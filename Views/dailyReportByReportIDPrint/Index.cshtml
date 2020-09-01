@@ -3,7 +3,8 @@
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
 @*PRINT DAILY REPORT BY REPORT ID PAGE*@
     <script>
@@ -32,27 +33,27 @@
 
             //begin load team members on page load
             $.ajax({
-                url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                method: 'post',
-                dataType: 'json',
-                data: { userName: '%', dailyReportID: dailyReportID },
-                success: function (data) {
+                //url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                //method: 'post',
+                //dataType: 'json',
+                //data: { userName: '%', dailyReportID: dailyReportID },
+                //success: function (data) {
 
-                    $(data).each(function (index, item) {
-                        var temp_userName;
-                        var temp_name;
-                        var temp_shortName;
+                //    $(data).each(function (index, item) {
+                //        var temp_userName;
+                //        var temp_name;
+                //        var temp_shortName;
 
-                        temp_userName = item.userName;
-                        temp_name = item.name;
-                        temp_shortName = item.shortName;
+                //        temp_userName = item.userName;
+                //        temp_name = item.name;
+                //        temp_shortName = item.shortName;
 
-                        $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                        $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                        $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
-                    });
-                    //end AddTeamMember
-                }
+                //        $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
+                //        $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
+                //        $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+                //    });
+                //    //end AddTeamMember
+                //}
             });
             //});
             //end load team members on page load
@@ -60,72 +61,72 @@
             //begin add team member on drop down change
             team_dpdwn.change(function () {
 
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNames',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: $(this).val() },
-                    success: function (data) {
+                //$.ajax({
+                //    url: 'DataService.asmx/GetAllTeamNames',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { userName: $(this).val() },
+                //    success: function (data) {
 
-                        $(data).each(function (index, item) {
-                            var temp_userName = item.userName;
-                            var temp_name = item.name;
-                            var temp_shortName = item.shortName;
+                //        $(data).each(function (index, item) {
+                //            var temp_userName = item.userName;
+                //            var temp_name = item.name;
+                //            var temp_shortName = item.shortName;
 
-                            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+                //            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
+                //            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
+                //            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
 
-                            //begin AddTeamMember
-                            //begin axios add post
-                            axios.post('/dailyReportByReportID/AddTeamMember', {
-                                dailyReportID: dailyReportID,
-                                userName: temp_userName,
-                            })
-                                .then(function (response) {
-                                    console.log(response);
-                                })
-                                .catch(function (error) {
-                                    console.log(error);
-                                });
-                            //end axios add post
-                        });
-                        //end AddTeamMember
-                    }
-                });
+                //            //begin AddTeamMember
+                //            //begin axios add post
+                //            axios.post('/dailyReportByReportID/AddTeamMember', {
+                //                dailyReportID: dailyReportID,
+                //                userName: temp_userName,
+                //            })
+                //                .then(function (response) {
+                //                    console.log(response);
+                //                })
+                //                .catch(function (error) {
+                //                    console.log(error);
+                //                });
+                //            //end axios add post
+                //        });
+                //        //end AddTeamMember
+                //    }
+                //});
             });
             //end add team member on drop down change
 
             //begin when a team member class is clicked...
             $(".team_").on('click', function () {
-                var tempTeamMemberUserID = this.id.substr(5);
+                //var tempTeamMemberUserID = this.id.substr(5);
 
-                //begin DeleteTeamMember
-                //begin axios delete post
-                axios.post('/dailyReportByReportID/DeleteTeamMember', {
+                ////begin DeleteTeamMember
+                ////begin axios delete post
+                //axios.post('/dailyReportByReportID/DeleteTeamMember', {
 
-                    dailyReportID: dailyReportID,
-                    userName: tempTeamMemberUserID,
-                })
-                    .then(function (response) {
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                //end axios add post
+                //    dailyReportID: dailyReportID,
+                //    userName: tempTeamMemberUserID,
+                //})
+                //    .then(function (response) {
+                //        console.log(response);
+                //    })
+                //    .catch(function (error) {
+                //        console.log(error);
+                //    });
+                ////end axios add post
 
-                $("#" + $(this).attr("id")).remove();
+                //$("#" + $(this).attr("id")).remove();
             });
             //end when a team member class is clicked...
             //end when a record class is clicked...
 
             $("#printDailyReport").click(function () {
                 //$("#nama").printThis({
-                $(".printable").printThis({
-                    importCSS: true,
-                    importStyle: true,
-                });
+                //$(".printable").printThis({
+                //    importCSS: true,
+                //    importStyle: true,
+                //});
             });
 
             //$("#printDailyReport").click(function () {//when a record's edit button is clicked...
@@ -143,7 +144,7 @@
 <div class="container printable" id="contnr_team">
     <div class="row">
         <div class="col-3" style="padding:5px">
-            <strong>Daily Log Information</strong>
+            <strong>Daily Log Information EMAIL VERSION</strong>
         </div>
         <div class="col-3" style="padding:5px">
             <div>
@@ -255,21 +256,21 @@
 @*END ALLPAX TEAM*@
 <hr style="margin:1px; opacity:0" />
 <div class="container" id="">
-    @{Html.RenderAction("Index", "workDescPrint", new { dailyReportID = ViewBag.reportID });
-    }
+    @*@{Html.RenderAction("Index", "workDescPrint", new { dailyReportID = ViewBag.reportID });
+    }*@
 </div>
 <hr style="margin:1px; opacity:0" />
 <div class="container" id="">
-    @{Html.RenderAction("Index", "workDescDelaysPrint", new { dailyReportID = ViewBag.reportID });
-    }
+    @*@{Html.RenderAction("Index", "workDescDelaysPrint", new { dailyReportID = ViewBag.reportID });
+    }*@
 </div>
 <hr style="margin:1px; opacity:0" />
 <div class="container" id="">
-    @{Html.RenderAction("Index", "workDescWntyDelaysPrint", new { dailyReportID = ViewBag.reportID });
-    }
+    @*@{Html.RenderAction("Index", "workDescWntyDelaysPrint", new { dailyReportID = ViewBag.reportID });
+    }*@
 </div>
 
-<button id="printDailyReport">PRINT THIS PAGE</button>
+<button id="printDailyReport">EMAIL THIS PAGE</button>
 
 
 

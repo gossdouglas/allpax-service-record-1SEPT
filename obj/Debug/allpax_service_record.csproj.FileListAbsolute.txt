@@ -324,3 +324,9 @@ C:\Users\goss\Documents\Github\service_record\allpax_service_record\bin\Microsof
 C:\Users\goss\Documents\Github\service_record\allpax_service_record\bin\Microsoft.Owin.Security.OAuth.xml
 C:\Users\goss\Documents\Github\service_record\allpax_service_record\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\goss\Documents\Github\service_record\allpax_service_record\obj\Debug\allpax_service_record.csprojAssemblyReference.cache
+C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\Westwind.Utilities.dll
+C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\Westwind.Web.dll
+C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\Westwind.Web.Mvc.dll
+C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\Westwind.Utilities.xml
+C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\Westwind.Web.xml
+C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\Westwind.Web.Mvc.xml

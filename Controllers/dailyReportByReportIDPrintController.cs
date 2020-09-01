@@ -12,6 +12,9 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Dynamic;
 using allpax_service_record.Models.MODEL_TESTING;
+using Westwind.Web.Mvc;
+using Westwind.Utilities;
+using System.Net.Mail;
 
 namespace allpax_service_record.Controllers
 {
@@ -78,8 +81,29 @@ namespace allpax_service_record.Controllers
             }
 
             sqlconn.Close();
-            //end query
-            return View(dailyReportByID);
+
+            string html = ViewRenderer.RenderView("~/views/dailyReportByReportIDPrint/index.cshtml", dailyReportByID);
+
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.EnableSsl = true;
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new NetworkCredential("allpaxtesting@gmail.com", "Allpax_1234");
+
+            string body = html;
+
+            using (var message = new MailMessage("allpaxtesting@gmail.com", "allpaxtesting@gmail.com"))
+            {
+                message.Subject = "Test";
+                message.Body = body;
+                message.IsBodyHtml = true;
+                smtp.Send(message);
+                }
+
+                //end query
+                return View(dailyReportByID);
         }
            
         protected override void Dispose(bool disposing)

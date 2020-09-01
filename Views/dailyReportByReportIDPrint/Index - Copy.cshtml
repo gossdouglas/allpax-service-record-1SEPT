@@ -5,7 +5,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@*DAILY REPORT BY REPORT ID PAGE*@
+@*PRINT DAILY REPORT BY REPORT ID PAGE*@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
@@ -14,20 +14,20 @@
             var addWorkDescBtn = $('#addWorkDescBtn');
             var dailyReportID = $("#txt_dailyReportID").html();
 
-            $.ajax({
-                url: 'DataService.asmx/GetAllTeamNames',
-                method: 'post',
-                dataType: 'json',
-                data: { userName: '%' },
-                success: function (data) {
+            //$.ajax({
+            //    url: 'DataService.asmx/GetAllTeamNames',
+            //    method: 'post',
+            //    dataType: 'json',
+            //    data: { userName: '%' },
+            //    success: function (data) {
 
-                    team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+            //        team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
 
-                    $(data).each(function (index, item) {
-                        team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
-                    });
-                }
-            });
+            //        $(data).each(function (index, item) {
+            //            team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+            //        });
+            //    }
+            //});
             ////end fill the team names dropdown
 
             //begin load team members on page load
@@ -120,9 +120,22 @@
             //end when a team member class is clicked...
             //end when a record class is clicked...
 
-            $("#printDailyReport").click(function () {//when a record's edit button is clicked...
-                window.location = '/DailyReportByReportIDPrint?reportID=' + dailyReportID;
+            $("#printDailyReport").click(function () {
+                //$("#nama").printThis({
+                $(".printable").printThis({
+                    importCSS: true,
+                    importStyle: true,
+                });
             });
+
+            //$("#printDailyReport").click(function () {//when a record's edit button is clicked...
+            //    //alert(selectedItem0);
+            //    //window.location = '/DailyReportByReportID?reportID=' + selectedItem0;   
+            //    //window.location = '/DailyReportByReportID/PrintDailyReport?reportID=' + selectedItem0 + "&date=" + selectedItem2;
+            //    //window.location = '/DailyReportByReportID/PrintDailyReport?reportID=' + selectedItem0;
+            //    window.location = '/DailyReportByReportID/PrintDailyReport?reportID=50';
+
+            //});
 
         });//end document read jquery statements
     </script>
@@ -130,7 +143,7 @@
 <div class="container printable" id="contnr_team">
     <div class="row">
         <div class="col-3" style="padding:5px">
-            <strong>Daily Log Information</strong>
+            <strong>Daily Log Information EMAIL VERSION</strong>
         </div>
         <div class="col-3" style="padding:5px">
             <div>
@@ -221,16 +234,16 @@
 </div>
 <hr style="margin:1px; opacity:0" />
 @*BEGIN ALLPAX TEAM*@
-<div class="container" id="contnr_team">
+<div class="container printable" id="contnr_team">
     <div class="row">
         <div class="col-2" style="padding:5px">
             <strong>Allpax Team:</strong>
         </div>
         <div class="col-10" style="padding:5px">
-            <div class="row" style="margin:0px;">
+            @*<div class="row" style="margin:0px;">
                 <select name="team_dpdwn" id="team_dpdwn" style="width:100%">
                 </select>
-            </div>
+            </div>*@
             <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
                 <div class="team_" id="team_" style="padding:5px; border:solid black 1px" hidden>
                     Johnny Watkins|JW
@@ -242,21 +255,21 @@
 @*END ALLPAX TEAM*@
 <hr style="margin:1px; opacity:0" />
 <div class="container" id="">
-    @{Html.RenderAction("Index", "workDesc", new { dailyReportID = ViewBag.reportID });
-    }
+    @*@{Html.RenderAction("Index", "workDescPrint", new { dailyReportID = ViewBag.reportID });
+    }*@
 </div>
 <hr style="margin:1px; opacity:0" />
 <div class="container" id="">
-    @{Html.RenderAction("Index", "workDescDelays", new { dailyReportID = ViewBag.reportID });
-    }
+    @*@{Html.RenderAction("Index", "workDescDelaysPrint", new { dailyReportID = ViewBag.reportID });
+    }*@
 </div>
 <hr style="margin:1px; opacity:0" />
 <div class="container" id="">
-    @{Html.RenderAction("Index", "workDescWntyDelays", new { dailyReportID = ViewBag.reportID });
-    }
+    @*@{Html.RenderAction("Index", "workDescWntyDelaysPrint", new { dailyReportID = ViewBag.reportID });
+    }*@
 </div>
 
-<button id="printDailyReport">GO TO PRINTABLE VERSION</button>
+<button id="printDailyReport">EMAIL THIS PAGE</button>
 
 
 

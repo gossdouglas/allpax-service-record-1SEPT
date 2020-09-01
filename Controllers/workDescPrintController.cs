@@ -10,6 +10,9 @@ using System.Web;
 using System.Web.Mvc;
 using allpax_service_record.Models;
 using allpax_service_record.Models.View_Models;
+using Westwind.Web.Mvc;
+using Westwind.Utilities;
+using System.Net.Mail;
 
 namespace allpax_service_record.Controllers
 {
@@ -58,6 +61,27 @@ namespace allpax_service_record.Controllers
             }
             //sqlconn.Close();
             //end
+            //var model = new EmailConfirmationModel();
+            //string html = ViewRenderer.RenderView("~/views/workDescPrint/index.cshtml", workDescs);
+
+            //SmtpClient smtp = new SmtpClient();
+            //smtp.Host = "smtp.gmail.com";
+            //smtp.Port = 587;
+            //smtp.EnableSsl = true;
+            //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            //smtp.UseDefaultCredentials = false;
+            //smtp.Credentials = new NetworkCredential("allpaxtesting@gmail.com", "Allpax_1234");
+
+            //string body = html;
+
+            //using (var message = new MailMessage("allpaxtesting@gmail.com", "allpaxtesting@gmail.com"))
+            //{
+            //    message.Subject = "Test";
+            //    message.Body = body;
+            //    message.IsBodyHtml = true;
+            //    smtp.Send(message);
+            //}
+
             return View(workDescs);
         }
 

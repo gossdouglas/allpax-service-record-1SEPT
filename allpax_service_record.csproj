@@ -120,6 +120,9 @@
     <Reference Include="Westwind.Web, Version=2.85.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Westwind.Web.2.85.0\lib\net45\Westwind.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Westwind.Web.Mvc, Version=2.85.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Westwind.Web.Mvc.2.850.0\lib\net45\Westwind.Web.Mvc.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
@@ -422,6 +425,7 @@
     <Content Include="Views\workDescPrint\Index.cshtml" />
     <Content Include="Views\workDescDelaysPrint\Index.cshtml" />
     <Content Include="Views\workDescWntyDelaysPrint\Index.cshtml" />
+    <Content Include="Views\dailyReportByReportIDPrint\Index - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
