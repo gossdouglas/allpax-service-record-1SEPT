@@ -425,7 +425,7 @@
     <Content Include="Views\workDescPrint\Index.cshtml" />
     <Content Include="Views\workDescDelaysPrint\Index.cshtml" />
     <Content Include="Views\workDescWntyDelaysPrint\Index.cshtml" />
-    <Content Include="Views\dailyReportByReportIDPrint\Index - Copy.cshtml" />
+    <Content Include="Views\dailyReportByReportIDPrint\Index-orig.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

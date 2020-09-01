@@ -121,7 +121,21 @@
             //end when a record class is clicked...
 
             $("#printDailyReport").click(function () {//when a record's edit button is clicked...
-                window.location = '/DailyReportByReportIDPrint?reportID=' + dailyReportID;
+                //window.location = '/DailyReportByReportIDPrint?reportID=' + dailyReportID;
+                $.ajax({
+                    url: '/DailyReportByReportIDPrint',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { reportID: dailyReportID },
+                    success: function (data) {
+
+                        team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+
+                        $(data).each(function (index, item) {
+                            team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+                        });
+                    }
+                });
             });
 
         });//end document read jquery statements
@@ -256,7 +270,7 @@
     }
 </div>
 
-<button id="printDailyReport">GO TO PRINTABLE VERSION</button>
+<button id="printDailyReport">E-mail this report</button>
 
 
 
