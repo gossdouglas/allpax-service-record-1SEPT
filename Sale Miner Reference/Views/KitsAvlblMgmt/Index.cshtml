@@ -1,0 +1,348 @@
+﻿@model IEnumerable<allpax_sale_miner.Models.tbl_eqpmt_kits_avlbl>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        $(document).ready(function () {//begin document read jquery statements
+                 // Setup - add a text input to each footer cell
+         //$('#datatable_kitsAvlblMgmt thead tr').clone(true).appendTo( '#datatable_kitsAvlblMgmt thead' );
+         //$('#datatable_kitsAvlblMgmt thead tr:eq(1) th').each( function (i) {
+         //    var title = $(this).text();
+         //    $(this).html( '<input type="text" placeholder=" " />' );
+ 
+         //    $( 'input', this ).on( 'keyup change', function () {
+         //        if ( table.column(i).search() !== this.value ) {
+         //            table
+         //                .column(i)
+         //                   .search( this.value )
+         //                    .draw();
+         //        }
+         //    } );
+         //} );
+
+            //begin cascading dropdown logic
+            var eqpmtTypes_Dpdwn = $('#addRecordItem1');
+            var models_Dpdwn = $('#addRecordItem3');
+           
+            //begin fill the equipment type dropdown
+            $.ajax({
+                url: 'DataService.asmx/GetEqpmtTypes',
+                method: 'post',
+                dataType: 'json',
+                success: function (data) {
+
+                    eqpmtTypes_Dpdwn.append($('<option/>', { value: -1, text: 'Select Equipment Type' }));
+                    models_Dpdwn.append($('<option/>', { value: -1, text: 'Select Equipment Model' }));
+                    models_Dpdwn.prop('disabled', true);
+                    $(data).each(function (index, item) {
+                        eqpmtTypes_Dpdwn.append($('<option/>', { value: item.eqpmtType, text: item.eqpmtType }));
+                    });
+                }
+            });
+            //end fill the equipment type dropdown
+
+            //begin clear out the selected model if selected equipment type changes
+            eqpmtTypes_Dpdwn.change(function () {
+                //if ($(this.val() == "-1")) {
+                models_Dpdwn.empty();
+                models_Dpdwn.append($('<option/>', { value: -1, text: 'Select Equipment Model' }));
+                models_Dpdwn.val('-1');
+                models_Dpdwn.prop('disabled', true);
+                //}
+                $.ajax({
+                    url: 'DataService.asmx/GetEqpmtModelsByEqpmtTypes',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { eqpmtType: $(this).val() },
+                    success: function (data) {
+
+                        $(data).each(function (index, item) {
+                            models_Dpdwn.append($('<option/>', { value: item.model, text: item.model }));
+                        });
+                    }
+                });
+                models_Dpdwn.prop('disabled', false);
+            });
+            //end clear out the selected model if selected equipment type changes
+
+            //end cascading dropdown logic
+ 
+            var table = $('#datatable_kitsAvlblMgmt').DataTable({
+                orderCellsTop: true,
+                fixedHeader: true,
+                paging: false,
+                order: [[1, "asc"]],
+                searching: false
+            });
+           
+            $('.dataTables_length').addClass('bs-select');
+            //begin when a record class is clicked...
+            $(".record").on('click keyup change', function () {
+                selectedItem0 = $(this).attr("id");//works
+                selectedItem1 = $(this).find("#record_item1").html();//works valid for inner html only
+                selectedItem2 = $(this).find("#record_item2").html();//works valid for inner html only
+                selectedItem3 = $(this).find("#record_item3").html();//works valid for inner html only
+
+
+                $("#slctd_id").val(selectedItem0);
+                $("#slctd_eqpmtType").val(selectedItem1);
+                $("#slctd_kitID").val(selectedItem2);
+                $("#slctd_model").val(selectedItem3);
+            });
+            //end when a record class is clicked...
+
+            $(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked...
+                $(this).parent().find(".editButton").hide();
+                $(this).parent().find(".updateButton").show();
+                $(this).parent().find(".deleteButton").hide();
+                $(this).parent().find(".cancelButton").show();
+
+                $(this).parent().parent().css("background-color", "powderblue");//change bkgnd color
+                $(this).parent().parent().attr("contenteditable", "true");//set all <td> in the record to editable
+                $(this).parent().parent().find("#record_item0").attr("contenteditable", "false");//set the id <td> to not editable
+                $(this).parent().parent().find(".cancelButton").css("background-color", "indianred");//change cancel buttn clr after edit is clicked
+                $(this).parent().parent().find(".cancelButton").css("border", "indianred");//change cancel buttn clr after edit is clicked
+                $(this).parent().parent().find(".updateButton").css("background-color", "steelblue");//change cancel buttn clr after edit is clicked
+                $(this).parent().parent().find(".updateButton").css("border", "steelblue");//change cancel buttn clr after edit is clicked
+
+            });
+            $(".btn.btn-primary.cancelButton").click(function () {//when a record's edit button is clicked...
+                $(this).parent().find(".editButton").show();
+                $(this).parent().find(".updateButton").hide();
+                $(this).parent().find(".deleteButton").show();
+                $(this).parent().find(".cancelButton").hide();
+                $(this).parent().find(".confirmButton").hide();
+
+                $(this).parent().parent().css("background-color", "transparent");
+                $(this).parent().parent().attr("contenteditable", "false");
+            });
+            $(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked...
+                $(this).parent().find(".editButton").hide();
+                $(this).parent().find(".updateButton").hide();
+                $(this).parent().find(".deleteButton").hide();
+                $(this).parent().find(".cancelButton").show();
+                $(this).parent().find(".confirmButton").show();
+
+                $(this).parent().parent().css("background-color", "powderblue");//change bkgnd color
+                $(this).parent().parent().attr("contenteditable", "false");
+                $(this).parent().parent().find(".cancelButton").css("background-color", "indianred");//change cancel buttn clr after delete is clicked
+                $(this).parent().parent().find(".cancelButton").css("border", "indianred");//change cancel buttn clr after edit is clicked
+                $(this).parent().parent().find(".confirmButton").css("background-color", "steelblue");//change confirm buttn color after delete is clicked
+                $(this).parent().parent().find(".confirmButton").css("border", "steelblue");
+            });
+
+            //begin #addButton
+            $("#addButton").click(function () {//when the add button is clicked...
+                var addItem1 = $("#addRecordItem1").val();
+                var addItem2 = $("#addRecordItem2").val();
+                var addItem3 = $("#addRecordItem3").val();
+
+                alert(
+                    "Selected for Add POST:" + '\n' +
+                    "addItem1: " + addItem1 + '\n' +
+                    "addItem2: " + addItem2 + '\n' +
+                    "addItem3: " + addItem3 + '\n'
+                );
+                $("#addRecordItem1").val('');
+                $("#addRecordItem2").val('');
+                $("#addRecordItem3").val('');
+                //begin axios add post
+
+                axios.post('/KitsAvlblMgmt/AddAvlblKit', {
+                    eqpmtType: addItem1,
+                    kitID: addItem2,
+                    model: addItem3,
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+                //end axios add post
+            });
+            //end #addButton
+
+            //begin confirm edit record
+            $(".btn.btn-primary.updateButton").click(function () {//when a record's edit button is clicked...
+                $(this).hide();
+                $(this).parent().find(".updateButton").hide();
+                $(this).parent().find(".editButton").show();
+                $(this).parent().find(".deleteButton").hide();
+                $(this).parent().find(".cancelButton").show();
+
+                $(this).parent().parent().attr("contenteditable", "false");
+
+                $(this).parent().parent().css("background-color", "transparent");
+                $(this).parent().parent().find(".cancelButton").css("background-color", "royalblue");//change cancel button color after update is clicked
+                $(this).parent().find(".cancelButton").hide();
+                $(this).parent().find(".deleteButton").show();
+
+                var editItem0 = $("#slctd_id").val();
+                var editItem1 = $("#slctd_eqpmtType").val();
+                var editItem2 = $("#slctd_kitID").val();
+                var editItem3 = $("#slctd_model").val();
+
+                alert(
+                    "Selected for Edit POST:" + '\n' +
+                    "editItem0: " + editItem0 + '\n' +
+                    "editItem1: " + editItem1 + '\n' +
+                    "editItem2: " + editItem2 + '\n' +
+                    "editItem3: " + editItem3 + '\n'
+                );
+
+                //begin axios update post
+                axios.post('/KitsAvlblMgmt/UpdateAvlblKit', {
+                    eqpmtType: editItem1,
+                    model: editItem3,
+                    kitID: editItem2,
+                    id: editItem0
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //end axios update post
+
+            });
+            //end confirm edit record
+
+            //begin axios confirm delete record
+            $(".btn.btn-primary.confirmButton").click(function () {//when a record's delete button is clicked...
+
+                alert(
+                    "Selected for DELETE:" + '\n' +
+                    "id: " + selectedItem0 + '\n' +
+                    "eqpmtType: " + selectedItem1 + '\n' +
+                    "kitID: " + selectedItem2 + '\n'
+                );
+
+                axios.post('/KitsAvlblMgmt/DeleteAvlblKit', {
+                    id: selectedItem0,
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+            });
+            //end axios confirm delete record
+
+        });//end document read jquery statements
+    </script>
+    <!--md bootstrap additions begin-->
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="~/Content/bootstrap.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="~/Content/mdb.min.css" rel="stylesheet">
+    <!-- MDBootstrap Datatables  -->
+    <link href="~/Content/MDBootstrap/css/addons/datatables.min.css" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link href="" rel="stylesheet">
+</head>
+<style>
+    div.row {
+        width: auto;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 0px;
+    }
+
+    .form-group {
+        margin: 5px;
+    }
+</style>
+
+
+<div class="container-fluid">
+    <hr />
+    <!--begin inline add-->
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Available Kits-kits available based equipment model number</h5>
+            <form class="form-inline">
+                <div class="form-group">
+                    <select class="form-control form-control-sm" id="addRecordItem1" name="addRecordItem1">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="form-control form-control-sm" id="addRecordItem3" name="addRecordItem3">
+                    </select>
+                </div>
+                <div class="form-group">
+                    @Html.DropDownList("kitID", null, "Select Kit ID", new { @id = "addRecordItem2", @name = "addRecordItem2", @class = "form-control form-control-sm" })
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm" id="addButton" style="background-color: royalblue">Add</button>
+            </form><hr />
+        </div>
+    </div>
+    <!--click event begin-->
+    <div>
+        <div class="row" style="display:none">
+            <div class="col-md-1">ID: <input type="text" id="slctd_id" value="slctd_id"></div>
+            <div class="col-md-2">Equipment Type: <input type="text" id="slctd_eqpmtType" value="slctd_eqpmtType"></div>
+            <div class="col-md-2">Equipment Model: <input type="text" id="slctd_model" value="slctd_model"></div>
+            <div class="col-md-2">Kit ID: <input type="text" id="slctd_kitID" value="slctd_kitID"></div>
+        </div>
+    </div>
+    <!--click event end-->
+    <!--table begin-->
+    <!-- Start your project here-->
+    <div style="height: 100vh">
+        <table id="datatable_kitsAvlblMgmt" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th class="th-sm">
+                        ID
+                    </th>
+                    <th class="th-sm">
+                        Equipment Type
+                    </th>
+                    <th class="th-sm">
+                        Equipment Model
+                    </th>
+                    <th class="th-sm">
+                        Kit ID
+                    </th>
+                    <th class="th-sm">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr class="record" id=@Html.DisplayFor(modelItem => item.id)>
+                    <td id="record_item0" value=@Html.DisplayFor(modelItem => item.id)>@Html.DisplayFor(modelItem => item.id)</td>
+                    <td id="record_item1" value=@Html.DisplayFor(modelItem => item.eqpmtType)>@Html.DisplayFor(modelItem => item.eqpmtType)</td>
+                    <td id="record_item3" value=@Html.DisplayFor(modelItem => item.model)>@Html.DisplayFor(modelItem => item.model)</td>
+                    <td id="record_item2" value=@Html.DisplayFor(modelItem => item.kitID)>@Html.DisplayFor(modelItem => item.kitID)</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm editButton" style=" background-color: royalblue">Edit</button>
+                        <button class="btn btn-primary btn-sm updateButton" style="display:none;">Update</button>
+                        <button class="btn btn-primary btn-sm deleteButton" style=" background-color: royalblue">Delete</button>
+                        <button class="btn btn-primary btn-sm confirmButton" style="display:none;">Confirm</button>
+                        <button class="btn btn-primary btn-sm cancelButton" style="display:none;">Cancel</button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--table end-->
+</div>

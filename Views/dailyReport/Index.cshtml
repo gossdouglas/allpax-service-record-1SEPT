@@ -1,0 +1,432 @@
+﻿@model IEnumerable<allpax_service_record.Models.tbl_dailyReport>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*Daily Report By Report ID*@
+
+<head>
+    <style>
+        .container {
+            border: 2px solid black;
+        }
+    </style>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {//begin document read jquery statements
+
+            //var queries = {};
+            //var dailyReportID = '';
+
+            //$.each(document.location.search.substr(1).split('&'), function (c, q) {
+            //    var i = q.split('=');
+            //    queries[i[0].toString()] = i[1].toString();
+            //    dailyReportID = queries[i[0].toString()];
+            //});
+            //alert(dailyReportID)
+
+            //alert($(".recordNo").html())
+            //alert($("#subJobTypes_dpdwn").val())
+
+            //begin fill the jobs dropdown
+            var jobs_dpdown = $('#jobs_dpdown');
+            //var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+
+            $.ajax({
+                url: 'DataService.asmx/GetAllJobNos',
+                method: 'post',
+                dataType: 'json',
+                success: function (data) {
+
+                    jobs_dpdown.append($('<option/>', { value: -1, text: 'Select Job' }));
+
+                    $(data).each(function (index, item) {
+                        jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                    });
+                }
+            });
+            //end fill the jobs dropdown
+
+            //begin jobs id dropdown change
+            jobs_dpdown.change(function () {
+                $.ajax({
+                    url: 'DataService.asmx/GetCustomerInfoByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
+                        //console.log(data.customerCode);
+                        //console.log(jobs_dpdown.val());
+
+                        $(data).each(function (index, item) {
+                            //console.log(item.customerCode);
+                            //console.log(item.customerName);
+                            //console.log(item.address);
+                            $("#output_customerName").html(item.customerName.toString());
+                            $("#output_location").html(item.address.toString());
+                            $("#output_customerCode").html(item.customerCode.toString());
+                            $("#output_customerContact").html(item.customerContact.toString());
+                        });
+                    }
+                });
+
+                //begin fill the team names dropdown
+                var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+                $('#subJobTypes_dpdwn').empty();//clear the dropdown
+                $('#input_jobs_dpdown').val('1');//
+                //alert($('#input_jobs_dpdown').val())
+
+                $.ajax({
+                    url: 'DataService.asmx/GetSubJobTypesByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
+
+                        subJobTypes_dpdwn.append($('<option/>', { value: '', text: 'Select a Job Sub-Type' }));
+
+                        $(data).each(function (index, item) {
+                            subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
+
+                            //console.log(item.subJobID);
+                        });
+                    }
+                });
+                //end fill sub jobs dropdown
+
+            });
+            //end jobs id dropdown change
+
+            //begin fill the team names dropdown
+            var team_dpdwn = $('#team_dpdwn');
+
+            $.ajax({
+                url: 'DataService.asmx/GetAllTeamNames',
+                method: 'post',
+                dataType: 'json',
+                data: { userName: '%' },
+                success: function (data) {
+
+                    team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+
+                    $(data).each(function (index, item) {
+                        team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+                    });
+                }
+            });
+            //end fill the sub job dropdown
+
+            //begin #addButton
+            $("#addButton").click(function () {//when the add button is clicked...
+
+                //window.location = '/home';
+
+                var addItem1 = $("#jobs_dpdown").val();
+                var addItem2 = $("#slct_date").val();
+                var addItem3 = $("#subJobTypes_dpdwn").val();
+                var addItem4 = $("#input_startTime").val();
+                var addItem5 = $("#input_endTime").val();
+                var addItem6 = $("#input_lunch").val();
+                var addItem7 = $("#input_equipment").val();
+
+                //console.log(addItem3);
+
+                alert(
+                    "Selected for Add POST:" + '\n' +
+                    "addItem1: " + addItem1 + '\n' +
+                    "addItem2: " + addItem2 + '\n' +
+                    "addItem3: " + addItem3 + '\n' +
+                    "addItem4: " + addItem4 + '\n' +
+                    "addItem5: " + addItem5 + '\n' +
+                    "addItem6: " + addItem6 + '\n' +
+                    "addItem7: " + addItem7 + '\n'
+                );
+                $("#addRecordItem1").val('');
+                $("#addRecordItem2").val('');
+                $("#addRecordItem3").val(''); 
+                $("#addRecordItem4").val('');
+                $("#addRecordItem5").val('');
+                $("#addRecordItem6").val('');
+                $("#addRecordItem7").val('');
+
+                //begin axios add post
+                axios.post('/dailyReport/AddDailyReport', {
+                    jobID: addItem1,
+                    date: addItem2,
+                    subJobID: addItem3,
+                    startTime: addItem4,
+                    endTime: addItem5,
+                    lunchHours: addItem6,
+                    equipment: addItem7,
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        //window.location = '/home';
+                        //window.location.href = '/home';
+                        
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+                //window.location = '/home';
+                //end axios add post
+
+                //$('#contnr_team').removeAttr('hidden');
+                //$('#contnr_workDescription').removeAttr('hidden');
+                //$('#contnr_delays').removeAttr('hidden');
+                //$('#contnr_warrantyDelays').removeAttr('hidden');
+
+                
+
+            });
+            //end #addButton
+
+            //begin #addTeamBtn
+            //$("#addTeamBtn").click(function () {//when the add button is clicked...
+
+            //    alert($('#team_dpdwn').val())
+
+            //    //$('#Crd').val()
+
+            //    //$("#output_customerName").html(item.customerName.toString());
+
+            //    //$("#output_customerName")
+
+            //    //var addItem1 = $("#jobs_dpdown").val();
+            //    //var addItem2 = $("#slct_date").val();
+            //    //var addItem3 = $("#subJobTypes_dpdwn").val();
+            //    //var addItem4 = $("#input_startTime").val();
+            //    //var addItem5 = $("#input_endTime").val();
+            //    //var addItem6 = $("#input_lunch").val();
+            //    //var addItem7 = $("#input_equipment").val();
+
+            //    //console.log(addItem3);
+
+            //    //alert(
+            //    //    "Selected for Add POST:" + '\n' +
+            //    //    "addItem1: " + addItem1 + '\n' +
+            //    //    "addItem2: " + addItem2 + '\n' +
+            //    //    "addItem3: " + addItem3 + '\n' +
+            //    //    "addItem4: " + addItem4 + '\n' +
+            //    //    "addItem5: " + addItem5 + '\n' +
+            //    //    "addItem6: " + addItem6 + '\n' +
+            //    //    "addItem7: " + addItem7 + '\n'
+            //    //);
+            //    //$("#addRecordItem1").val('');
+            //    //$("#addRecordItem2").val('');
+            //    //$("#addRecordItem3").val('');
+            //    //$("#addRecordItem4").val('');
+            //    //$("#addRecordItem5").val('');
+            //    //$("#addRecordItem6").val('');
+            //    //$("#addRecordItem7").val('');
+
+            //    //begin axios add post
+            //    //axios.post('/dailyReport/AddDailyReport', {
+            //    //    jobID: addItem1,
+            //    //    date: addItem2,
+            //    //    subJobID: addItem3,
+            //    //    startTime: addItem4,
+            //    //    endTime: addItem5,
+            //    //    lunchHours: addItem6,
+            //    //    equipment: addItem7
+            //    //    //dailyReportID: '6'
+            //    //})
+            //    //    .then(function (response) {
+            //    //        console.log(response);
+            //    //    })
+            //    //    .catch(function (error) {
+            //    //        console.log(error);
+            //    //    });
+            //    //end axios add post
+            //});
+            //end #addTeamBtn
+
+            //begin
+            //team_dpdwn.change(function () {
+
+            //    //alert($(this).val())
+
+            //    //alert($('#team_dpdwn').val())
+
+            //    //begin
+            //    var team_dpdwn = $('#team_dpdwn');
+
+            //    $.ajax({
+            //        url: 'DataService.asmx/GetAllTeamNames',
+            //        method: 'post',
+            //        dataType: 'json',
+            //        data: { userName: $(this).val() },
+            //        success: function (data) {
+
+            //            //alert($('#team_dpdwn').val())
+            //            //team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+
+            //            $(data).each(function (index, item) {
+            //                //team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+            //                //alert(item.userName)
+            //                //alert(item.name)
+            //                //alert(item.shortName)
+            //                var temp_userName;
+            //                var temp_name;
+            //                var temp_shortName;
+
+            //                temp_userName = item.userName;
+            //                temp_name = item.name;
+            //                temp_shortName = item.shortName;
+
+            //                $("#teamMember_template").clone().prop("id", "user_" + temp_userName.toString()).appendTo("#txt_teamMembers");
+
+            //                $("#user_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
+
+            //                //$("#btn_delete_temp_userName").clone().prop("id", "btn_delete_temp_" + temp_userName.toString()).appendTo("#user_" + temp_userName.toString());
+
+            //                $("#user_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+            //            });
+            //        }
+            //    });
+
+            //    //$("#tabTemplate").clone().prop("id", "tab_" + tempJobNo.toString()).appendTo("#jobNoTabs");
+
+            //    //$("#tab_" + tempJobNo.toString()).removeAttr('hidden');//unhide the copy
+            //});
+            //end
+
+            //begin
+            //subJobTypes_dpdwn.change(function () {
+
+            //    //alert($('#subJobTypes_dpdwn').val())
+
+            //    //alert(allFilled().val())
+                
+            //});
+            //end
+            
+            var fields = "#slct_date, #input_jobs_dpdown, #input_equipment, #input_startTime, #input_endTime, #input_lunch, #subJobTypes_dpdwn";
+
+            $(fields).on('change', function () {
+                if (allFilled()) {
+                    $('#addButton').removeAttr('disabled');
+                } else {
+                    $('#addButton').attr('disabled', 'disabled');
+                }
+            });
+
+            function allFilled() {
+                var filled = true;
+                $(fields).each(function () {
+                    if ($(this).val() == '') {
+                        filled = false;
+                        //alert("not filled: " + $(this).attr('id'))
+
+                        //$(this).attr('id')
+                    }
+                });
+
+                //alert("all filled? "+filled)
+                return filled;
+            }
+
+        });//end document read jquery statements
+    </script>
+</head>
+
+<div class=" container">
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Daily Log Information</strong>
+        </div>
+        <div class="col-3" style="padding:5px">
+            <div>
+                <span><strong>Record No</strong></span>
+                <span class="recordNo">new</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="md-col-2" style="padding:5px">
+            <strong>Job:</strong>
+        </div>
+        <div class="md-col-2" style="padding:5px">
+            <select name="jobs_dpdown" id="jobs_dpdown" style="width:100%" value="">
+            </select>
+            <input type="text" id="input_jobs_dpdown" name="" style="width:100%" hidden>
+        </div>
+        <div class="md-col-5" style="padding:5px"></div>
+        <div class="md-col-1" style="padding:5px">
+            <strong>Date:</strong>
+        </div>
+        <div class="md-col-2" style="padding:5px">
+            <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value="">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Customer:</strong>:
+        </div>
+        <div class="col-7" style="padding:5px" id="output_customerName"></div>
+        <div class="col-1" style="padding:5px">
+            <strong>Sub Job:</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <select name="subJobTypes_dpdwn" id="subJobTypes_dpdwn" style="width:100%">
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Location:</strong>
+        </div>
+        <div class="col-7" style="padding:5px" id="output_location"></div>
+        <div class="col-1" style="padding:5px">
+            <strong>Code:</strong>
+        </div>
+        <div class="col-2" style="padding:5px" id="output_customerCode"></div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Customer Contact:</strong>
+        </div>
+        <div class="col-10" style="padding:5px" id="output_customerContact"></div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Equipment:</strong>
+        </div>
+        <div class="col-10" style="padding:5px">
+            <input type="text" value="" id="input_equipment" name="" style="width:100%">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Start Time:</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="">
+        </div>
+        <div class="col-2" style="padding:5px">
+            <strong>End Time:</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="">
+        </div>
+        <div class="col-2" style="padding:5px">
+            <strong>Lunch (hr)</strong>
+        </div>
+        <div class="col-1" style="padding:5px">
+            <input type="text" class="form-control form-control-sm" id="input_lunch">
+        </div>
+        <div class="col-1" style="padding:5px">
+        </div>
+    </div>
+    
+</div>
+<hr style="margin:1px; opacity:0" />
+<div class=" container">
+    <button type="submit" class="btn btn-primary btn-sm" id="addButton" style="background-color: royalblue" disabled>Save Record</button>
+</div>

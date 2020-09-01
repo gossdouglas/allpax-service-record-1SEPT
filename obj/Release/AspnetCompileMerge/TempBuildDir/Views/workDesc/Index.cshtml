@@ -1,0 +1,368 @@
+﻿@model IEnumerable<allpax_service_record.Models.View_Models.vm_workDesc>
+@{
+    Layout = null;
+}
+
+    <head>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        @*JQuery*@
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <script>
+            $(document).ready(function () {//begin document read jquery statements
+
+                var slctd_timeEntryID;
+                var dailyReportID = $("#txt_dailyReportID").html()
+                //var workDescTeamLine_dpdwn = $('.workDescTeamLine_dpdwn_');
+
+                //begin when nnnn is clicked...
+                $("#addWorkDescBtn").on('click', function () {
+
+                    //alert('hghghgh');
+
+                    //console.log($(this).attr("id"))
+                    //console.log($(this).attr("class"))
+                    //alert($(this).parent().attr("class"))
+                    //alert($(this).parents().eq(1).attr("class"))
+
+                    var addItem1 = $("#txt_dailyReportID").html();
+                    var addItem2 = $("#input_workDesc").html();
+
+                    alert("dailyReportID: " + addItem1 + '\n' +
+                        "workDescription: " + addItem2
+                    );
+
+                    $(".workDescTeam_").each(function () {
+
+                        var tempTeamMemberUserID = $(this).attr("id").substr(13);
+
+                        if (tempTeamMemberUserID.length > 0) {
+                            //alert(tempTeamMemberUserID);
+                            //alert(tempTeamMemberUserID.length);
+
+                            //begin axios add post
+                            axios.post('/workDesc/AddWorkDesc', {
+                                dailyReportID: addItem1,
+                                workDescription: addItem2,
+                                //userName: 'tgoss',
+                                userName: tempTeamMemberUserID,
+
+                            })
+                                .then(function (response) {
+                                    console.log(response);
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                            //end axios add post
+                        }
+                    });
+
+                });
+
+                //$(".workDescLine_").on('click', function () {
+                //    slctd_timeEntryID = this.id.substr(13);
+                //});
+
+                //begin when a work description line team member class is clicked...
+                $(".workDescTeamLineUserShortName_").on('click', function () {
+                    var tempTeamMemberUserID = this.id.substr(31);
+                    //alert(tempTeamMemberUserID);
+
+                    //alert(tempTeamMemberUserID)
+
+                    //begin DeleteTeamMember
+                    //begin axios delete post
+                    //axios.post('/dailyReportByReportID/DeleteTeamMember', {
+
+                    //    dailyReportID: dailyReportID,
+                    //    userName: tempTeamMemberUserID,
+                    //})
+                    //    .then(function (response) {
+                    //        console.log(response);
+                    //    })
+                    //    .catch(function (error) {
+                    //        console.log(error);
+                    //    });
+                    //end axios add post
+
+                    $("#" + $(this).attr("id")).remove();
+                });
+                //end when a team member class is clicked...
+
+                //begin when a team member class is clicked...
+                $(".workDescTeam_").on('click', function () {
+                    //var tempTeamMemberUserID = this.id.substr(5);
+                    var tempTeamMemberUserID = this.id;
+
+                    //alert(tempTeamMemberUserID)
+
+                    //begin DeleteTeamMember
+                    //begin axios delete post
+                    //axios.post('/dailyReportByReportID/DeleteTeamMember', {
+
+                    //    dailyReportID: dailyReportID,
+                    //    userName: tempTeamMemberUserID,
+                    //})
+                    //    .then(function (response) {
+                    //        console.log(response);
+                    //    })
+                    //    .catch(function (error) {
+                    //        console.log(error);
+                    //    });
+                    //end axios add post
+
+                    $("#" + $(this).attr("id")).remove();
+                });
+                //end when a team member class is clicked...
+
+                //begin when a team member class is clicked...
+                $(".editWorkDescLineBtn_").on('click', function () {
+                    //var tempTeamMemberUserID = this.id.substr(5);
+                    slctd_timeEntryID = this.id.substr(20);
+                    //alert(slctd_timeEntryID);
+
+                    //$("#workDescTeamLine_" + slctd_timeEntryID + "_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+                    $("#input_workDescLine_" + slctd_timeEntryID).attr("contentEditable", "true");//set the work description line to editable
+                    $("#txt_teamMembersWorkDescLine_" + slctd_timeEntryID).children().css('pointer-events', 'auto');//set the line team to editable
+
+                    $("#workDescTeamLine_dpdwn_" + slctd_timeEntryID).removeAttr("disabled");//set the work description line to editable
+                    //$("#workDescTeamLine_dpdwn_" + slctd_timeEntryID).removeAttr("disabled").remove();//set the work description line to editable
+
+                    //$("#workDescTeamLine_dpdwn_" + slctd_timeEntryID).prop("disabled", false);
+
+                    //$("#" + $(this).attr("id")).remove();
+
+                });
+                //end when a team member class is clicked...
+
+                //begin when a team member class is clicked...
+                $(".deleteWorkDescLineBtn_").on('click', function () {
+                    //var tempTeamMemberUserID = this.id.substr(5);
+                    slctd_timeEntryID = this.id.substr(22);
+                    //alert(slctd_timeEntryID);
+
+                    //var addItem1 = $("#txt_dailyReportID").html();
+                    //var addItem2 = $("#input_workDesc").html();
+
+                    alert("deleting time entry id: " + slctd_timeEntryID);
+
+                    //begin axios delete post
+                    axios.post('/workDesc/DeleteWorkDesc', {
+                        timeEntryID: slctd_timeEntryID,
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    //end axios delete post
+                });
+                //end when a team member class is clicked...
+
+                //begin load team members on work description dpdwn change
+                $(".workDescTeamLine_dpdwn_").change(function () {
+
+                    //alert(slctd_timeEntryID + " " + $(this).val());
+                    //workDescTeam_dpdwn.empty();
+                    //workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Add' }));
+                    //workDescTeam_dpdwn.val('-1');
+                    //alert($(this).val());
+
+                    //var tempTeamMemberUserID = $(this).val();
+
+                    //begin
+
+                    $.ajax({
+                        url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                        method: 'post',
+                        dataType: 'json',
+                        data: { userName: $(this).val(), dailyReportID: dailyReportID },
+                        success: function (data) {
+
+
+                            //team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+
+                            //console.log(data)
+
+                            $(data).each(function (index, item) {
+                                //team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+                                console.log(item.userName)
+                                console.log(item.name)
+                                console.log(item.shortName)
+
+                                var temp_userName;
+                                var temp_name;
+                                var temp_shortName;
+
+                                temp_userName = item.userName;
+                                temp_name = item.name;
+                                temp_shortName = item.shortName;
+
+                                //$("#workDescTeam_").clone(true).prop("id", "workDescTeam_" + temp_userName.toString()).appendTo("#txt_teamMembersWorkDesc");
+                                //$("#workDescTeam_" + temp_userName.toString()).text(temp_shortName);
+                                //$("#workDescTeam_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+
+                                //$("#workDescTeam_").clone(true).prop("id", "workDescTeamLine_" + slctd_timeEntryID + "_" + temp_userName.toString()).appendTo("#workDescLine_" + slctd_timeEntryID + "#txt_teamMembersWorkDescLine_" + slctd_timeEntryID);
+
+                                $("#workDescTeam_").clone(true).prop("id", "workDescTeamLine_" + slctd_timeEntryID + "_" + temp_userName.toString()).appendTo("#txt_teamMembersWorkDescLine_" + slctd_timeEntryID);
+
+                                $("#workDescTeamLine_" + slctd_timeEntryID + "_" + temp_userName.toString()).prop("class", "workDescTeamLineUserShortName_")
+                                $("#workDescTeamLine_" + slctd_timeEntryID + "_" + temp_userName.toString()).text(temp_shortName);
+                                $("#workDescTeamLine_" + slctd_timeEntryID + "_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+
+                                //begin AddTeamMember
+                                //begin axios add post
+                                //axios.post('/dailyReportByReportID/AddTeamMember', {
+                                //    dailyReportID: dailyReportID,
+                                //    userName: temp_userName,
+                                //})
+                                //    .then(function (response) {
+                                //        console.log(response);
+                                //    })
+                                //    .catch(function (error) {
+                                //        console.log(error);
+                                //    });
+                                //end axios add post
+                            });
+                            //end AddTeamMember
+                        }
+                    });
+                });
+                //end load team members on work description dpdwn change
+
+            });//end document read jquery statements
+        </script>
+    </head>
+
+@*BEGIN ALLPAX TEAM*@
+<div class="container pl-auto" style="margin:5px" id="contnr_team">
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Allpax Team:</strong>
+        </div>
+        <div class="col-10" style="padding:5px">
+            <div class="row" style="margin:0px;">
+                <select name="team_dpdwn" id="team_dpdwn" style="width:100%">
+                </select>
+            </div>
+            <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
+                <div class="team_" id="team_" style="padding:5px; border:solid black 1px" hidden>
+                    Johnny Watkins|JW
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*END ALLPAX TEAM*@
+
+<div class=" container pl-auto" style="margin:5px" id="contnr_workDescription">
+    <div class="row">
+        <div class="col-8" style="padding:5px">
+            <strong>Work Description</strong>
+        </div>
+        <div class="col-4" style="padding:5px">
+            <strong>Team</strong>
+        </div>
+    </div>
+
+@*BEGIN WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
+    <div class="col-12" id="workDescriptionLine_template">
+        @*<div class="col-3" style="padding:5px">
+                <div>
+                    <span><strong>Record No</strong></span>
+                    <span id="txt_dailyReportID" value=@ViewBag.reportID>@ViewBag.reportID</span>
+                </div>
+            </div>*@
+        <div class="row" id="">
+            <div class="col-8" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable="true">
+                @*<span class="input" role="textbox" id="input_workDesc" contenteditable>kkkkk</span>*@
+            </div>
+            <div class="col-3" name="txt_teamMembersWorkDesc" id="txt_teamMembersWorkDesc" style="padding:5px">
+                <span class="workDescTeam_" id="workDescTeam_" style="padding:5px"></span>
+            </div>
+            <div class="col-1" style="padding:5px">
+                <select class="workDescTeam_dpdwn" name="" @*id="workDescTeam_dpdwn"*@ style="width:100%">
+                    <option value="">Team</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2" style="padding:5px">
+                <div>
+                    <span><strong>Time Entry:</strong></span>
+                    <span id="txt_timeEntryID" value="">new</span>
+                </div>
+            </div>
+            <div class="col-10" style="padding:5px">
+                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="background-color: royalblue; width: 100%">Save Entry</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*END WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
+
+@*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
+<div class=" container pl-auto" style="margin:5px" id="contnr_workDescription">
+    @foreach (var item in Model)
+    {
+        //BEGIN TEMPORARY LOOP VARIABLES
+        int temp_timeEntryID = item.timeEntryID;
+        List<string> temp_userNames=item.userNames;
+        List<string> temp_userShortNames = item.userShortNames;
+        string temp_workDescription = item.workDescription;
+        //END TEMPORARY LOOP VARIABLES
+
+        <div class="col-12 workDescLine_" id="workDescLine_@temp_timeEntryID">
+            <div class="row" style="padding:5px" id="">
+                <div class="col-8 input_workDescLine_" id="input_workDescLine_@temp_timeEntryID" style="padding:5px; border: 1px solid black;" contenteditable="false">
+                    @*<span class="input" role="textbox" id="input_workDesc" contenteditable>kkkkk</span>*@
+                    @temp_workDescription
+                </div>
+                <div class="col-3 txt_teamMembersWorkDescLine" id="txt_teamMembersWorkDescLine_@temp_timeEntryID" style="padding:5px">
+                    @*<span class="workDescTeam_" id="workDescTeam_" style="padding:5px">*@
+                    @for (var i = 0; i < (temp_userNames.Count); i++)
+                    {
+                        @*<span class="workDescTeam_" id=@Html.DisplayFor(modelItem => item.userShortNames[@i])> @Html.DisplayFor(modelItem => item.userShortNames[@i]) </span>*@
+                        <span class="workDescTeamLineUserShortName_" id="workDescTeamLineUserShortName_@temp_timeEntryID@temp_userNames[@i]" style="pointer-events:none">@temp_userShortNames[@i]</span>
+                    }
+                    @*</span>*@
+                </div>
+                <div class="col-1" style="padding:5px">
+                    <select name="" class="workDescTeamLine_dpdwn_" id="workDescTeamLine_dpdwn_@temp_timeEntryID" style="width:100%" disabled>
+                        <option value="">Team</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2" style="padding:5px">
+                    <div>
+                        <span><strong>Time Entry:</strong></span>
+                        <span id="timeEntryIDWorkDesc_@temp_timeEntryID" value="">@temp_timeEntryID</span>
+                    </div>
+                </div>
+                <div class="col-1" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm deleteWorkDescLineBtn_" id="deleteWorkDescLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%">Delete</button>
+                </div>
+                <div class="col-2" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm editWorkDescLineBtn_" id="editWorkDescLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%;">Unlock for Edit</button>
+                </div>
+                <div class="col-2" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm lockWorkDescLineBtn_" id="lockWorkDescLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%;" disabled>Lock for Edit</button>
+                </div>
+                <div class="col-2" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm saveWorkDescLineBtn_" id="saveWorkDescLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%;" disabled>Save Edits</button>
+                </div>
+                @*<div class="col-2" style="padding:5px">
+                    <button type="button" class="example2 btn btn-primary btn-sm" id="" style="background-color: grey; width: 100%">confirm test</button>
+                </div>*@
+            </div>
+            <hr style="margin:1px; background-color:black" />
+        </div>
+    }
+    @*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
+</div>
+
+
+

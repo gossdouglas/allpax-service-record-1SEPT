@@ -1,0 +1,366 @@
+﻿@model IEnumerable<allpax_sale_miner.Models.tbl_customer>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <head>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <!-- JQuery -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {//begin document read jquery statements
+
+         //$('#datatable_customers thead tr').clone(true).appendTo( '#datatable_customers thead' );
+         //$('#datatable_customers thead tr:eq(1) th').each( function (i) {
+         //    var title = $(this).text();
+         //    $(this).html( '<input type="text" placeholder=" " />' );
+ 
+         //    $( 'input', this ).on( 'keyup change', function () {
+         //        if ( table.column(i).search() !== this.value ) {
+         //            table
+         //                .column(i)
+         //                   .search( this.value )
+         //                    .draw();
+         //        }
+         //    } );
+         //} );
+
+                //begin cascading dropdown logic
+                var states_Dpdwn = $('#addRecordItem5');
+
+                //begin fill the states dropdown
+                $.ajax({
+                    url: 'DataService.asmx/GetStates',
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        states_Dpdwn.append($('<option/>', { value: -1, text: 'Select State' }));
+                        
+                        $(data).each(function (index, item) {
+                            states_Dpdwn.append($('<option/>', { value: item.abbrev, text: item.state }));
+                        });
+                    }
+                });
+            //end fill the states dropdown
+ 
+                var table = $('#datatable_customers').DataTable({
+                    orderCellsTop: true,
+                    fixedHeader: true,
+                    paging: false,
+                    //"scrollY": "50vh",
+                    //"scrollX": true,
+                    //"scrollCollapse": true,
+                    order: [[1, "asc"]],
+                    searching: false
+                });
+
+          
+               // "searching": false, // false to disable search (or any other option)
+               // "order": [[1, "asc"]]
+            
+            $('.dataTables_length').addClass('bs-select');
+                //begin when a record class is clicked...
+                $(".record").on('click keyup change', function () {
+                    selectedItem0 = $(this).attr("id");//works
+                    selectedItem1 = $(this).find("#record_item1").html();//works valid for inner html only
+                    selectedItem2 = $(this).find("#record_item2").html();//works valid for inner html only
+                    selectedItem3 = $(this).find("#record_item3").html();//works valid for inner html only
+                    selectedItem4 = $(this).find("#record_item4").html();//works valid for inner html only
+                    selectedItem5 = $(this).find("#record_item5").html();//works valid for inner html only
+                    selectedItem6 = $(this).find("#record_item6").html();//works valid for inner html only
+
+                    $("#slctd_id").val(selectedItem0);
+                    $("#slctd_customerCode").val(selectedItem1);
+                    $("#slctd_name").val(selectedItem2);
+                    $("#slctd_address").val(selectedItem3);
+                    $("#slctd_city").val(selectedItem4);
+                    $("#slctd_state").val(selectedItem5);
+                    $("#slctd_zipCode").val(selectedItem6);
+                });
+                //end when a record class is clicked...
+                $(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked...
+                    $(this).parent().find(".editButton").hide();
+                    $(this).parent().find(".updateButton").show();
+                    $(this).parent().find(".deleteButton").hide();
+                    $(this).parent().find(".cancelButton").show();
+
+                    $(this).parent().parent().css("background-color", "powderblue");//change bkgnd color
+                    $(this).parent().parent().attr("contenteditable", "true");//set all <td> in the record to editable
+                    $(this).parent().parent().find("#record_item0").attr("contenteditable", "false");//set the id <td> to not editable
+                    $(this).parent().parent().find(".cancelButton").css("background-color", "indianred");//change cancel buttn clr after edit is clicked
+                    $(this).parent().parent().find(".cancelButton").css("border", "indianred");//change cancel buttn clr after edit is clicked
+                    $(this).parent().parent().find(".updateButton").css("background-color", "steelblue");//change cancel buttn clr after edit is clicked
+                    $(this).parent().parent().find(".updateButton").css("border", "steelblue");//change cancel buttn clr after edit is clicked
+                });
+                $(".btn.btn-primary.cancelButton").click(function () {//when a record's edit button is clicked...
+                    $(this).parent().find(".editButton").show();
+                    $(this).parent().find(".updateButton").hide();
+                    $(this).parent().find(".deleteButton").show();
+                    $(this).parent().find(".cancelButton").hide();
+                    $(this).parent().find(".confirmButton").hide();
+
+                    $(this).parent().parent().css("background-color", "transparent");
+                    $(this).parent().parent().attr("contenteditable", "false");
+                });
+                $(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked...
+                    $(this).parent().find(".editButton").hide();
+                    $(this).parent().find(".updateButton").hide();
+                    $(this).parent().find(".deleteButton").hide();
+                    $(this).parent().find(".cancelButton").show();
+                    $(this).parent().find(".confirmButton").show();
+
+                    $(this).parent().parent().css("background-color", "powderblue");//change bkgnd color
+                    $(this).parent().parent().attr("contenteditable", "false");
+                    $(this).parent().parent().find(".cancelButton").css("background-color", "indianred");//change cancel buttn clr after delete is clicked
+                    $(this).parent().parent().find(".cancelButton").css("border", "indianred");//change cancel buttn clr after edit is clicked
+                    $(this).parent().parent().find(".confirmButton").css("background-color", "steelblue");//change confirm buttn color after delete is clicked
+                    $(this).parent().parent().find(".confirmButton").css("border", "steelblue");
+                });
+
+                //begin #addButton
+                $("#addButton").click(function () {//when the add button is clicked...
+                    var addItem1 = $("#addRecordItem1").val();
+                    var addItem2 = $("#addRecordItem2").val();
+                    var addItem3 = $("#addRecordItem3").val();
+                    var addItem4 = $("#addRecordItem4").val();
+                    var addItem5 = $("#addRecordItem5").val();
+                    var addItem6 = $("#addRecordItem6").val();
+
+                    alert(
+                        "Selected for Add POST:" + '\n' +
+                        "addItem1: " + addItem1 + '\n' +
+                        "addItem2: " + addItem2 + '\n' +
+                        "addItem3: " + addItem3 + '\n' +
+                        "addItem4: " + addItem4 + '\n' +
+                        "addItem5: " + addItem5 + '\n' +
+                        "addItem6: " + addItem6 + '\n'
+                    );
+                    $("#addRecordItem1").val('');
+                    $("#addRecordItem2").val('');
+                    $("#addRecordItem3").val('');
+                    $("#addRecordItem4").val('');
+                    $("#addRecordItem5").val('');
+                    $("#addRecordItem6").val('');
+                    //begin axios add post
+                    axios.post('/CustomerMgmt/AddCustomer', {
+                        customerCode: addItem1,
+                        name: addItem2,
+                        address: addItem3,
+                        city: addItem4,
+                        state: addItem5,
+                        zipCode: addItem6,
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    //end axios add post
+                });
+                //end #addButton
+
+                //begin confirm edit record
+                $(".btn.btn-primary.updateButton").click(function () {//when a record's edit button is clicked...
+                    $(this).hide();
+                    $(this).parent().find(".updateButton").hide();
+                    $(this).parent().find(".editButton").show();
+                    $(this).parent().find(".deleteButton").hide();
+                    $(this).parent().find(".cancelButton").show();
+
+                    $(this).parent().parent().attr("contenteditable", "false");
+
+                    $(this).parent().parent().css("background-color", "transparent");
+                    $(this).parent().parent().find(".cancelButton").css("background-color","royalblue");//change cancel button color after update is clicked
+                    $(this).parent().find(".cancelButton").hide();
+                    $(this).parent().find(".deleteButton").show();
+
+                    var editItem0 = $("#slctd_id").val();
+                    var editItem1 = $("#slctd_customerCode").val();
+                    var editItem2 = $("#slctd_name").val();
+                    var editItem3 = $("#slctd_address").val();
+                    var editItem4 = $("#slctd_city").val();
+                    var editItem5 = $("#slctd_state").val();
+                    var editItem6 = $("#slctd_zipCode").val();
+
+                    alert(
+                        "Selected for Edit POST:" + '\n' +
+                        "editItem0: " + editItem0 + '\n' +
+                        "editItem1: " + editItem1 + '\n' +
+                        "editItem2: " + editItem2 + '\n' +
+                        "editItem3: " + editItem3 + '\n' +
+                        "editItem4: " + editItem4 + '\n' +
+                        "editItem5: " + editItem5 + '\n' +
+                        "editItem6: " + editItem6 + '\n'
+                    );
+
+                    //begin axios add post
+                    axios.post('/CustomerMgmt/UpdateCustomer', {
+                        id: editItem0,
+                        customerCode: editItem1,
+                        name: editItem2,
+                        address: editItem3,
+                        city: editItem4,
+                        state: editItem5,
+                        zipCode: editItem6,
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    //end axios add post
+                });
+                //end confirm edit record
+
+                //begin axios confirm delete record
+                $(".btn.btn-primary.confirmButton").click(function () {//when a record's delete button is clicked...
+                    alert(
+                        "Selected for DELETE:" + '\n' +
+                        "id: " + selectedItem0 + '\n' +
+                        "customerCode: " + selectedItem1 + '\n' +
+                        "name: " + selectedItem2 + '\n' +
+                        "address: " + selectedItem3 + '\n' +
+                        "city: " + selectedItem4 + '\n' +
+                        "state: " + selectedItem5 + '\n' +
+                        "zipCode: " + selectedItem6 + '\n'
+                    );
+
+                    axios.post('/CustomerMgmt/DeleteCustomer', {
+                        id: selectedItem0,
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+                });
+                //end axios confirm delete record
+            });//end document read jquery statements
+        </script>
+    </head>
+    <style>
+        div.row {
+            width: auto;
+            height: auto;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 0px;
+        }
+        .form-group {
+  margin: 5px;
+}
+        
+    </style>
+
+
+    <div class="container-fluid"><hr />
+            <!--begin inline add-->
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Customer Management</h5>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-sm" id="addRecordItem1" placeholder="Customer Code" value="">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-sm" id="addRecordItem2" placeholder="Name" value="">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-sm" id="addRecordItem3" placeholder="Address" value="">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-sm" id="addRecordItem4" placeholder="City" value="">
+                        </div>
+                        <div class="form-group">        
+                            <select class="form-control form-control-sm" id="addRecordItem5" name="addRecordItem5">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-sm" id="addRecordItem6" placeholder="ZIP" value="">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm" id="addButton" style="background-color: royalblue">Add</button>
+                    </form><hr />
+                </div>
+            </div>
+            <!--end inline add-->
+            <!--click event begin-->
+            <div>
+                <div class="row" style="display:none">
+                    <div class="col-md-1">ID: <input type="text" id="slctd_id" value="slctd_id"></div>
+                    <div class="col-md-2">C-Code: <input type="text" id="slctd_customerCode" value="slctd_customerCode"></div>
+                    <div class="col-md-2">NAME: <input type="text" id="slctd_name" value="slctd_name"></div>
+                    <div class="col-md-2">address: <input type="text" id="slctd_address" value="slctd_address"></div>
+                    <div class="col-md-2">city: <input type="text" id="slctd_city" value="slctd_city"></div>
+                    <div class="col-md-1">state: <input type="text" id="slctd_state" value="slctd_state"></div>
+                    <div class="col-md-1">zip: <input type="text" id="slctd_zipCode" value="slctd_zipCode"></div>
+                </div>
+            </div>
+            <!--click event end-->
+            <!-- Start your project here-->
+            
+            <!-- End your project here-->
+        </div>
+<div class="container-fluid">
+    <div class="col-md-12" style="border:none">
+        <table id="datatable_customers" class="table table-striped table-bordered" >
+            <thead>
+                <tr>
+                    <th class="th-sm">
+                        ID
+                    </th>
+                    <th class="th-sm">
+                        C- Code
+                    </th>
+                    <th class="th-sm">
+                        Name
+                    </th>
+                    <th class="th-sm">
+                        Address
+                    </th>
+                    <th class="th-sm">
+                        City
+                    </th>
+                    <th class="th-sm">
+                        State
+                    </th>
+                    <th class="th-sm">
+                        Zip Code
+                    </th>
+                    <th class="th-sm">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="record" id=@Html.DisplayFor(modelItem => item.id)>
+                        <td id="record_item0" value=@Html.DisplayFor(modelItem => item.id)>@Html.DisplayFor(modelItem => item.id)</td>
+                        <td id="record_item1" value=@Html.DisplayFor(modelItem => item.customerCode)>@Html.DisplayFor(modelItem => item.customerCode)</td>
+                        <td id="record_item2" value=@Html.DisplayFor(modelItem => item.name)>@Html.DisplayFor(modelItem => item.name)</td>
+                        <td id="record_item3" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
+                        <td id="record_item4" value=@Html.DisplayFor(modelItem => item.city)>@Html.DisplayFor(modelItem => item.city)</td>
+                        <td id="record_item5" value=@Html.DisplayFor(modelItem => item.state)>@Html.DisplayFor(modelItem => item.state)</td>
+                        <td id="record_item6" value=@Html.DisplayFor(modelItem => item.zipCode)>@Html.DisplayFor(modelItem => item.zipCode)</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm editButton">Edit</button>
+                            <button class="btn btn-primary btn-sm updateButton" style="display:none;">Update</button>
+                            <button class="btn btn-primary btn-sm deleteButton">Delete</button>
+                            <button class="btn btn-primary btn-sm confirmButton" style="display:none;">Confirm</button>
+                            <button class="btn btn-primary btn-sm cancelButton" style="display:none;">Cancel</button>
+                        </td>
+                    </tr>
+                }
+        </table>
+    </div>    
+</div>
+
+
+

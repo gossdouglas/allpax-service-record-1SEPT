@@ -1,0 +1,56 @@
+﻿@model IEnumerable<allpax_sale_miner.ViewModels.machinesW_kitsAvlbl>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.customerCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.eqpmtType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.model)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.machineID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.machineID2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.kitID)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.customerCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.eqpmtType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.model)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.machineID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.machineID2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.kitID)
+        </td>
+    </tr>
+}
+
+</table>

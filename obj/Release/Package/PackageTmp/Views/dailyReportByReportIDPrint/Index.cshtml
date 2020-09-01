@@ -1,0 +1,281 @@
+﻿@model List<allpax_service_record.Models.View_Models.vm_dailyReportByReportID>
+@*@model IEnumerable<allpax_service_record.Models.View_Models.vm_dailyReportByReportID>*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*PRINT DAILY REPORT BY REPORT ID PAGE*@
+    <script>
+        $(document).ready(function () {//begin document read jquery statements
+
+            //begin fill the team names dropdown
+            var team_dpdwn = $('#team_dpdwn');
+            var addWorkDescBtn = $('#addWorkDescBtn');
+            var dailyReportID = $("#txt_dailyReportID").html();
+
+            //$.ajax({
+            //    url: 'DataService.asmx/GetAllTeamNames',
+            //    method: 'post',
+            //    dataType: 'json',
+            //    data: { userName: '%' },
+            //    success: function (data) {
+
+            //        team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+
+            //        $(data).each(function (index, item) {
+            //            team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+            //        });
+            //    }
+            //});
+            ////end fill the team names dropdown
+
+            //begin load team members on page load
+            $.ajax({
+                url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                method: 'post',
+                dataType: 'json',
+                data: { userName: '%', dailyReportID: dailyReportID },
+                success: function (data) {
+
+                    $(data).each(function (index, item) {
+                        var temp_userName;
+                        var temp_name;
+                        var temp_shortName;
+
+                        temp_userName = item.userName;
+                        temp_name = item.name;
+                        temp_shortName = item.shortName;
+
+                        $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
+                        $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
+                        $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+                    });
+                    //end AddTeamMember
+                }
+            });
+            //});
+            //end load team members on page load
+
+            //begin add team member on drop down change
+            team_dpdwn.change(function () {
+
+                $.ajax({
+                    url: 'DataService.asmx/GetAllTeamNames',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { userName: $(this).val() },
+                    success: function (data) {
+
+                        $(data).each(function (index, item) {
+                            var temp_userName = item.userName;
+                            var temp_name = item.name;
+                            var temp_shortName = item.shortName;
+
+                            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
+                            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
+                            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+
+                            //begin AddTeamMember
+                            //begin axios add post
+                            axios.post('/dailyReportByReportID/AddTeamMember', {
+                                dailyReportID: dailyReportID,
+                                userName: temp_userName,
+                            })
+                                .then(function (response) {
+                                    console.log(response);
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                            //end axios add post
+                        });
+                        //end AddTeamMember
+                    }
+                });
+            });
+            //end add team member on drop down change
+
+            //begin when a team member class is clicked...
+            $(".team_").on('click', function () {
+                var tempTeamMemberUserID = this.id.substr(5);
+
+                //begin DeleteTeamMember
+                //begin axios delete post
+                axios.post('/dailyReportByReportID/DeleteTeamMember', {
+
+                    dailyReportID: dailyReportID,
+                    userName: tempTeamMemberUserID,
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //end axios add post
+
+                $("#" + $(this).attr("id")).remove();
+            });
+            //end when a team member class is clicked...
+            //end when a record class is clicked...
+
+            $("#printDailyReport").click(function () {
+                //$("#nama").printThis({
+                $(".printable").printThis({
+                    importCSS: true,
+                    importStyle: true,
+                });
+            });
+
+            //$("#printDailyReport").click(function () {//when a record's edit button is clicked...
+            //    //alert(selectedItem0);
+            //    //window.location = '/DailyReportByReportID?reportID=' + selectedItem0;   
+            //    //window.location = '/DailyReportByReportID/PrintDailyReport?reportID=' + selectedItem0 + "&date=" + selectedItem2;
+            //    //window.location = '/DailyReportByReportID/PrintDailyReport?reportID=' + selectedItem0;
+            //    window.location = '/DailyReportByReportID/PrintDailyReport?reportID=50';
+
+            //});
+
+        });//end document read jquery statements
+    </script>
+
+<div class="container printable" id="contnr_team">
+    <div class="row">
+        <div class="col-3" style="padding:5px">
+            <strong>Daily Log Information</strong>
+        </div>
+        <div class="col-3" style="padding:5px">
+            <div>
+                <span><strong>Record No</strong></span>
+                <span id="txt_dailyReportID" value="@Model.First().dailyReportID">@Model.First().dailyReportID</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="md-col-2" style="padding:5px">
+            <strong>Job:</strong>
+        </div>
+        <div class="md-col-2" style="padding:5px">
+            <select name="jobs_dpdown" id="jobs_dpdown" style="width:100%" value="">
+                <option value="@Model.First().jobID">@Model.First().jobID</option>
+            </select>
+            <input type="text" id="input_jobs_dpdown" name="" style="width:100%" hidden>
+        </div>
+        <div class="md-col-5" style="padding:5px"></div>
+        <div class="md-col-1" style="padding:5px">
+            <strong>Date:</strong>
+        </div>
+        <div class="md-col-2" style="padding:5px">
+            <input type="date" class="form-control form-control-sm" id="slct_date"
+                   placeholder="@Model.First().date" value=@Model.First().date>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Customer:</strong>:
+        </div>
+        <div class="col-7" style="padding:5px" id="output_customerName">@Model.First().customerName</div>
+        <div class="col-1" style="padding:5px">
+            <strong>Sub Job:</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <select name="subJobTypes_dpdwn" id="subJobTypes_dpdwn" style="width:100%" value="">
+                <option value="@Model.First().description">@Model.First().description</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Location:</strong>
+        </div>
+        <div class="col-7" style="padding:5px" id="output_location">@Model.First().address</div>
+        <div class="col-1" style="padding:5px">
+            <strong>Code:</strong>
+        </div>
+        <div class="col-2" style="padding:5px" id="output_customerCode">@Model.First().customerCode</div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Customer Contact:</strong>
+        </div>
+        <div class="col-10" style="padding:5px" id="output_customerContact">@Model.First().customerContact</div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Equipment:</strong>
+        </div>
+        <div class="col-10" style="padding:5px">
+            <input type="text" value="@Model.First().equipment" id="input_equipment" name="" style="width:100%">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Start Time:</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="@Model.First().startTime">
+        </div>
+        <div class="col-2" style="padding:5px">
+            <strong>End Time:</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="@Model.First().endTime">
+        </div>
+        <div class="col-2" style="padding:5px">
+            <strong>Lunch (hr)</strong>
+        </div>
+        <div class="col-1" style="padding:5px">
+            <input type="text" class="form-control form-control-sm" id="input_lunch" value="@Model.First().lunchHours">
+        </div>
+        <div class="col-1" style="padding:5px">
+        </div>
+    </div>
+</div>
+<hr style="margin:1px; opacity:0" />
+@*BEGIN ALLPAX TEAM*@
+<div class="container printable" id="contnr_team">
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Allpax Team:</strong>
+        </div>
+        <div class="col-10" style="padding:5px">
+            @*<div class="row" style="margin:0px;">
+                <select name="team_dpdwn" id="team_dpdwn" style="width:100%">
+                </select>
+            </div>*@
+            <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
+                <div class="team_" id="team_" style="padding:5px; border:solid black 1px" hidden>
+                    Johnny Watkins|JW
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*END ALLPAX TEAM*@
+<hr style="margin:1px; opacity:0" />
+<div class="container" id="">
+    @{Html.RenderAction("Index", "workDescPrint", new { dailyReportID = ViewBag.reportID });
+    }
+</div>
+<hr style="margin:1px; opacity:0" />
+<div class="container" id="">
+    @{Html.RenderAction("Index", "workDescDelaysPrint", new { dailyReportID = ViewBag.reportID });
+    }
+</div>
+<hr style="margin:1px; opacity:0" />
+<div class="container" id="">
+    @{Html.RenderAction("Index", "workDescWntyDelaysPrint", new { dailyReportID = ViewBag.reportID });
+    }
+</div>
+
+<button id="printDailyReport">PRINT THIS PAGE</button>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,368 @@
+﻿@model IEnumerable<allpax_sale_miner.Models.tbl_customer_event>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        $(document).ready(function () {//begin document read jquery statements
+            // Setup - add a text input to each footer cell
+            //$('#datatable_customerevent thead tr').clone(true).appendTo( '#datatable_customerevent thead' );
+            //$('#datatable_customerevent thead tr:eq(1) th').each( function (i) {
+            //    var title = $(this).text();
+            //    $(this).html( '<input type="text" placeholder=" " />' );
+
+            //    $( 'input', this ).on( 'keyup change', function () {
+            //        if ( table.column(i).search() !== this.value ) {
+            //            table
+            //                .column(i)
+            //                   .search( this.value )
+            //                    .draw();
+            //        }
+            //    } );
+            //} );
+
+            //begin cascading dropdown logic
+            var customerCodes_Dpdwn = $('#addRecordItem1');
+            var eventType_Dpdwn = $('#addRecordItem3');
+
+            //begin fill the customer codes dropdown
+            $.ajax({
+                url: 'DataService.asmx/GetCustomerCodes',
+                method: 'post',
+                dataType: 'json',
+                success: function (data) {
+
+                    customerCodes_Dpdwn.append($('<option/>', { value: -1, text: 'Select Customer Code' }));
+
+                    $(data).each(function (index, item) {
+                        customerCodes_Dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode }));
+                    });
+                }
+            });
+            //end fill the customer codes dropdown
+
+            //begin fill the event types dropdown
+            $.ajax({
+                url: 'DataService.asmx/GetEventTypes',
+                method: 'post',
+                dataType: 'json',
+                success: function (data) {
+
+                    eventType_Dpdwn.append($('<option/>', { value: -1, text: 'Select Event Type' }));
+
+                    $(data).each(function (index, item) {
+                        eventType_Dpdwn.append($('<option/>', { value: item.eventType, text: item.eventType }));
+                    });
+                }
+            });
+            //end fill the event types dropdown
+
+            var table = $('#datatable_customerevent').DataTable({
+                orderCellsTop: true,
+                fixedHeader: true,
+                paging: false,
+                order: [[1, "asc"]],
+                searching: false
+            });
+
+            $('.dataTables_length').addClass('bs-select');
+            //begin when a record class is clicked...
+            $(".record").on('click keyup change', function () {
+                selectedItem0 = $(this).attr("id");//works
+                selectedItem1 = $(this).find("#record_item1").html();//works valid for inner html only
+                selectedItem2 = $(this).find("#record_item2").html();//works valid for inner html only
+                selectedItem3 = $(this).find("#record_item3").html();//works valid for inner html only
+                selectedItem4 = $(this).find("#record_item4").html();//works valid for inner html only
+                selectedItem5 = $(this).find("#record_item5").html();//works valid for inner html only
+
+
+                $("#slctd_id").val(selectedItem0);
+                $("#slctd_customerCode").val(selectedItem1);
+                $("#slctd_eventID").val(selectedItem2);
+                $("#slctd_eventType").val(selectedItem3);
+                $("#slctd_startDate").val(selectedItem4);
+                $("#slctd_endDate").val(selectedItem5);
+
+            });
+            //end when a record class is clicked...
+
+            $(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked...
+                $(this).parent().find(".editButton").hide();
+                $(this).parent().find(".updateButton").show();
+                $(this).parent().find(".deleteButton").hide();
+                $(this).parent().find(".cancelButton").show();
+
+                $(this).parent().parent().css("background-color", "powderblue");//change bkgnd color
+                $(this).parent().parent().attr("contenteditable", "true");//set all <td> in the record to editable
+                $(this).parent().parent().find("#record_item0").attr("contenteditable", "false");//set the id <td> to not editable
+            });
+            $(".btn.btn-primary.cancelButton").click(function () {//when a record's edit button is clicked...
+                $(this).parent().find(".editButton").show();
+                $(this).parent().find(".updateButton").hide();
+                $(this).parent().find(".deleteButton").show();
+                $(this).parent().find(".cancelButton").hide();
+                $(this).parent().find(".confirmButton").hide();
+
+                $(this).parent().parent().css("background-color", "transparent");
+                $(this).parent().parent().attr("contenteditable", "false");
+            });
+            $(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked...
+                $(this).parent().find(".editButton").hide();
+                $(this).parent().find(".updateButton").hide();
+                $(this).parent().find(".deleteButton").hide();
+                $(this).parent().find(".cancelButton").show();
+                $(this).parent().find(".confirmButton").show();
+                $(this).parent().parent().css("background-color", "powderblue");//change bkgnd color
+
+            });
+
+            //begin #addButton
+            $("#addButton").click(function () {//when the add button is clicked...
+                var addItem1 = $("#addRecordItem1").val();
+                //var addItem2 = $("#addRecordItem2").val();
+                var addItem3 = $("#addRecordItem3").val();
+                var addItem4 = $("#addRecordItem4").val();
+                var addItem5 = $("#addRecordItem5").val();
+
+                alert(
+                    "Selected for Add POST:" + '\n' +
+                    "addItem1: " + addItem1 + '\n' +
+                    //"addItem2: " + addItem2 + '\n' +
+                    "addItem3: " + addItem3 + '\n' +
+                    "addItem4: " + addItem4 + '\n' +
+                    "addItem5: " + addItem5 + '\n'
+                );
+                $("#addRecordItem1").val('');
+                //$("#addRecordItem2").val('');
+                $("#addRecordItem3").val('');
+                $("#addRecordItem4").val('');
+                $("#addRecordItem5").val('');
+                //begin axios add post
+
+                axios.post('/CustomerEvent/AddEvent', {
+                    customerCode: addItem1,                    
+                    eventType: addItem3,
+                    startDate: addItem4,
+                    endDate: addItem5,
+                    eventID: '99',//need to delete eventID at some point
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+                //end axios add post
+            });
+            //end #addButton
+
+            //begin confirm edit record
+            $(".btn.btn-primary.updateButton").click(function () {//when a record's edit button is clicked...
+                $(this).hide();
+                $(this).parent().find(".updateButton").hide();
+                $(this).parent().find(".editButton").show();
+                $(this).parent().find(".deleteButton").hide();
+                $(this).parent().find(".cancelButton").show();
+
+                $(this).parent().parent().attr("contenteditable", "false");
+
+                $(this).parent().parent().css("background-color", "transparent");
+                $(this).parent().parent().find(".cancelButton").css("background-color", "royalblue");//change cancel button color after update is clicked
+                $(this).parent().find(".cancelButton").hide();
+                $(this).parent().find(".deleteButton").show();
+
+                var editItem0 = $("#slctd_id").val();
+                var editItem1 = $("#slctd_customerCode").val();
+                //var editItem2 = $("#slctd_eventID").val();
+                var editItem3 = $("#slctd_eventType").val();
+                var editItem4 = $("#slctd_startDate").val();
+                var editItem5 = $("#slctd_endDate").val();
+
+
+
+                alert(
+                    "Selected for Edit POST:" + '\n' +
+                    "editItem0: " + editItem0 + '\n' +
+                    "editItem1: " + editItem1 + '\n' +
+                    //"editItem2: " + editItem2 + '\n' +
+                    "editItem3: " + editItem3 + '\n' +
+                    "editItem4: " + editItem4 + '\n' +
+                    "editItem5: " + editItem5 + '\n'
+                );
+
+                //begin axios add post
+                axios.post('/CustomerEvent/UpdateEvent', {                   
+                    customerCode: editItem1,                   
+                    eventType: editItem3,
+                    startDate: editItem4,
+                    endDate: editItem5,
+                    eventID: '99', //need to delete eventID at some point
+                    id: editItem0
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //end axios add post
+
+            });
+            //end confirm edit record
+
+            //begin axios confirm delete record
+            $(".btn.btn-primary.confirmButton").click(function () {//when a record's delete button is clicked...
+                alert(
+                    "Selected for DELETE:" + '\n' +
+                    "id: " + selectedItem0 + '\n' +
+                    "customerCode: " + selectedItem1 + '\n' +
+                    //"eventID: " + selectedItem2 + '\n' +
+                    "eventType: " + selectedItem3 + '\n' +
+                    "startDate: " + selectedItem4 + '\n' +
+                    "endDate: " + selectedItem5 + '\n'
+                );
+
+                axios.post('/CustomerEvent/DeleteEvent', {
+                    id: selectedItem0,
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+            });
+            //end axios confirm delete record
+
+        });//end document read jquery statements
+    </script>
+    <!--md bootstrap additions begin-->
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="~/Content/bootstrap.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="~/Content/mdb.min.css" rel="stylesheet">
+    <!-- MDBootstrap Datatables  -->
+    <link href="~/Content/MDBootstrap/css/addons/datatables.min.css" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link href="" rel="stylesheet">
+
+</head>
+<style>
+    div.row {
+        width: auto;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 0px;
+    }
+
+    .form-group {
+        margin: 5px;
+    }
+</style>
+
+<div class="container-fluid">
+    <hr />
+    <!--begin inline add-->
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Customer Events</h5>
+            <form class="form-inline">
+                <div class="form-group">                   
+                    <select class="form-control form-control-sm" id="addRecordItem1" name="addRecordItem1">
+                    </select>
+                </div>
+                <div class="form-group">
+                    @*<label for="addRecordItem2">Event ID</label>*@
+                    @*<input type="text" class="form-control form-control-sm" id="addRecordItem2" placeholder="Event ID" value="">*@
+                </div>
+                <div class="form-group">
+                    <select class="form-control form-control-sm" id="addRecordItem3" name="addRecordItem3">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="date" class="form-control form-control-sm" id="addRecordItem4" placeholder="Start Date" value="">
+                </div>
+                <div class="form-group">
+                    <input type="date" class="form-control form-control-sm" id="addRecordItem5" placeholder="End Date" value="">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm" id="addButton" style="background-color: royalblue">Add</button>
+            </form><hr />
+        </div>
+    </div>
+</div>
+<!--end inline add-->
+<!--click event begin-->
+<div>
+    <div class="row" style="display:none">
+        <div class="col-md-1">ID: <input type="text" id="slctd_id" value="slctd_id"></div>
+        <div class="col-md-2">Customer Code: <input type="text" id="slctd_customerCode" value="slctd_customerCode"></div>
+        @*<div class="col-md-2">Event ID: <input type="text" id="slctd_eventID" value="slctd_eventID"></div>*@
+        <div class="col-md-2">Event Type: <input type="text" id="slctd_eventType" value="slctd_eventType"></div>
+        <div class="col-md-2">Start Date: <input type="text" id="slctd_startDate" value="slctd_startDate"></div>
+        <div class="col-md-2">End Date: <input type="text" id="slctd_endDate" value="slctd_endDate"></div>
+    </div>
+</div>
+<!--click event end-->
+<!--table begin-->
+<div class="container-fluid">
+    <div class="col-md-12" style="border:none">
+        <table id="datatable_customerevent" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="th-sm">
+                        ID
+                    </th>
+                    <th class="th-sm">
+                        Customer Code
+                    </th>
+                    @*<th class="th-sm">
+                            Event ID
+                        </th>*@
+                    <th class="th-sm">
+                        Event Type
+                    </th>
+                    <th class="th-sm">
+                        Start Date
+                    </th>
+                    <th class="th-sm">
+                        End Date
+                    </th>
+                    <th class="th-sm">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="record" id=@Html.DisplayFor(modelItem => item.id)>
+                        <td id="record_item0" value=@Html.DisplayFor(modelItem => item.id)>@Html.DisplayFor(modelItem => item.id)</td>
+                        <td id="record_item1" value=@Html.DisplayFor(modelItem => item.customerCode)>@Html.DisplayFor(modelItem => item.customerCode)</td>
+                        @*<td id="record_item2" value=@Html.DisplayFor(modelItem => item.eventID)>@Html.DisplayFor(modelItem => item.eventID)</td>*@
+                        <td id="record_item3" value=@Html.DisplayFor(modelItem => item.eventType)>@Html.DisplayFor(modelItem => item.eventType)</td>
+                        <td id="record_item4" value=@Html.DisplayFor(modelItem => item.startDate)>@Html.DisplayFor(modelItem => item.startDate)</td>
+                        <td id="record_item5" value=@Html.DisplayFor(modelItem => item.endDate)>@Html.DisplayFor(modelItem => item.endDate)</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm editButton">Edit</button>
+                            <button class="btn btn-primary btn-sm updateButton" style="display:none;">Update</button>
+                            <button class="btn btn-primary btn-sm deleteButton">Delete</button>
+                            <button class="btn btn-primary btn-sm confirmButton" style="display:none;">Confirm</button>
+                            <button class="btn btn-primary btn-sm cancelButton" style="display:none;">Cancel</button>
+                        </td>
+                    </tr>
+                }
+        </table>
+    </div>
+    <!-- End your project here-->
+    <!--table end-->
+</div>

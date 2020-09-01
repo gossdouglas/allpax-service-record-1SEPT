@@ -1,0 +1,50 @@
+﻿@model allpax_service_record.Models.View_Models.vm_workDesc
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>vm_workDesc</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.dailyReportID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.dailyReportID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.workDescription)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.workDescription)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.userName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.userName)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.timeEntryID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

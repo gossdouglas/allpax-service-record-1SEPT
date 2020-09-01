@@ -1,0 +1,384 @@
+﻿@model List<allpax_sale_miner.ViewModels.vm_SalesCustomer>
+
+@*@model IEnumerable<allpax_sale_miner.ViewModels.vm_SalesCustomer>*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<hr />
+<h3 style="text-align:center">All Equipment Sales</h3>
+<h4 style="text-align:center">
+    <script>document.write(new Date().toLocaleDateString());</script>
+</h4>
+<hr />
+
+@*Customer Equipment Sales*@
+<head>
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {//begin document read jquery statements
+
+            //begin set up the data table
+            var table = $('#datatable_eqpmnt_sales').DataTable({
+                orderCellsTop: true,
+                fixedHeader: true,
+                paging: false,
+                //"scrollY": "50vh",
+                //"scrollX": true,
+                //"scrollCollapse": true,
+                order: [[0, "asc"]],
+                searching: false,
+                
+            });
+                $('.dataTables_length').addClass('bs-select');
+            //end set up the data table
+
+            var queries = {};
+            var nav_customerCode = '';
+            //var jobNumbers = {};
+            var jobNumbers = new Array();
+
+            $.each(document.location.search.substr(1).split('&'), function (c, q) {
+                var i = q.split('=');
+                queries[i[0].toString()] = i[1].toString();
+                nav_customerCode = queries[i[0].toString()];
+            });
+
+            //begin create the tabs
+            $.ajax({
+                url: 'DataService.asmx/GetJobNosByCustomerCode',
+                method: 'post',
+                async: false,
+                data: { customerCode: nav_customerCode },
+                dataType: 'json',
+                success: function (data) {
+
+                    $(data).each(function (index, item) {
+                        var tempJobNo = item.jobNo.toString();
+                        jobNumbers.push(item.jobNo.toString());
+
+                        $("#tabTemplate").clone().prop("id", "tab_" + tempJobNo.toString()).appendTo("#jobNoTabs");
+
+                        $("#tab_" + tempJobNo.toString()).removeAttr('hidden');//unhide the copy
+
+                        $("#tab_" + tempJobNo.toString()).children().html(tempJobNo.toString());
+                        $("#tab_" + tempJobNo).children().attr("id", tempJobNo+"-tab");
+                        $("#tab_" + tempJobNo).children().attr("href", "#" + tempJobNo);
+
+                        $("#home").clone().prop("id", tempJobNo.toString()).appendTo("#jobNoTabsContent");
+                        $("#"+tempJobNo.toString()).removeAttr('hidden');//unhide the copy
+                        $("#"+tempJobNo).attr("aria-labelledby", tempJobNo + "-tab".toString());                       
+
+                        $("#datatable_eqpmnt_salesTemplate").clone().prop("id", "datatable_eqpmnt_sales" + tempJobNo).appendTo("#" + tempJobNo);//clone and append a data table
+                        $("#datatable_eqpmnt_sales" + tempJobNo).removeAttr('hidden');//unhide the copy
+
+                        //inside this loop is probably where i would begin nesting ajax calls for job numbers.
+                    });
+
+                    $.each(jobNumbers, function (index, val) {
+
+                        $("#datatable_eqpmnt_sales" + val + " tr td:nth-child(1)").each(function (index) {
+
+                            if (val !== $(this).text()) {
+                                //$("#datatable_eqpmnt_sales" + val + " tr").attr('hidden', '');
+                                $($(this)).parent().attr('hidden', '');
+                            }
+
+                        });                      
+                    });
+                }
+            });
+            //end create the tabs
+
+            $(".kitLink").on('click', function () {
+                //alert(
+                //    "id is: " + $(this).attr("id")
+                //);
+
+                //begin fill the kit info panel
+                $.ajax({
+                    url: 'DataService.asmx/GetKitInfoByKitID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { kitID: $(this).attr("id") },
+                    success: function (data) {
+
+                        $(data).each(function (index, item) {
+
+                            var test = item.description.toString();
+                            partInfoPartDesc_1
+
+                            $("#kitFormKitInfoID").html("Kit ID: " + item.kitID.toString());
+                            $("#KitFormKitInfoDesc").html("Kit Description: " + item.description.toString());
+
+                            $("#partInfoPartDesc_1").html("Part Description: " + item.descKitItem_1.toString());
+                            $("#partInfoPartID_1").html("Part ID: " + item.partNoKitItem_1.toString());
+                            $("#partInfoPartDesc_2").html("Part Description: " + item.descKitItem_2.toString());
+                            $("#partInfoPartID_2").html("Part ID: " + item.partNoKitItem_2.toString());
+                            $("#partInfoPartDesc_3").html("Part Description: " + item.descKitItem_3.toString());
+                            $("#partInfoPartID_3").html("Part ID: " + item.partNoKitItem_3.toString());
+                            $("#partInfoPartDesc_4").html("Part Description: " + item.descKitItem_4.toString());
+                            $("#partInfoPartID_4").html("Part ID: " + item.partNoKitItem_4.toString());
+                            $("#partInfoPartDesc_5").html("Part Description: " + item.descKitItem_5.toString());
+                            $("#partInfoPartID_5").html("Part ID: " + item.partNoKitItem_5.toString());
+
+                            $("#kitInfoFile").html(item.infoPackage.toString());
+                            $("#kitMechDwgFile").html(item.mechDrawing.toString());
+                            $("#kitPriceSheet").html(item.priceSheet.toString());
+
+                        });
+                    }
+                });
+            //end fill the kit info panel
+            });
+
+        });//end document read jquery statements
+    </script>
+</head>
+<style>
+    table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .kits {
+        text-overflow: ellipsis;
+        white-space: normal;
+        overflow: visible;
+        width: 30%;
+        max-width: 30%;
+    }
+    .kitFormTemplate {
+        border: 1px solid black;
+    }
+
+</style>
+<div class="container-fluid">
+    <div class="col-md-12" style="border:none">
+
+        <ul class="nav nav-tabs" id="jobNoTabs" role="tablist">
+            <li class="nav-item" id="tabTemplate">
+                <a class="nav-link" id="intro-tab" data-toggle="tab" href="#intro" role="tab" aria-controls="intro"
+                   aria-selected="true">Select a Job Number:</a>
+            </li>
+            <li class="nav-item" id="tabTemplate" hidden>
+                <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+                   aria-selected="false">J1000 static</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="">
+            <div class="tab-pane fade" id="intro" role="tabpanel" aria-labelledby="intro-tab">
+            </div>
+        </div>
+        <div class="tab-content" id="jobNoTabsContent">
+            <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+            </div>
+        </div><br />
+
+    <form class="" id="kitForm_">
+        <div class="row" id="">
+            <div class="col-md-3 kitFormTemplate" id="kitFormKitInfoID">
+                Kit ID:
+            </div>
+            <div class="col-md-3 kitFormTemplate" id="KitFormKitInfoDesc">
+                Kit Description:
+            </div>
+        </div>
+        <div class="row" id="">
+            <div class="col-md-3 kitFormTemplate" id="partInfoPartDesc_1">
+                Part Description:
+            </div>
+            <div class="col-md-3 kitFormTemplate" id="partInfoPartID_1">
+                Part ID:
+            </div>
+        </div>
+        <div class="row" id="">
+            <div class="col-md-3 kitFormTemplate" id="partInfoPartDesc_2">
+                Part Description:
+            </div>
+            <div class="col-md-3 kitFormTemplate" id="partInfoPartID_2">
+                Part ID:
+            </div>
+        </div>
+        <div class="row" id="">
+            <div class="col-md-3 kitFormTemplate" id="partInfoPartDesc_3">
+                Part Description:
+            </div>
+            <div class="col-md-3 kitFormTemplate" id="partInfoPartID_3">
+                Part ID:
+            </div>
+        </div>
+        <div class="row" id="">
+            <div class="col-md-3 kitFormTemplate" id="partInfoPartDesc_4">
+                Part Description:
+            </div>
+            <div class="col-md-3 kitFormTemplate" id="partInfoPartID_4">
+                Part ID:
+            </div>
+        </div>
+        <div class="row" id="">
+            <div class="col-md-3 kitFormTemplate" id="partInfoPartDesc_5">
+                Part Description:
+            </div>
+            <div class="col-md-3 kitFormTemplate" id="partInfoPartID_5">
+                Part ID:
+            </div>
+        </div>
+        <div class="row" id="">
+            <div class="col-md-3 kitFormTemplate" id="">
+                Kit Information Package File:
+            </div>
+            <div class="col-md-3 kitFormTemplate" id="kitInfoFile">
+
+            </div>
+        </div>
+        <div class="row" id="">
+            <div class="col-md-3 kitFormTemplate" id="">
+                Kit Mechanical Drawing File:
+            </div>
+            <div class="col-md-3 kitFormTemplate" id="kitMechDwgFile">
+
+            </div>
+        </div>
+        <div class="row" id="">
+            <div class="col-md-3 kitFormTemplate" id="">
+                Kit Price Sheet:
+            </div>
+            <div class="col-md-3 kitFormTemplate" id="kitPriceSheet">
+
+            </div>
+        </div>
+    </form><hr />
+
+        <table id="datatable_eqpmnt_salesTemplate" class="table table-striped table-bordered" hidden>
+            <thead>
+                <tr>
+                    <th class="th-sm" hidden>
+                        Job Number
+                    </th>
+                    <th class="th-sm">
+                        Customer (Customer Code)
+                    </th>
+                    <th class="th-sm">
+                        Model
+                    </th>
+                    <th class="th-sm">
+                        Machine ID
+                    </th>
+                    <th class="th-sm">
+                        Current Kits
+                    </th>
+                    <th class="th-sm">
+                        Available Kits
+                    </th>
+                    @*<th class="th-sm">
+                        Job List
+                    </th>*@
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+
+                {
+
+                    <tr class="record" id="">
+                        <td id="" value=@Html.DisplayFor(modelItem => item.jobNo) hidden>@Html.DisplayFor(modelItem => item.jobNo)</td>
+                        <td id="" value=@Html.DisplayFor(modelItem => item.name)>@Html.DisplayFor(modelItem => item.name) (@Html.DisplayFor(modelItem => item.customerCode))</td>
+                        <td id="" value=@Html.DisplayFor(modelItem => item.model)>@Html.DisplayFor(modelItem => item.model)</td>
+                        <td id="" value=@Html.DisplayFor(modelItem => item.machineID)>@Html.DisplayFor(modelItem => item.machineID)</td>
+                        <td class="kits">
+                            @for (var i = 0; i < (item.kitsCurrent.Count); i++)
+                            {
+                                @*<span>@Html.DisplayFor(modelItem => item.kitsCurrent[@i]), </span>*@
+
+                                <a href="" class="kitLink" id="@Html.DisplayFor(modelItem => item.kitsCurrent[@i])" style="color:blue;">@Html.DisplayFor(modelItem => item.kitsCurrent[@i]),</a>
+                            }
+                        </td>
+                        <td class="kits">
+                            @for (var i = 0; i < (item.kitsAvlblbNotInstld.Count); i++)
+                            {
+                                @*<span>@Html.DisplayFor(modelItem => item.kitsAvlblbNotInstld[@i]), </span>*@
+                                <a href="#" class="kitLink" id="@Html.DisplayFor(modelItem => item.kitsAvlblbNotInstld[@i])" style="color:blue;">@Html.DisplayFor(modelItem => item.kitsAvlblbNotInstld[@i]) </a>
+                                
+                            }
+                        </td>
+                        @*<td class="kits">
+                            @for (var i = 0; i < (item.jobNoList.Count); i++)
+                            {
+                                <span>@Html.DisplayFor(modelItem => item.jobNoList[@i]), </span>
+                            }
+                        </td>*@
+                    </tr>
+                }
+        </table>
+
+        @*<table id="datatable_eqpmnt_salesTemplate_test" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="th-sm" hidden>
+                        Job Number
+                    </th>
+                    <th class="th-sm">
+                        Customer (Customer Code)
+                    </th>
+                    <th class="th-sm">
+                        Model
+                    </th>
+                    <th class="th-sm">
+                        Machine ID
+                    </th>
+                    <th class="th-sm">
+                        Current Kits
+                    </th>
+                    <th class="th-sm">
+                        Available Kits
+                    </th>
+                    <th class="th-sm">
+                        Job List
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+
+                {
+
+                    <tr class="record" id="">
+                        <td id="" value=@Html.DisplayFor(modelItem => item.jobNo)>@Html.DisplayFor(modelItem => item.jobNo)</td>
+                        <td id="" value=@Html.DisplayFor(modelItem => item.name)>@Html.DisplayFor(modelItem => item.name) (@Html.DisplayFor(modelItem => item.customerCode))</td>
+                        <td id="" value=@Html.DisplayFor(modelItem => item.model)>@Html.DisplayFor(modelItem => item.model)</td>
+                        <td id="" value=@Html.DisplayFor(modelItem => item.machineID)>@Html.DisplayFor(modelItem => item.machineID)</td>
+                        <td class="kits">
+                            @for (var i = 0; i < (item.kitsCurrent.Count); i++)
+                            {
+                                <span>@Html.DisplayFor(modelItem => item.kitsCurrent[@i]), </span>
+                            }
+                        </td>
+                        <td class="kits">
+                            @for (var i = 0; i < (item.kitsAvlblbNotInstld.Count); i++)
+                            {
+                                <span>@Html.DisplayFor(modelItem => item.kitsAvlblbNotInstld[@i]), </span>
+                            }
+                        </td>
+                        <td class="kits">
+                            @for (var i = 0; i < (item.jobNoList.Count); i++)
+                            {
+                                <span>@Html.DisplayFor(modelItem => item.jobNoList[@i]), </span>
+                            }
+                        </td>
+                    </tr>
+                }
+        </table>*@
+    </div>
+</div>
+
+
+
+
+
+

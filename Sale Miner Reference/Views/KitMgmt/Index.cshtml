@@ -1,0 +1,546 @@
+﻿@model IEnumerable<allpax_sale_miner.Models.tbl_kit>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <script>
+            $(document).ready(function () {//begin document read jquery statements
+
+                //$('#datatable_kitmgmt thead tr').clone(true).appendTo( '#datatable_kitmgmt thead' );
+                //$('#datatable_kitmgmt thead tr:eq(1) th').each( function (i) {
+                //    var title = $(this).text();
+                //    $(this).html( '<input type="text" placeholder=" " />' );
+
+                //    $( 'input', this ).on( 'keyup change', function () {
+                //        if ( table.column(i).search() !== this.value ) {
+                //            table
+                //                .column(i)
+                //                   .search( this.value )
+                //                    .draw();
+                //        }
+                //    } );
+                //} );
+
+                var table = $('#datatable_kitmgmt').DataTable({
+                    orderCellsTop: true,
+                    fixedHeader: true,
+                    paging: false,
+                    order: [[1, "asc"]],
+                    searching: false,
+                    scrollX: true,
+                    scrollY: 450,
+                    fixedColumns: {
+                        leftColumns: 5
+                    }
+                });
+
+                $('.dataTables_length').addClass('bs-select');
+                //begin when a record class is clicked...
+                $(".record").on('click keyup change', function () {
+                    selectedItem0 = $(this).attr("id");//works
+                    selectedItem1 = $(this).find("#record_item1").text();//works valid for inner html only
+                    selectedItem2 = $(this).find("#record_item2").text();//works valid for inner html only
+                    selectedItem3 = $(this).find("#record_item3").text();//works valid for inner html only
+
+                    selectedItem4 = $(this).find("#record_item4").text();//works valid for inner html only
+                    selectedItem5 = $(this).find("#record_item5").text();//works valid for inner html only
+                    selectedItem6 = $(this).find("#record_item6").text();//works valid for inner html only
+                    selectedItem7 = $(this).find("#record_item7").text();//works valid for inner html only
+                    selectedItem8 = $(this).find("#record_item8").text();//works valid for inner html only
+                    selectedItem9 = $(this).find("#record_item9").text();//works valid for inner html only
+                    selectedItem10 = $(this).find("#record_item10").text();//works valid for inner html only
+                    selectedItem11 = $(this).find("#record_item11").text();//works valid for inner html only
+                    selectedItem12 = $(this).find("#record_item12").text();//works valid for inner html only
+                    selectedItem13 = $(this).find("#record_item13").text();//works valid for inner html only
+                    selectedItem14 = $(this).find("#record_item14").text();//works valid for inner html only
+                    selectedItem15 = $(this).find("#record_item15").text();//works valid for inner html only
+                    selectedItem16 = $(this).find("#record_item16").text();//works valid for inner html only
+
+                    $("#slctd_id").val(selectedItem0);
+                    $("#slctd_kitID").val(selectedItem1);
+                    $("#slctd_description").val(selectedItem2);
+                    $("#slctd_filePath").val(selectedItem3);
+
+                    $("#slctd_descKitItem_1").val(selectedItem4);
+                    $("#slctd_partNoKitItem_1").val(selectedItem5);
+                    $("#slctd_descKitItem_2").val(selectedItem6);
+                    $("#slctd_partNoKitItem_2").val(selectedItem7);
+                    $("#slctd_descKitItem_3").val(selectedItem8);
+                    $("#slctd_partNoKitItem_3").val(selectedItem9);
+                    $("#slctd_descKitItem_4").val(selectedItem10);
+                    $("#slctd_partNoKitItem_4").val(selectedItem11);
+                    $("#slctd_descKitItem_5").val(selectedItem12);
+                    $("#slctd_partNoKitItem_5").val(selectedItem13);
+                    $("#slctd_infoPackage").val(selectedItem14);
+                    $("#slctd_mechDrawing").val(selectedItem15);
+                    $("#slctd_priceSheet").val(selectedItem16);
+
+                });
+                //end when a record class is clicked...
+
+                $(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked...
+                    $(this).parent().find(".editButton").hide();
+                    $(this).parent().find(".updateButton").show();
+                    $(this).parent().find(".deleteButton").hide();
+                    $(this).parent().find(".cancelButton").show();
+
+                    $(this).parent().parent().css("background-color", "powderblue");//change bkgnd color
+                    $(this).parent().parent().attr("contenteditable", "true");//set all <td> in the record to editable
+                    $(this).parent().parent().find("#record_item0").attr("contenteditable", "false");//set the id <td> to not editable
+                    $(this).parent().parent().find(".cancelButton").css("background-color", "indianred");//change cancel buttn clr after edit is clicked
+
+                });
+                $(".btn.btn-primary.cancelButton").click(function () {//when a record's edit button is clicked...
+                    $(this).parent().find(".editButton").show();
+                    $(this).parent().find(".updateButton").hide();
+                    $(this).parent().find(".deleteButton").show();
+                    $(this).parent().find(".cancelButton").hide();
+                    $(this).parent().find(".confirmButton").hide();
+
+                    $(this).parent().parent().css("background-color", "transparent");
+                    $(this).parent().parent().attr("contenteditable", "false");
+                });
+                $(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked...
+                    $(this).parent().find(".editButton").hide();
+                    $(this).parent().find(".updateButton").hide();
+                    $(this).parent().find(".deleteButton").hide();
+                    $(this).parent().find(".cancelButton").show();
+                    $(this).parent().find(".confirmButton").show();
+                    $(this).parent().parent().css("background-color", "powderblue");//change bkgnd color
+
+                });
+
+                //begin #addButton
+                $("#addButton").click(function () {//when the add button is clicked...
+                    var addItem1 = $("#addRecordItem1").val();
+                    var addItem2 = $("#addRecordItem2").val();
+                    var addItem3 = $("#addRecordItem3").val();
+
+                    var addItem4 = $("#addRecordItem4").val();
+                    var addItem5 = $("#addRecordItem5").val();
+                    var addItem6 = $("#addRecordItem6").val();
+                    var addItem7 = $("#addRecordItem7").val();
+                    var addItem8 = $("#addRecordItem8").val();
+                    var addItem9 = $("#addRecordItem9").val();
+                    var addItem10 = $("#addRecordItem10").val();
+                    var addItem11 = $("#addRecordItem11").val();
+                    var addItem12 = $("#addRecordItem12").val();
+                    var addItem13 = $("#addRecordItem13").val();
+                    var addItem14 = $("#addRecordItem14").val();
+                    var addItem15 = $("#addRecordItem15").val();
+                    var addItem16 = $("#addRecordItem16").val();
+
+                    alert(
+                        "Selected for Add POST:" + '\n' +
+                        "addItem1: " + addItem1 + '\n' +
+                        "addItem2: " + addItem2 + '\n' +
+                        "addItem3: " + addItem3 + '\n' +
+                        "addItem4: " + addItem4 + '\n' +
+                        "addItem5: " + addItem5 + '\n' +
+                        "addItem6: " + addItem6 + '\n' +
+                        "addItem7: " + addItem7 + '\n' +
+                        "addItem8: " + addItem8 + '\n' +
+                        "addItem9: " + addItem9 + '\n' +
+                        "addItem10: " + addItem10 + '\n' +
+                        "addItem11: " + addItem11 + '\n' +
+                        "addItem12: " + addItem12 + '\n' +
+                        "addItem13: " + addItem13 + '\n' +
+                        "addItem14: " + addItem14 + '\n' +
+                        "addItem15: " + addItem15 + '\n' +
+                        "addItem16: " + addItem16 + '\n'
+                    );
+                    $("#addRecordItem1").val('');
+                    $("#addRecordItem2").val('');
+                    $("#addRecordItem3").val('');
+                    $("#addRecordItem4").val('');
+                    $("#addRecordItem5").val('');
+                    $("#addRecordItem6").val('');
+                    $("#addRecordItem7").val('');
+                    $("#addRecordItem8").val('');
+                    $("#addRecordItem9").val('');
+                    $("#addRecordItem10").val('');
+                    $("#addRecordItem11").val('');
+                    $("#addRecordItem12").val('');
+                    $("#addRecordItem13").val('');
+                    $("#addRecordItem14").val('');
+                    $("#addRecordItem15").val('');
+                    $("#addRecordItem16").val('');
+                    //begin axios add post
+
+                    axios.post('/KitMgmt/AddKit', {
+                        kitID: addItem1,
+                        description: addItem2,
+                        filePath: addItem3,
+                        descKitItem_1: addItem4,
+                        partNoKitItem_1: addItem5,
+                        descKitItem_2: addItem6,
+                        partNoKitItem_2: addItem7,
+                        descKitItem_3: addItem8,
+                        partNoKitItem_3: addItem9,
+                        descKitItem_4: addItem10,
+                        partNoKitItem_4: addItem11,
+                        descKitItem_5: addItem12,
+                        partNoKitItem_5: addItem13,
+                        infoPackage: addItem14,
+                        mechDrawing: addItem15,
+                        priceSheet: addItem16
+
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+                    //end axios add post
+                });
+                //end #addButton
+
+                //begin confirm edit record
+                $(".btn.btn-primary.updateButton").click(function () {//when a record's edit button is clicked...
+                    $(this).hide();
+                    $(this).parent().find(".updateButton").hide();
+                    $(this).parent().find(".editButton").show();
+                    $(this).parent().find(".deleteButton").hide();
+                    $(this).parent().find(".cancelButton").show();
+
+                    $(this).parent().parent().attr("contenteditable", "false");
+
+                    $(this).parent().parent().css("background-color", "transparent");
+                    $(this).parent().parent().find(".cancelButton").css("background-color", "royalblue");//change cancel button color after update is clicked
+                    $(this).parent().find(".cancelButton").hide();
+                    $(this).parent().find(".deleteButton").show();
+
+                    var editItem0 = $("#slctd_id").val();
+                    var editItem1 = $("#slctd_kitID").val();
+                    var editItem2 = $("#slctd_description").val();
+                    var editItem3 = $("#slctd_filePath").val();
+
+                    var editItem4 = $("#slctd_descKitItem_1").val();
+                    var editItem5 = $("#slctd_partNoKitItem_1").val();
+                    var editItem6 = $("#slctd_descKitItem_2").val();
+                    var editItem7 = $("#slctd_partNoKitItem_2").val();
+                    var editItem8 = $("#slctd_descKitItem_3").val();
+                    var editItem9 = $("#slctd_partNoKitItem_3").val();
+                    var editItem10 = $("#slctd_descKitItem_4").val();
+                    var editItem11 = $("#slctd_partNoKitItem_4").val();
+                    var editItem12 = $("#slctd_descKitItem_5").val();
+                    var editItem13 = $("#slctd_partNoKitItem_5").val();
+                    var editItem14 = $("#slctd_infoPackage").val();
+                    var editItem15 = $("#slctd_mechDrawing").val();
+                    var editItem16 = $("#slctd_priceSheet").val();
+
+                    alert(
+                        "Selected for Edit POST:" + '\n' +
+                        "editItem0: " + editItem0 + '\n' +
+                        "editItem1: " + editItem1 + '\n' +
+                        "editItem2: " + editItem2 + '\n' +
+                        "editItem3: " + editItem3 + '\n' +
+
+                        "editItem4: " + editItem4 + '\n' +
+                        "editItem5: " + editItem5 + '\n' +
+                        "editItem6: " + editItem6 + '\n' +
+                        "editItem7: " + editItem7 + '\n' +
+                        "editItem8: " + editItem8 + '\n' +
+                        "editItem9: " + editItem9 + '\n' +
+                        "editItem10: " + editItem10 + '\n' +
+                        "editItem11: " + editItem11 + '\n' +
+                        "editItem12: " + editItem12 + '\n' +
+                        "editItem13: " + editItem13 + '\n' +
+                        "editItem14: " + editItem14 + '\n' +
+                        "editItem15: " + editItem15 + '\n' +
+                        "editItem16: " + editItem16 + '\n'
+
+                    );
+
+                    //begin axios add post
+                    axios.post('/KitMgmt/UpdateKit', {
+                        kitID: editItem1,
+                        description: editItem2,
+                        filePath: editItem3,
+                        id: editItem0,
+
+                        descKitItem_1: editItem4,
+                        partNoKitItem_1: editItem5,
+                        descKitItem_2: editItem6,
+                        partNoKitItem_2: editItem7,
+                        descKitItem_3: editItem8,
+                        partNoKitItem_3: editItem9,
+                        descKitItem_4: editItem10,
+                        partNoKitItem_4: editItem11,
+                        descKitItem_5: editItem12,
+                        partNoKitItem_5: editItem13,
+                        infoPackage: editItem14,
+                        mechDrawing: editItem15,
+                        priceSheet: editItem16
+
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    //end axios add post
+
+                });
+                //end confirm edit record
+
+                //begin axios confirm delete record
+                $(".btn.btn-primary.confirmButton").click(function () {//when a record's delete button is clicked...
+                    alert(
+                        "Selected for DELETE:" + '\n' +
+                        "id: " + selectedItem0 + '\n' +
+                        "kitID: " + selectedItem1 + '\n' +
+                        "description: " + selectedItem2 + '\n' +
+                        "filePath: " + selectedItem3 + '\n'
+                    );
+
+                    axios.post('/KitMgmt/DeleteKit', {
+                        id: selectedItem0,
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+                });
+                //end axios confirm delete record
+
+            });//end document read jquery statements
+        </script>
+        <!--md bootstrap additions begin-->
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+        <!-- Bootstrap core CSS -->
+        <link href="~/Content/bootstrap.css" rel="stylesheet">
+        <!-- Material Design Bootstrap -->
+        <link href="~/Content/mdb.min.css" rel="stylesheet">
+        <!-- MDBootstrap Datatables  -->
+        <link href="~/Content/MDBootstrap/css/addons/datatables.min.css" rel="stylesheet">
+        <!-- Your custom styles (optional) -->
+        <link href="" rel="stylesheet">
+
+    </head>
+<style>
+    div.row {
+        width: auto;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 0px;
+    }
+
+    .form-group {
+        margin: 5px;
+    }
+
+    tr td {
+        white-space: nowrap;
+    }
+</style>
+
+<div class="container-fluid">
+    <hr />
+    <!--begin inline add-->
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Kit Management</h5>
+            <form class="form-inline">
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem1" placeholder="Kit ID" value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem2" placeholder="Description" value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem3" placeholder="File Path" value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem4" placeholder="Kit Item 1 Desc" value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem5" placeholder="Kit Item 1 Part No." value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem6" placeholder="Kit Item 2 Desc" value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem7" placeholder="Kit Item 2 Part No." value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem8" placeholder="Kit Item 3 Desc" value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem9" placeholder="Kit Item 3 Part No." value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem10" placeholder="Kit Item 4 Desc" value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem11" placeholder="Kit Item 4 Part No." value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem12" placeholder="Kit Item 5 Desc" value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem13" placeholder="Kit Item 5 Part No." value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem14" placeholder="Info. Package" value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem15" placeholder="Drawing" value="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem16" placeholder="Price Sheet" value="">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm" id="addButton" style="background-color: royalblue">Add</button>
+            </form><hr />
+        </div>
+    </div>
+    <!--end inline add-->
+    <!--click event begin-->
+    <div>
+        <div class="row" style="display:none">
+            <div class="auto"><input type="text" id="slctd_id" value="slctd_id"></div>
+            <div class="auto"><input type="text" id="slctd_kitID" value="slctd_kitID"></div>
+            <div class="auto"><input type="text" id="slctd_description" value="slctd_description"></div>
+            <div class="auto"><input type="text" id="slctd_filePath" value="slctd_filePath"></div>
+
+            <div class="auto"><input type="text" id="slctd_descKitItem_1" value="slctd_descKitItem_1"></div>
+            <div class="auto"><input type="text" id="slctd_partNoKitItem_1" value="slctd_partNoKitItem_1"></div>
+
+            <div class="auto"><input type="text" id="slctd_descKitItem_2" value="slctd_descKitItem_2"></div>
+            <div class="auto"><input type="text" id="slctd_partNoKitItem_2" value="slctd_partNoKitItem_2"></div>
+
+            <div class="auto"><input type="text" id="slctd_descKitItem_3" value="slctd_descKitItem_3"></div>
+            <div class="auto"><input type="text" id="slctd_partNoKitItem_3" value="slctd_partNoKitItem_3"></div>
+
+            <div class="auto"><input type="text" id="slctd_descKitItem_4" value="slctd_descKitItem_4"></div>
+            <div class="auto"><input type="text" id="slctd_partNoKitItem_4" value="slctd_partNoKitItem_4"></div>
+
+            <div class="auto"><input type="text" id="slctd_descKitItem_5" value="slctd_descKitItem_5"></div>
+            <div class="auto"><input type="text" id="slctd_partNoKitItem_5" value="slctd_partNoKitItem_5"></div>
+
+            <div class="auto"><input type="text" id="slctd_infoPackage" value="slctd_infoPackage"></div>
+            <div class="auto"><input type="text" id="slctd_mechDrawing" value="slctd_mechDrawing"></div>
+            <div class="auto"><input type="text" id="slctd_priceSheet" value="slctd_priceSheet"></div>
+
+        </div>
+    </div>
+    <!--click event end-->
+    <!--table begin-->
+    <!-- Start your project here-->
+    <div style="height: 100vh">
+        <table id="datatable_kitmgmt" class="table table-striped table-bordered " cellspacing="0" width="100%">
+            <thead style="white-space: nowrap">
+                <tr>
+                    <th class="th-sm">
+                        ID
+                    </th>
+                    <th class="th-sm">
+                        Kit ID (key)
+                    </th>
+                    <th class="th-sm">
+                        Description
+                    </th>
+                    <th class="th-sm">
+                        File Path
+                    </th>
+                    <th class="th-sm">
+                        Action
+                    </th>
+                    <th class="th-sm">
+                        Kit Item 1 Desc
+                    </th>
+                    <th class="th-sm" style="white-space: nowrap">
+                        Kit Item 1 Part No.
+                    </th>
+                    <th class="th-sm">
+                        Kit Item 2 Desc
+                    </th>
+                    <th class="th-sm">
+                        Kit Item 2 Part No.
+                    </th>
+                    <th class="th-sm">
+                        Kit Item 3 Desc
+                    </th>
+                    <th class="th-sm">
+                        Kit Item 3 Part No.
+                    </th>
+                    <th class="th-sm">
+                        Kit Item 4 Desc
+                    </th>
+                    <th class="th-sm">
+                        Kit Item 4 Part No.
+                    </th>
+                    <th class="th-sm">
+                        Kit Item 5 Desc
+                    </th>
+                    <th class="th-sm">
+                        Kit Item 5 Part No.
+                    </th>
+                    <th class="th-sm">
+                        Info Package
+                    </th>
+                    <th class="th-sm">
+                        Drawing
+                    </th>
+                    <th class="th-sm">
+                        Price Sheet
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="record" id=@Html.DisplayFor(modelItem => item.id)>
+                        <td id="record_item0" value=@Html.DisplayFor(modelItem => item.id)>@Html.DisplayFor(modelItem => item.id)</td>
+                        <td id="record_item1" value=@Html.DisplayFor(modelItem => item.kitID)>@Html.DisplayFor(modelItem => item.kitID)</td>
+                        <td id="record_item2" value=@Html.DisplayFor(modelItem => item.description)>@Html.DisplayFor(modelItem => item.description)</td>
+                        <td id="record_item3" value=@Html.DisplayFor(modelItem => item.filePath)>@Html.DisplayFor(modelItem => item.filePath)</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm editButton">Edit</button>
+                            <button class="btn btn-primary btn-sm updateButton" style="display:none;">Update</button>
+                            <button class="btn btn-primary btn-sm deleteButton">Delete</button>
+                            <button class="btn btn-primary btn-sm confirmButton" style="display:none;">Confirm</button>
+                            <button class="btn btn-primary btn-sm cancelButton" style="display:none;">Cancel</button>
+                        </td>
+                        <td id="record_item4" value=@Html.DisplayFor(modelItem => item.descKitItem_1)>@Html.DisplayFor(modelItem => item.descKitItem_1)</td>
+                        <td id="record_item5" value=@Html.DisplayFor(modelItem => item.partNoKitItem_1)>@Html.DisplayFor(modelItem => item.partNoKitItem_1)</td>
+
+                        <td id="record_item6" value=@Html.DisplayFor(modelItem => item.descKitItem_2)>@Html.DisplayFor(modelItem => item.descKitItem_2)</td>
+                        <td id="record_item7" value=@Html.DisplayFor(modelItem => item.partNoKitItem_2)>@Html.DisplayFor(modelItem => item.partNoKitItem_2)</td>
+
+                        <td id="record_item8" value=@Html.DisplayFor(modelItem => item.descKitItem_3)>@Html.DisplayFor(modelItem => item.descKitItem_3)</td>
+                        <td id="record_item9" value=@Html.DisplayFor(modelItem => item.partNoKitItem_3)>@Html.DisplayFor(modelItem => item.partNoKitItem_3)</td>
+
+                        <td id="record_item10" value=@Html.DisplayFor(modelItem => item.descKitItem_4)>@Html.DisplayFor(modelItem => item.descKitItem_4)</td>
+                        <td id="record_item11" value=@Html.DisplayFor(modelItem => item.partNoKitItem_4)>@Html.DisplayFor(modelItem => item.partNoKitItem_4)</td>
+
+                        <td id="record_item12" value=@Html.DisplayFor(modelItem => item.descKitItem_5)>@Html.DisplayFor(modelItem => item.descKitItem_5)</td>
+                        <td id="record_item13" value=@Html.DisplayFor(modelItem => item.partNoKitItem_5)>@Html.DisplayFor(modelItem => item.partNoKitItem_5)</td>
+
+                        <td id="record_item14" value=@Html.DisplayFor(modelItem => item.infoPackage)>@Html.DisplayFor(modelItem => item.infoPackage)</td>
+                        <td id="record_item15" value=@Html.DisplayFor(modelItem => item.mechDrawing)>@Html.DisplayFor(modelItem => item.mechDrawing)</td>
+                        <td id="record_item16" value=@Html.DisplayFor(modelItem => item.priceSheet)>@Html.DisplayFor(modelItem => item.priceSheet)</td>
+
+                    </tr>
+                }
+        </table>   
+    </div>
+    <!-- End your project here-->
+    <!--table end-->  
+
+</div>

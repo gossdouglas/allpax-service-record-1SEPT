@@ -1,0 +1,79 @@
+﻿@model IEnumerable<allpax_sale_miner.ViewModels.machinesW_kitsAvlbl_BnotInstalled>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>All Sales Opportunities</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.jobNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customerCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.eqpmtType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.model)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.machineID)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.kitsCurrent_machineID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.kitsCurrent_kitID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.kitsAvlbl_model)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.kitsAvlbl_kitID)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.jobNo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.customerCode)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.eqpmtType)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.model)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.machineID)
+    </td>
+    @*<td>
+        @Html.DisplayFor(modelItem => item.kitsCurrent_machineID)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.kitsCurrent_kitID)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.kitsAvlbl_model)
+    </td>*@
+<td>
+    @*@Html.DisplayFor(modelItem => item.kitsAvlblbNotInstld.Count)*@
+    @for (var i = 0; i < (item.kitsAvlblbNotInstld.Count); i++)
+    {
+        <p>@Html.DisplayFor(modelItem => item.kitsAvlblbNotInstld[@i])</p>
+    }
+</td>
+</tr>
+}
+
+</table>
+

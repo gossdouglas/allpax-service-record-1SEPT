@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+            .navbar a {
+                float: left;
+                font-size: 16px;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+            .dropdown .dropbtn {
+                font-size: 16px;
+                border: none;
+                outline: none;
+                color: white;
+                padding: 14px 16px;
+                background-color: inherit;
+                font-family: inherit;
+                margin: 0;
+            }
+
+            .navbar a:hover, .dropdown:hover .dropbtn {
+                background-color: red;
+            }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+                float: none;
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                text-align: left;
+            }
+
+                .dropdown-content a:hover {
+                    background-color: #ddd;
+                }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg" style="background-color: #0275d8;">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <a class="navbar-brand" href="#"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAh8AAABdCAMAAAAyjPStAAABCFBMVEX///80PkisHy1xcnEsN0Jwd30xO0X6+/smMj0uOUPs7e5janEbKjd6f4RLU1u3ur3S1NakqKzm5uZeZGvc3t+rGCh2d3ZsbWyqESM4Qk3p19hvdHNCTFXz9PSbnqMiLzuoABqlAACusbWNkpeoABbiubyDiI3g4eP68fLLzdCBgoGJiomuJTKqCyB0bW2mABATIzH25eeam5p2aGnr0NK3RU+PTFHGkJR+YGK8T1mxMj3esrXTkJbWnKG1uLy2Pkm/XGWeOEDFc3nNgoijLTi9Vl+wKzjKn6OcS1GBZ2m2bHPUtLaGWVzEhIjnx8qxXWSZPkYAGiqrUlq3eX7LeoHbpqrkt7vGZ3Aa/5gVAAAUIElEQVR4nO1dC1va2NYOiAkX5R4NFISKYrDkSObDTlWod9szndLOVMr//ycnIZDstffaOzva+QwO7zPPzAhJyE7erPtaURRZmHY9QBlFNtvUpI+3xquBOfz0++3V3UM/qRsuknfXn9//d+fNDoXj43e/lQq97Euf7xr/fzDtyR9Jy7IMXU8G0F1cv//wnzcbELsudkrFNUf+FdC+3DwcGEkcDmMcirx5Q3PEZclxqfjS577GP436j77BI4cvR+7+/A/CEIciO4XySy9gjX8Q9a+6pQvZsaDI3fv/QwjiUGRnf82Q14r6tyQiOnQdY4z+8CdjiHgM2SitDZFXiU/nGDsezs4uUYWjX3/AlIwrQ3ovvZQ1fjnqfxuYnOhPNM08wwmS/LyBEmRj991ahLwyfLFQDhiP7peTPvadw5C7DxyCrEXIq4L2jWOVnpjz7684X+vJP3GCbOyWmi+8pjV+GeqnFn7/kweH7vf2Kdep0fk6Zu3IvBLYd9yIh37qCpARjz7uFt9xP2ZNkNeCyZ0g5GHcXFxM2/zvXT+GR5Dj6nNOq1wl8K9RVkeRVt2kIEiV0ptKn1H9QRgRM9ptnB7+XgKCPEOCNDcbeR+NPal9tM4mgVwUeu6Re25Gsa5zmzxsdzt7pUIkV06r5YlVF8I271Qg+JcpS23ZWVCpXOpu74kuVN2XHlZbInTq08Y6Dwhy9w8QpJBWA2QaUnzXKulUgEGUdNB2i9iz9THCnoMUH+l0ujVIbMtnHUotYtWpXNiqs/lUhsQWj9jaZprcLtXwzkjbG2yWSl11m0ti83RhexjG5PBUqEiA8JhN7NsT/6/vXCP1yYphM5UgkAp9lObLzWWIfbYi8SMV+dcW2EqEQE218h2569AEC0ikQ1dQANsnMhXO71DbbS0egM5gTqhyI8fRTD499Cvb+fNCVnrcuDtPz32CfEbp8QyCVAdw4aGPkot48sOlSDrdkdEzhTTYLZUL3aMD90h30K3KGRUct+t93PurV863/qpUj9IczfRj6bm0f7p/htgiPqxbd2vS7eXGQX6TuCzh606kZYyJ2PLDQasicVAoNB1ehSqmbANKhhR6nbrgaqoL7aJsV5rVVqGa2NS6eVSAfPJVRHs8/4AKdOiG1T44aLcNKkfnhUXq58SnnEjqxm6Ua+3jKA8I76x7U2KvOPMjoQ66YTLwaEDtk8LFAYleAlypTB75kX1Iu9bCSmlWuko13as29pX92hFy7HoQNzfmEsG8DO64bp1YZzfj6eHkYnx7//C2TeRnPP0yJMImXCdmYwf75TB8pMRHQq1J2Hix5oerLkJKdWmhmVAr4Vqp04I/UmK2aMKHLd1dfl7pKNVEo5YoOvxA5I55TTz/52NbGwYCwUpejerzjRy4yzKnN5eBg2PN7OEIyBT9M0+A7IQukYFGiw9n3RIubsz5kUiLrShGaDqPergnpeWBdFBZo3Yb0C4TcG4z16w6a83nlA4mdj4Bd6X9cNNf3nHj5HboUGIyHd3M7s+ubr6Ofzrmqz3t+wwxLi06qPoLNUyPvegZiUcp7vwIHl0U+7T4cO52PvwEKA3DGLU9eEjCB94fFI8GH5XOX+UGcmKMMbpUF7p+Yyvm4b1rfhiO6eH8xzJcAaMoI79GhDFkHQ3DcWKiaxjaTnPRCr9psedHorUvOBIrPgJbQYQ9oYbJ5oEFC0yafO2o2HRjkQn24dP+4GRd2peHijk+PaEYoLf10VCxZwc8F0f/ZT5MtYFcqUwldL/480Nt8J8VRGgGrqgItIaBtgS0T6AYruYbpWLxY0VFWFjnhc0fNeXwEi1DtfSRplxgZWZz3HHkx8ZuxDDqHito3UsV+ijFgB9E+BPhuHPobe6BMKHpEErCsS/WoIYhn6QePA3KOtE6+UYjj4ZPv3GKwhzhMaJlh4/2/VCpn3HSuXwBwtrUIjRr+KUNfZRenh9qI0AtvdVKsRYn71kp4qvmRa4ASpSGCbRYs5ISH00r4o1LdfwWPzj3H6839WA8TBXzCifIr7JA9uFqg2sfdpSX50erR+ZIs4VuJUFJBU6Ekyc0E2pK5iQoDRNcKegyh2d0fHzFSKD3h8phX9j/op+MFfOeswnXhRGZZTS0CgwJBhc/7FF6eX4wv6n1cvC+q5gn6aCZQMWHlIvrCJ8G7sMUITu3pFPaNlb0oRsT5RBtZyBhjXgFZfo1hx8buxGauIE/poL/D9kzhvxwc6SUYMDNKCA0yVWnNmWeeUrDpD1SNXNQu8jr+S8HyP01psqEdVwZnIxA6JQkCN415fBDvqJCI5MFap5cX5iLG0t+KEpX4iYBoakCTzcjde0qmIaBnq8c0zz8jdxgY6bYUgk6/VAZ49bt++e7uNkUucwCKThTm2IxFFN+ZIHCTG1jiwBCM1MEAoTv8hCgNYybr6oCRa1yTWMWZUy7JE3tVNx7629ZV65Q+4VvoUqfG2lROasEBlZGfMtjyg/lI9AdWI2GRv5+uqMBkTOQKkGjUlZbhWdoF+UTcnetsTKVosdc0gxPsC/6/32uggHJJMc2q5LLDnFx48qPJrmNWkNudxnc3J5SIIWBlItLa5hMPluCvkuI8AX4ynqo+plpSxgfC4JcKI+Yk/v8EMhHUr0kqCcrMRBq0LjyQwEKpoXwg7S5MjkNJijVvJTwLVNpWhhvU5EQOhfZv1kitKfKraCPgeLHlTYkmuqCUtTvPA/mWO7MNHJV8weHJEyIjIwtP8DRt9i7nQVC010jcHokz4fK71FFH1FCDPUlEXQ/Iav3FVuWHQ5ODpUbP1XXPw8y/1wPV84AKRKX24sta6ThJc7ixpYfnZR4G7KAR824eiBL+rgZiSzufBF4iG2+pG6UMXEL79Y4OZsusynWrTKVFh/OrvfKxcJF1vWf9tQvc36mh0vep0XNGLBQhUmY2PIDmJtskEojDUmvBgB4+bJxrSMsr+mRTo3UZvFjzgRj5hZ1zLw7qw/Nswj9DcmkrXgJPv3SrSPSFqVFfANESr4dkY/NolKhTF5cYRY3tvyA58VIUjJzq9a8Q/Rq5AlJubjOTliKb36AaP3ynvnRvnD/35w7IvqpbUt3N8zJNVXu50fxag2X5HpmBKREWacuoIUqepTiyg8N3DbWPiVtrmURIhUwkwyMb+IaJh1JuyiKF1zXvebrOT+MR2UciR+OPrqY76CfzQ/5uBBDPAN1953EKYJaFt8WBSlqkYsbV34UQPyD6fUCmdut5W+DgLuki0sXAy2AFi2LsLiXc35M5mZEe8wd4oDDcYeHix3coywzMvo1xz7dOJbQgOSFDJKQlLPHz+LGlB+w64lt5dkjhWZq+RgBC1VtSAqAAsYPmSI0cMJLSfFT0WzvwT+YKJK9L0v0bdurdtdPp/bErwm44xmoMhFUUqYSggIknwQubkz5sQfDmLQoyJJWJfEtsMulWz67rIaRKe0GKC8cFV0fPerejT0xzUjscBhV922Og35Q+M7nR7gKBdlogvRl8rarDe7+8eQHlVrN0Acno+9kbWCPVDsSrXQeWA0TWbsE4Y+kP+v0LadgSMCPQ2WGhOP5/Ai/XWSYANAA+If8LG4c+ZHdhj6Fmqf1LKk9gaMC0ic1WR0BHJ85PyKPLR6ygY63yjAiP9rTIEJG8oOXgdkIPc0yKWhBvA9kN/mPUgz4QQnJo/0GJe8Z+7oHzplkQYE8tLg1gkCzAoMgaiPysMAJyo9o5odbJvSI8OMZGboSKPwgzRXo7NV4N/7l+ZHqlvZ8dLYrDaYAtUUxCKRqYQWUBipSM5K3uUTHQKRaUwHqGD+i6hdrjMqPh6fLD1DqAcs0obPHK+F8eX4k3JEfS6RSGSaeyYgBEBFsQdsbJGEkXdximm09jJJ6cYHxw4ySfXHB0S9P50cPxNHh1k1V5lGKAT9CwLYrkF4K/S2o+eEVrkJQ9eqLw0bsLzFZfpzUFc6QUx4OJhoWMXmy/wLCpEwYvSPzKMWfH1u0mwrKkhnbJPpZMS3e8z1lnZ8l2EjpwU/lMpoBYtXRKuUn86NKats0fS2AVc4bkxN7frBGJhi9wGRJQOBVpsCniJf+R9UwrF5wrE3MW+VDv7SHmMThzSLbCJtFBgM7zNQ34LUxMQQPcedHi0mDwBJAlRlxB253eBa32cD5oSai+bhsc4Nxo4jHWDI7zLRDZAd+fD1s0hQUjBnHuJv/s/gPNSUHf5TizQ81zQ6IofpTUuJVh2ZxO6zxsdg1moZhx2m7+dsI5R9c90WQnxOfUglvmuMAf5RizY9MAjlqjndDMajokB8CBf41lE3wefgdKT8dmvdRDBB9qPSxInhufl9cgNqMdKU4WdwY8yPTqiDxnyy/4Atddcg1xAZELKBiA4K4GLLdUdZjpPox/VSZYBXs/Pog8TXvRbtSeC9ubPmhtirorUW9DcFhmNg8WD0sL1ThA5eRzQC7qGOSIlr96YVyi9mz/PpCsWxEhxsIgFrkseSHmmoN8vvojc3yOo15ECbqC7BePU9Vo0ZpfzGRyEV7rIykLVS3fh2tB+jzomM7QvqW6cl9YUCTkjHghzeeePHvVCrdSuS3cXIoVN+U1KoF1ZVZGMpvFWjjJkqNIWaAnJn2uXT/yyHeDMHt0A4pL+QMNxAAe5RiwA/onnb3CkWBW88tJ+ZC5a4JttzNZ8RQE0Uy/MIIBl/w/rkLyRCIdaPU0f45vvkhJG9ZYFlxgHlsL84PtDeOC3SgVMiquQNR4dAUzz6jGmK4eSsWZDGQsRxsqtvKTMpE1c/tZTRNt9rkWH9u9lYcPS1EFh9oFnfF+NGNaHMlBKkUSrukPfOMaurnjJbAQDTQzWYzb5C6MQMDcvn0SE6Wnbr66Xg6Dfbh9meHqBe0qjYEyNOwWvxAp/CFrhqPY2jU6wxy6E+oNelKssnSw227g5MXoVNjrOBWJ8TJVBkuZM7bibP3T9+s5Uc/hFe8CGso0lzAOkPmXqwWP4DNpfIXDRL2nOpK2Iod5IFLT9Uw5iLErl+6721Y1iYbE2WIRb2g+JgG1epX7s5a0GnJ9W6FxIUleN0SF8AfZB221eJHCtSn73EXvQeEAHpu5RYc/hE4/1S6n5O4QrDwYKzR/K9FaMydPzZ5CJk/Ng3mjy32Hi1fEvI076UqXeYA7BR2tjDkR6uXFYPcFfAjs98U70n66k/lx0epkicXwE7BUk9NXLu4qNaeqGEWs/kdr9b9a5mpd+cXDrkDTpPM/MK2K338ylWdN59ObJ0CISi8UtQkHvphgPxQiReUYaiRu0IRFrJnhVzOE/lBWQwiyxHGlpFyY1hSCEPpVLmhdBmr8od3kw9cETANXgXl2J7mLW/+qU7PPzVmw2H9yhcfT7JOQYM+fz7oHHDsAT2pCfIDzKpFMCB3hfwQ75hpkLfoifwATYEhs6GhgmGyuFWqxBGGlukomWwjjR9jf3x8JF/rkXQIMzkzsNysIzzc2crgq/NzP6jGD34I73mUIpgsnEZL1/rmovhBW+Su2xF8TfVX8AP8YEj3E7Qy05SKoFKbdGComqA0jOwpLiegGoYBxEX7ynFKLmYH8NOk0b6cmop9S7/F0J+Hqd89LXYKuw9DDCiwMS0sV4gfgOhsSy4EaPxg7HIYe2aLACgNIz1nyuS999boP9qKNnzs65b//ga9fz8xFW10yQ+gccWHuHIMtIlxX7Dnbw0s1ATceoX4Ea00HdT9ZHLgR4rU1CDWq6N9GFkNg85AncM6GQ2dDSZj//0vbit3fdwXvAJV/46zI6zxpRvpSsFeZ+pRWh1+gIFS/IaeJWBZKWggpF/fgTS7VOGrAtSU5LRzDR/R7zEkOYPvj7Kns3PhC3L7nNhHyPujYOfCVuj1BQ8e1Qu/OvwoQIEQun2ea83C5m8VfT8hlf2UbpiqC9+sbp0YZzfjC+/9c33w/jlMfPC0S0jfPvRIwr2vLLgeMIu7MvyAI+Yl3nwEKwEGRBO30Hfxrwvl5MqWgnxBk7DETee8vxLZkleXHFI31qxEsU5dgLVCY31l+FGMYp26oCxUP0ZEVRilKrjtCRMY4YWsPtC3ODwFDzztEjJWihK0EtE9aI9tkStdGX6A2JjU0wzUSFBdSb3YNsGT1ZQPk8Ffd8vCvI5UtI68ds6DwdEuuyFTg+BsMaki6yy0UMlw66rwA8wZDLdOXcCXDC7S93TVLp9pdNtlSKVzABOduK5buLFhJfEKM17eNoweSnXg1eJ5BXktqeTAfovYJ00WKmuVdEYaKRg/bUXYE9xRsAK5IcV7W8Q+LTlrESwt5fX5l2tgvWlBZKNK5YQHsqUgiI2qtw8nN1iev387rJ9hTVHfN1B+7IbODNoH5XhyPRpZsE+OWKjWYRrQBACmy16UPbdJpQY6/bZlGK51eQsQoADPfX4G8Opt5kRX++MehHTHJfOaU/3UjX3YrOna/ul8bt4ibzZ9Kj3WWAEMqffNWeP5x28Zfrydl4pMWHrgtumuxESpNVYAWWiDLIo6WEtDn38+pixa/RrvyN49XkuPVwLzGxlp9wYiI+OmdLeYkB4qZXzn0SPyW7PXiC1+kAGwh1HdnCKerJ6cmpMZ9eF7ju3xW9ShimvEGV8sQixYB/j7s5PW+QGQHnofrxjb3YlSwbnGCqD+jQx58MLp8HP9Gm132d14F3Hg1RorgItTYX6W5Ur//RuUHscRx32vsRpofn3A1QouSXjCo7C2PF4r7N/7kvkY/e5PTHg4hkfkab1rrBDsH31DXOjhksNhB+LV7jqyY214vHZoX27vDkR6xtEsjux4Q3Nj97i0jpf+O2BPvt4ZlgOdrgtyP/j8gZQdux7eFaprxfKvwuTT71+/nV0+uP0PSySv33/YebMT4Pjdu99Kwhkoa7xiNG27DlCmkG02o735bo3Y4381OU/bLR6NggAAAABJRU5ErkJggg==" height="30" alt="mdb logo"></a>
+
+                <li>@Html.ActionLink("Customers", "Index", "customers")</li>
+                <li>@Html.ActionLink("Daily Report", "Index", "dailyReport")</li>
+                <li>@Html.ActionLink("Daily Report Time Entry", "Index", "dailyReportTimeEntry")</li>
+                <li>@Html.ActionLink("Job Correspondents", "Index", "jobCorrespondents")</li>
+                <li>@Html.ActionLink("Job Resource Types", "Index", "jobResourceTypes")</li>
+                <li>@Html.ActionLink("Jobs", "Index", "jobs")</li>
+                <li>@Html.ActionLink("Resource Types", "Index", "resourceTypes")</li>
+                <li>@Html.ActionLink("Sub Job Types", "Index", "subJobTypes")</li>
+                <li>@Html.ActionLink("Users", "Index", "users")</li>
+
+                @Html.Partial("_LoginPartial")
+            </ul>
+        </div>
+       </nav>
+
+    <div class="container-fluid">
+        @RenderBody()
+        <hr />
+        <footer>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

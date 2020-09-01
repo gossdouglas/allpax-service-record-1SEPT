@@ -1,0 +1,562 @@
+﻿@model IEnumerable<allpax_sale_miner.Models.tbl_customer_eqpmt>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        $(document).ready(function () {//begin document read jquery statements
+
+            //$('#datatable_customer_eqpmt thead tr').clone(true).appendTo( '#datatable_customer_eqpmt thead' );
+            //$('#datatable_customer_eqpmt thead tr:eq(1) th').each( function (i) {
+            //    var title = $(this).text();
+            //    $(this).html( '<input type="text" placeholder=" " />' );
+
+            //    $( 'input', this ).on( 'keyup change', function () {
+            //        if ( table.column(i).search() !== this.value ) {
+            //            table
+            //                .column(i)
+            //                   .search( this.value )
+            //                    .draw();
+            //        }
+            //    } );
+            //} );
+
+            //begin cascading dropdown logic
+            var customerCodes_Dpdwn = $('#addRecordItem1');
+            var eqpmtTypes_Dpdwn = $('#addRecordItem4');
+            var models_Dpdwn = $('#addRecordItem5');
+
+            //begin fill the customer code dropdown
+            $.ajax({
+                url: 'DataService.asmx/GetCustomerCodes',
+                method: 'post',
+                dataType: 'json',
+                success: function (data) {
+
+                    customerCodes_Dpdwn.append($('<option/>', { value: -1, text: 'Select Customer Code' }));
+
+                    eqpmtTypes_Dpdwn.append($('<option/>', { value: -1, text: 'Select Equipment Type' }));
+
+                    models_Dpdwn.append($('<option/>', { value: -1, text: 'Select Equipment Model' }));
+                    models_Dpdwn.prop('disabled', true);
+
+                    $(data).each(function (index, item) {
+                        customerCodes_Dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode }));
+                    });
+                }               
+            });
+            //end fill the customer code dropdown
+
+            //begin fill the equipment type dropdown
+            $.ajax({
+                url: 'DataService.asmx/GetEqpmtTypes',
+                method: 'post',
+                dataType: 'json',
+                success: function (data) {
+
+                    $(data).each(function (index, item) {
+                        eqpmtTypes_Dpdwn.append($('<option/>', { value: item.eqpmtType, text: item.eqpmtType }));
+                    });
+                }
+            });
+            //end fill the equipment type dropdown
+
+            //begin clear out the selected model if selected equipment type changes
+            eqpmtTypes_Dpdwn.change(function () {
+                //if ($(this.val() == "-1")) {
+                    models_Dpdwn.empty();
+                    models_Dpdwn.append($('<option/>', { value: -1, text: 'Select Equipment Model' }));
+                    models_Dpdwn.val('-1');
+                    models_Dpdwn.prop('disabled', true);
+                //}
+                $.ajax({
+                    url: 'DataService.asmx/GetEqpmtModelsByEqpmtTypes',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { eqpmtType: $(this).val() },
+                    success: function (data) {
+
+                        $(data).each(function (index, item) {
+                            models_Dpdwn.append($('<option/>', { value: item.model, text: item.model }));
+                        });
+                    }
+                });
+                models_Dpdwn.prop('disabled', false);
+            });
+            //end clear out the selected model if selected equipment type changes
+            
+            //end cascading dropdown logic
+           
+            var table = $('#datatable_customer_eqpmt').DataTable({
+                orderCellsTop: true,
+                fixedHeader: true,
+                paging: false,
+                order: [[1, "asc"]],
+                searching: false
+            });
+
+            $('.dataTables_length').addClass('bs-select');
+            //begin when a record class is clicked...
+            $(".record").on('click keyup change', function () {
+                selectedItem0 = $(this).attr("id");//works
+                selectedItem1 = $(this).find("#record_item1").html();//works valid for inner html only
+                selectedItem2 = $(this).find("#record_item2").html();//works valid for inner html only
+                selectedItem3 = $(this).find("#record_item3").html();//works valid for inner html only
+                selectedItem4 = $(this).find("#record_item4").html();//works valid for inner html only
+                selectedItem5 = $(this).find("#record_item5").html();//works valid for inner html only
+
+                $("#slctd_id").val(selectedItem0);
+                $("#slctd_customerCode").val(selectedItem1);
+                $("#slctd_machineID").val(selectedItem2);
+                $("#slctd_jobNum").val(selectedItem3);
+                $("#slctd_eqpmtType").val(selectedItem4);
+                $("#slctd_model").val(selectedItem5);
+
+                //begin fill the equipment type dropdown
+            $.ajax({
+                url: 'DataService.asmx/GetEqpmtTypes',
+                method: 'post',
+                dataType: 'json',
+                success: function (data) {
+
+                    $(data).each(function (index, item) {
+                        eqpmtTypes_Dpdwn.append($('<option/>', { value: item.eqpmtType, text: item.eqpmtType }));
+                    });
+                }
+            });
+            //end fill the equipment type dropdown
+
+            });
+            //end when a record class is clicked...
+
+            //begin test modal for kits installed
+            $('#kitsModal').on('show.bs.modal', function (event) {
+                event.stopPropagation();
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var modal = $(this)
+                modal.find('.modal-title').text('Add or Delete Kits for ' + selectedItem2)
+                //modal.find('.modal-body #md-customerCode').val(selectedItem1)
+                //modal.find('.modal-body #md-eqpmtType').val(selectedItem4)
+                //modal.find('.modal-body #md-model').val(selectedItem5)
+                modal.find('.modal-body #md-machineID').val(selectedItem2)
+                modal.find('.modal-body #md-kitsAvlbl').empty();
+                modal.find('.modal-body #md-kitsInstld').empty(); 
+                modal.find('.modal-body #md-kitsAvlbl').append($('<option/>', { value: -1, text: 'Select Kit to Install' }));  
+                modal.find('.modal-body #md-kitsInstld').append($('<option/>', { value: -1, text: 'Select Kit to Remove' }));
+
+                //begin fill the kits available dropdown
+                $.ajax({
+                    url: 'DataService.asmx/GetKitsAvlblBnotInstalledByMachineID',
+                    method: 'post',
+                    async: false,
+                    dataType: 'json',
+                    data: { machineID: selectedItem2 },
+                    success: function (data) {
+
+                        $(data).each(function (index, item) {
+                            modal.find('.modal-body #md-kitsAvlbl').append($('<option/>', { value: item.kitsAvlblbNotInstld, text: item.kitsAvlblbNotInstld }));
+                        });                   
+                    }
+                });
+
+                //end fill the kits available dropdown
+
+                //begin fill the kits installed dropdown
+                $.ajax({
+                    url: 'DataService.asmx/GetKitsInstldByMachineID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { machineID: selectedItem2 },
+                    success: function (data) {
+                        
+                        $(data).each(function (index, item) {
+                            modal.find('.modal-body #md-kitsInstld').append($('<option/>', { value: item.kitsInstld, text: item.kitsInstld }));
+                        });
+                    }
+                });
+                //end fill the kits installed dropdown
+            })
+
+            $('#md-kitsAvlbl-POST').click(function () {
+                var addItem1 = $("#md-machineID").val();
+                var addItem2 = $("#md-kitsAvlbl").val();
+
+                alert(
+                    "Selected for Add POST:" + '\n' +
+                    "addItem1: " + addItem1 + '\n' +
+                    "addItem2: " + addItem2 + '\n'
+                );
+                //$("#addRecordItem1").val('');
+                //$("#addRecordItem2").val('');
+                //begin axios add post
+
+                axios.post('/CurrentEqpmtKits/AddCurrentEqpmt', {
+                    machineID: addItem1,
+                    kitID: addItem2,
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+               
+                //end axios add post
+              
+            });
+
+            $('#md-kitsInstld-POST').click(function () {
+                var addItem1 = $("#md-machineID").val();
+                var addItem2 = $("#md-kitsInstld").val();
+
+                alert(
+                    "Selected for Delete POST:" + '\n' +
+                    "addItem1: " + addItem1 + '\n' +
+                    "addItem2: " + addItem2 + '\n'
+                );
+                //$("#addRecordItem1").val('');
+                //$("#addRecordItem2").val('');
+                //begin axios add post
+
+                axios.post('/CurrentEqpmtKits/DeleteCurrentEqpmt', {
+                    machineID: addItem1,
+                    kitID: addItem2,
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+                //end axios add post
+
+            });
+            // end test modal for kits installed
+        
+            $(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked...
+                $(this).parent().find(".editButton").hide();
+                $(this).parent().find(".updateButton").show();
+                $(this).parent().find(".deleteButton").hide();
+                $(this).parent().find(".cancelButton").show();
+
+                $(this).parent().parent().css("background-color", "powderblue");//change bkgnd color
+                $(this).parent().parent().attr("contenteditable", "true");//set all <td> in the record to editable
+                $(this).parent().parent().find("#record_item0").attr("contenteditable", "false");//set the id <td> to not editable
+                $(this).parent().parent().find(".cancelButton").css("background-color", "indianred");//change cancel buttn clr after edit is clicked
+                $(this).parent().parent().find(".cancelButton").css("border", "indianred");//change cancel buttn clr after edit is clicked
+                $(this).parent().parent().find(".updateButton").css("background-color", "steelblue");//change cancel buttn clr after edit is clicked
+                $(this).parent().parent().find(".updateButton").css("border", "steelblue");//change cancel buttn clr after edit is clicked
+
+            });
+            $(".btn.btn-primary.cancelButton").click(function () {//when a record's edit button is clicked...
+                $(this).parent().find(".editButton").show();
+                $(this).parent().find(".updateButton").hide();
+                $(this).parent().find(".deleteButton").show();
+                $(this).parent().find(".cancelButton").hide();
+                $(this).parent().find(".confirmButton").hide();
+
+                $(this).parent().parent().css("background-color", "transparent");
+                $(this).parent().parent().attr("contenteditable", "false");
+            });
+            $(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked...
+                $(this).parent().find(".editButton").hide();
+                $(this).parent().find(".updateButton").hide();
+                $(this).parent().find(".deleteButton").hide();
+                $(this).parent().find(".cancelButton").show();
+                $(this).parent().find(".confirmButton").show();
+
+                $(this).parent().parent().css("background-color", "powderblue");//change bkgnd color
+                $(this).parent().parent().attr("contenteditable", "false");
+                $(this).parent().parent().find(".cancelButton").css("background-color", "indianred");//change cancel buttn clr after delete is clicked
+                $(this).parent().parent().find(".cancelButton").css("border", "indianred");//change cancel buttn clr after edit is clicked
+                $(this).parent().parent().find(".confirmButton").css("background-color", "steelblue");//change confirm buttn color after delete is clicked
+                $(this).parent().parent().find(".confirmButton").css("border", "steelblue");
+            });
+
+            //begin #addButton
+            $("#addButton").click(function () {//when the add button is clicked...
+                var addItem1 = $("#addRecordItem1").val();
+                var addItem2 = $("#addRecordItem2").val();
+                var addItem3 = $("#addRecordItem3").val();
+                var addItem4 = $("#addRecordItem4").val();
+                var addItem5 = $("#addRecordItem5").val();
+
+                alert(
+                    "Selected for Add POST:" + '\n' +
+                    "addItem1: " + addItem1 + '\n' +
+                    "addItem2: " + addItem2 + '\n' +
+                    "addItem3: " + addItem3 + '\n' +
+                    "addItem4: " + addItem4 + '\n' +
+                    "addItem5: " + addItem5 + '\n'
+
+                );
+                $("#addRecordItem1").val('');
+                $("#addRecordItem2").val('');
+                $("#addRecordItem3").val('');
+                $("#addRecordItem4").val('');
+                $("#addRecordItem5").val('');
+                //begin axios add post
+
+                axios.post('/CustomerEqpmtMgmt/AddCustEqpmt', {
+                    customerCode: addItem1,
+                    eqpmtType: addItem4,
+                    model: addItem5,
+                    machineID: addItem2,
+                    jobNum: addItem3
+                    
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+                //end axios add post
+            });
+            //end #addButton
+
+            //begin confirm edit record
+            $(".btn.btn-primary.updateButton").click(function () {//when a record's edit button is clicked...
+                $(this).hide();
+                $(this).parent().find(".updateButton").hide();
+                $(this).parent().find(".editButton").show();
+                $(this).parent().find(".deleteButton").hide();
+                $(this).parent().find(".cancelButton").show();
+
+                $(this).parent().parent().attr("contenteditable", "false");
+
+                $(this).parent().parent().css("background-color", "transparent");
+                $(this).parent().parent().find(".cancelButton").css("background-color", "royalblue");//change cancel button color after update is clicked
+                $(this).parent().find(".cancelButton").hide();
+                $(this).parent().find(".deleteButton").show();
+
+                var editItem0 = $("#slctd_id").val();
+                var editItem1 = $("#slctd_customerCode").val();
+                var editItem2 = $("#slctd_machineID").val();
+                var editItem3 = $("#slctd_jobNum").val();
+                var editItem4 = $("#slctd_eqpmtType").val();
+                var editItem5 = $("#slctd_model").val();
+
+                alert(
+                    "Selected for Edit POST:" + '\n' +
+                    "editItem0: " + editItem0 + '\n' +
+                    "editItem1: " + editItem1 + '\n' +
+                    "editItem2: " + editItem2 + '\n' +
+                    "editItem3: " + editItem3 + '\n' +
+                    "editItem4: " + editItem4 + '\n' +
+                    "editItem5: " + editItem5 + '\n'
+                );
+
+                //begin axios add post
+                axios.post('/CustomerEqpmtMgmt/UpdateCustEqpmt', {
+                    id: editItem0,
+                    customerCode: editItem1,
+                    machineID: editItem2,
+                    jobNum: editItem3,
+                    eqpmtType: editItem4,
+                    model: editItem5
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //end axios add post
+
+            });
+            //end confirm edit record
+
+            //begin axios confirm delete record
+            $(".btn.btn-primary.confirmButton").click(function () {//when a record's delete button is clicked...
+
+                alert(
+                    "Selected for DELETE:" + '\n' +
+                    "id: " + selectedItem0 + '\n' +
+                    "customerCode: " + selectedItem1 + '\n' +
+                    "machineID: " + selectedItem2 + '\n' +
+                    "Job Num: " + selectedItem3 + '\n' +
+                    "Equipment Type: " + selectedItem4 + '\n' +
+                    "Equipment Model: " + selectedItem5 + '\n'
+                );
+
+                axios.post('/CustomerEqpmtMgmt/DeleteCustEqpmt', {
+                    id: selectedItem0,
+                })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+            });
+            //end axios confirm delete record
+
+        });//end document read jquery statements
+    </script>
+</head>
+
+<div class="container-fluid">
+    <hr />
+    <!--begin inline add-->
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Customer Equipment Management</h5>
+            <form class="form-inline">
+                <div class="form-group">
+                    @*@Html.DropDownList("customerCode", null, "Select Customer Code", new { @id = "addRecordItem1", @name = "addRecordItem1", @class = "form-control form-control-sm" })*@
+                    <select class="form-control form-control-sm" id = "addRecordItem1" name = "addRecordItem1">
+                    </select>
+                </div>
+                <div class="form-group">
+                    @*@Html.DropDownList("eqpmtType", null, "Select Equipment Type", new { @id = "addRecordItem4", @name = "addRecordItem4", @class = "form-control form-control-sm" })*@
+                    <select class="form-control form-control-sm" id="addRecordItem4" name="addRecordItem4">
+                    </select>
+                </div>
+                <div class="form-group">
+                    @*@Html.DropDownList("model", null, "Select Equipment Model", new { @id = "addRecordItem5", @name = "addRecordItem5", @class = "form-control form-control-sm" })*@
+                    <select class="form-control form-control-sm" id="addRecordItem5" name="addRecordItem5">
+                    </select>
+                </div>
+                <div class="form-group">
+                    @*<label for="addRecordItem2">Machine ID</label>*@
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem2" placeholder="Machine ID" value="">
+                </div>
+                <div class="form-group">
+                    @*<label for="addRecordItem3">Job Number</label>*@
+                    <input type="text" class="form-control form-control-sm" id="addRecordItem3" placeholder="Job Number" value="">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm" id="addButton" style="background-color: royalblue">Add</button>
+            </form><hr />
+        </div>
+    </div>
+</div>
+<!--click event begin-->
+<div>
+    <div class="row" style="display:none">
+        <div class="col-md-1">ID: <input type="text" id="slctd_id" value="slctd_id"></div>
+        <div class="col-md-2">Customer Code: <input type="text" id="slctd_customerCode" value="slctd_CustomerCode"></div>
+        <div class="col-md-2">Machine ID: <input type="text" id="slctd_machineID" value="slctd_machineID"></div>
+        <div class="col-md-2">Job Number: <input type="text" id="slctd_jobNum" value="slctd_jobNum"></div>
+        <div class="col-md-2">Equipment Type: <input type="text" id="slctd_eqpmtType" value="slctd_eqpmtType"></div>
+        <div class="col-md-2">Equipment Model: <input type="text" id="slctd_model" value="slctd_model"></div>
+    </div>
+    </div>
+<!--click event end-->
+<!--table begin-->
+<div class="container-fluid">
+    <div class="col-md-12" style="border:none">
+        <table id="datatable_customer_eqpmt" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="th-sm">
+                        ID
+                    </th>
+                    <th class="th-sm">
+                        Customer Code
+                    </th>
+                    <th class="th-sm">
+                        Equipment Type
+                    </th>
+                    <th class="th-sm">
+                        Model
+                    </th>
+                    <th class="th-sm">
+                        Machine ID
+                    </th>
+                    <th class="th-sm">
+                        Job Number
+                    </th>
+                    <th class="th-sm">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr class="record" id=@Html.DisplayFor(modelItem => item.id)>
+                    <td id="record_item0" value=@Html.DisplayFor(modelItem => item.id)>@Html.DisplayFor(modelItem => item.id)</td>
+                    <td id="record_item1" value=@Html.DisplayFor(modelItem => item.customerCode)>@Html.DisplayFor(modelItem => item.customerCode)</td>
+                    <td id="record_item4" value=@Html.DisplayFor(modelItem => item.eqpmtType)>@Html.DisplayFor(modelItem => item.eqpmtType)</td>
+                    <td id="record_item5" value=@Html.DisplayFor(modelItem => item.model)>@Html.DisplayFor(modelItem => item.model)</td>
+                    <td id="record_item2" value=@Html.DisplayFor(modelItem => item.machineID)>@Html.DisplayFor(modelItem => item.machineID)</td>
+                    <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobNum)>@Html.DisplayFor(modelItem => item.jobNum)</td>
+
+                    <td>
+                        @*<button class="btn btn-primary btn-sm kitsInstalledButton" style=" background-color: royalblue">Kits Installed</button>*@
+                        <button class="btn btn-primary btn-sm editButton" style=" background-color: royalblue">Edit</button>
+                        <button class="btn btn-primary btn-sm updateButton" style="display:none;">Update</button>
+                        <button class="btn btn-primary btn-sm deleteButton" style=" background-color: royalblue">Delete</button>
+                        <button class="btn btn-primary btn-sm confirmButton" style="display:none;">Confirm</button>
+                        <button class="btn btn-primary btn-sm cancelButton" style="display:none;">Cancel</button>
+
+                        <button type="button" class="btn btn-primary btn-sm kitsInstalledButton" data-toggle="modal" data-target="#kitsModal"
+                                data-customerCode="@Html.DisplayFor(modelItem => item.customerCode)"
+                                data-eqpmtType="@Html.DisplayFor(modelItem => item.eqpmtType)"
+                                data-model="@Html.DisplayFor(modelItem => item.model)"
+                                data-machineID="@Html.DisplayFor(modelItem => item.machineID)">
+                            Edit Kits for @Html.DisplayFor(modelItem => item.machineID)
+                        </button>            
+                        <div class="modal fade" id="kitsModal" tabindex="-1" role="dialog" aria-labelledby="kitsModallLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="kitsModalLabel"></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="avlblKits-form">
+                                            <div class="form-group">
+                                                <input type="hidden" class="form-control" id="md-customerCode" value=selectedItem2>
+                                            </div>
+                                            <div class="form-group">
+                                                @*<label for="md-eqpmtType" class="col-form-label">Equipment Type:</label>*@
+                                                <input type="hidden" class="form-control" id="md-eqpmtType">
+                                            </div>
+                                            <div class="form-group">
+                                                @*<label for="md-model" class="col-form-label">Model:</label>*@
+                                                <input type="hidden" class="form-control" id="md-model">
+                                            </div>
+                                            <div class="form-group">
+                                                @*<label for="md-machineID" class="col-form-label">MachineID:</label>*@
+                                                <input type="hidden" class="form-control" id="md-machineID">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="md-kitsAvlbl" class="col-form-label">Add Kit:</label>
+                                                <select class="form-control form-control-sm" id="md-kitsAvlbl" name="md-kitsAvlbl">
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="md-kitsInstld" class="col-form-label">Delete Kit :</label>
+                                                <select class="form-control form-control-sm" id="md-kitsInstld" name="md-kitsInstld">
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary" id="md-kitsAvlbl-POST">Add Kit</button>
+                                        <button type="submit" class="btn btn-primary" id="md-kitsInstld-POST">Delete Kit</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        <!--table end-->
+    </div>
+</div>
