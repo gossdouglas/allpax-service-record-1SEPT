@@ -34,7 +34,6 @@ namespace allpax_service_record.Controllers
 
             sqlconn.Open();
 
-            //begin query for kits available, but not installed
             string sqlquery1 =
                 "SELECT tbl_dailyReport.dailyReportID, tbl_dailyReport.jobID, tbl_subJobTypes.description, tbl_dailyReport.date, " +
                 "tbl_Jobs.customerContact,tbl_customers.customerName, tbl_customers.address, tbl_dailyReport.equipment, " +
@@ -50,8 +49,6 @@ namespace allpax_service_record.Controllers
                 "tbl_jobSubJobs ON tbl_jobSubJobs.jobID = tbl_Jobs.jobID " +
                 "INNER JOIN " +
                 "tbl_subJobTypes ON tbl_subJobTypes.subJobID = tbl_jobSubJobs.subJobID " +
-                //"INNER JOIN tbl_Jobs ON "+
-                //"tbl_Jobs.jobID = tbl_jobCorrespondents.jobID "+
 
                 "WHERE " +
 
@@ -111,7 +108,7 @@ namespace allpax_service_record.Controllers
                 message.IsBodyHtml = true;
                 smtp.Send(message);
                 }
-                //end query
+
                 return View(dailyReportByID);
         }
         public List<string> namesByTimeEntryID(int dailyReportByID)
@@ -121,7 +118,6 @@ namespace allpax_service_record.Controllers
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
-            //begin query for kits available but not installed by machine
             string sqlquery1 = "SELECT tbl_Users.name " +
 
             "FROM " +
@@ -133,7 +129,6 @@ namespace allpax_service_record.Controllers
 
             "WHERE " +
             "tbl_dailyReportUsers.dailyReportID = @dailyReportID";
-            //end query for kits available but not installed by machine
 
             SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
             sqlcomm1.Parameters.Add(new SqlParameter("dailyReportID", dailyReportByID));
@@ -153,7 +148,6 @@ namespace allpax_service_record.Controllers
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
-            //begin query for kits available but not installed by machine
             string sqlquery1 = "SELECT tbl_Users.shortName " +
 
             "FROM " +
@@ -165,7 +159,6 @@ namespace allpax_service_record.Controllers
 
             "WHERE " +
             "tbl_dailyReportUsers.dailyReportID = @dailyReportID";
-            //end query for kits available but not installed by machine
 
             SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
             sqlcomm1.Parameters.Add(new SqlParameter("dailyReportID", dailyReportByID));
@@ -185,7 +178,6 @@ namespace allpax_service_record.Controllers
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
-            //begin query for kits available but not installed by machine
             string sqlquery1 = "SELECT tbl_jobCorrespondents.email " +
 
             "FROM " +
@@ -197,7 +189,6 @@ namespace allpax_service_record.Controllers
 
             "WHERE " +
             "tbl_jobCorrespondents.jobID = @jobID";
-            //end query for kits available but not installed by machine
 
             SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
             sqlcomm1.Parameters.Add(new SqlParameter("jobID", jobID));
