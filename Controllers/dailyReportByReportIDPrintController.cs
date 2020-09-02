@@ -27,6 +27,8 @@ namespace allpax_service_record.Controllers
             ViewBag.reportID = reportID;           
 
             List<vm_dailyReportByReportID> dailyReportByID = new List<vm_dailyReportByReportID>();
+            List<string> recipientList = new List<string>();
+
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
@@ -36,7 +38,7 @@ namespace allpax_service_record.Controllers
             string sqlquery1 =
                 "SELECT tbl_dailyReport.dailyReportID, tbl_dailyReport.jobID, tbl_subJobTypes.description, tbl_dailyReport.date, " +
                 "tbl_Jobs.customerContact,tbl_customers.customerName, tbl_customers.address, tbl_dailyReport.equipment, " +
-                "tbl_dailyReport.startTime, tbl_dailyReport.endTime, tbl_dailyReport.lunchHours, tbl_customers.customerCode  " +
+                "tbl_dailyReport.startTime, tbl_dailyReport.endTime, tbl_dailyReport.lunchHours, tbl_customers.customerCode " +
 
                 "FROM tbl_dailyReport " +
 
@@ -48,6 +50,8 @@ namespace allpax_service_record.Controllers
                 "tbl_jobSubJobs ON tbl_jobSubJobs.jobID = tbl_Jobs.jobID " +
                 "INNER JOIN " +
                 "tbl_subJobTypes ON tbl_subJobTypes.subJobID = tbl_jobSubJobs.subJobID " +
+                //"INNER JOIN tbl_Jobs ON "+
+                //"tbl_Jobs.jobID = tbl_jobCorrespondents.jobID "+
 
                 "WHERE " +
 
@@ -78,11 +82,15 @@ namespace allpax_service_record.Controllers
                 vm_dailyReportByReportID.customerCode = dr1[11].ToString();
                 vm_dailyReportByReportID.names = namesByTimeEntryID(vm_dailyReportByReportID.dailyReportID);
                 vm_dailyReportByReportID.shortNames = shortNamesByTimeEntryID(vm_dailyReportByReportID.dailyReportID);
+                vm_dailyReportByReportID.jobCorrespondentEmail = jobCorrespondentEmailByTimeEntryID(vm_dailyReportByReportID.jobID);
+                recipientList = vm_dailyReportByReportID.jobCorrespondentEmail;
 
                 dailyReportByID.Add(vm_dailyReportByReportID);
             }
 
             sqlconn.Close();
+            
+            string recipientListStr = string.Join(", ", recipientList);
 
             string html = ViewRenderer.RenderView("~/views/dailyReportByReportIDPrint/index.cshtml", dailyReportByID);
 
@@ -96,7 +104,7 @@ namespace allpax_service_record.Controllers
 
             string body = html;
 
-            using (var message = new MailMessage("allpaxtesting@gmail.com", "allpaxtesting@gmail.com"))
+            using (var message = new MailMessage("allpaxtesting@gmail.com", recipientListStr))
             {
                 message.Subject = "Test";
                 message.Body = body;
@@ -169,6 +177,38 @@ namespace allpax_service_record.Controllers
                 shortNames.Add(dr1[0].ToString());
             }
             return shortNames;
+        }
+        public List<string> jobCorrespondentEmailByTimeEntryID(string jobID)
+        {
+            List<string> crspndtEmails = new List<string>();
+
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            //begin query for kits available but not installed by machine
+            string sqlquery1 = "SELECT tbl_jobCorrespondents.email " +
+
+            "FROM " +
+            "tbl_jobCorrespondents " +
+
+            "INNER JOIN " +
+            "tbl_Jobs ON " +
+            "tbl_Jobs.jobID = tbl_jobCorrespondents.jobID " +
+
+            "WHERE " +
+            "tbl_jobCorrespondents.jobID = @jobID";
+            //end query for kits available but not installed by machine
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.Add(new SqlParameter("jobID", jobID));
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                crspndtEmails.Add(dr1[0].ToString());
+            }
+            return crspndtEmails;
         }
 
         protected override void Dispose(bool disposing)
