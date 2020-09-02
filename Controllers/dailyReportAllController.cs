@@ -35,15 +35,34 @@ namespace allpax_service_record.Controllers
                     "WHERE " +
                     "tbl_dailyReport.subJobID = tbl_subJobTypes.subJobID").ToList();
 
-
             return View(list.ToList()); 
+        }
+
+        public ActionResult Filtered(DateTime startDate, DateTime endDate)
+        {
+            //return View(db.tbl_customers.ToList());
+            //var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
+            List<vm_dailyReportViewAll> list = db.Database.SqlQuery<vm_dailyReportViewAll>("SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, " +
+                "tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address FROM tbl_dailyReport " +
+
+                    "INNER JOIN " +
+                    "tbl_Jobs ON tbl_Jobs.jobID = tbl_dailyReport.jobID " +
+                    "INNER JOIN " +
+                    "tbl_customers ON tbl_customers.customerCode = tbl_Jobs.customerCode " +
+                    "INNER JOIN " +
+                    "tbl_jobSubJobs ON tbl_jobSubJobs.jobID = tbl_Jobs.jobID " +
+                    "INNER JOIN " +
+                    "tbl_subJobTypes ON tbl_subJobTypes.subJobID = tbl_jobSubJobs.subJobID " +
+                    "WHERE " +
+                    "tbl_dailyReport.subJobID = tbl_subJobTypes.subJobID").ToList();
+
+            return View(list.ToList());
         }
 
         //begin CMPS 411 controller code
         [HttpPost]
         public ActionResult AddDailyReport(tbl_dailyReport dailyReportAdd)
         {
-
              db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6})",
                 dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime, dailyReportAdd.lunchHours, dailyReportAdd.equipment); 
             //return new EmptyResult();
@@ -68,7 +87,6 @@ namespace allpax_service_record.Controllers
 
             return RedirectToAction("Index");
         }
-
 
         protected override void Dispose(bool disposing)
         {
