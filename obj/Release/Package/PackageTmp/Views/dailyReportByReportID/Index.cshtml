@@ -200,7 +200,23 @@
         <div class="col-2" style="padding:5px">
             <strong>Customer Contact:</strong>
         </div>
-        <div class="col-10" style="padding:5px" id="output_customerContact">@Model.First().customerContact</div>
+        <div class="col-4" style="padding:5px" id="output_customerContact">@Model.First().customerContact</div>
+        <div class="col-2" style="padding:5px">
+            <strong>Correspondents:</strong>
+        </div>
+        @foreach (var item in Model)
+        {
+            //BEGIN TEMPORARY LOOP VARIABLES
+            List<string> temp_jobCorrespondentName = item.jobCorrespondentName;
+            //END TEMPORARY LOOP VARIABLES
+
+        <div class="col-4" style="padding:5px" id="output_customerContact">
+        @for (var i = 0; i < (temp_jobCorrespondentName.Count); i++)
+        {
+            <span class="" id="" style="pointer-events:none">@temp_jobCorrespondentName[@i]</span>
+        }
+        </div>
+        }     
     </div>
     <div class="row">
         <div class="col-2" style="padding:5px">
