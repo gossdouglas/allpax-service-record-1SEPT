@@ -41,6 +41,7 @@ namespace allpax_service_record.Models.View_Models
         public List<string> names { get; set; }
         public List<string> shortNames { get; set; }
         public List<string> jobCorrespondentEmail { get; set; }
+        public List<string> jobCorrespondentName { get; set; }
 
         public string workDescription { get; set; }
 

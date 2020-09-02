@@ -4,7 +4,7 @@ namespace allpax_service_record.Models
     using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
-    using allpax_service_record.Models.MODEL_TESTING;
+
 
     public partial class allpaxServiceRecordEntities : DbContext
     {

@@ -1,6 +1,6 @@
 namespace allpax_service_record.Models
 {
-    using allpax_service_record.Models.MODEL_TESTING;
+
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

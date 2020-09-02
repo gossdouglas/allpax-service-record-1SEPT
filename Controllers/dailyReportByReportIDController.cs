@@ -11,7 +11,6 @@ using allpax_service_record.Models.View_Models;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Dynamic;
-using allpax_service_record.Models.MODEL_TESTING;
 
 namespace allpax_service_record.Controllers
 {
