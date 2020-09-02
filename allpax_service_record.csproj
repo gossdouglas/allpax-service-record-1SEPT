@@ -417,7 +417,6 @@
     <Content Include="Views\workDesc\Index.cshtml" />
     <Content Include="Views\workDescDelays\Index.cshtml" />
     <Content Include="Views\workDescWntyDelays\Index.cshtml" />
-    <Content Include="Views\dailyReportByReportID\PrintDailyReport.cshtml" />
     <Content Include="Views\dailyReportByReportIDPrint\Index.cshtml" />
     <Content Include="Views\dailyReportByReportIDPrint\PrintDailyReport.cshtml" />
     <Content Include="Views\workDescPrint\Index.cshtml" />

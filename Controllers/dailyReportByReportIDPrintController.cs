@@ -78,7 +78,10 @@ namespace allpax_service_record.Controllers
                 vm_dailyReportByReportID.customerCode = dr1[11].ToString();
                 vm_dailyReportByReportID.names = namesByTimeEntryID(vm_dailyReportByReportID.dailyReportID);
                 vm_dailyReportByReportID.shortNames = shortNamesByTimeEntryID(vm_dailyReportByReportID.dailyReportID);
+
+                vm_dailyReportByReportID.jobCorrespondentName = jobCrspdtNameByJobID(vm_dailyReportByReportID.jobID);                
                 vm_dailyReportByReportID.jobCorrespondentEmail = jobCorrespondentEmailByTimeEntryID(vm_dailyReportByReportID.jobID);
+
                 recipientList = vm_dailyReportByReportID.jobCorrespondentEmail;
 
                 dailyReportByID.Add(vm_dailyReportByReportID);
@@ -199,6 +202,32 @@ namespace allpax_service_record.Controllers
                 crspndtEmails.Add(dr1[0].ToString());
             }
             return crspndtEmails;
+        }
+
+        public List<string> jobCrspdtNameByJobID(string jobID)
+        {
+            List<string> jobCrspdtNames = new List<string>();
+
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            string sqlquery1 = "SELECT tbl_jobCorrespondents.name " +
+
+            "FROM " +
+            "tbl_jobCorrespondents " +
+            "WHERE " +
+            "tbl_jobCorrespondents.jobID = @jobID";
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.Add(new SqlParameter("jobID", jobID));
+            SqlDataAdapter sda3 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda3.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                jobCrspdtNames.Add(dr1[0].ToString());
+            }
+            return jobCrspdtNames;
         }
 
         protected override void Dispose(bool disposing)
