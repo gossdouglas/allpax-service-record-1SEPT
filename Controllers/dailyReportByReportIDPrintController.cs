@@ -76,6 +76,8 @@ namespace allpax_service_record.Controllers
                 vm_dailyReportByReportID.endTime = dr1[9].ToString();
                 vm_dailyReportByReportID.lunchHours = (int)dr1[10];
                 vm_dailyReportByReportID.customerCode = dr1[11].ToString();
+                vm_dailyReportByReportID.names = namesByTimeEntryID(vm_dailyReportByReportID.dailyReportID);
+                vm_dailyReportByReportID.shortNames = shortNamesByTimeEntryID(vm_dailyReportByReportID.dailyReportID);
 
                 dailyReportByID.Add(vm_dailyReportByReportID);
             }
@@ -101,11 +103,74 @@ namespace allpax_service_record.Controllers
                 message.IsBodyHtml = true;
                 smtp.Send(message);
                 }
-
                 //end query
                 return View(dailyReportByID);
         }
-           
+        public List<string> namesByTimeEntryID(int dailyReportByID)
+        {
+            List<string> Names = new List<string>();
+
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            //begin query for kits available but not installed by machine
+            string sqlquery1 = "SELECT tbl_Users.name " +
+
+            "FROM " +
+            "tbl_Users " +
+
+            "INNER JOIN " +
+            "tbl_dailyReportUsers ON " +
+            "tbl_Users.userName = tbl_dailyReportUsers.userName " +
+
+            "WHERE " +
+            "tbl_dailyReportUsers.dailyReportID = @dailyReportID";
+            //end query for kits available but not installed by machine
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.Add(new SqlParameter("dailyReportID", dailyReportByID));
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                Names.Add(dr1[0].ToString());
+            }
+            return Names;
+        }
+        public List<string> shortNamesByTimeEntryID(int dailyReportByID)
+        {
+            List<string> shortNames = new List<string>();
+
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            //begin query for kits available but not installed by machine
+            string sqlquery1 = "SELECT tbl_Users.shortName " +
+
+            "FROM " +
+            "tbl_Users " +
+
+            "INNER JOIN " +
+            "tbl_dailyReportUsers ON " +
+            "tbl_Users.userName = tbl_dailyReportUsers.userName " +
+
+            "WHERE " +
+            "tbl_dailyReportUsers.dailyReportID = @dailyReportID";
+            //end query for kits available but not installed by machine
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.Add(new SqlParameter("dailyReportID", dailyReportByID));
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                shortNames.Add(dr1[0].ToString());
+            }
+            return shortNames;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

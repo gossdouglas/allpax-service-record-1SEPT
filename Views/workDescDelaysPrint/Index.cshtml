@@ -245,7 +245,7 @@
                 });
             });
             //end load team members on line dpdwn change
-         
+
             //begin when the line delete button is pressed
             $(".deleteWorkDescDelaysLineBtn_").on('click', function () {
                 //begin suck in variables
@@ -317,7 +317,7 @@
                 $("#editWorkDescDelaysLineBtn_" + slctd_timeEntryID).removeAttr("disabled");//enable the line edit button
             });
             //begin when the line lock button is pressed
-         
+
             //begin when the line save button is pressed
             $(".saveWorkDescDelaysLineBtn_").on('click', function () {
                 //begin suck in variables
@@ -333,7 +333,7 @@
 
                 //var tempTeamMemberUserID = this.id.replace(/workDescDelaysTeamLineUserName_[0-9]*/i, "");
 
-                //^ [\t]+ 
+                //^ [\t]+
 
                 $("#input_workDescLineDelays_" + slctd_timeEntryID).attr("contentEditable", "false");//set the description input to non-editable
                 $("#input_workDescLineDelays_" + slctd_timeEntryID).css("color", "black");//set the  description input text to black to demonstrate non-edit mode
@@ -343,7 +343,7 @@
 
                 $("#teamWorkDescDelaysLine_" + slctd_timeEntryID).children().css('pointer-events', 'none');//set the line team to non-editable
                 $("#teamWorkDescDelaysLine_" + slctd_timeEntryID).children().css('color', 'black');//set the line team text to black to demonstrate non-edit mode
-                
+
                 $("#workDescDelaysTeamLine_dpdwn_" + slctd_timeEntryID).prop("disabled", true);//set the line team dropdown to non-editable
                 $("#workDescDelaysTeamLine_dpdwn_" + slctd_timeEntryID).css('color', 'black');//set the line team dropdown text to black to demonstrate non-edit mode
 
@@ -366,11 +366,11 @@
                     });
                 //end axios delete post
             });
-            //end when the line save button is pressed. 
-            
+            //end when the line save button is pressed.
+
         });//end document jquery statements
     </script>
-</head>        
+</head>
 
 @*BEGIN ALLPAX TEAM*@
 
@@ -380,104 +380,54 @@
     <div class="row">
         <div class="col-7" style="padding:5px">
             <strong>Delays</strong>
-        </div>
-        <div class="col-1" style="padding:5px">
-            <strong>Hours</strong>
-        </div>
-        <div class="col-4" style="padding:5px">
-            <strong>Team</strong>
-        </div>
+        </div>      
     </div>
+</div>
 
-@*BEGIN WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
-    @*<div class="col-12" id="workDescriptionDelaysLine_template">
-        <div class="row" id="">
-            <div class="col-7" id="input_workDescDelays" style="padding:5px; border: 1px solid black;" contenteditable="true">
+@*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
+@*<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">*@
+@foreach (var item in Model)
+{
+    //BEGIN TEMPORARY LOOP VARIABLES
+    int temp_timeEntryID = item.timeEntryID;
+    List<string> temp_userNames = item.userNames;
+    List<string> temp_userShortNames = item.userShortNames;
+    string temp_workDescription = item.workDescription;
+    int temp_hours = item.hours;
+    //END TEMPORARY LOOP VARIABLES
+
+    @*<div class="col-12 workDescLineDelays_" id="workDescLineDelays_@temp_timeEntryID">
+        <div class="row" style="padding:5px" id="">
+            <div class="col-7 input_workDescLineDelays_" id="input_workDescLineDelays_@temp_timeEntryID" style="padding:5px; border: 1px solid black;" contenteditable="false">
+                @temp_workDescription
             </div>
             <div class="col-1" style="padding:5px">
-                <input type="text" class="form-control form-control-sm" id="inputHours_workDescDelays" value="">
+                <input type="text" class="form-control form-control-sm" id="inputHours_workDescDelays_@temp_timeEntryID" value="@temp_hours" disabled>
             </div>
-            <div class="col-2" name="txt_teamMembersWorkDescDelays" id="txt_teamMembersWorkDescDelays" style="padding:5px">
-                <span class="workDescDelaysTeam_" id="workDescDelaysTeam_" style="padding:5px"></span>
-            </div>
-            <div class="col-2" style="padding:5px">
-                <select class="workDescDelaysTeam_dpdwn" name="" style="width:100%">
-                    <option value="">Team</option>
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <div>
-                    <span><strong>Time Entry:</strong></span>
-                    <span id="txt_timeEntryIDDelays" value="">new</span>
-                </div>
-            </div>
-            <div class="col-10" style="padding:5px">
-                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysBtn" style="background-color: royalblue; width: 100%">Save Entry</button>
+            <div class="col-2 teamWorkDescDelaysLine_" id="teamWorkDescDelaysLine_@temp_timeEntryID" style="padding:5px">
+                @for (var i = 0; i < (temp_userNames.Count); i++)
+                {
+
+                    <span class="workDescDelaysTeamLineUserName_" id="workDescDelaysTeamLineUserName_@temp_timeEntryID@temp_userNames[@i]" style="pointer-events:none">@temp_userShortNames[@i]</span>
+                }
             </div>
         </div>
     </div>*@
-</div>
-@*END WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
 
-@*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
-<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
-    @foreach (var item in Model)
-    {
-        //BEGIN TEMPORARY LOOP VARIABLES
-        int temp_timeEntryID = item.timeEntryID;
-        List<string> temp_userNames=item.userNames;
-        List<string> temp_userShortNames = item.userShortNames;
-        string temp_workDescription = item.workDescription;
-        int temp_hours= item.hours;
-        //END TEMPORARY LOOP VARIABLES
-
-        <div class="col-12 workDescLineDelays_" id="workDescLineDelays_@temp_timeEntryID">
-            <div class="row" style="padding:5px" id="">
-                <div class="col-7 input_workDescLineDelays_" id="input_workDescLineDelays_@temp_timeEntryID" style="padding:5px; border: 1px solid black;" contenteditable="false">
-                    @temp_workDescription
-                </div>
-                <div class="col-1" style="padding:5px">
-                    <input type="text" class="form-control form-control-sm" id="inputHours_workDescDelays_@temp_timeEntryID" value="@temp_hours" disabled>
-                </div>
-                <div class="col-2 teamWorkDescDelaysLine_" id="teamWorkDescDelaysLine_@temp_timeEntryID" style="padding:5px">
-                    @for (var i = 0; i < (temp_userNames.Count); i++)
-                    {
-
-                        <span class="workDescDelaysTeamLineUserName_" id="workDescDelaysTeamLineUserName_@temp_timeEntryID@temp_userNames[@i]" style="pointer-events:none">@temp_userShortNames[@i]</span>
-                    }
-                </div>
-                @*<div class="col-2" style="padding:5px">
-                    <select name="" class="workDescDelaysTeamLine_dpdwn_" id="workDescDelaysTeamLine_dpdwn_@temp_timeEntryID" style="width:100%" disabled>
-                        <option value="">Team</option>
-                    </select>
-                </div>*@
+    <div class="container" style="padding:0px">
+        <div class="row" style="padding:5px" id="">
+            <span>@temp_workDescription</span>
+            <div class="" id="" style="padding:5px">
+                <span><strong>Team</strong></span>
+                @for (var i = 0; i < (temp_userNames.Count); i++)
+                {
+                    <span class="" id="" style="pointer-events:none">@temp_userShortNames[@i]</span>
+                }
             </div>
-            @*<div class="row">
-                <div class="col-2" style="padding:5px">
-                    <div>
-                        <span><strong>Time Entry:</strong></span>
-                        <span id="timeEntryIDWorkDescDelays_@temp_timeEntryID" value="">@temp_timeEntryID</span>
-                    </div>
-                </div>
-                <div class="col-1" style="padding:5px">
-                    <button type="button" class="btn btn-primary btn-sm deleteWorkDescDelaysLineBtn_" id="deleteWorkDescDelaysLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%">Delete</button>
-                </div>
-                <div class="col-2" style="padding:5px">
-                    <button type="button" class="btn btn-primary btn-sm editWorkDescDelaysLineBtn_" id="editWorkDescDelaysLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%;">Unlock for Edit</button>
-                </div>
-                <div class="col-2" style="padding:5px">
-                    <button type="button" class="btn btn-primary btn-sm lockWorkDescDelaysLineBtn_" id="lockWorkDescDelaysLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%;" disabled>Lock for Edit</button>
-                </div>
-                <div class="col-2" style="padding:5px">
-                    <button type="button" class="btn btn-primary btn-sm saveWorkDescDelaysLineBtn_" id="saveWorkDescDelaysLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%;" disabled>Save Edits</button>
-                </div>
-            </div>*@
         </div>
-    }
-    @*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
-</div>
+    </div>
+}
+@*</div>*@
 
 
 

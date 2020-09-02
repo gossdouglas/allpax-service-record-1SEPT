@@ -38,6 +38,8 @@ namespace allpax_service_record.Models.View_Models
         public int subJobID { get; set; }
 
         public string team { get; set; }
+        public List<string> names { get; set; }
+        public List<string> shortNames { get; set; }
 
         public string workDescription { get; set; }
 

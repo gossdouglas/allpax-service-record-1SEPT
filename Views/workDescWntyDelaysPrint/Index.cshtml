@@ -367,44 +367,8 @@
     <div class="row">
         <div class="col-7" style="padding:5px">
             <strong>Warranty Delays</strong>
-        </div>
-        <div class="col-1" style="padding:5px">
-            <strong>Hours</strong>
-        </div>
-        <div class="col-4" style="padding:5px">
-            <strong>Team</strong>
-        </div>
+        </div>      
     </div>
-
-@*BEGIN WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
-    @*<div class="col-12" id="workDescriptionWntyDelaysLine_template">
-        <div class="row" id="">
-            <div class="col-7" id="input_workDescWntyDelays" style="padding:5px; border: 1px solid black;" contenteditable="true">
-            </div>
-            <div class="col-1" style="padding:5px">
-                <input type="text" class="form-control form-control-sm" id="inputHours_workDescWntyDelays" value="">
-            </div>
-            <div class="col-2" name="txt_teamMembersWorkDescWntyDelays" id="txt_teamMembersWorkDescWntyDelays" style="padding:5px">
-                <span class="workDescWntyDelaysTeam_" id="workDescWntyDelaysTeam_" style="padding:5px"></span>
-            </div>
-            <div class="col-2" style="padding:5px">
-                <select class="workDescWntyDelaysTeam_dpdwn" name="" style="width:100%">
-                    <option value="">Team</option>
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <div>
-                    <span><strong>Time Entry:</strong></span>
-                    <span id="txt_timeEntryIDWntyDelays" value="">new</span>
-                </div>
-            </div>
-            <div class="col-10" style="padding:5px">
-                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescWntyDelaysBtn" style="background-color: royalblue; width: 100%">Save Entry</button>
-            </div>
-        </div>
-    </div>*@
 </div>
 @*END WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
 
@@ -414,52 +378,23 @@
     {
         //BEGIN TEMPORARY LOOP VARIABLES
         int temp_timeEntryID = item.timeEntryID;
-        List<string> temp_userNames=item.userNames;
+        List<string> temp_userNames = item.userNames;
         List<string> temp_userShortNames = item.userShortNames;
         string temp_workDescription = item.workDescription;
-        int temp_hours= item.hours;
+        int temp_hours = item.hours;
         //END TEMPORARY LOOP VARIABLES
 
-        <div class="col-12 workDescLineWntyDelays_" id="workDescLineWntyDelays_@temp_timeEntryID">
+        <div class="container" style="padding:0px">
             <div class="row" style="padding:5px" id="">
-                <div class="col-7 input_workDescLineWntyDelays_" id="input_workDescLineWntyDelays_@temp_timeEntryID" style="padding:5px; border: 1px solid black;" contenteditable="false">
-                    @temp_workDescription
-                </div>
-                <div class="col-1" style="padding:5px">
-                    <input type="text" class="form-control form-control-sm" id="inputHours_workDescWntyDelays_@temp_timeEntryID" value="@temp_hours" disabled>
-                </div>
-                <div class="col-2 teamWorkDescWntyDelaysLine_" id="teamWorkDescWntyDelaysLine_@temp_timeEntryID" style="padding:5px">
+                <span>@temp_workDescription</span>
+                <div class="" id="" style="padding:5px">
+                    <span><strong>Team</strong></span>
                     @for (var i = 0; i < (temp_userNames.Count); i++)
                     {
-                        <span class="workDescWntyDelaysTeamLineUserName_" id="workDescWntyDelaysTeamLineUserName_@temp_timeEntryID@temp_userNames[@i]" style="pointer-events:none">@temp_userShortNames[@i]</span>
+                        <span class="" id="" style="pointer-events:none">@temp_userShortNames[@i]</span>
                     }
                 </div>
-                @*<div class="col-2" style="padding:5px">
-                    <select name="" class="workDescWntyDelaysTeamLine_dpdwn_" id="workDescWntyDelaysTeamLine_dpdwn_@temp_timeEntryID" style="width:100%" disabled>
-                        <option value="">Team</option>
-                    </select>
-                </div>*@
             </div>
-            @*<div class="row">
-                <div class="col-2" style="padding:5px">
-                    <div>
-                        <span><strong>Time Entry:</strong></span>
-                        <span id="timeEntryIDWorkDescWntyDelays_@temp_timeEntryID" value="">@temp_timeEntryID</span>
-                    </div>
-                </div>
-                <div class="col-1" style="padding:5px">
-                    <button type="button" class="btn btn-primary btn-sm deleteWorkDescWntyDelaysLineBtn_" id="deleteWorkDescWntyDelaysLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%">Delete</button>
-                </div>
-                <div class="col-2" style="padding:5px">
-                    <button type="button" class="btn btn-primary btn-sm editWorkDescWntyDelaysLineBtn_" id="editWorkDescWntyDelaysLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%;">Unlock for Edit</button>
-                </div>
-                <div class="col-2" style="padding:5px">
-                    <button type="button" class="btn btn-primary btn-sm lockWorkDescWntyDelaysLineBtn_" id="lockWorkDescWntyDelaysLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%;" disabled>Lock for Edit</button>
-                </div>
-                <div class="col-2" style="padding:5px">
-                    <button type="button" class="btn btn-primary btn-sm saveWorkDescWntyDelaysLineBtn_" id="saveWorkDescWntyDelaysLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%;" disabled>Save Edits</button>
-                </div>
-            </div>*@
         </div>
     }
     @*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
