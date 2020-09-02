@@ -8,7 +8,7 @@
 <head>
     <style>
         .container {
-            border: 2px solid black;
+            border: 2px solid black;           
         }
     </style>
 
@@ -17,6 +17,12 @@
     @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>*@
     <script>
         $(document).ready(function () {//begin document read jquery statements
+            
+            $('#dt_dailyRptAll').DataTable({
+                //orderCellsTop: true,
+                //fixedHeader: true,
+                fixedColumns: true
+            });
            
             //begin when a record class is clicked...
             $(".record").on('click mouseover', function () {
@@ -58,7 +64,7 @@
 
 <div class="container-fluid">
     <div class="col-md-12" style="border:none">
-        <table id="datatable_current_eqpmt_kits" class="table table-striped table-bordered">
+        <table id="dt_dailyRptAll" class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th class="th-sm">
