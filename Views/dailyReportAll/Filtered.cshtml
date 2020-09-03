@@ -51,7 +51,22 @@
             $(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked... 
                 window.location = '/DailyReportByReportID?reportID=' + selectedItem0; 
             });
-                                                      
+
+            //begin when the line save button is pressed
+            //$("#filterDateBtn").on('click', function () {
+
+            //    var startDate = $("#startDateInput").val();
+            //    var endDate = $("#endDateInput").val();
+
+            //    window.location = 'dailyReportAll/filtered?startDate=' + startDate + "&" + "endDate=" + endDate;  
+            //}); 
+
+            //begin
+            $("#filterResetDateBtn").on('click', function () {
+                window.location = '/dailyReportAll';
+            });
+            //end
+
         });//end document read jquery statements
     </script>
 </head>
@@ -70,8 +85,11 @@
         <div class="md-col-2" style="padding:5px">
             <input type="date" class="form-control form-control-sm" id="endDate" placeholder="" value="">
         </div>
+        @*<div class="md-col-1" style="padding:5px">
+            <button class="btn btn-primary btn-sm" id="filterDateBtn" style=" background-color: royalblue" hidden>Filter</button>
+        </div>*@
         <div class="md-col-1" style="padding:5px">
-            <button class="btn btn-primary btn-sm editButtonxxxxx" style=" background-color: royalblue">Filter</button>
+            <button class="btn btn-primary btn-sm" id="filterResetDateBtn" style=" background-color: royalblue">Reset Filter</button>
         </div>
     </div>    
     <div class="col-md-12" style="border:none">

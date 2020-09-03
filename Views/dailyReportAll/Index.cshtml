@@ -17,6 +17,9 @@
     @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>*@
     <script>
         $(document).ready(function () {//begin document read jquery statements
+
+            //var startDateInput = $("#startDate").val();
+            //var endDateInput = $("#endDate").val();
             
             $('#dt_dailyRptAll').DataTable({
                 fixedColumns: true
@@ -51,6 +54,43 @@
             $(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked... 
                 window.location = '/DailyReportByReportID?reportID=' + selectedItem0; 
             });
+
+            //begin when the line save button is pressed
+            $("#filterDateBtn").on('click', function () {
+
+                var startDate = $("#startDateInput").val();
+                var endDate = $("#endDateInput").val();
+
+                window.location = 'dailyReportAll/filtered?startDate=' + startDate+"&"+"endDate="+endDate; 
+
+                //begin suck in variables
+                //slctd_timeEntryID = this.id.substr(20);
+                //slctd_workDescText = $("#input_workDescLine_" + slctd_timeEntryID).html()
+                //slctd_workDescText = slctd_workDescText.replace(/^[\s]+ /, "");//clean up the work description section
+                //slctd_workDescText = slctd_workDescText.replace(/&amp;/, " ");//wipe out leading white space characters
+                //slctd_workDescText = slctd_workDescText.replace(/nbsp;/, " ");//and amp and nbsp
+                //end suck in variables
+
+                //begin axios delete post
+                //axios.post('/dailyReportAll/Filtered', {
+                //    startDate: startDate,
+                //    endDate: endDate
+                //})
+                //    .then(function (response) {
+                //        console.log(response);
+                //    })
+                //    .catch(function (error) {
+                //        console.log(error);
+                //    });
+                //end axios delete post            
+            });
+            //end when the line save button is pressed.
+
+           // //begin
+           // $("#filterResetDateBtn").on('click', function () {
+           //     window.location = 'dailyReportAll/';
+           //});
+           // //end 
                                                       
         });//end document read jquery statements
     </script>
@@ -62,17 +102,18 @@
             <strong>Start Date:</strong>
         </div>
         <div class="md-col-2" style="padding:5px">
-            <input type="date" class="form-control form-control-sm" id="startDate" placeholder="" value="">
+            <input type="date" class="form-control form-control-sm" id="startDateInput" placeholder="" value="">
         </div>
         <div class="md-col-1" style="padding:5px">
             <strong>End Date:</strong>
         </div>
         <div class="md-col-2" style="padding:5px">
-            <input type="date" class="form-control form-control-sm" id="endDate" placeholder="" value="">
+            <input type="date" class="form-control form-control-sm" id="endDateInput" placeholder="" value="">
         </div>
         <div class="md-col-1" style="padding:5px">
-            <button class="btn btn-primary btn-sm editButtonxxxxx" style=" background-color: royalblue">Filter</button>
+            <button class="btn btn-primary btn-sm" id="filterDateBtn" style=" background-color: royalblue">Filter</button>
         </div>
+        
     </div>    
     <div class="col-md-12" style="border:none">
         <table id="dt_dailyRptAll" class="table table-striped table-bordered">
