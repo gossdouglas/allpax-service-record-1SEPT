@@ -88,19 +88,19 @@ namespace allpax_service_record.Controllers
         }
 
         //begin CMPS 411 controller code
-        [HttpPost]
-        public ActionResult AddDailyReport(tbl_dailyReport dailyReportAdd)
-        {
-             db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6})",
-                dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime, dailyReportAdd.lunchHours, dailyReportAdd.equipment); 
-            //return new EmptyResult();
-            return RedirectToAction("Home", "Index");
-            //return Redirect("/Home");
-        }
+        //[HttpPost]
+        //public ActionResult AddDailyReport(tbl_dailyReport dailyReportAdd)
+        //{
+        //     db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6})",
+        //        dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime, dailyReportAdd.lunchHours, dailyReportAdd.equipment); 
+        //    //return new EmptyResult();
+        //    return RedirectToAction("Home", "Index");
+        //    //return Redirect("/Home");
+        //}
 
-        public ActionResult DeleteCustomer(tbl_dailyReport custDelete)
+        public ActionResult DeleteDailyReport(tbl_dailyReport dailyReportDelete)
         {
-            //db.Database.ExecuteSqlCommand("DELETE FROM tbl_customers WHERE id=({0})", custDelete.id);
+            db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReport WHERE dailyReportID=({0})", dailyReportDelete.dailyReportID);
 
             return RedirectToAction("Index");
         }

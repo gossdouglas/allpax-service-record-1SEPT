@@ -5,6 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@*DAILY REPORT ALL*@
+
 <head>
     <style>
         .container {
@@ -55,6 +57,22 @@
                 window.location = '/DailyReportByReportID?reportID=' + selectedItem0; 
             });
 
+            $(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked... 
+                //window.location = '/DailyReportByReportID?reportID=' + selectedItem0;
+
+                //begin axios add post
+                axios.post('/dailyReportAll/DeleteDailyReport', {
+                    dailyReportID: selectedItem0
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        window.location = '/DailyReportAll';
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });              
+            });
+
             //begin when the line save button is pressed
             $("#filterDateBtn").on('click', function () {
 
@@ -85,7 +103,7 @@
                 //end axios delete post            
             });
             //end when the line save button is pressed.
-
+          
            // //begin
            // $("#filterResetDateBtn").on('click', function () {
            //     window.location = 'dailyReportAll/';
@@ -171,7 +189,7 @@
                         <td id="record_item8" value=>WORK DESCRIPTION</td>
                         <td>
                             <button class="btn btn-primary btn-sm editButton" style=" background-color: royalblue">Edit</button>
-                            <button class="btn btn-primary btn-sm deleteButton" style=" background-color: royalblue" disabled>Delete</button>
+                            <button class="btn btn-primary btn-sm deleteButton" style=" background-color: royalblue">Delete</button>
                         </td>
                     </tr>
                 }
