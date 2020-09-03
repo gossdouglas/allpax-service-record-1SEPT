@@ -34,7 +34,6 @@ namespace allpax_service_record.Controllers
                     "tbl_subJobTypes ON tbl_subJobTypes.subJobID = tbl_jobSubJobs.subJobID " +
                     "WHERE " +
                     "tbl_dailyReport.subJobID = tbl_subJobTypes.subJobID").ToList();
-
             return View(list.ToList()); 
         }
 
