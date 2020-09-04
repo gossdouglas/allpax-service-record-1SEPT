@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@*New Daily Report*@
+@*Copy Daily Report*@
 
 <head>
     <style>
@@ -35,27 +35,27 @@
 
             //begin fill the jobs dropdown
             var jobs_dpdown = $('#jobs_dpdown');
-            //var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+            var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
 
             $.ajax({
-                url: 'DataService.asmx/GetAllJobNos',
-                method: 'post',
-                dataType: 'json',
-                success: function (data) {
+                //url: '/DataService.asmx/GetAllJobNos',
+                //method: 'post',
+                //dataType: 'json',
+                //success: function (data) {
 
-                    jobs_dpdown.append($('<option/>', { value: -1, text: 'Select Job' }));
+                //    jobs_dpdown.append($('<option/>', { value: -1, text: 'Select Job' }));
 
-                    $(data).each(function (index, item) {
-                        jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
-                    });
-                }
+                //    $(data).each(function (index, item) {
+                //        jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                //    });
+                //}
             });
             //end fill the jobs dropdown
 
             //begin jobs id dropdown change
             jobs_dpdown.change(function () {
                 $.ajax({
-                    url: 'DataService.asmx/GetCustomerInfoByJobID',
+                    url: '/DataService.asmx/GetCustomerInfoByJobID',
                     method: 'post',
                     dataType: 'json',
                     data: { jobID: jobs_dpdown.val() },
@@ -76,13 +76,13 @@
                 });
 
                 //begin fill the team names dropdown
-                var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+                //var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
                 $('#subJobTypes_dpdwn').empty();//clear the dropdown
                 $('#input_jobs_dpdown').val('1');//
                 //alert($('#input_jobs_dpdown').val())
 
                 $.ajax({
-                    url: 'DataService.asmx/GetSubJobTypesByJobID',
+                    url: '/DataService.asmx/GetSubJobTypesByJobID',
                     method: 'post',
                     dataType: 'json',
                     data: { jobID: jobs_dpdown.val() },
@@ -103,22 +103,22 @@
             //end jobs id dropdown change
 
             //begin fill the team names dropdown
-            var team_dpdwn = $('#team_dpdwn');
+            //var team_dpdwn = $('#team_dpdwn');
 
-            $.ajax({
-                url: 'DataService.asmx/GetAllTeamNames',
-                method: 'post',
-                dataType: 'json',
-                data: { userName: '%' },
-                success: function (data) {
+            //$.ajax({
+            //    url: '/DataService.asmx/GetAllTeamNames',
+            //    method: 'post',
+            //    dataType: 'json',
+            //    data: { userName: '%' },
+            //    success: function (data) {
 
-                    team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+            //        team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
 
-                    $(data).each(function (index, item) {
-                        team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
-                    });
-                }
-            });
+            //        $(data).each(function (index, item) {
+            //            team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+            //        });
+            //    }
+            //});
             //end fill the sub job dropdown
 
             //begin #addButton
@@ -148,7 +148,7 @@
                 );
                 $("#addRecordItem1").val('');
                 $("#addRecordItem2").val('');
-                $("#addRecordItem3").val(''); 
+                $("#addRecordItem3").val('');
                 $("#addRecordItem4").val('');
                 $("#addRecordItem5").val('');
                 $("#addRecordItem6").val('');
@@ -168,13 +168,13 @@
                         console.log(response);
                         //window.location = '/home';
                         //window.location.href = '/home';
-                        
+
                     })
                     .catch(function (error) {
                         console.log(error);
-                    });        
+                    });
             });
-                       
+
             var fields = "#slct_date, #input_jobs_dpdown, #input_equipment, #input_startTime, #input_endTime, #input_lunch, #subJobTypes_dpdwn";
 
             $(fields).on('change', function () {
@@ -200,6 +200,12 @@
                 return filled;
             }
 
+            //$("#jobs_dpdown").val("J1000").prop('selected', true);
+            //$("#jobs_dpdown option[value='jobs_dpdown']").attr("selected", true);
+
+            //alert(jobs_dpdown.val());
+            //alert($("#jobs_dpdown").val());
+
         });//end document read jquery statements
     </script>
 </head>
@@ -207,7 +213,7 @@
 <div class=" container">
     <div class="row">
         <div class="col-2" style="padding:5px">
-            <strong>Daily Log Information</strong>
+            <strong>Daily Log Information @ViewBag.jobID</strong>
         </div>
         <div class="col-3" style="padding:5px">
             <div>
@@ -222,8 +228,8 @@
         </div>
         <div class="md-col-2" style="padding:5px">
             <select name="jobs_dpdown" id="jobs_dpdown" style="width:100%" value="">
+                <option value="@ViewBag.jobID">@ViewBag.jobID</option>
             </select>
-            <input type="text" id="input_jobs_dpdown" name="" style="width:100%" hidden>
         </div>
         <div class="md-col-5" style="padding:5px"></div>
         <div class="md-col-1" style="padding:5px">
@@ -237,12 +243,13 @@
         <div class="col-2" style="padding:5px">
             <strong>Customer:</strong>:
         </div>
-        <div class="col-7" style="padding:5px" id="output_customerName"></div>
+        <div class="col-7" style="padding:5px" id="output_customerName">@ViewBag.customerName</div>
         <div class="col-1" style="padding:5px">
             <strong>Sub Job:</strong>
         </div>
         <div class="col-2" style="padding:5px">
             <select name="subJobTypes_dpdwn" id="subJobTypes_dpdwn" style="width:100%">
+                <option value="@ViewBag.subJobID">@ViewBag.subJobID</option>
             </select>
         </div>
     </div>
@@ -250,7 +257,7 @@
         <div class="col-2" style="padding:5px">
             <strong>Location:</strong>
         </div>
-        <div class="col-7" style="padding:5px" id="output_location"></div>
+        <div class="col-7" style="padding:5px" id="output_location">@ViewBag.location</div>
         <div class="col-1" style="padding:5px">
             <strong>Code:</strong>
         </div>

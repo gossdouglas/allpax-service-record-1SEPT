@@ -28,7 +28,9 @@ namespace allpax_service_record.Models.View_Models
 
         public string team { get; set; }
 
-        public string workDescription { get; set; }    
-       
+        public string workDescription { get; set; }
+
+        public string customerCode { get; set; }
+
     }
 }
