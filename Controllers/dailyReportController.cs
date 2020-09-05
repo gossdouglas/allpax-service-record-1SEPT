@@ -24,18 +24,15 @@ namespace allpax_service_record.Controllers
             return View(sql.ToList()); 
         }
 
-        public ActionResult copyDailyReport(string jobID, string subJobID, string customerName, string location)
+        // GET: customers
+        public ActionResult Edit()
         {
-            ViewBag.jobiD = jobID;
-            ViewBag.subJobID = subJobID;
-            ViewBag.customerName = customerName;
-            ViewBag.location = subJobID;
+            //ViewBag.reportID = reportID;
 
             //return View(db.tbl_customers.ToList());
-            //var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
+            var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
 
-            //return View(sql.ToList());
-            return View();
+            return View(sql.ToList());
         }
 
         //begin CMPS 411 controller code
@@ -49,7 +46,26 @@ namespace allpax_service_record.Controllers
             //return RedirectToAction("Home", "Index");
             //return Redirect("/Home");
         }
-      
+
+        public ActionResult DeleteCustomer(tbl_dailyReport custDelete)
+        {
+            //db.Database.ExecuteSqlCommand("DELETE FROM tbl_customers WHERE id=({0})", custDelete.id);
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult UpdateCustomer(tbl_dailyReport custUpdate)
+        {
+            //db.Database.ExecuteSqlCommand("UPDATE cmps411.tbl_customer SET customerCode={0},name={1},address={2}, city={3}, state={4}, zipCode={5} WHERE id={6}",
+            //      custUpdate.customerCode, custUpdate.name, custUpdate.address, custUpdate.city, custUpdate.state, custUpdate.zipCode, custUpdate.id);
+
+            //db.Database.ExecuteSqlCommand("UPDATE tbl_customers SET customerCode={0}, customerName={1}, address={2} WHERE id={3}",
+            //      custUpdate.customerCode, custUpdate.customerName, custUpdate.address, custUpdate.id);
+
+            return RedirectToAction("Index");
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
