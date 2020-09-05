@@ -24,29 +24,6 @@
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
 
-            //begin jobs id dropdown change
-            jobs_dpdown.click(function () {
-
-                //$(jobs_dpdown).empty();//clear the dropdown
-                console.log('jobs dpwn click.')
-                //begin fill the jobs dropdown            
-                //$.ajax({
-                //    url: '/DataService.asmx/GetAllJobNos',
-                //    method: 'post',
-                //    dataType: 'json',
-                //    success: function (data) {
-
-                //        jobs_dpdown.append($('<option/>', { value: -1, text: 'Select Job' }));
-
-                //        $(data).each(function (index, item) {
-                //            jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
-                //        });
-                //    }
-                //});
-                //end fill the jobs dropdown
-            });
-            //end jobs id dropdown change
-
             //begin fill the jobs dropdown on page load          
             $.ajax({
                 url: '/DataService.asmx/GetAllJobNos',
@@ -54,10 +31,10 @@
                 dataType: 'json',
                 success: function (data) {
 
-                    //jobs_dpdown.append($('<option/>', { value: -1, text: 'Select Job' }));
-
                     $(data).each(function (index, item) {
-                        jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                        if (item.jobID != jobs_dpdown.val()) {
+                            jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                        }                       
                     });
                 }
             });
@@ -99,7 +76,7 @@
                     data: { jobID: jobs_dpdown.val() },
                     success: function (data) {
 
-                        subJobTypes_dpdwn.append($('<option/>', { value: '', text: 'Select a Job Sub-Type' }));
+                        //subJobTypes_dpdwn.append($('<option/>', { value: '', text: 'Select a Job Sub-Type' }));
 
                         $(data).each(function (index, item) {
                             subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
