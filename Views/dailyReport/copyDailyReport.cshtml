@@ -20,19 +20,6 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            //var queries = {};
-            //var dailyReportID = '';
-
-            //$.each(document.location.search.substr(1).split('&'), function (c, q) {
-            //    var i = q.split('=');
-            //    queries[i[0].toString()] = i[1].toString();
-            //    dailyReportID = queries[i[0].toString()];
-            //});
-            //alert(dailyReportID)
-
-            //alert($(".recordNo").html())
-            //alert($("#subJobTypes_dpdwn").val())
-
             //begin fill the jobs dropdown
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
@@ -51,6 +38,52 @@
                 //}
             });
             //end fill the jobs dropdown
+
+            //begin jobs id dropdown change
+            jobs_dpdown.click(function () {
+
+                $(jobs_dpdown).empty();//clear the dropdown
+
+                //begin fill the jobs dropdown            
+                $.ajax({
+                    url: '/DataService.asmx/GetAllJobNos',
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        jobs_dpdown.append($('<option/>', { value: -1, text: 'Select Job' }));
+
+                        $(data).each(function (index, item) {
+                            jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                        });
+                    }
+                });
+            //end fill the jobs dropdown
+
+                $(subJobTypes_dpdwn).empty();//clear the dropdown
+                //$(subJobTypes_dpdwn).val('1');
+                //alert($('#input_jobs_dpdown').val())
+
+                $.ajax({
+                    url: '/DataService.asmx/GetSubJobTypesByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
+
+                        //subJobTypes_dpdwn.append($('<option/>', { value: '', text: 'Select a Job Sub-Type' }));
+
+                        $(data).each(function (index, item) {
+                            subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
+
+                            //console.log(item.subJobID);
+                        });
+                    }
+                });
+                //end fill sub jobs dropdown
+
+            });
+            //end jobs id dropdown change
 
             //begin jobs id dropdown change
             jobs_dpdown.change(function () {
@@ -101,25 +134,6 @@
 
             });
             //end jobs id dropdown change
-
-            //begin fill the team names dropdown
-            //var team_dpdwn = $('#team_dpdwn');
-
-            //$.ajax({
-            //    url: '/DataService.asmx/GetAllTeamNames',
-            //    method: 'post',
-            //    dataType: 'json',
-            //    data: { userName: '%' },
-            //    success: function (data) {
-
-            //        team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
-
-            //        $(data).each(function (index, item) {
-            //            team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
-            //        });
-            //    }
-            //});
-            //end fill the sub job dropdown
 
             //begin #addButton
             $("#addButton").click(function () {//when the add button is clicked...
@@ -213,7 +227,7 @@
 <div class=" container">
     <div class="row">
         <div class="col-2" style="padding:5px">
-            <strong>Daily Log Information @ViewBag.jobID</strong>
+            <strong>Daily Log Information</strong>
         </div>
         <div class="col-3" style="padding:5px">
             <div>
@@ -298,8 +312,7 @@
         </div>
         <div class="col-1" style="padding:5px">
         </div>
-    </div>
-    
+    </div>   
 </div>
 <hr style="margin:1px; opacity:0" />
 <div class=" container">

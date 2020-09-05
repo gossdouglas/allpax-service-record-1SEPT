@@ -20,23 +20,12 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            //var queries = {};
-            //var dailyReportID = '';
-
-            //$.each(document.location.search.substr(1).split('&'), function (c, q) {
-            //    var i = q.split('=');
-            //    queries[i[0].toString()] = i[1].toString();
-            //    dailyReportID = queries[i[0].toString()];
-            //});
-            //alert(dailyReportID)
-
-            //alert($(".recordNo").html())
-            //alert($("#subJobTypes_dpdwn").val())
+            var jobs_dpdown = $('#jobs_dpdown');
+            var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+            var team_dpdwn = $('#team_dpdwn');
 
             //begin fill the jobs dropdown
-            var jobs_dpdown = $('#jobs_dpdown');
-            //var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
-
+            
             $.ajax({
                 url: 'DataService.asmx/GetAllJobNos',
                 method: 'post',
@@ -76,7 +65,7 @@
                 });
 
                 //begin fill the team names dropdown
-                var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+                //var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
                 $('#subJobTypes_dpdwn').empty();//clear the dropdown
                 $('#input_jobs_dpdown').val('1');//
                 //alert($('#input_jobs_dpdown').val())
@@ -103,7 +92,7 @@
             //end jobs id dropdown change
 
             //begin fill the team names dropdown
-            var team_dpdwn = $('#team_dpdwn');
+            //var team_dpdwn = $('#team_dpdwn');
 
             $.ajax({
                 url: 'DataService.asmx/GetAllTeamNames',
