@@ -22,7 +22,7 @@ namespace allpax_service_record.Controllers
             //return View(db.tbl_customers.ToList());
             //var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
             List<vm_dailyReportViewAll> list  = db.Database.SqlQuery<vm_dailyReportViewAll>("SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, " +
-                "tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact " +
+                "tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact, tbl_dailyReport.subJobID " +
                 "FROM tbl_dailyReport " +
 
                     "INNER JOIN " +

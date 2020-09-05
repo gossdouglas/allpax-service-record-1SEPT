@@ -34,6 +34,7 @@
                 selectedItem2 = $(this).find("#record_item2").html();//works valid for inner html only
                 selectedItem3 = $(this).find("#record_item3").html();//works valid for inner html only
                 selectedItem4 = $(this).find("#record_item4").html();//works valid for inner html only
+                selectedItem4_1 = $(this).find("#record_item4").attr("value");//works valid for inner html only
                 selectedItem5 = $(this).find("#record_item5").html();//works valid for inner html only
                 selectedItem6 = $(this).find("#record_item6").html();//works valid for inner html only
                 selectedItem7 = $(this).find("#record_item7").html();//works valid for inner html only
@@ -46,6 +47,7 @@
                 $("#slctd_date").val(selectedItem2);
                 $("#slctd_jobID").val(selectedItem3);
                 $("#slctd_description").val(selectedItem4);
+                $("#slctd_subJobID").val(selectedItem4_1);
                 $("#slctd_customerName").val(selectedItem5);
                 $("#slctd_address").val(selectedItem6);
                 $("#slctd_customerCode").val(selectedItem9);
@@ -53,6 +55,7 @@
 
                 //alert($("#slctd_reportID").val())
                 //alert($(this).attr("id"))
+                
 
             });
             //end when a record class is clicked...
@@ -78,7 +81,12 @@
             });
 
             $(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked... 
-                window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&subJobID=" + selectedItem4
+
+                alert(selectedItem4);
+                alert(selectedItem4_1);
+                //alert($("#record_item4").attr("value"));
+
+                window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
                     + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9 + "&customerContact=" + selectedItem10;
 
                 //window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&subJobID=" + selectedItem4
@@ -199,7 +207,7 @@
                     <td id="record_item1" value=@Html.DisplayFor(modelItem => item.active)>@Html.DisplayFor(modelItem => item.active)</td>
                     <td id="record_item2" value=@temp_date>@temp_date</td>
                     <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
-                    <td id="record_item4" value=@Html.DisplayFor(modelItem => item.description)>@Html.DisplayFor(modelItem => item.description)</td>
+                    <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
                     <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
                     <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
                     <td id="record_item7" value=>TEAM</td>
