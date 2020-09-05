@@ -53,8 +53,8 @@ namespace allpax_service_record.Controllers
             ViewBag.subJobID = subJobID;
             ViewBag.customerName = customerName;
             ViewBag.location = location;
-            ViewBag.location = customercode;
-            ViewBag.location = customerContact;
+            ViewBag.customercode = customercode;
+            ViewBag.customerContact = customerContact;
 
             //return View(db.tbl_customers.ToList());
             //var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
