@@ -47,12 +47,14 @@ namespace allpax_service_record.Controllers
             //return Redirect("/Home");
         }
 
-        public ActionResult copyDailyReport(string jobID, string subJobID, string customerName, string location)
+        public ActionResult copyDailyReport(string jobID, string subJobID, string customerName, string location, string customercode, string customerContact)
         {
             ViewBag.jobiD = jobID;
             ViewBag.subJobID = subJobID;
             ViewBag.customerName = customerName;
             ViewBag.location = location;
+            ViewBag.location = customercode;
+            ViewBag.location = customerContact;
 
             //return View(db.tbl_customers.ToList());
             //var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();

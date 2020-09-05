@@ -39,6 +39,7 @@
                 selectedItem7 = $(this).find("#record_item7").html();//works valid for inner html only
                 selectedItem8 = $(this).find("#record_item8").html();//works valid for inner html only
                 selectedItem9 = $(this).find("#record_item9").html();//works valid for inner html only
+                //selectedItem10 = $(this).find("#record_item10").html();//works valid for inner html only
 
                 $("#slctd_reportID").val(selectedItem0);
                 $("#slctd_active").val(selectedItem1);
@@ -47,7 +48,8 @@
                 $("#slctd_description").val(selectedItem4);
                 $("#slctd_customerName").val(selectedItem5);
                 $("#slctd_address").val(selectedItem6);
-                //$("#slctd_customerCode").val(selectedItem9);
+                $("#slctd_customerCode").val(selectedItem9);
+                //$("#slctd_customerContact").val(selectedItem10);
 
                 //alert($("#slctd_reportID").val())
                 //alert($(this).attr("id"))
@@ -76,11 +78,11 @@
             });
 
             $(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked... 
-                //window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&subJobID=" + selectedItem4
-                //    + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9;
-
                 window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&subJobID=" + selectedItem4
-                    + "&customerName=" + selectedItem5 + "&location=" + selectedItem6;
+                    + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9 + "&customerContact=" + selectedItem10;
+
+                //window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&subJobID=" + selectedItem4
+                    //+ "&customerName=" + selectedItem5 + "&location=" + selectedItem6;
             });
 
             //begin when the line save button is pressed
@@ -174,6 +176,12 @@
                         Work Description
                     </th>
                     <th class="th-sm">
+                        Customer Code
+                    </th>
+                    <th class="th-sm">
+                        Customer Contact
+                    </th>
+                    <th class="th-sm">
                         Action
                     </th>
                 </tr>
@@ -196,7 +204,8 @@
                     <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
                     <td id="record_item7" value=>TEAM</td>
                     <td id="record_item8" value=>WORK DESCRIPTION</td>
-                    @*<td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode) hidden>@Html.DisplayFor(modelItem => item.customercode)</td>*@
+                    <td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode)>@Html.DisplayFor(modelItem => item.customercode)</td>
+                    <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact)>@Html.DisplayFor(modelItem => item.customerContact)</td>
                     <td>
                         <button class="btn btn-primary btn-sm editButton" style=" background-color: royalblue">Edit</button>
                         <button class="btn btn-primary btn-sm deleteButton" style=" background-color: royalblue">Delete</button>
@@ -208,6 +217,5 @@
         </table>
     </div>
 </div>
-        <!--table end-->
 
 
