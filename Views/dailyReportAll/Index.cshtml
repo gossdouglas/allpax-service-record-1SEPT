@@ -34,7 +34,7 @@
                 selectedItem2 = $(this).find("#record_item2").html();//works valid for inner html only
                 selectedItem3 = $(this).find("#record_item3").html();//works valid for inner html only
                 selectedItem4 = $(this).find("#record_item4").html();//works valid for inner html only
-                selectedItem4_1 = $(this).find("#record_item4").attr("value");//works valid for inner html only
+                selectedItem4_1 = $(this).find("#record_item4").attr("value");//
                 selectedItem5 = $(this).find("#record_item5").html();//works valid for inner html only
                 selectedItem6 = $(this).find("#record_item6").html();//works valid for inner html only
                 selectedItem7 = $(this).find("#record_item7").html();//works valid for inner html only
@@ -82,15 +82,12 @@
 
             $(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked... 
 
-                alert(selectedItem4);
-                alert(selectedItem4_1);
+                //alert(selectedItem4);
+                //alert(selectedItem4_1);
                 //alert($("#record_item4").attr("value"));
 
                 window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
                     + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9 + "&customerContact=" + selectedItem10;
-
-                //window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&subJobID=" + selectedItem4
-                    //+ "&customerName=" + selectedItem5 + "&location=" + selectedItem6;
             });
 
             //begin when the line save button is pressed
@@ -183,10 +180,10 @@
                     <th class="th-sm">
                         Work Description
                     </th>
-                    <th class="th-sm">
+                    <th class="th-sm" hidden>
                         Customer Code
                     </th>
-                    <th class="th-sm">
+                    <th class="th-sm" hidden>
                         Customer Contact
                     </th>
                     <th class="th-sm">
@@ -212,8 +209,8 @@
                     <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
                     <td id="record_item7" value=>TEAM</td>
                     <td id="record_item8" value=>WORK DESCRIPTION</td>
-                    <td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode)>@Html.DisplayFor(modelItem => item.customercode)</td>
-                    <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact)>@Html.DisplayFor(modelItem => item.customerContact)</td>
+                    <td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode) hidden>@Html.DisplayFor(modelItem => item.customercode)</td>
+                    <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact) hidden>@Html.DisplayFor(modelItem => item.customerContact)</td>
                     <td>
                         <button class="btn btn-primary btn-sm editButton" style=" background-color: royalblue">Edit</button>
                         <button class="btn btn-primary btn-sm deleteButton" style=" background-color: royalblue">Delete</button>
