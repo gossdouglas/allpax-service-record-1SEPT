@@ -424,6 +424,7 @@
     <Content Include="Views\workDescWntyDelaysPrint\Index.cshtml" />
     <Content Include="Views\dailyReportByReportIDPrint\Index-orig.cshtml" />
     <Content Include="Views\dailyReportAll\Filtered.cshtml" />
+    <Content Include="Views\dailyReport\copyDailyReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

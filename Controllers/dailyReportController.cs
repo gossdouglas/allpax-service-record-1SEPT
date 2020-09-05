@@ -47,9 +47,23 @@ namespace allpax_service_record.Controllers
             //return Redirect("/Home");
         }
 
-        public ActionResult DeleteCustomer(tbl_dailyReport custDelete)
+        public ActionResult copyDailyReport(string jobID, string subJobID, string customerName, string location)
         {
-            //db.Database.ExecuteSqlCommand("DELETE FROM tbl_customers WHERE id=({0})", custDelete.id);
+            ViewBag.jobiD = jobID;
+            ViewBag.subJobID = subJobID;
+            ViewBag.customerName = customerName;
+            ViewBag.location = location;
+
+            //return View(db.tbl_customers.ToList());
+            //var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
+
+            //return View(sql.ToList());
+            return View();
+        }
+
+        public ActionResult DeleteDailyReport(tbl_dailyReport dailyReportDelete)
+        {
+            db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReport WHERE jobID=({0})", dailyReportDelete.jobID);
 
             return RedirectToAction("Index");
         }

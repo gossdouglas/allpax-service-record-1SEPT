@@ -38,6 +38,7 @@
                 selectedItem6 = $(this).find("#record_item6").html();//works valid for inner html only
                 selectedItem7 = $(this).find("#record_item7").html();//works valid for inner html only
                 selectedItem8 = $(this).find("#record_item8").html();//works valid for inner html only
+                selectedItem9 = $(this).find("#record_item9").html();//works valid for inner html only
 
                 $("#slctd_reportID").val(selectedItem0);
                 $("#slctd_active").val(selectedItem1);
@@ -46,6 +47,7 @@
                 $("#slctd_description").val(selectedItem4);
                 $("#slctd_customerName").val(selectedItem5);
                 $("#slctd_address").val(selectedItem6);
+                //$("#slctd_customerCode").val(selectedItem9);
 
                 //alert($("#slctd_reportID").val())
                 //alert($(this).attr("id"))
@@ -74,7 +76,11 @@
             });
 
             $(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked... 
-                //window.location = '/DailyReportByReportID?reportID=' + selectedItem0;
+                //window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&subJobID=" + selectedItem4
+                //    + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9;
+
+                window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&subJobID=" + selectedItem4
+                    + "&customerName=" + selectedItem5 + "&location=" + selectedItem6;
             });
 
             //begin when the line save button is pressed
@@ -180,22 +186,23 @@
                     string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
                     //END TEMPORARY LOOP VARIABLES
 
-                    <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
-                        <td id="record_item0" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
-                        <td id="record_item1" value=@Html.DisplayFor(modelItem => item.active)>@Html.DisplayFor(modelItem => item.active)</td>
-                        <td id="record_item2" value=@temp_date>@temp_date</td>
-                        <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
-                        <td id="record_item4" value=@Html.DisplayFor(modelItem => item.description)>@Html.DisplayFor(modelItem => item.description)</td>
-                        <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
-                        <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
-                        <td id="record_item7" value=>TEAM</td>
-                        <td id="record_item8" value=>WORK DESCRIPTION</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm editButton" style=" background-color: royalblue">Edit</button>
-                            <button class="btn btn-primary btn-sm deleteButton" style=" background-color: royalblue">Delete</button>
-                            <button class="btn btn-primary btn-sm copyButton" style=" background-color: royalblue">Copy</button>
-                        </td>
-                    </tr>
+                <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
+                    <td id="record_item0" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
+                    <td id="record_item1" value=@Html.DisplayFor(modelItem => item.active)>@Html.DisplayFor(modelItem => item.active)</td>
+                    <td id="record_item2" value=@temp_date>@temp_date</td>
+                    <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
+                    <td id="record_item4" value=@Html.DisplayFor(modelItem => item.description)>@Html.DisplayFor(modelItem => item.description)</td>
+                    <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
+                    <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
+                    <td id="record_item7" value=>TEAM</td>
+                    <td id="record_item8" value=>WORK DESCRIPTION</td>
+                    @*<td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode) hidden>@Html.DisplayFor(modelItem => item.customercode)</td>*@
+                    <td>
+                        <button class="btn btn-primary btn-sm editButton" style=" background-color: royalblue">Edit</button>
+                        <button class="btn btn-primary btn-sm deleteButton" style=" background-color: royalblue">Delete</button>
+                        <button class="btn btn-primary btn-sm copyButton" style=" background-color: royalblue">Copy</button>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
