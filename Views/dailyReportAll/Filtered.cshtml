@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@*FILTERED DAILY REPORTS*@
 <head>
     <style>
         .container {
@@ -29,21 +30,24 @@
                 selectedItem2 = $(this).find("#record_item2").html();//works valid for inner html only
                 selectedItem3 = $(this).find("#record_item3").html();//works valid for inner html only
                 selectedItem4 = $(this).find("#record_item4").html();//works valid for inner html only
+                selectedItem4_1 = $(this).find("#record_item4").attr("value");//
                 selectedItem5 = $(this).find("#record_item5").html();//works valid for inner html only
                 selectedItem6 = $(this).find("#record_item6").html();//works valid for inner html only
                 selectedItem7 = $(this).find("#record_item7").html();//works valid for inner html only
                 selectedItem8 = $(this).find("#record_item8").html();//works valid for inner html only
+                selectedItem9 = $(this).find("#record_item9").html();//works valid for inner html only
+                selectedItem10 = $(this).find("#record_item10").html();//works valid for inner html only
 
                 $("#slctd_reportID").val(selectedItem0);
                 $("#slctd_active").val(selectedItem1);
                 $("#slctd_date").val(selectedItem2);
                 $("#slctd_jobID").val(selectedItem3);
                 $("#slctd_description").val(selectedItem4);
+                $("#slctd_subJobID").val(selectedItem4_1);
                 $("#slctd_customerName").val(selectedItem5);
                 $("#slctd_address").val(selectedItem6);
-
-                //alert($("#slctd_reportID").val())
-                //alert($(this).attr("id"))
+                $("#slctd_customerCode").val(selectedItem9);
+                $("#slctd_customerContact").val(selectedItem10);
 
             });
             //end when a record class is clicked...
@@ -52,14 +56,31 @@
                 window.location = '/DailyReportByReportID?reportID=' + selectedItem0; 
             });
 
-            //begin when the line save button is pressed
-            //$("#filterDateBtn").on('click', function () {
+            $(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked... 
+                //window.location = '/DailyReportByReportID?reportID=' + selectedItem0;
 
-            //    var startDate = $("#startDateInput").val();
-            //    var endDate = $("#endDateInput").val();
+                //begin axios add post
+                axios.post('/dailyReportAll/DeleteDailyReport', {
+                    dailyReportID: selectedItem0
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        window.location = '/DailyReportAll';
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            });
 
-            //    window.location = 'dailyReportAll/filtered?startDate=' + startDate + "&" + "endDate=" + endDate;  
-            //}); 
+            $(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked... 
+
+                //alert(selectedItem4);
+                //alert(selectedItem4_1);
+                //alert($("#record_item4").attr("value"));
+
+                window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
+                    + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9 + "&customerContact=" + selectedItem10;
+            });
 
             //begin
             $("#filterResetDateBtn").on('click', function () {
@@ -89,7 +110,7 @@
             <button class="btn btn-primary btn-sm" id="filterDateBtn" style=" background-color: royalblue" hidden>Filter</button>
         </div>*@
         <div class="md-col-1" style="padding:5px">
-            <button class="btn btn-primary btn-sm" id="filterResetDateBtn" style=" background-color: royalblue">Reset Filter</button>
+            <button class="btn btn-primary btn-sm" id="filterResetDateBtn" style=" background-color: darkorange">Reset Filter</button>
         </div>
     </div>    
     <div class="col-md-12" style="border:none">
@@ -123,6 +144,12 @@
                     <th class="th-sm">
                         Work Description
                     </th>
+                    <th class="th-sm" hidden>
+                        Customer Code
+                    </th>
+                    <th class="th-sm" hidden>
+                        Customer Contact
+                    </th>
                     <th class="th-sm">
                         Action
                     </th>
@@ -136,21 +163,24 @@
                     string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
                     //END TEMPORARY LOOP VARIABLES
 
-                    <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
-                        <td id="record_item0" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
-                        <td id="record_item1" value=@Html.DisplayFor(modelItem => item.active)>@Html.DisplayFor(modelItem => item.active)</td>
-                        <td id="record_item2" value=@temp_date>@temp_date</td>
-                        <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
-                        <td id="record_item4" value=@Html.DisplayFor(modelItem => item.description)>@Html.DisplayFor(modelItem => item.description)</td>
-                        <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
-                        <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
-                        <td id="record_item7" value=>TEAM</td>
-                        <td id="record_item8" value=>WORK DESCRIPTION</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm editButton" style=" background-color: royalblue">Edit</button>
-                            <button class="btn btn-primary btn-sm deleteButton" style=" background-color: royalblue" disabled>Delete</button>
-                        </td>
-                    </tr>
+                <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
+                    <td id="record_item0" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
+                    <td id="record_item1" value=@Html.DisplayFor(modelItem => item.active)>@Html.DisplayFor(modelItem => item.active)</td>
+                    <td id="record_item2" value=@temp_date>@temp_date</td>
+                    <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
+                    <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
+                    <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
+                    <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
+                    <td id="record_item7" value=>TEAM</td>
+                    <td id="record_item8" value=>WORK DESCRIPTION</td>
+                    <td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode) hidden>@Html.DisplayFor(modelItem => item.customercode)</td>
+                    <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact) hidden>@Html.DisplayFor(modelItem => item.customerContact)</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm editButton" style=" background-color: darkorange">Edit</button>
+                        <button class="btn btn-primary btn-sm deleteButton" style=" background-color: darkgoldenrod">Delete</button>
+                        <button class="btn btn-primary btn-sm copyButton" style=" background-color: darkturquoise">Copy</button>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

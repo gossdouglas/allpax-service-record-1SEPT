@@ -44,7 +44,8 @@ namespace allpax_service_record.Controllers
             //var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
 
             string sql = @"SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, " +
-            "tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address FROM tbl_dailyReport " +
+            "tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact, tbl_dailyReport.subJobID " +
+            "FROM tbl_dailyReport " +
 
             "INNER JOIN " +
             "tbl_Jobs ON tbl_Jobs.jobID = tbl_dailyReport.jobID " +
