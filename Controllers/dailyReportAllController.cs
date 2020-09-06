@@ -21,22 +21,6 @@ namespace allpax_service_record.Controllers
         // GET: customers
         public ActionResult Index()
         {
-            //return View(db.tbl_customers.ToList());
-            //var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
-            //List<vm_dailyReportViewAll> list  = db.Database.SqlQuery<vm_dailyReportViewAll>("SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, " +
-            //    "tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact, tbl_dailyReport.subJobID " +
-            //    "FROM tbl_dailyReport " +
-
-            //        "INNER JOIN " +
-            //        "tbl_Jobs ON tbl_Jobs.jobID = tbl_dailyReport.jobID " +
-            //        "INNER JOIN " +
-            //        "tbl_customers ON tbl_customers.customerCode = tbl_Jobs.customerCode " +
-            //        "INNER JOIN " +
-            //        "tbl_jobSubJobs ON tbl_jobSubJobs.jobID = tbl_Jobs.jobID " +
-            //        "INNER JOIN " +
-            //        "tbl_subJobTypes ON tbl_subJobTypes.subJobID = tbl_jobSubJobs.subJobID " +
-            //        "WHERE " +
-            //        "tbl_dailyReport.subJobID = tbl_subJobTypes.subJobID").ToList();
 
             List<vm_dailyReportViewAll> dailyRptViewAlls = new List<vm_dailyReportViewAll>();
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
@@ -82,22 +66,49 @@ namespace allpax_service_record.Controllers
                 dailyRptViewAll.customerContact = dr1[9].ToString();
                 dailyRptViewAll.team = TeamNamesByDailyReportID(dailyRptViewAll.dailyReportID);
 
-                //workDesc.userNames = workDescUsersByTimeEntryID(workDesc.timeEntryID);
                 dailyRptViewAlls.Add(dailyRptViewAll);
             }
             sqlconn.Close();
-            //end
-            return View(dailyRptViewAlls);
 
-            //return View(list.ToList()); 
+            return View(dailyRptViewAlls);
         }
 
         public ActionResult Filtered(string startDate, string endDate)
         {
-            //return View(db.tbl_customers.ToList());
-            //var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
 
-            string sql = @"SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, " +
+            //string sql = @"SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, " +
+            //"tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact, tbl_dailyReport.subJobID " +
+            //"FROM tbl_dailyReport " +
+
+            //"INNER JOIN " +
+            //"tbl_Jobs ON tbl_Jobs.jobID = tbl_dailyReport.jobID " +
+            //"INNER JOIN " +
+            //"tbl_customers ON tbl_customers.customerCode = tbl_Jobs.customerCode " +
+            //"INNER JOIN " +
+            //"tbl_jobSubJobs ON tbl_jobSubJobs.jobID = tbl_Jobs.jobID " +
+            //"INNER JOIN " +
+            //"tbl_subJobTypes ON tbl_subJobTypes.subJobID = tbl_jobSubJobs.subJobID " +
+            //"WHERE " +
+            //"tbl_dailyReport.subJobID = tbl_subJobTypes.subJobID " +
+            //"AND " +
+            //"tbl_dailyReport.date >= {0} " +
+            //"AND " +
+            //"tbl_dailyReport.date <= {1}";
+
+            //List<vm_dailyReportViewAll> list = db.Database.SqlQuery<vm_dailyReportViewAll>
+            //(sql, startDate, endDate).ToList();
+
+            //return View(list);
+
+            List<vm_dailyReportViewAll> dailyRptViewAlls = new List<vm_dailyReportViewAll>();
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            sqlconn.Open();
+
+            //begin
+            string sqlquery1 =
+             "SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, " +
             "tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact, tbl_dailyReport.subJobID " +
             "FROM tbl_dailyReport " +
 
@@ -112,34 +123,39 @@ namespace allpax_service_record.Controllers
             "WHERE " +
             "tbl_dailyReport.subJobID = tbl_subJobTypes.subJobID " +
             "AND " +
-            "tbl_dailyReport.date >= {0} " +
+            //"tbl_dailyReport.date >= {0} " +
+            "tbl_dailyReport.date >= @startDate " +
             "AND " +
-            "tbl_dailyReport.date <= {1}";
+            //"tbl_dailyReport.date <= {1}";
+            "tbl_dailyReport.date <= @endDate";
 
-            List<vm_dailyReportViewAll> list = db.Database.SqlQuery<vm_dailyReportViewAll>
-            (sql, startDate, endDate).ToList();
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.AddWithValue("@startDate", startDate);
+            sqlcomm1.Parameters.AddWithValue("@endDate", endDate);
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                vm_dailyReportViewAll dailyRptViewAll = new vm_dailyReportViewAll();
 
-            //List<vm_dailyReportViewAll> list = db.Database.SqlQuery<vm_dailyReportViewAll>
-            //("SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, " +
-            //"tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address FROM tbl_dailyReport " +
+                dailyRptViewAll.dailyReportID = (int)dr1[0];
+                dailyRptViewAll.active = (Boolean)dr1[1];
+                dailyRptViewAll.date = String.Format("{0:yyyy-MM-dd}", dr1[2]);
+                dailyRptViewAll.jobID = dr1[3].ToString();
+                dailyRptViewAll.subJobID = dr1[4].ToString();
+                dailyRptViewAll.description = dr1[5].ToString();
+                dailyRptViewAll.customerName = dr1[6].ToString();
+                dailyRptViewAll.address = dr1[7].ToString();
+                dailyRptViewAll.customercode = dr1[8].ToString();
+                dailyRptViewAll.customerContact = dr1[9].ToString();
+                dailyRptViewAll.team = TeamNamesByDailyReportID(dailyRptViewAll.dailyReportID);
 
-            //"INNER JOIN " +
-            //"tbl_Jobs ON tbl_Jobs.jobID = tbl_dailyReport.jobID " +
-            //"INNER JOIN " +
-            //"tbl_customers ON tbl_customers.customerCode = tbl_Jobs.customerCode " +
-            //"INNER JOIN " +
-            //"tbl_jobSubJobs ON tbl_jobSubJobs.jobID = tbl_Jobs.jobID " +
-            //"INNER JOIN " +
-            //"tbl_subJobTypes ON tbl_subJobTypes.subJobID = tbl_jobSubJobs.subJobID " +
-            //"WHERE " +
-            //"tbl_dailyReport.subJobID = tbl_subJobTypes.subJobID " +
-            //"AND " +
-            //"tbl_dailyReport.date >= @p0 " +
-            //"AND " +
-            //"tbl_dailyReport.date <= @p1").ToList();
+                dailyRptViewAlls.Add(dailyRptViewAll);
+            }
+            sqlconn.Close();
 
-            //return View(list.ToList());
-            return View(list);
+            return View(dailyRptViewAlls);
         }
 
         public List<string> TeamNamesByDailyReportID(int dailyReportID)
