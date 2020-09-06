@@ -12,7 +12,7 @@ namespace allpax_service_record.Models.View_Models
 
         public Boolean active { get; set; }
 
-        public DateTime date { get; set; }
+        public string date { get; set; }
 
         public string jobID { get; set; }
 
@@ -24,9 +24,11 @@ namespace allpax_service_record.Models.View_Models
 
         public string address { get; set; }
 
-        public int subJobID { get; set; }
+        //public int subJobID { get; set; }
 
-        public string team { get; set; }
+        public string subJobID { get; set; }
+
+        public List<string> team { get; set; }
 
         public string workDescription { get; set; }
         public string customercode { get; set; }
