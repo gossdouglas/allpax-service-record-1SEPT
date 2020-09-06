@@ -92,37 +92,6 @@ namespace allpax_service_record.Controllers
             //return View(list.ToList()); 
         }
 
-        public List<string> TeamNamesByDailyReportID(int dailyReportID)
-        {
-            List<string> team = new List<string>();
-
-            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
-            SqlConnection sqlconn = new SqlConnection(mainconn);
-
-            //begin query for kits available but not installed by machine
-            string sqlquery1 = "SELECT tbl_Users.name "+
-            "FROM " +
-            "tbl_Users " +
-
-            "INNER JOIN " +
-            "tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = tbl_Users.userName " +
-
-            "WHERE " +
-            "tbl_dailyReportUsers.dailyReportID = @dailyReportID";
-            //end query for kits available but not installed by machine
-
-            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
-            sqlcomm1.Parameters.Add(new SqlParameter("dailyReportID", dailyReportID));
-            SqlDataAdapter sda3 = new SqlDataAdapter(sqlcomm1);
-            DataTable dt1 = new DataTable();
-            sda3.Fill(dt1);
-            foreach (DataRow dr1 in dt1.Rows)
-            {
-                team.Add(dr1[0].ToString());
-            }
-            return team;
-        }
-
         public ActionResult Filtered(string startDate, string endDate)
         {
             //return View(db.tbl_customers.ToList());
@@ -173,33 +142,35 @@ namespace allpax_service_record.Controllers
             return View(list);
         }
 
-        //begin CMPS 411 controller code
-        //[HttpPost]
-        //public ActionResult AddDailyReport(tbl_dailyReport dailyReportAdd)
-        //{
-        //     db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6})",
-        //        dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime, dailyReportAdd.lunchHours, dailyReportAdd.equipment); 
-        //    //return new EmptyResult();
-        //    return RedirectToAction("Home", "Index");
-        //    //return Redirect("/Home");
-        //}
-
-        public ActionResult DeleteDailyReport(tbl_dailyReport dailyReportDelete)
+        public List<string> TeamNamesByDailyReportID(int dailyReportID)
         {
-            db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReport WHERE dailyReportID=({0})", dailyReportDelete.dailyReportID);
+            List<string> team = new List<string>();
 
-            return RedirectToAction("Index");
-        }
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
 
-        public ActionResult UpdateCustomer(tbl_dailyReport custUpdate)
-        {
-            //db.Database.ExecuteSqlCommand("UPDATE cmps411.tbl_customer SET customerCode={0},name={1},address={2}, city={3}, state={4}, zipCode={5} WHERE id={6}",
-            //      custUpdate.customerCode, custUpdate.name, custUpdate.address, custUpdate.city, custUpdate.state, custUpdate.zipCode, custUpdate.id);
+            //begin query for kits available but not installed by machine
+            string sqlquery1 = "SELECT tbl_Users.name " +
+            "FROM " +
+            "tbl_Users " +
 
-            //db.Database.ExecuteSqlCommand("UPDATE tbl_customers SET customerCode={0}, customerName={1}, address={2} WHERE id={3}",
-            //      custUpdate.customerCode, custUpdate.customerName, custUpdate.address, custUpdate.id);
+            "INNER JOIN " +
+            "tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = tbl_Users.userName " +
 
-            return RedirectToAction("Index");
+            "WHERE " +
+            "tbl_dailyReportUsers.dailyReportID = @dailyReportID";
+            //end query for kits available but not installed by machine
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.Add(new SqlParameter("dailyReportID", dailyReportID));
+            SqlDataAdapter sda3 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda3.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                team.Add(dr1[0].ToString());
+            }
+            return team;
         }
 
         protected override void Dispose(bool disposing)
