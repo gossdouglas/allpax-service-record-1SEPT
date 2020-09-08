@@ -20,7 +20,7 @@
         table {
             table-layout: fixed;
         }
-        #record_item7, #record_item8 {
+        #record_item8 {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -236,11 +236,13 @@
                         <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
                         <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
                         <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
-                        <td id="record_item7" value=>
-                            @for (var i = 0; i < (temp_team.Count); i++)
-                            {
-                                <span class="" id="" style="">@temp_team[@i]|</span>
-                            }
+                        <td id="record_item7" value= >
+                                <span>
+                                    @for (var i = 0; i < (temp_team.Count); i++)
+                                    {
+                                        <span class="" id="" style="">@temp_team[@i]|</span>
+                                    }
+                                </span>
                         </td>
                         <td id="record_item8" value= style="overflow:hidden; white-space:nowrap">
                             @for (var i = 0; i < (temp_workDescription.Count); i++)
