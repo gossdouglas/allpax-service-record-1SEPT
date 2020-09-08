@@ -165,11 +165,23 @@
                     //BEGIN TEMPORARY LOOP VARIABLES
                     string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
                     List<string> temp_team = item.team;
+                    Boolean temp_active = item.active;
                     //END TEMPORARY LOOP VARIABLES
 
                     <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
                         <td id="record_item0" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
-                        <td id="record_item1" value=@Html.DisplayFor(modelItem => item.active)>@Html.DisplayFor(modelItem => item.active)</td>
+                        <td id="record_item1" style="text-align:center">
+                            @if (item.active == true)
+                            {
+                                <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+
+                                <span hidden>@temp_active</span>
+                            }
+                            else
+                            {
+                                <i class="fas fa-stop-circle fa-2x" style="color:red" ;></i>
+                            }
+                        </td>
                         <td id="record_item2" value=@temp_date>@temp_date</td>
                         <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
                         <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
