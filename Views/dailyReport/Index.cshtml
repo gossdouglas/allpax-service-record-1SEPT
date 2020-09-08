@@ -123,8 +123,10 @@
                 var addItem5 = $("#input_endTime").val();
                 var addItem6 = $("#input_lunch").val();
                 var addItem7 = $("#input_equipment").val();
+                var addItem7 = $("#input_equipment").val();
+                var addItem8 = dailyRptAuthor;
 
-                //console.log(addItem3);
+                console.log(addItem8);
 
                 alert(
                     "Selected for Add POST:" + '\n' +
@@ -134,7 +136,8 @@
                     "addItem4: " + addItem4 + '\n' +
                     "addItem5: " + addItem5 + '\n' +
                     "addItem6: " + addItem6 + '\n' +
-                    "addItem7: " + addItem7 + '\n'
+                    "addItem7: " + addItem7 + '\n' +
+                    "addItem8: " + addItem8 + '\n'
                 );
                 $("#addRecordItem1").val('');
                 $("#addRecordItem2").val('');
@@ -143,6 +146,7 @@
                 $("#addRecordItem5").val('');
                 $("#addRecordItem6").val('');
                 $("#addRecordItem7").val('');
+                $("#addRecordItem8").val('');
 
                 //begin axios add post
                 axios.post('/dailyReport/AddDailyReport', {
@@ -153,6 +157,7 @@
                     endTime: addItem5,
                     lunchHours: addItem6,
                     equipment: addItem7,
+                    dailyReportAuthor: addItem8
                 })
                     .then(function (response) {
                         console.log(response);
@@ -185,7 +190,6 @@
                         //$(this).attr('id')
                     }
                 });
-
                 //alert("all filled? "+filled)
                 return filled;
             }
@@ -292,5 +296,5 @@
 </div>
 <hr style="margin:1px; opacity:0" />
 <div class=" container">
-    <button type="submit" class="btn btn-primary btn-sm" id="addButton" style="background-color: darkturquoise" disabled>Save Record</button>
+    <button type="submit" class="btn btn-primary btn-sm" id="addButton" style="background-color: darkturquoise" disabled>Save and Continue</button>
 </div>

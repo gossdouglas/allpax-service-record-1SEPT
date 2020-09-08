@@ -31,5 +31,7 @@ namespace allpax_service_record.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_dailyReportUsers> tbl_dailyReportUsers { get; set; }
+        [StringLength(16)]
+        public string dailyReportAuthor { get; set; }
     }
 }

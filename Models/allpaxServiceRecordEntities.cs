@@ -41,6 +41,10 @@ namespace allpax_service_record.Models
                 .Property(e => e.equipment)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<tbl_dailyReport>()
+                .Property(e => e.dailyReportAuthor)
+                .IsUnicode(false);
+
             modelBuilder.Entity<tbl_dailyReportUsers>()
                 .Property(e => e.userName)
                 .IsUnicode(false);
