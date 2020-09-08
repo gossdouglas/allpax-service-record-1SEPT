@@ -12,11 +12,6 @@
         .container {
             border: 2px solid black;
         }
-
-        .input-group-addon {
-            color: #ff0000;
-            background-color: #ffffff;
-        }
         table {
             table-layout: fixed;
         }
@@ -25,11 +20,15 @@
             white-space: nowrap;
             text-overflow: ellipsis;
         }
+        div.scrollable {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+        }
     </style>
 
-    @*<script src="https://unpkg.com/axios/dist/axios.min.js"></script>*@
-    <!-- JQuery -->
-    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>*@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
@@ -109,37 +108,10 @@
                 var startDate = $("#startDateInput").val();
                 var endDate = $("#endDateInput").val();
 
-                window.location = 'dailyReportAll/filtered?startDate=' + startDate+"&"+"endDate="+endDate; 
-
-                //begin suck in variables
-                //slctd_timeEntryID = this.id.substr(20);
-                //slctd_workDescText = $("#input_workDescLine_" + slctd_timeEntryID).html()
-                //slctd_workDescText = slctd_workDescText.replace(/^[\s]+ /, "");//clean up the work description section
-                //slctd_workDescText = slctd_workDescText.replace(/&amp;/, " ");//wipe out leading white space characters
-                //slctd_workDescText = slctd_workDescText.replace(/nbsp;/, " ");//and amp and nbsp
-                //end suck in variables
-
-                //begin axios delete post
-                //axios.post('/dailyReportAll/Filtered', {
-                //    startDate: startDate,
-                //    endDate: endDate
-                //})
-                //    .then(function (response) {
-                //        console.log(response);
-                //    })
-                //    .catch(function (error) {
-                //        console.log(error);
-                //    });
-                //end axios delete post            
+                window.location = 'dailyReportAll/filtered?startDate=' + startDate+"&"+"endDate="+endDate;          
             });
             //end when the line save button is pressed.
-          
-           // //begin
-           // $("#filterResetDateBtn").on('click', function () {
-           //     window.location = 'dailyReportAll/';
-           //});
-           // //end 
-                                                      
+                                         
         });//end document read jquery statements
     </script>
 </head>
@@ -210,7 +182,6 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-
                     //BEGIN TEMPORARY LOOP VARIABLES
                     string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
                     List<string> temp_team = item.team;
@@ -236,13 +207,13 @@
                         <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
                         <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
                         <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
-                        <td id="record_item7" value= >
-                                <span>
-                                    @for (var i = 0; i < (temp_team.Count); i++)
-                                    {
-                                        <span class="" id="" style="">@temp_team[@i]|</span>
-                                    }
-                                </span>
+                        <td id="record_item7" value=>
+                            <span>
+                                @for (var i = 0; i < (temp_team.Count); i++)
+                                {
+                                    <span class="" id="" style="">@temp_team[@i]|</span>
+                                }
+                            </span>
                         </td>
                         <td id="record_item8" value= style="overflow:hidden; white-space:nowrap">
                             @for (var i = 0; i < (temp_workDescription.Count); i++)
