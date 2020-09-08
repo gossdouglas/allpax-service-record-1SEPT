@@ -20,7 +20,7 @@
         table {
             table-layout: fixed;
         }
-        #record_item7, #record_item8 {
+        #record_item8 {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -169,10 +169,10 @@
         <table id="dt_dailyRptAll" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th class="th-sm">
+                    <th class="th-sm" style="width:15px">
                         Report ID
                     </th>
-                    <th class="th-sm">
+                    <th class="th-sm" style="width:15px">
                         Active
                     </th>
                     <th class="th-sm">
@@ -219,8 +219,8 @@
                     //END TEMPORARY LOOP VARIABLES
 
                     <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
-                        <td id="record_item0" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
-                        <td id="record_item1" style="text-align:center">
+                        <td id="record_item0" style="width:15px" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
+                        <td id="record_item1" style="text-align:center; width:15px">
                             @if (item.active == true)
                             {
                                 <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
@@ -236,11 +236,13 @@
                         <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
                         <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
                         <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
-                        <td id="record_item7" value=>
-                            @for (var i = 0; i < (temp_team.Count); i++)
-                            {
-                                <span class="" id="" style="">@temp_team[@i]|</span>
-                            }
+                        <td id="record_item7" value= >
+                                <span>
+                                    @for (var i = 0; i < (temp_team.Count); i++)
+                                    {
+                                        <span class="" id="" style="">@temp_team[@i]|</span>
+                                    }
+                                </span>
                         </td>
                         <td id="record_item8" value= style="overflow:hidden; white-space:nowrap">
                             @for (var i = 0; i < (temp_workDescription.Count); i++)
