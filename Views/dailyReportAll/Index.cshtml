@@ -17,6 +17,14 @@
             color: #ff0000;
             background-color: #ffffff;
         }
+        table {
+            table-layout: fixed;
+        }
+        #record_item7, #record_item8 {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
     </style>
 
     @*<script src="https://unpkg.com/axios/dist/axios.min.js"></script>*@
@@ -206,6 +214,7 @@
                     //BEGIN TEMPORARY LOOP VARIABLES
                     string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
                     List<string> temp_team = item.team;
+                    List<string> temp_workDescription = item.workDescription;
                     Boolean temp_active = item.active;
                     //END TEMPORARY LOOP VARIABLES
 
@@ -218,8 +227,9 @@
                             }
                             else
                             {
-                                <i class="fas fa-stop-circle fa-2x" style="color:red";></i>
+                                <i class="fas fa-stop-circle fa-2x" style="color:red" ;></i>
                             }
+                        <span class="" id="" style="" hidden>@temp_active</span>
                         </td>
                         <td id="record_item2" value=@temp_date>@temp_date</td>
                         <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
@@ -229,10 +239,15 @@
                         <td id="record_item7" value=>
                             @for (var i = 0; i < (temp_team.Count); i++)
                             {
-                                <span class="" id="" style="pointer-events:none">@temp_team[@i]|</span>
+                                <span class="" id="" style="">@temp_team[@i]|</span>
                             }
                         </td>
-                        <td id="record_item8" value=>WORK DESCRIPTION</td>
+                        <td id="record_item8" value= style="overflow:hidden; white-space:nowrap">
+                            @for (var i = 0; i < (temp_workDescription.Count); i++)
+                            {
+                                @temp_workDescription[@i]
+                            }                        
+                        </td>
                         <td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode) hidden>@Html.DisplayFor(modelItem => item.customercode)</td>
                         <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact) hidden>@Html.DisplayFor(modelItem => item.customerContact)</td>
                         <td>
