@@ -25,6 +25,7 @@
             var team_dpdwn = $('#team_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
+            var lastDlyRptCrtdByUser;
 
             //begin fill the jobs dropdown
             $.ajax({
@@ -93,8 +94,6 @@
             //end jobs id dropdown change
 
             //begin fill the team names dropdown
-            //var team_dpdwn = $('#team_dpdwn');
-
             $.ajax({
                 url: 'DataService.asmx/GetAllTeamNames',
                 method: 'post',
@@ -109,12 +108,10 @@
                     });
                 }
             });
-            //end fill the sub job dropdown
+            //end fill the team names dropdown
 
             //begin #addButton
             $("#addButton").click(function () {//when the add button is clicked...
-
-                //window.location = '/home';
 
                 var addItem1 = $("#jobs_dpdown").val();
                 var addItem2 = $("#slct_date").val();
@@ -125,8 +122,6 @@
                 var addItem7 = $("#input_equipment").val();
                 var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
-
-                console.log(addItem8);
 
                 alert(
                     "Selected for Add POST:" + '\n' +
@@ -161,10 +156,21 @@
                 })
                     .then(function (response) {
                         console.log(response);
-                        //window.location = '/home';
-                        //window.location.href = '/home';
+                        //begin get last daily report created by user name
+                        $.ajax({
+                            url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
+                            method: 'post',
+                            dataType: 'json',
+                            data: { dailyReportAuthor: dailyRptAuthor },
+                            success: function (data) {
 
-                    })
+                                $(data).each(function (index, item) {
+                                    lastDlyRptCrtdByUser = item;
+                                    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                                });
+                            }
+                        });
+                    })               
                     .catch(function (error) {
                         console.log(error);
                     });
@@ -185,12 +191,8 @@
                 $(fields).each(function () {
                     if ($(this).val() == '') {
                         filled = false;
-                        //alert("not filled: " + $(this).attr('id'))
-
-                        //$(this).attr('id')
                     }
                 });
-                //alert("all filled? "+filled)
                 return filled;
             }
 
@@ -198,12 +200,12 @@
     </script>
 </head>
 
-<div class=" container">
+<div class="container">
     <div class="row">
         <div class="col-2" style="padding:5px">
             <strong>Daily Log Information</strong>
         </div>
-        <div class="col-3" style="padding:5px">
+        <div class="col-2" style="padding:5px">
             <div>
                 <span><strong>Record No</strong></span>
                 <span class="recordNo">new</span>
@@ -292,9 +294,151 @@
         <div class="col-1" style="padding:5px">
         </div>
     </div>
-
 </div>
 <hr style="margin:1px; opacity:0" />
 <div class=" container">
     <button type="submit" class="btn btn-primary btn-sm" id="addButton" style="background-color: darkturquoise" disabled>Save and Continue</button>
+</div>
+<hr style="margin:1px; opacity:0">
+<div class="container" id="contnr_team">
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Allpax Team:</strong>
+        </div>
+        <div class="col-10" style="padding:5px">
+            <div class="row" style="margin:0px;">
+                <select name="team_dpdwn" id="team_dpdwn" style="width:100%" disabled>
+                    <option value="-1">Add Team Member</option>                   
+                </select>
+            </div>
+            <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
+            </div>
+        </div>
+    </div>
+</div>
+<hr style="margin:1px; opacity:0">
+<div class="container" id="">
+    <div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
+        <div class="row">
+            <div class="col-8" style="padding:5px">
+                <strong>Work Description</strong>
+            </div>
+            <div class="col-4" style="padding:5px">
+                <strong>Team</strong>
+            </div>
+        </div>
+        <div class="col-12" id="workDescriptionLine_template">
+            <div class="row" id="">
+                <div class="col-8" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable="false">
+                </div>
+                <div class="col-2" name="txt_teamMembersWorkDesc" id="txt_teamMembersWorkDesc" style="padding:5px">
+                    <span class="workDescTeam_" id="workDescTeam_" style="padding:5px"></span>
+                </div>
+                <div class="col-2" style="padding:5px">
+                    <select class="workDescTeam_dpdwn" name="" style="width:100%" disabled>
+                        <option value="">Team</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2" style="padding:5px">
+                    <div>
+                        <span><strong>Time Entry:</strong></span>
+                        <span id="txt_timeEntryID" value="">new</span>
+                    </div>
+                </div>
+                <div class="col-10" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="background-color: darkorange; width: 100%" disabled>Save Entry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr style="margin:1px; opacity:0">
+<div class="container" id="">
+    <div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
+        <div class="row">
+            <div class="col-7" style="padding:5px">
+                <strong>Delays</strong>
+            </div>
+            <div class="col-1" style="padding:5px">
+                <strong>Hours</strong>
+            </div>
+            <div class="col-4" style="padding:5px">
+                <strong>Team</strong>
+            </div>
+        </div>
+        <div class="col-12" id="workDescriptionDelaysLine_template">
+            <div class="row" id="">
+                <div class="col-7" id="input_workDescDelays" style="padding:5px; border: 1px solid black;" contenteditable="false">
+                </div>
+                <div class="col-1" style="padding:5px">
+                    <input type="text" class="form-control form-control-sm" id="inputHours_workDescDelays" value="" disabled>
+                </div>
+                <div class="col-2" name="txt_teamMembersWorkDescDelays" id="txt_teamMembersWorkDescDelays" style="padding:5px">
+                    <span class="workDescDelaysTeam_" id="workDescDelaysTeam_" style="padding:5px"></span>
+                </div>
+                <div class="col-2" style="padding:5px">
+                    <select class="workDescDelaysTeam_dpdwn" name="" style="width:100%" disabled>
+                        <option value="">Team</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2" style="padding:5px">
+                    <div>
+                        <span><strong>Time Entry:</strong></span>
+                        <span id="txt_timeEntryIDDelays" value="">new</span>
+                    </div>
+                </div>
+                <div class="col-10" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysBtn" style="background-color: darkgoldenrod; width: 100%" disabled>Save Entry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr style="margin:1px; opacity:0">
+<div class="container" id="">
+    <div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
+        <div class="row">
+            <div class="col-7" style="padding:5px">
+                <strong>Warranty Delays</strong>
+            </div>
+            <div class="col-1" style="padding:5px">
+                <strong>Hours</strong>
+            </div>
+            <div class="col-4" style="padding:5px">
+                <strong>Team</strong>
+            </div>
+        </div>
+        <div class="col-12" id="workDescriptionWntyDelaysLine_template">
+            <div class="row" id="">
+                <div class="col-7" id="input_workDescWntyDelays" style="padding:5px; border: 1px solid black;" contenteditable="false">
+                </div>
+                <div class="col-1" style="padding:5px">
+                    <input type="text" class="form-control form-control-sm" id="inputHours_workDescWntyDelays" value="" disabled>
+                </div>
+                <div class="col-2" name="txt_teamMembersWorkDescWntyDelays" id="txt_teamMembersWorkDescWntyDelays" style="padding:5px">
+                    <span class="workDescWntyDelaysTeam_" id="workDescWntyDelaysTeam_" style="padding:5px"></span>
+                </div>
+                <div class="col-2" style="padding:5px">
+                    <select class="workDescWntyDelaysTeam_dpdwn" name="" style="width:100%" disabled>
+                        <option value="">Team</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2" style="padding:5px">
+                    <div>
+                        <span><strong>Time Entry:</strong></span>
+                        <span id="txt_timeEntryIDWntyDelays" value="">new</span>
+                    </div>
+                </div>
+                <div class="col-10" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescWntyDelaysBtn" style="background-color: darkturquoise; width: 100%" disabled>Save Entry</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

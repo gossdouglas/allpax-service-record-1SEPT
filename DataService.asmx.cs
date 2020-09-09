@@ -202,5 +202,34 @@ namespace allpax_service_record
             //JavaScriptSerializer js = new JavaScriptSerializer();
             //Context.Response.Write(js.Serialize(teamNames));
         }
+
+        [WebMethod]
+        public void GetLastDlyRptCrtdByUserName(string dailyReportAuthor)
+        {
+            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            //List<tbl_dailyReport> dlyRptAuthor = new List<tbl_dailyReport>();
+            List<string> dailyRptID = new List<string>();
+
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+
+                SqlCommand cmd = new SqlCommand("spGetLastDlyRptCrtdByUserName", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter param = new SqlParameter()
+                {
+                    ParameterName = "@dailyReportAuthor",
+                    Value = dailyReportAuthor
+                };
+                cmd.Parameters.Add(param);
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    dailyRptID.Add(rdr["dailyReportID"].ToString());
+                }
+            }
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.Write(js.Serialize(dailyRptID));
+        }
     }
 }

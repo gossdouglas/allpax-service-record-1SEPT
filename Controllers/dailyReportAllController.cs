@@ -127,6 +127,13 @@ namespace allpax_service_record.Controllers
             return View(dailyRptViewAlls);
         }
 
+        public ActionResult DeleteDailyReport(tbl_dailyReport dailyReportDelete)
+        {
+            db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReport WHERE dailyReportID=({0})", dailyReportDelete.dailyReportID);
+
+            return RedirectToAction("Index");
+        }
+
         public List<string> TeamNamesByDailyReportID(int dailyReportID)
         {
             List<string> team = new List<string>();

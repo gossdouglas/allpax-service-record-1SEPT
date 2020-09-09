@@ -85,7 +85,7 @@
                 })
                     .then(function (response) {
                         console.log(response);
-                        window.location = '/DailyReportAll';
+                        window.location = '/DailyReportAll';//reload the page after a deletion
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -93,11 +93,6 @@
             });
 
             $(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked... 
-
-                //alert(selectedItem4);
-                //alert(selectedItem4_1);
-                //alert($("#record_item4").attr("value"));
-
                 window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
                     + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9 + "&customerContact=" + selectedItem10;
             });
