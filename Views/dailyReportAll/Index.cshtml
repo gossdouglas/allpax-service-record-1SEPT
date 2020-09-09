@@ -80,16 +80,40 @@
                 //window.location = '/DailyReportByReportID?reportID=' + selectedItem0;
 
                 //begin axios add post
-                axios.post('/dailyReportAll/DeleteDailyReport', {
-                    dailyReportID: selectedItem0
-                })
-                    .then(function (response) {
-                        console.log(response);
-                        window.location = '/DailyReportAll';//reload the page after a deletion
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });              
+                //axios.post('/dailyReportAll/DeleteDailyReport', {
+                //    dailyReportID: selectedItem0
+                //})
+                //    .then(function (response) {
+                //        console.log(response);
+                //        window.location = '/DailyReportAll';//reload the page after a deletion
+                //    })
+                //    .catch(function (error) {
+                //        console.log(error);
+                //    });  
+                //end axios add post
+
+                $.confirm({ 
+                    title: '',
+                    content: 'Delete Daily Report ' + selectedItem0 + '?',
+                    buttons: {
+                        confirm: function () {
+                            //begin axios add post
+                            axios.post('/dailyReportAll/DeleteDailyReport', {
+                                dailyReportID: selectedItem0
+                            })
+                                .then(function (response) {
+                                    console.log(response);
+                                    window.location = '/DailyReportAll';//reload the page after a deletion
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });  
+                            //end axios add post
+                        },
+                        cancel: function () {
+                        }
+                    }
+                });
             });
 
             $(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked... 
