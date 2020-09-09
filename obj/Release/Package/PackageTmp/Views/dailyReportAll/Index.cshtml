@@ -12,11 +12,6 @@
         .container {
             border: 2px solid black;
         }
-
-        .input-group-addon {
-            color: #ff0000;
-            background-color: #ffffff;
-        }
         table {
             table-layout: fixed;
         }
@@ -25,11 +20,15 @@
             white-space: nowrap;
             text-overflow: ellipsis;
         }
+        div.scrollable {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+        }
     </style>
 
-    @*<script src="https://unpkg.com/axios/dist/axios.min.js"></script>*@
-    <!-- JQuery -->
-    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>*@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
@@ -86,7 +85,7 @@
                 })
                     .then(function (response) {
                         console.log(response);
-                        window.location = '/DailyReportAll';
+                        window.location = '/DailyReportAll';//reload the page after a deletion
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -94,11 +93,6 @@
             });
 
             $(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked... 
-
-                //alert(selectedItem4);
-                //alert(selectedItem4_1);
-                //alert($("#record_item4").attr("value"));
-
                 window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
                     + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9 + "&customerContact=" + selectedItem10;
             });
@@ -109,37 +103,10 @@
                 var startDate = $("#startDateInput").val();
                 var endDate = $("#endDateInput").val();
 
-                window.location = 'dailyReportAll/filtered?startDate=' + startDate+"&"+"endDate="+endDate; 
-
-                //begin suck in variables
-                //slctd_timeEntryID = this.id.substr(20);
-                //slctd_workDescText = $("#input_workDescLine_" + slctd_timeEntryID).html()
-                //slctd_workDescText = slctd_workDescText.replace(/^[\s]+ /, "");//clean up the work description section
-                //slctd_workDescText = slctd_workDescText.replace(/&amp;/, " ");//wipe out leading white space characters
-                //slctd_workDescText = slctd_workDescText.replace(/nbsp;/, " ");//and amp and nbsp
-                //end suck in variables
-
-                //begin axios delete post
-                //axios.post('/dailyReportAll/Filtered', {
-                //    startDate: startDate,
-                //    endDate: endDate
-                //})
-                //    .then(function (response) {
-                //        console.log(response);
-                //    })
-                //    .catch(function (error) {
-                //        console.log(error);
-                //    });
-                //end axios delete post            
+                window.location = 'dailyReportAll/filtered?startDate=' + startDate+"&"+"endDate="+endDate;          
             });
             //end when the line save button is pressed.
-          
-           // //begin
-           // $("#filterResetDateBtn").on('click', function () {
-           //     window.location = 'dailyReportAll/';
-           //});
-           // //end 
-                                                      
+                                         
         });//end document read jquery statements
     </script>
 </head>
@@ -169,10 +136,10 @@
         <table id="dt_dailyRptAll" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th class="th-sm" style="width:15px">
+                    <th class="th-sm">
                         Report ID
                     </th>
-                    <th class="th-sm" style="width:15px">
+                    <th class="th-sm">
                         Active
                     </th>
                     <th class="th-sm">
@@ -210,7 +177,6 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-
                     //BEGIN TEMPORARY LOOP VARIABLES
                     string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
                     List<string> temp_team = item.team;
@@ -219,8 +185,8 @@
                     //END TEMPORARY LOOP VARIABLES
 
                     <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
-                        <td id="record_item0" style="width:15px" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
-                        <td id="record_item1" style="text-align:center; width:15px">
+                        <td id="record_item0" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
+                        <td id="record_item1" style="text-align:center;">
                             @if (item.active == true)
                             {
                                 <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
@@ -236,13 +202,13 @@
                         <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
                         <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
                         <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
-                        <td id="record_item7" value= >
-                                <span>
-                                    @for (var i = 0; i < (temp_team.Count); i++)
-                                    {
-                                        <span class="" id="" style="">@temp_team[@i]|</span>
-                                    }
-                                </span>
+                        <td id="record_item7" value=>
+                            <span>
+                                @for (var i = 0; i < (temp_team.Count); i++)
+                                {
+                                    <span class="" id="" style="">@temp_team[@i]|</span>
+                                }
+                            </span>
                         </td>
                         <td id="record_item8" value= style="overflow:hidden; white-space:nowrap">
                             @for (var i = 0; i < (temp_workDescription.Count); i++)
