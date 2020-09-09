@@ -121,21 +121,23 @@
         //end when a record class is clicked...
 
         $("#printDailyReport").click(function () {//when a record's edit button is clicked...
-            //window.location = '/DailyReportByReportIDPrint?reportID=' + dailyReportID;
-            $.ajax({
-                url: '/DailyReportByReportIDPrint',
-                method: 'post',
-                dataType: 'json',
-                data: { reportID: dailyReportID },
-                success: function (data) {
 
-                    team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+            //begin axios delete post
+            axios.post('/DailyReportByReportIDPrint', {
 
-                    $(data).each(function (index, item) {
-                        team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
-                    });
-                }
-            });
+                reportID: dailyReportID,
+            })
+                .then(function (response) {
+                    console.log(response);
+                    $.alert({
+                    title: 'Confirmation',
+                    content: 'This daily report has been e-mailed.',
+                });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            //end axios add pos
         });
 
     });//end document read jquery statements
@@ -160,7 +162,7 @@
         </div>
         <div class="col-2" style="padding:5px">
             <div>
-                <button class="btn btn-primary btn-sm" id="printDailyReport" style="background-color: darkturquoise">E-mail this report</button>
+                @*<button class="btn btn-primary btn-sm" id="printDailyReport" style="background-color: darkturquoise">E-mail this report</button>*@
                 @*<button id="printDailyReport">E-mail this report</button>*@
             </div>
         </div>
@@ -296,6 +298,14 @@
 <div class="container" id="">
     @{Html.RenderAction("Index", "workDescWntyDelays", new { dailyReportID = ViewBag.reportID });
     }
+</div>
+<hr style="margin:1px; opacity:0" />
+<div class="container" id="">
+    <div class="row">
+        <div class="col-12" style="padding:5px">
+            <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="background-color: darkseagreen; width: 100%">E-mail Daily Report</button>
+        </div>
+    </div>
 </div>
 
 
