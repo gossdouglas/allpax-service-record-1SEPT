@@ -6,15 +6,11 @@
 @*WORK DESCRIPTION PAGE*@
 
 <head>
-    @*Axios CDN*@
-    @*<script src="https://unpkg.com/axios/dist/axios.min.js"></script>*@
-    @*JQuery CDN*@
-    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>*@
 
     <script>
         $(document).ready(function () {//begin document jquery statements
 
-            $("#contnr_team :input").prop("disabled", true);//disable the daily log section
+            //$("#contnr_team :input").prop("disabled", true);//disable the daily log section
 
             //begin this partial view's variable declaration section
             var slctd_timeEntryID;
@@ -359,7 +355,7 @@
     </script>
 </head>
 
-<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
+<div class=" container pl-auto printable" style="" id="contnr_workDescription">
     <div class="row">
         <div class="col-8" style="padding:5px">
             <strong>Work Description</strong>
@@ -369,7 +365,7 @@
         </div>
     </div>
 
-    @*BEGIN WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
+    @*BEGIN TEMPLATE FOR COPIES*@
     <div class="col-12" id="workDescriptionLine_template">
         <div class="row" id="">
             <div class="col-8" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable="true">
@@ -395,11 +391,10 @@
             </div>
         </div>
     </div>
-</div>
-@*END WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
+    @*</div>*@
+    @*END TEMPLATE FOR COPIES*@
 
-@*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
-<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
+    @*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
     @foreach (var item in Model)
     {
         //BEGIN TEMPORARY LOOP VARIABLES
@@ -450,7 +445,7 @@
             </div>
         </div>
     }
-    @*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
+    @*END DISPLAY WORK DESCRIPTION RECORDS*@
 </div>
 
 
