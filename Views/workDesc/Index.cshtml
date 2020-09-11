@@ -55,6 +55,7 @@
                         })
                             .then(function (response) {
                                 console.log(response);
+                                window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
                             })
                             .catch(function (error) {
                                 console.log(error);
@@ -236,7 +237,8 @@
                                 timeEntryID: slctd_timeEntryID,
                             })
                                 .then(function (response) {
-                                    console.log(response);                                    
+                                    console.log(response);
+                                    window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
                                 })
                                 .catch(function (error) {
                                 });

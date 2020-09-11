@@ -57,6 +57,7 @@
                         })
                             .then(function (response) {
                                 console.log(response);
+                                window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
                             })
                             .catch(function (error) {
                                 console.log(error);
@@ -242,6 +243,7 @@
                             })
                                 .then(function (response) {
                                     console.log(response);
+                                    window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
                                 })
                                 .catch(function (error) {
                                 });
