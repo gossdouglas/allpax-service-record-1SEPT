@@ -117,7 +117,6 @@
                             userName: temp_userName,
                         })
                             .then(function (response) {
-                                console.log(response);
                                 //begin load work description dropdown with possible team members
                                 workDescTeam_dpdwn.empty();
                                 workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
@@ -146,7 +145,6 @@
                                     }
                                 });
                                 //end load work description dropdown with possible team members
-
                             })
                             .catch(function (error) {
                                 console.log(error);
@@ -156,25 +154,6 @@
                     //end AddTeamMember
                 }
             });
-            ////begin load work description dropdown with possible team members
-            //console.log('yo');
-            //workDescTeam_dpdwn.empty();
-            //workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-            //workDescTeam_dpdwn.val('-1');
-
-            //$.ajax({
-            //    url: 'DataService.asmx/GetAllTeamNamesByReportID',
-            //    method: 'post',
-            //    dataType: 'json',
-            //    data: { userName: '%', dailyReportID: dailyReportID },
-            //    success: function (data) {
-            //        $(data).each(function (index, item) {
-            //            workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-            //            console.log(item.shortName);
-            //        });
-            //    }
-            //});
-            ////end load work description dropdown with possible team members
         });
         //end add team member on drop down change
 
@@ -191,12 +170,39 @@
             })
                 .then(function (response) {
                     console.log(response);
+                    //begin load work description dropdown with possible team members
+                    workDescTeam_dpdwn.empty();
+                    workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                    workDescTeam_dpdwn.val('-1');
+
+                    workDescDelaysTeam_dpdwn.empty();
+                    workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                    workDescDelaysTeam_dpdwn.val('-1');
+
+                    workDescWntyDelaysTeam_dpdwn.empty();
+                    workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                    workDescWntyDelaysTeam_dpdwn.val('-1');
+
+                    $.ajax({
+                        url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                        method: 'post',
+                        dataType: 'json',
+                        data: { userName: '%', dailyReportID: dailyReportID },
+                        success: function (data) {
+                            $(data).each(function (index, item) {
+                                workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                                workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                                workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                                //console.log(item.shortName);
+                            });
+                        }
+                    });
+                    //end load work description dropdown with possible team members
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
-            //end axios add post
-
+            //end axios delete post
             $("#" + $(this).attr("id")).remove();
         });
         //end when a team member class is clicked...
