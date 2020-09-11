@@ -172,7 +172,58 @@ namespace allpax_service_record.Controllers
             //return RedirectToAction("Index", "DailyReportByReportID", new { reportID = workDescAdd.dailyReportID});
         }
 
-        [HttpPost]
+    [HttpPost]
+    public ActionResult AddWorkDescNarr(vm_workDesc workDescAdd)
+     {
+        //--IF THE DAILY REPORT DOESN'T ALREADY EXIST...
+        db.Database.ExecuteSqlCommand
+            ("DECLARE @id INT " +
+            "DECLARE @timeEntryID INT " +
+            //"IF NOT EXISTS (SELECT * FROM tbl_dailyReportTimeEntry " +
+            //"WHERE " +
+            //"dailyReportID = {0} " +
+            //"AND " +
+            //"workDescription = {1} " +
+            //"AND " +
+            //"workDescriptionCategory ={3}) " +
+
+            //"BEGIN " +
+
+            "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {3}, {4}) " +
+            "SET @id = SCOPE_IDENTITY() " +
+            "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@id, {2}) ",
+
+            //"END " +
+
+            //--IF THE DAILY REPORT DOES ALREADY EXIST...
+            //"ELSE " +
+            //"BEGIN " +
+
+            //"SET @timeEntryID = " +
+            //    "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
+            //    "FROM tbl_dailyReportTimeEntry " +
+            //    "WHERE " +
+
+            //    "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
+            //    "AND " +
+            //    "workDescription = {1} " +
+            //    "AND " +
+            //    "workDescriptionCategory = {3}) " +
+
+            //    "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) " +
+
+            //"END",
+
+            workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.userName, workDescAdd.workDescriptionCategory, workDescAdd.hours);
+
+        return new EmptyResult();
+        //return View();
+        //return RedirectToAction("Index");
+        //return RedirectToAction("Index", new { dailyReportID = workDescAdd.dailyReportID });
+        //return RedirectToAction("Index", "DailyReportByReportID", new { reportID = workDescAdd.dailyReportID});
+    }
+
+    [HttpPost]
         public ActionResult AddTeamMember(vm_workDesc teamMemberAdd)
         {
             db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportTimeEntryUsers Values({0},{1})",
