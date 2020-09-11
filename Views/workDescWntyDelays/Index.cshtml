@@ -6,11 +6,6 @@
 @*WARRANTY DELAYS PAGE*@
 
 <head>
-    @*Axios CDN*@
-    @*<script src="https://unpkg.com/axios/dist/axios.min.js"></script>*@
-    @*JQuery CDN*@
-    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>*@
-
     <script>
         $(document).ready(function () {//begin document jquery statements
 
@@ -111,39 +106,12 @@
             });
             //end load team members on work description dpdwn change
 
-            //begin load team members on work description dpdwn click
-            workDescWntyDelaysTeamLine_dpdwn.click(function () {
-                //workDescWntyDelaysTeamLine_dpdwn.empty();
-                //workDescWntyDelaysTeamLine_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                //workDescWntyDelaysTeamLine_dpdwn.val('-1');
-
-                //$.ajax({
-                //    url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                //    method: 'post',
-                //    dataType: 'json',
-                //    data: { userName: '%', dailyReportID: dailyReportID },
-                //    success: function (data) {
-
-                //        $(data).each(function (index, item) {
-                //            workDescWntyDelaysTeamLine_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                //        });
-                //    }
-                //});
-            });
-            //end load team members on work description dpdwn click
-
             //begin when a line team member class is clicked for the purpose of deletion...
             $(".workDescWntyDelaysTeamLineUserName_").on('click', function () {
                 //begin suck in variables for eventual axios post
                 var tempTeamMemberUserID = this.id.replace(/workDescWntyDelaysTeamLineUserName_[0-9]*/i, "");
                 var tempworkDescWntyDelaysTeamLineUserName_ = "#" + $(this).attr("id");
                 //end suck in variables for eventual axios post
-
-                //begin tattler pop up
-                //alert("User name " + tempTeamMemberUserID + '\n' +
-                //    "in time entry " + slctd_timeEntryID + '\n' +
-                //    "has been selected for deletion.");
-                //end tattler pop up
 
                 $.confirm({
                     title: 'Delete Team Member?',
@@ -230,10 +198,6 @@
                 slctd_timeEntryID = this.id.replace(/deleteWorkDescWntyDelaysLineBtn_/i, "");//suck out the time entry ID
                 //end suck in variables
 
-                //begin tattler pop up
-                //alert("deleting time entry id: " + slctd_timeEntryID);
-                //end tattler pop up
-
                 $.confirm({
                     title: 'Delete Time Entry ' + slctd_timeEntryID + '?',
                     content: '',
@@ -288,7 +252,6 @@
             //begin when the line lock button is pressed
             $(".lockWorkDescWntyDelaysLineBtn_").on('click', function () {
                 //begin suck in variables
-                //slctd_timeEntryID = this.id.substr(26);
                 slctd_timeEntryID = this.id.replace(/lockWorkDescWntyDelaysLineBtn_/i, "");//suck out the time entry ID
                 //end suck in variables
 
@@ -307,19 +270,16 @@
                 $(this).attr("disabled", "true");//disable the line lock button
                 $("#editWorkDescWntyDelaysLineBtn_" + slctd_timeEntryID).removeAttr("disabled");//enable the line edit button
             });
-            //begin when the line lock button is pressed
+            //end when the line lock button is pressed
          
             //begin when the line save button is pressed
             $(".saveWorkDescWntyDelaysLineBtn_").on('click', function () {
                 //begin suck in variables
-                //slctd_timeEntryID = this.id.substr(26);
                 slctd_timeEntryID = this.id.replace(/saveWorkDescWntyDelaysLineBtn_/i, "");//suck out the time entry ID
                 slctd_workDescText = $("#input_workDescLineWntyDelays_" + slctd_timeEntryID).html()
-
                 slctd_workDescText = slctd_workDescText.replace(/^[\s]+ /, "");
                 slctd_workDescText = slctd_workDescText.replace(/&amp;/, " ");
                 slctd_workDescText = slctd_workDescText.replace(/nbsp;/, " ");
-
                 slctd_hours = $("#inputHours_workDescWntyDelays_" + slctd_timeEntryID).val();
                 //end suck in variables
 
@@ -376,17 +336,12 @@
                         });
                     }
                 });
-            }
-            
+            }            
         });//end document jquery statements
     </script>
 </head>        
 
-@*BEGIN ALLPAX TEAM*@
-
-@*END ALLPAX TEAM*@
-
-<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
+<div class=" container pl-auto printable" style="" id="contnr_workDescription">
     <div class="row">
         <div class="col-7" style="padding:5px">
             <strong>Warranty Delays</strong>
@@ -399,7 +354,7 @@
         </div>
     </div>
 
-@*BEGIN WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
+    @*BEGIN TEMPLATE FOR COPIES*@
     <div class="col-12" id="workDescriptionWntyDelaysLine_template">
         <div class="row" id="">
             <div class="col-7" id="input_workDescWntyDelays" style="padding:5px; border: 1px solid black;" contenteditable="true">
@@ -428,19 +383,17 @@
             </div>
         </div>
     </div>
-</div>
-@*END WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
+    @*END TEMPLATE FOR COPIES*@
 
-@*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
-<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
+    @*BEGIN DISPLAY WARRANTY DELAY RECORDS*@
     @foreach (var item in Model)
     {
         //BEGIN TEMPORARY LOOP VARIABLES
         int temp_timeEntryID = item.timeEntryID;
-        List<string> temp_userNames=item.userNames;
+        List<string> temp_userNames = item.userNames;
         List<string> temp_userShortNames = item.userShortNames;
         string temp_workDescription = item.workDescription;
-        int temp_hours= item.hours;
+        int temp_hours = item.hours;
         //END TEMPORARY LOOP VARIABLES
 
         <div class="col-12 workDescLineWntyDelays_" id="workDescLineWntyDelays_@temp_timeEntryID">
@@ -485,7 +438,7 @@
             </div>
         </div>
     }
-    @*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
+    @*END DISPLAY WARRANTY DELAY RECORDS*@
 </div>
 
 

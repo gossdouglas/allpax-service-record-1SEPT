@@ -9,8 +9,6 @@
     <script>
         $(document).ready(function () {//begin document jquery statements
 
-            //$("#contnr_team :input").prop("disabled", true);//disable the daily log section
-
             //begin this partial view's variable declaration section
             var slctd_timeEntryID;
             var slctd_workDescText;
@@ -381,11 +379,7 @@
     </script>
 </head>        
 
-@*BEGIN ALLPAX TEAM*@
-
-@*END ALLPAX TEAM*@
-
-<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
+<div class=" container pl-auto printable" style="" id="contnr_workDescription">
     <div class="row">
         <div class="col-7" style="padding:5px">
             <strong>Delays</strong>
@@ -398,7 +392,7 @@
         </div>
     </div>
 
-@*BEGIN WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
+    @*BEGIN TEMPLATE FOR COPIES*@
     <div class="col-12" id="workDescriptionDelaysLine_template">
         <div class="row" id="">
             <div class="col-7" id="input_workDescDelays" style="padding:5px; border: 1px solid black;" contenteditable="true">
@@ -427,19 +421,17 @@
             </div>
         </div>
     </div>
-</div>
-@*END WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
+    @*END TEMPLATE FOR COPIES*@
 
-@*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
-<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
+    @*BEGIN DISPLAY DELAY RECORDS*@
     @foreach (var item in Model)
     {
         //BEGIN TEMPORARY LOOP VARIABLES
         int temp_timeEntryID = item.timeEntryID;
-        List<string> temp_userNames=item.userNames;
+        List<string> temp_userNames = item.userNames;
         List<string> temp_userShortNames = item.userShortNames;
         string temp_workDescription = item.workDescription;
-        int temp_hours= item.hours;
+        int temp_hours = item.hours;
         //END TEMPORARY LOOP VARIABLES
 
         <div class="col-12 workDescLineDelays_" id="workDescLineDelays_@temp_timeEntryID">
@@ -485,7 +477,7 @@
             </div>
         </div>
     }
-    @*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
+    @*END DISPLAY DELAY RECORDS*@
 </div>
 
 
