@@ -84,22 +84,21 @@
             //begin load team members on work description dpdwn click
             workDescTeam_dpdwn.click(function () {
 
-                workDescTeam_dpdwn.empty();
-                workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                workDescTeam_dpdwn.val('-1');
+                //workDescTeam_dpdwn.empty();
+                //workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                //workDescTeam_dpdwn.val('-1');
 
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: '%', dailyReportID: dailyReportID },
-                    success: function (data) {
-                        $(data).each(function (index, item) {
-                            workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                        });
-                        //end AddTeamMember
-                    }
-                });
+                //$.ajax({
+                //    url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { userName: '%', dailyReportID: dailyReportID },
+                //    success: function (data) {
+                //        $(data).each(function (index, item) {
+                //            workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                //        });
+                //    }
+                //});
             });
             //end load team members on work description dpdwn click
 
@@ -119,7 +118,6 @@
                         $(data).each(function (index, item) {
                             workDescTeamLine_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
                         });
-                        //end AddTeamMember
                     }
                 });
             });
@@ -376,7 +374,7 @@
                 <span class="workDescTeam_" id="workDescTeam_" style="padding:5px"></span>
             </div>
             <div class="col-2" style="padding:5px">
-                <select class="workDescTeam_dpdwn" name="" style="width:100%">
+                <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" style="width:100%">
                     <option value="">Team</option>
                 </select>
             </div>
