@@ -83,23 +83,22 @@
 
             //begin load team members on work description dpdwn click
             workDescDelaysTeam_dpdwn.click(function () {
-                workDescDelaysTeam_dpdwn.empty();
-                workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                workDescDelaysTeam_dpdwn.val('-1');
+                //workDescDelaysTeam_dpdwn.empty();
+                //workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                //workDescDelaysTeam_dpdwn.val('-1');
 
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: '%', dailyReportID: dailyReportID },
-                    success: function (data) {
+                //$.ajax({
+                //    url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { userName: '%', dailyReportID: dailyReportID },
+                //    success: function (data) {
 
-                        $(data).each(function (index, item) {
-                            workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                        });
-                        //end AddTeamMember
-                    }
-                });
+                //        $(data).each(function (index, item) {
+                //            workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                //        });
+                //    }
+                //});
             });
             //end load team members on work description dpdwn click
 
@@ -132,33 +131,9 @@
                         //end AddTeamMember
                     }
                 });
+                $(workDescDelaysTeam_dpdwn).val("-1");
             });
             //end load team members on work description dpdwn change
-
-            //begin load team members on work description dpdwn click
-            workDescDelaysTeamLine_dpdwn.click(function () {
-
-                //alert(this.id)
-
-                workDescDelaysTeamLine_dpdwn.empty();
-                workDescDelaysTeamLine_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                workDescDelaysTeamLine_dpdwn.val('-1');
-
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: '%', dailyReportID: dailyReportID },
-                    success: function (data) {
-
-                        $(data).each(function (index, item) {
-                            workDescDelaysTeamLine_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                        });
-                        //end AddTeamMember
-                    }
-                });
-            });
-            //end load team members on work description dpdwn click
 
             //begin when a line team member class is clicked for the purpose of deletion...
             $(".workDescDelaysTeamLineUserName_").on('click', function () {
@@ -244,6 +219,7 @@
                         });
                     }
                 });
+                $(this).val("-1");
             });
             //end load team members on line dpdwn change
          
@@ -283,6 +259,7 @@
             //begin when the edit line button is pressed
             $(".editWorkDescDelaysLineBtn_").on('click', function () {
 
+                $.fn.updateWorkDescDelaysTeamLineDpdwns();//update the line's team dropdowns with possible team members. 
                 //begin suck in variables
                 slctd_timeEntryID = this.id.substr(26);
                 //end suck in variables
@@ -377,6 +354,28 @@
                 //end axios delete post
             });
             //end when the line save button is pressed. 
+
+            $.fn.updateWorkDescDelaysTeamLineDpdwns = function () {
+                //this function keeps the time entry dropdowns in work description
+                //in synch with which team members available for addition
+
+                workDescDelaysTeamLine_dpdwn.empty();
+                workDescDelaysTeamLine_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                workDescDelaysTeamLine_dpdwn.val('-1');
+
+                $.ajax({
+                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { userName: '%', dailyReportID: dailyReportID },
+                    success: function (data) {
+
+                        $(data).each(function (index, item) {
+                            workDescDelaysTeamLine_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                        });
+                    }
+                });
+            }
             
         });//end document jquery statements
     </script>
