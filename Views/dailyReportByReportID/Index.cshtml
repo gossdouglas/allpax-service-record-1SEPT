@@ -13,7 +13,9 @@
         var team_dpdwn = $('#team_dpdwn');
         var addWorkDescBtn = $('#addWorkDescBtn');
         var dailyReportID = $("#txt_dailyReportID").html();
-        var workDescTeam_dpdwn = $("#workDescTeam_dpdwn");
+        var workDescTeam_dpdwn = $(".workDescTeam_dpdwn");
+        var workDescDelaysTeam_dpdwn = $('.workDescDelaysTeam_dpdwn');
+        var workDescWntyDelaysTeam_dpdwn = $('.workDescWntyDelaysTeam_dpdwn');
 
         //$("#foo").trigger("click");
         //$(".workDescTeam_dpdwn").trigger("click");
@@ -45,13 +47,13 @@
             success: function (data) {
 
                 $(data).each(function (index, item) {
-                    var temp_userName;
-                    var temp_name;
-                    var temp_shortName;
+                    var temp_userName = item.userName;
+                    var temp_name = item.name;
+                    var temp_shortName = item.shortName;
 
-                    temp_userName = item.userName;
-                    temp_name = item.name;
-                    temp_shortName = item.shortName;
+                    //temp_userName = item.userName;
+                    //temp_name = item.name;
+                    //temp_shortName = item.shortName;
 
                     $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
                     $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
@@ -62,6 +64,14 @@
                 workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
                 workDescTeam_dpdwn.val('-1');
 
+                workDescDelaysTeam_dpdwn.empty();
+                workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                workDescDelaysTeam_dpdwn.val('-1');
+
+                workDescWntyDelaysTeam_dpdwn.empty();
+                workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                workDescWntyDelaysTeam_dpdwn.val('-1');
+
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNamesByReportID',
                     method: 'post',
@@ -70,6 +80,8 @@
                     success: function (data) {
                         $(data).each(function (index, item) {
                             workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                            workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                            workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
                         });
                     }
                 });
@@ -107,10 +119,17 @@
                             .then(function (response) {
                                 console.log(response);
                                 //begin load work description dropdown with possible team members
-                                //console.log('yo');
                                 workDescTeam_dpdwn.empty();
                                 workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
                                 workDescTeam_dpdwn.val('-1');
+
+                                workDescDelaysTeam_dpdwn.empty();
+                                workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                                workDescDelaysTeam_dpdwn.val('-1');
+
+                                workDescWntyDelaysTeam_dpdwn.empty();
+                                workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                                workDescWntyDelaysTeam_dpdwn.val('-1');
 
                                 $.ajax({
                                     url: 'DataService.asmx/GetAllTeamNamesByReportID',
@@ -120,7 +139,9 @@
                                     success: function (data) {
                                         $(data).each(function (index, item) {
                                             workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                                            console.log(item.shortName);
+                                            workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                                            workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                                            //console.log(item.shortName);
                                         });
                                     }
                                 });

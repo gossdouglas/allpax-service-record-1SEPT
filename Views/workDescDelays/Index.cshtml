@@ -83,23 +83,22 @@
 
             //begin load team members on work description dpdwn click
             workDescDelaysTeam_dpdwn.click(function () {
-                workDescDelaysTeam_dpdwn.empty();
-                workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                workDescDelaysTeam_dpdwn.val('-1');
+                //workDescDelaysTeam_dpdwn.empty();
+                //workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                //workDescDelaysTeam_dpdwn.val('-1');
 
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: '%', dailyReportID: dailyReportID },
-                    success: function (data) {
+                //$.ajax({
+                //    url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { userName: '%', dailyReportID: dailyReportID },
+                //    success: function (data) {
 
-                        $(data).each(function (index, item) {
-                            workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                        });
-                        //end AddTeamMember
-                    }
-                });
+                //        $(data).each(function (index, item) {
+                //            workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                //        });
+                //    }
+                //});
             });
             //end load team members on work description dpdwn click
 

@@ -85,23 +85,23 @@
             //begin load team members on work description dpdwn click
             workDescWntyDelaysTeam_dpdwn.click(function () {
 
-                workDescWntyDelaysTeam_dpdwn.empty();
-                workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                workDescWntyDelaysTeam_dpdwn.val('-1');
+                //workDescWntyDelaysTeam_dpdwn.empty();
+                //workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                //workDescWntyDelaysTeam_dpdwn.val('-1');
 
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: '%', dailyReportID: dailyReportID },
-                    success: function (data) {
+                //$.ajax({
+                //    url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { userName: '%', dailyReportID: dailyReportID },
+                //    success: function (data) {
 
-                        $(data).each(function (index, item) {
-                            workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                        });
-                        //end AddTeamMember
-                    }
-                });
+                //        $(data).each(function (index, item) {
+                //            workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                //        });
+                //        //end AddTeamMember
+                //    }
+                //});
             });
             //end load team members on work description dpdwn click
 
