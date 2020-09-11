@@ -131,30 +131,9 @@
                         //end AddTeamMember
                     }
                 });
+                $(workDescDelaysTeam_dpdwn).val("-1");
             });
             //end load team members on work description dpdwn change
-
-            //begin load team members on work description dpdwn click
-            workDescDelaysTeamLine_dpdwn.click(function () {
-
-                //workDescDelaysTeamLine_dpdwn.empty();
-                //workDescDelaysTeamLine_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                //workDescDelaysTeamLine_dpdwn.val('-1');
-
-                //$.ajax({
-                //    url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                //    method: 'post',
-                //    dataType: 'json',
-                //    data: { userName: '%', dailyReportID: dailyReportID },
-                //    success: function (data) {
-
-                //        $(data).each(function (index, item) {
-                //            workDescDelaysTeamLine_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                //        });
-                //    }
-                //});
-            });
-            //end load team members on work description dpdwn click
 
             //begin when a line team member class is clicked for the purpose of deletion...
             $(".workDescDelaysTeamLineUserName_").on('click', function () {
