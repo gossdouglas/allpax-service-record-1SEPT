@@ -29,13 +29,6 @@
                 var addItem3 = $("#inputHours_workDescWntyDelays").val();
                 //end suck in variables for eventual axios post
 
-                //begin tattler pop up
-                alert("dailyReportID: " + addItem1 + '\n' +
-                    "workDescription: " + addItem2 + '\n' +
-                    "hours:" + addItem3
-                );
-                //end tattler pop up
-
                 //begin adding team members to a new work description time entry
                 $(".workDescWntyDelaysTeam_").each(function () {
 
@@ -55,6 +48,7 @@
                         })
                             .then(function (response) {
                                 console.log(response);
+                                window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
                             })
                             .catch(function (error) {
                                 console.log(error);
@@ -209,6 +203,7 @@
                             })
                                 .then(function (response) {
                                     console.log(response);
+                                    window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
                                 })
                                 .catch(function (error) {
                                 });
