@@ -231,5 +231,38 @@ namespace allpax_service_record
             JavaScriptSerializer js = new JavaScriptSerializer();
             Context.Response.Write(js.Serialize(dailyRptID));
         }
+
+        [WebMethod]
+        public void GetLastTimeEntryByRptID_WkDesc_Cat (int dailyReportID, string workDescription, int workDescriptionCategory)
+        {
+            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            List<string> lastTimeEntry = new List<string>();
+
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                SqlCommand cmd = new SqlCommand("spGetLastTimeEntryByRptID_WkDesc_Cat", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                //SqlParameter param = new SqlParameter()
+                //{
+                //    ParameterName = "@userName",
+                //    Value = userName
+                //};
+                //cmd.Parameters.Add(param);
+
+                //cmd.Parameters.AddWithValue("@userName", userName);
+                cmd.Parameters.AddWithValue("@dailyReportID", dailyReportID);
+                cmd.Parameters.AddWithValue("@workDescription", @workDescription);
+                cmd.Parameters.AddWithValue("@workDescriptionCategory", workDescriptionCategory);
+
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    lastTimeEntry.Add(rdr["timeEntryID"].ToString());
+                }
+            }
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.Write(js.Serialize(lastTimeEntry));
+        }
     }
 }

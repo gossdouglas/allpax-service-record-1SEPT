@@ -177,14 +177,6 @@ namespace allpax_service_record.Controllers
      {
         //--IF THE DAILY REPORT DOESN'T ALREADY EXIST...
         db.Database.ExecuteSqlCommand(
-            //"DECLARE @id INT " +
-            //"DECLARE @timeEntryID INT " +
-
-            //"INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {3}, {4}) " +
-            //"SET @id = SCOPE_IDENTITY() " +
-            //"INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@id, {2}) ",
-
-            //workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.userName, workDescAdd.workDescriptionCategory, workDescAdd.hours);
 
             "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
 
@@ -198,22 +190,6 @@ namespace allpax_service_record.Controllers
         {
             //--IF THE DAILY REPORT DOES ALREADY EXIST...
             db.Database.ExecuteSqlCommand(
-            //    "DECLARE @timeEntryID INT " +
-
-            //    "SET @timeEntryID = " +
-            //        "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
-            //        "FROM tbl_dailyReportTimeEntry " +
-            //        "WHERE " +
-
-            //        "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
-            //        "AND " +
-            //        "workDescription = {1} " +
-            //        "AND " +
-            //        "workDescriptionCategory = {3}) " +
-
-            //    "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
-
-            //workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.userName, workDescAdd.workDescriptionCategory);
 
             "DECLARE @timeEntryID INT " +
 
