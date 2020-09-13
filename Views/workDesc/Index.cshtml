@@ -21,7 +21,7 @@
             //end this partial view's variable declaration section
 
             //begin when a new work description is added for a given daily report...
-            $("#addWorkDescBtn").on('click', function () {
+            $("#addWorkDescNarrBtn").on('click', function () {
 
                 //begin suck in variables for eventual axios post
                 var addItem1 = $("#txt_dailyReportID").html();
@@ -32,36 +32,16 @@
                 //var temp_workDescTeamLineUserName = [];//will hold an array of which user names are part of a time entry
                 //end suck in variables for eventual axios post
 
-                //begin adding team members to a new work description time entry
-                $(".workDescTeam_").each(function () {
-
-                    //begin suck in variables for eventual axios post
-                    //var tempTeamMemberUserID = this.id.replace(/workDescTeam_/i, "");//suck out the team member's userName
-                    //end suck in variables for eventual axios post
-
-                    //if (tempTeamMemberUserID.length > 0) {//if that userName is greater than 0
-                    //    temp_workDescTeamLineUserName.push(tempTeamMemberUserID);
-                    //}
-                });
-                //end adding team members to a new work description time entry
-
-                //console.log(temp_workDescTeamLineUserName);
-                //console.log(temp_workDescTeamLineUserName.length);
-                //console.log(temp_workDescTeamLineUserName[0]);
-
                 //begin axios add post
                 //begin add the first team member to the database
                 axios.post('/workDesc/AddWorkDescNarr', {
                     dailyReportID: addItem1,//0
                     workDescription: addItem2,//1
-                    //userName: tempTeamMemberUserID,//2
-                    //userName: temp_workDescTeamLineUserName[0],//2
                     workDescriptionCategory: '1',//3
                     hours: '0'//4
                 })
                     .then(function (response) {
                         console.log(response);
-                        //window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -69,60 +49,18 @@
                 //end add the first team member to the database
                 //end axios add post
 
-                //begin axios add post
-                //begin add the second team member and onward to the database
-                //for (var i = 1, l = temp_workDescTeamLineUserName.length; i < l; i++) {
-                //    axios.post('/workDesc/AddWorkDescTeam', {
-                //        dailyReportID: addItem1,//0
-                //        workDescription: addItem2,//1
-                //        //userName: tempTeamMemberUserID,//2
-                //        userName: temp_workDescTeamLineUserName[i],//2
-                //        workDescriptionCategory: '1',//3
-                //        hours: '0'//4
-                //    })
-                //        .then(function (response) {
-                //            console.log(response);
-                //            //window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
-                //        })
-                //        .catch(function (error) {
-                //            console.log(error);
-                //            console.log('error with saving team member ' + temp_workDescTeamLineUserName[i]);
-                //        });
-                //}               
-                //end add the second team member and onward to the database
-                //end axios add post
-
-                //OLD BEGINS
-                //begin adding team members to a new work description time entry
-                //$(".workDescTeam_").each(function () {
-
-                //    //begin suck in variables for eventual axios post
-                //    var tempTeamMemberUserID = this.id.replace(/workDescTeam_/i, "");//suck out the team member's userName
-                //    //end suck in variables for eventual axios post
-
-                //    if (tempTeamMemberUserID.length > 0) {//if that userName is greater than 0
-                //        //begin axios add post
-                //        axios.post('/workDesc/AddWorkDesc', {
-                //            dailyReportID: addItem1,
-                //            workDescription: addItem2,
-                //            userName: tempTeamMemberUserID,
-                //            workDescriptionCategory: '1',
-                //            hours: '0'
-                //        })
-                //            .then(function (response) {
-                //                console.log(response);
-                //                //window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
-                //            })
-                //            .catch(function (error) {
-                //                console.log(error);
-                //            });
-                //        //end axios add post
-                //    }
-                //});
-                //end adding team members to a new work description time entry
-                //OLD ENDS
+                $(this).prop("hidden", true);//
+                $("#workDescTeam_dpdwn").removeAttr("disabled");//
+                $("#addWorkDescBtn").removeAttr("hidden");//
 
                 //window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
+            });
+            //end a new work description is added for a given daily report...
+
+            //begin when a new work description is added for a given daily report...
+            $("#addWorkDescBtn").on('click', function () {
+
+                window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
             });
             //end a new work description is added for a given daily report...
 
@@ -133,7 +71,7 @@
                 var tempTeamMemberUserID = this.id;
                 //end suck in variables
 
-                $("#" + $(this).attr("id")).remove();
+                //$("#" + $(this).attr("id")).remove();
             });
             //end remove team member from being included in the creation of a new description entry
 
@@ -167,7 +105,6 @@
                 addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
                 addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
                 addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
-                //userName = $(this).val();
                 //end suck in variables for eventual axios post
 
                 //begin AddTeamMember
@@ -190,25 +127,20 @@
                             axios.post('/workDesc/AddWorkDescTeam', {
                                 dailyReportID: addItem1,//0
                                 workDescription: addItem2,//1
-                                //userName: tempTeamMemberUserID,//2
                                 userName: temp_userName,//2
                                 workDescriptionCategory: '1',//3
-                                //hours: '0'//4
                             })
                                 .then(function (response) {
                                     console.log(response);
-                                    //window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
                                 })
                                 .catch(function (error) {
                                     console.log(error);
-                                    //console.log('error with saving team member ' + temp_workDescTeamLineUserName[i]);
                                 });
                         });
-                        //end AddTeamMember
+                //end AddTeamMember
                     }
                 });
-                $(workDescTeam_dpdwn).val("-1");
-        
+                $(workDescTeam_dpdwn).val("-1");       
             });
             //end load team members on work description dpdwn change
 
@@ -281,7 +213,6 @@
                             //begin deleting team member from a time entry
                             //begin axios delete post
                             axios.post('/workDesc/DeleteTeamMember', {
-
                                 timeEntryID: slctd_timeEntryID,
                                 userName: tempTeamMemberUserID,
                             })
@@ -459,7 +390,7 @@
                 <span class="workDescTeam_" id="workDescTeam_" style="padding:5px"></span>
             </div>
             <div class="col-2" style="padding:5px">
-                <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" style="width:100%">
+                <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" style="width:100%" disabled>
                     <option value="">Team</option>
                 </select>
             </div>
@@ -472,7 +403,8 @@
                 </div>
             </div>
             <div class="col-10" style="padding:5px">
-                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="background-color: darkorange; width: 100%">Save Entry</button>
+                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescNarrBtn" style="background-color: darkorange; width: 100%">Save Narrative</button>
+                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="background-color: darkorange; width: 100%" hidden>Save Entry</button>
             </div>
         </div>
     </div>
