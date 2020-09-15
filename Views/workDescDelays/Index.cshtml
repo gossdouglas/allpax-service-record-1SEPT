@@ -19,50 +19,6 @@
 
             //BEGIN NEW DELAYS SECTION
 
-            //begin a new work description is added for a given daily report...
-            $("#addWorkDescDelaysBtn").on('click', function () {
-
-                ////begin suck in variables for eventual axios post
-                //var addItem1 = $("#txt_dailyReportID").html();
-                //var addItem2 = $("#input_workDescDelays").html();
-                //addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
-                //addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
-                //addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
-                //var addItem3 = $("#inputHours_workDescDelays").val();
-                ////end suck in variables for eventual axios post
-
-                ////begin adding team members to a new work description time entry
-                //$(".workDescDelaysTeam_").each(function () {
-
-                //    //begin suck in variables for eventual axios post
-                //    //var tempTeamMemberUserID = $(this).attr("id").substr(19);//suck out the team member's userName
-                //    var tempTeamMemberUserID = this.id.replace(/workDescDelaysTeam_/i, "");//suck out the team member's userName
-                //    //end suck in variables for eventual axios post
-
-                //    if (tempTeamMemberUserID.length > 0) {//if that userName is greater than 0
-
-                //        //begin axios add post
-                //        axios.post('/workDescDelays/AddWorkDesc', {
-                //            dailyReportID: addItem1,
-                //            workDescription: addItem2,
-                //            userName: tempTeamMemberUserID,
-                //            workDescriptionCategory: '2',
-                //            hours: addItem3
-                //        })
-                //            .then(function (response) {
-                //                console.log(response);
-                //                window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
-                //            })
-                //            .catch(function (error) {
-                //                console.log(error);
-                //            });
-                //        //end axios add post
-                //    }
-                //});
-                ////end adding team members to a new work description time entry
-            });
-            //end a new work description is added for a given daily report...
-
             //begin 
             $("#addWorkDescDelaysNarrBtn").on('click', function () {
 
@@ -504,9 +460,8 @@
                 </div>
             </div>
             <div class="col-10" style="padding:5px">
-                @*<button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysBtn" style="background-color: darkgoldenrod; width: 100%">Save Entry</button>*@
-                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysNarrBtn" style="background-color: darkorange; width: 100%">Save Narrative</button>
-                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysRecordBtn" style="background-color: darkorange; width: 100%" hidden>Save Entry</button>
+                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysNarrBtn" style="background-color: darkgoldenrod; width: 100%">Save Narrative</button>
+                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysRecordBtn" style="background-color: darkgoldenrod; width: 100%" hidden>Save Entry</button>
 
             </div>
         </div>

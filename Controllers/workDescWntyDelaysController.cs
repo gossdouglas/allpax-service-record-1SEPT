@@ -124,49 +124,41 @@ namespace allpax_service_record.Controllers
         }
      
         [HttpPost]
-        public ActionResult AddWorkDesc(vm_workDesc workDescAdd)
+        public ActionResult AddWorkDescWntyDelaysNarr(vm_workDesc workDescAdd)
         {
             //--IF THE DAILY REPORT DOESN'T ALREADY EXIST...
-            db.Database.ExecuteSqlCommand
-                ("DECLARE @id INT " +
-                "DECLARE @timeEntryID INT " +
-                "IF NOT EXISTS (SELECT * FROM tbl_dailyReportTimeEntry " +
-                "WHERE " +
-                "dailyReportID = {0} " +
-                "AND " +
-                "workDescription = {1} " +
-                "AND " +
-                "workDescriptionCategory ={3}) " +
+            db.Database.ExecuteSqlCommand(
 
-                "BEGIN " +
+                "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
 
-                "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {3}, {4}) " +
-                "SET @id = SCOPE_IDENTITY() " +
-                "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@id, {2}) " +
+                workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.workDescriptionCategory, workDescAdd.hours);
 
-                "END " +
+            return new EmptyResult();
+        }
 
-                //--IF THE DAILY REPORT DOES ALREADY EXIST...
-                "ELSE " +
-                "BEGIN " +
+        [HttpPost]
+        public ActionResult AddWorkDescWntyDelaysTeam(vm_workDesc workDescAdd)
+        {
+            //--IF THE DAILY REPORT DOES ALREADY EXIST...
+            db.Database.ExecuteSqlCommand(
 
-                "SET @timeEntryID = " +
-                    "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
-                    "FROM tbl_dailyReportTimeEntry " +
-                    "WHERE " +
+            "DECLARE @timeEntryID INT " +
 
-                    "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
-                    "AND " +
-                    "workDescription = {1} " +
-                    "AND " +
-                    "workDescriptionCategory = {3}) " +
+                    "SET @timeEntryID = " +
+                        "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
+                        "FROM tbl_dailyReportTimeEntry " +
+                        "WHERE " +
 
-                    "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) " +
+                        "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
+                        "AND " +
+                        "workDescription = {1} " +
+                        "AND " +
+                        "workDescriptionCategory = {3}) " +
 
-                "END",
+                    "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
 
-                workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.userName, workDescAdd.workDescriptionCategory, workDescAdd.hours);
-           
+                workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.userName, workDescAdd.workDescriptionCategory);
+
             return new EmptyResult();
         }
 
