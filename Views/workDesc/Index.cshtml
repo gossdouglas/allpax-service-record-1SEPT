@@ -31,28 +31,33 @@
                 addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
                 //end suck in variables for eventual axios post
 
-                //begin axios add post
-                //begin add the first team member to the database
-                axios.post('/workDesc/AddWorkDescNarr', {
-                    dailyReportID: addItem1,//0
-                    workDescription: addItem2,//1
-                    workDescriptionCategory: '1',//3
-                    hours: '0'//4
-                })
-                    .then(function (response) {
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
+                if (addItem2.length == 0) {
+                    $.alert({
+                        title: '',
+                        content: 'A Work Description Must be Entered.',
                     });
-                //end add the first team member to the database
-                //end axios add post
+                } else {
+                    //begin axios add post
+                    //begin add the first team member to the database
+                    axios.post('/workDesc/AddWorkDescNarr', {
+                        dailyReportID: addItem1,//0
+                        workDescription: addItem2,//1
+                        workDescriptionCategory: '1',//3
+                        hours: '0'//4
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    //end add the first team member to the database
+                    //end axios add post
 
-                $(this).prop("hidden", true);//
-                $("#workDescTeam_dpdwn").removeAttr("disabled");//
-                $("#addWorkDescRecordBtn").removeAttr("hidden");//
-
-                //window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
+                    $(this).prop("hidden", true);//
+                    $("#workDescTeam_dpdwn").removeAttr("disabled");//
+                    $("#addWorkDescRecordBtn").removeAttr("hidden");//
+                }
             });
             //end 
 
@@ -97,7 +102,7 @@
                                     console.log(error);
                                 });
                         });
-                        //end AddTeamMember
+                //end AddTeamMember
                     }
                 });
                 $(workDescTeam_dpdwn).val("-1");
@@ -170,7 +175,14 @@
             //begin 
             $("#addWorkDescRecordBtn").on('click', function () {
 
-                window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
+                if ($("#txt_teamMembersWorkDesc").children().length <= 1) {
+                    $.alert({
+                        title: '',
+                        content: 'At Least One Team Member Must be Entered.',
+                    });
+                } else {
+                    window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
+                }
             });
             //end 
 
