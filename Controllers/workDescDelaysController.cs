@@ -126,52 +126,91 @@ namespace allpax_service_record.Controllers
         [HttpPost]
         public ActionResult AddWorkDesc(vm_workDesc workDescAdd)
         {
-            //--IF THE DAILY REPORT DOESN'T ALREADY EXIST...
-            db.Database.ExecuteSqlCommand
-                ("DECLARE @id INT " +
-                "DECLARE @timeEntryID INT " +
-                "IF NOT EXISTS (SELECT * FROM tbl_dailyReportTimeEntry " +
-                "WHERE " +
-                "dailyReportID = {0} " +
-                "AND " +
-                "workDescription = {1} " +
-                "AND " +
-                "workDescriptionCategory ={3}) " +
+            ////--IF THE DAILY REPORT DOESN'T ALREADY EXIST...
+            //db.Database.ExecuteSqlCommand
+            //    ("DECLARE @id INT " +
+            //    "DECLARE @timeEntryID INT " +
+            //    "IF NOT EXISTS (SELECT * FROM tbl_dailyReportTimeEntry " +
+            //    "WHERE " +
+            //    "dailyReportID = {0} " +
+            //    "AND " +
+            //    "workDescription = {1} " +
+            //    "AND " +
+            //    "workDescriptionCategory ={3}) " +
 
-                "BEGIN " +
+            //    "BEGIN " +
 
-                "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {3}, {4}) " +
-                "SET @id = SCOPE_IDENTITY() " +
-                "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@id, {2}) " +
+            //    "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {3}, {4}) " +
+            //    "SET @id = SCOPE_IDENTITY() " +
+            //    "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@id, {2}) " +
 
-                "END " +
+            //    "END " +
 
-                //--IF THE DAILY REPORT DOES ALREADY EXIST...
-                "ELSE " +
-                "BEGIN " +
+            //    //--IF THE DAILY REPORT DOES ALREADY EXIST...
+            //    "ELSE " +
+            //    "BEGIN " +
 
-                "SET @timeEntryID = " +
-                    "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
-                    "FROM tbl_dailyReportTimeEntry " +
-                    "WHERE " +
+            //    "SET @timeEntryID = " +
+            //        "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
+            //        "FROM tbl_dailyReportTimeEntry " +
+            //        "WHERE " +
 
-                    "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
-                    "AND " +
-                    "workDescription = {1} " +
-                    "AND " +
-                    "workDescriptionCategory = {3}) " +
+            //        "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
+            //        "AND " +
+            //        "workDescription = {1} " +
+            //        "AND " +
+            //        "workDescriptionCategory = {3}) " +
 
-                    "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) " +
+            //        "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) " +
 
-                "END",
+            //    "END",
 
-                workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.userName, workDescAdd.workDescriptionCategory, workDescAdd.hours);
+            //    workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.userName, workDescAdd.workDescriptionCategory, workDescAdd.hours);
            
             return new EmptyResult();
             //return View();
             //return RedirectToAction("Index");
             //return RedirectToAction("Index", new { dailyReportID = workDescAdd.dailyReportID });
             //return RedirectToAction("Index", "DailyReportByReportID", new { reportID = workDescAdd.dailyReportID});
+        }
+
+        [HttpPost]
+        public ActionResult AddWorkDescDelaysNarr(vm_workDesc workDescAdd)
+        {
+            //--IF THE DAILY REPORT DOESN'T ALREADY EXIST...
+            db.Database.ExecuteSqlCommand(
+
+                "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
+
+                workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.workDescriptionCategory, workDescAdd.hours);
+
+            return new EmptyResult();
+        }
+
+        [HttpPost]
+        public ActionResult AddWorkDescDelaysTeam(vm_workDesc workDescAdd)
+        {
+            //--IF THE DAILY REPORT DOES ALREADY EXIST...
+            db.Database.ExecuteSqlCommand(
+
+            "DECLARE @timeEntryID INT " +
+
+                    "SET @timeEntryID = " +
+                        "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
+                        "FROM tbl_dailyReportTimeEntry " +
+                        "WHERE " +
+
+                        "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
+                        "AND " +
+                        "workDescription = {1} " +
+                        "AND " +
+                        "workDescriptionCategory = {3}) " +
+
+                    "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
+
+                workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.userName, workDescAdd.workDescriptionCategory);
+
+            return new EmptyResult();
         }
 
         [HttpPost]
