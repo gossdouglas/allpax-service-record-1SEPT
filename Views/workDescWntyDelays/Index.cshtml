@@ -29,28 +29,36 @@
                 addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
                 addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
                 var addItem3 = $("#inputHours_workDescWntyDelays").val();
-                //end suck in variables for eventual axios post
+                    //end suck in variables for eventual axios post
 
-                //begin axios add post
-                //begin add the first team member to the database
-                axios.post('/workDescWntyDelays/AddWorkDescWntyDelaysNarr', {
-                    dailyReportID: addItem1,//0
-                    workDescription: addItem2,//1
-                    workDescriptionCategory: '3',//3
-                    hours: addItem3//4
-                })
-                    .then(function (response) {
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
+                if (addItem2.length == 0) {
+                    $.alert({
+                        title: '',
+                        content: 'A Narrative Must be Entered.',
                     });
-                //end add the first team member to the database
-                //end axios add post
+                } else {
 
-                $(this).prop("hidden", true);//
-                $("#workDescWntyDelaysTeam_dpdwn").removeAttr("disabled");//
-                $("#addWorkDescWntyDelaysRecordBtn").removeAttr("hidden");//
+                    //begin axios add post
+                    //begin add the first team member to the database
+                    axios.post('/workDescWntyDelays/AddWorkDescWntyDelaysNarr', {
+                        dailyReportID: addItem1,//0
+                        workDescription: addItem2,//1
+                        workDescriptionCategory: '3',//3
+                        hours: addItem3//4
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    //end add the first team member to the database
+                    //end axios add post
+
+                    $(this).prop("hidden", true);//
+                    $("#workDescWntyDelaysTeam_dpdwn").removeAttr("disabled");//
+                    $("#addWorkDescWntyDelaysRecordBtn").removeAttr("hidden");//
+                }
             });
             //end
 
@@ -167,7 +175,14 @@
             //begin 
             $("#addWorkDescWntyDelaysRecordBtn").on('click', function () {
 
-                window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
+                if ($("#txt_teamMembersWorkDescWntyDelays").children().length <= 1) {
+                    $.alert({
+                        title: '',
+                        content: 'At Least One Team Member Must be Entered.',
+                    });
+                } else {
+                    window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
+                }
             });
             //end
 
