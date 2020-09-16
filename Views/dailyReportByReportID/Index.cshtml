@@ -1,157 +1,200 @@
 ﻿@model List<allpax_service_record.Models.View_Models.vm_dailyReportByReportID>
-@*@model IEnumerable<allpax_service_record.Models.View_Models.vm_dailyReportByReportID>*@
+@using Microsoft.AspNet.Identity
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @*DAILY REPORT BY REPORT ID PAGE*@
-    <script>
-        $(document).ready(function () {//begin document read jquery statements
+<script>
+    $(document).ready(function () {//begin document read jquery statements
 
-            //begin fill the team names dropdown
-            var team_dpdwn = $('#team_dpdwn');
-            var addWorkDescBtn = $('#addWorkDescBtn');
-            var dailyReportID = $("#txt_dailyReportID").html();
+        $("#contnrDailyLog :input").prop("disabled", true);//disable the daily log section
+
+        //begin fill the team names dropdown
+        var team_dpdwn = $('#team_dpdwn');
+        var addWorkDescBtn = $('#addWorkDescBtn');
+        var dailyReportID = $("#txt_dailyReportID").html();
+        var workDescTeam_dpdwn = $(".workDescTeam_dpdwn");
+        var workDescDelaysTeam_dpdwn = $('.workDescDelaysTeam_dpdwn');
+        var workDescWntyDelaysTeam_dpdwn = $('.workDescWntyDelaysTeam_dpdwn');
+
+        //begin fill the team names dropdown
+        $.ajax({
+            url: 'DataService.asmx/GetAllTeamNames',
+            method: 'post',
+            dataType: 'json',
+            data: { userName: '%' },
+            success: function (data) {
+
+                team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+
+                $(data).each(function (index, item) {
+                    team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+                });
+            }
+        });
+        //end fill the team names dropdown
+
+        //begin load team members on page load
+        $.ajax({
+            url: 'DataService.asmx/GetAllTeamNamesByReportID',
+            method: 'post',
+            dataType: 'json',
+            data: { userName: '%', dailyReportID: dailyReportID },
+            success: function (data) {
+
+                $(data).each(function (index, item) {
+                    var temp_userName = item.userName;
+                    var temp_name = item.name;
+                    var temp_shortName = item.shortName;
+
+                    $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
+                    $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
+                    $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+                });
+                $.fn.updateSectionDpdwns();
+            }
+        });
+        //end load team members on page load
+
+        //begin add team member on drop down change
+        team_dpdwn.change(function () {
 
             $.ajax({
                 url: 'DataService.asmx/GetAllTeamNames',
                 method: 'post',
                 dataType: 'json',
-                data: { userName: '%' },
+                data: { userName: $(this).val() },
                 success: function (data) {
 
-                    team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
-
                     $(data).each(function (index, item) {
-                        team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+                        var temp_userName = item.userName;
+                        var temp_name = item.name;
+                        var temp_shortName = item.shortName;
+
+                        $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
+                        $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
+                        $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+
+                        //begin AddTeamMember
+                        //begin axios add post
+                        axios.post('/dailyReportByReportID/AddTeamMember', {
+                            dailyReportID: dailyReportID,
+                            userName: temp_userName,
+                        })
+                            .then(function (response) {
+                                $.fn.updateSectionDpdwns();
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                        //end axios add post
                     });
+                    //end AddTeamMember
                 }
             });
-            ////end fill the team names dropdown
+            $(team_dpdwn).val("-1");
+        });
+        //end add team member on drop down change
 
-            //begin load team members on page load
+        //begin when a team member class is clicked...
+        $(".team_").on('click', function () {
+            var tempTeamMemberUserID = this.id.substr(5);
+
+            //begin DeleteTeamMember
+            //begin axios delete post
+            axios.post('/dailyReportByReportID/DeleteTeamMember', {
+
+                dailyReportID: dailyReportID,
+                userName: tempTeamMemberUserID,
+            })
+                .then(function (response) {
+                    console.log(response);
+                    $.fn.updateSectionDpdwns();                  
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            //end axios delete post
+            $("#" + $(this).attr("id")).remove();
+        });
+        //end when a team member class is clicked...
+        //end when a record class is clicked...
+
+        $("#printDailyReport").click(function () {//when a record's edit button is clicked...
+
+            //begin axios delete post
+            axios.post('/DailyReportByReportIDPrint', {
+
+                reportID: dailyReportID,
+            })
+                .then(function (response) {
+                    console.log(response);
+                    $.alert({
+                    title: 'Confirmation',
+                    content: 'This daily report has been e-mailed.',
+                });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            //end axios add pos
+        });
+
+        $.fn.updateSectionDpdwns = function () {
+            //this function keeps the new record dropdowns in sections work description, delays and warranty delays 
+            //in synch with which team members available for addition to a new record
+
+            //begin load work description dropdown with possible team members                
+            workDescTeam_dpdwn.empty();
+            workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+            workDescTeam_dpdwn.val('-1');
+
+            workDescDelaysTeam_dpdwn.empty();
+            workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+            workDescDelaysTeam_dpdwn.val('-1');
+
+            workDescWntyDelaysTeam_dpdwn.empty();
+            workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+            workDescWntyDelaysTeam_dpdwn.val('-1');
+
             $.ajax({
                 url: 'DataService.asmx/GetAllTeamNamesByReportID',
                 method: 'post',
                 dataType: 'json',
                 data: { userName: '%', dailyReportID: dailyReportID },
                 success: function (data) {
-
                     $(data).each(function (index, item) {
-                        var temp_userName;
-                        var temp_name;
-                        var temp_shortName;
-
-                        temp_userName = item.userName;
-                        temp_name = item.name;
-                        temp_shortName = item.shortName;
-
-                        $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                        $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                        $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+                        workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                        workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                        workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
                     });
-                    //end AddTeamMember
                 }
             });
-            //});
-            //end load team members on page load
+            //end load work description dropdown with possible team members
+        }
 
-            //begin add team member on drop down change
-            team_dpdwn.change(function () {
+    });//end document read jquery statements
+</script>
 
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNames',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: $(this).val() },
-                    success: function (data) {
-
-                        $(data).each(function (index, item) {
-                            var temp_userName = item.userName;
-                            var temp_name = item.name;
-                            var temp_shortName = item.shortName;
-
-                            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
-
-                            //begin AddTeamMember
-                            //begin axios add post
-                            axios.post('/dailyReportByReportID/AddTeamMember', {
-                                dailyReportID: dailyReportID,
-                                userName: temp_userName,
-                            })
-                                .then(function (response) {
-                                    console.log(response);
-                                })
-                                .catch(function (error) {
-                                    console.log(error);
-                                });
-                            //end axios add post
-                        });
-                        //end AddTeamMember
-                    }
-                });
-            });
-            //end add team member on drop down change
-
-            //begin when a team member class is clicked...
-            $(".team_").on('click', function () {
-                var tempTeamMemberUserID = this.id.substr(5);
-
-                //begin DeleteTeamMember
-                //begin axios delete post
-                axios.post('/dailyReportByReportID/DeleteTeamMember', {
-
-                    dailyReportID: dailyReportID,
-                    userName: tempTeamMemberUserID,
-                })
-                    .then(function (response) {
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                //end axios add post
-
-                $("#" + $(this).attr("id")).remove();
-            });
-            //end when a team member class is clicked...
-            //end when a record class is clicked...
-
-            $("#printDailyReport").click(function () {//when a record's edit button is clicked...
-                //window.location = '/DailyReportByReportIDPrint?reportID=' + dailyReportID;
-                $.ajax({
-                    url: '/DailyReportByReportIDPrint',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { reportID: dailyReportID },
-                    success: function (data) {
-
-                        team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
-
-                        $(data).each(function (index, item) {
-                            team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
-                        });
-                    }
-                });
-            });
-
-        });//end document read jquery statements
-    </script>
-
-<div class="container printable" id="contnr_team">
+<div class="container" id="contnrDailyLog">
     <div class="row">
-        <div class="col-3" style="padding:5px">
+        <div class="col-2" style="padding:5px">
             <strong>Daily Log Information</strong>
         </div>
-        <div class="col-3" style="padding:5px">
+        <div class="col-2" style="padding:5px">
             <div>
                 <span><strong>Record No</strong></span>
                 <span id="txt_dailyReportID" value="@Model.First().dailyReportID">@Model.First().dailyReportID</span>
             </div>
         </div>
+        <div class="col-3" style="padding:5px">
+            <div>
+                <span><strong>Author</strong></span>
+                <span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>
+            </div>
+        </div>>
     </div>
     <div class="row">
         <div class="md-col-2" style="padding:5px">
@@ -210,13 +253,13 @@
             List<string> temp_jobCorrespondentName = item.jobCorrespondentName;
             //END TEMPORARY LOOP VARIABLES
 
-        <div class="col-4" style="padding:5px" id="output_customerContact">
-        @for (var i = 0; i < (temp_jobCorrespondentName.Count); i++)
-        {
-            <span class="" id="" style="pointer-events:none">@temp_jobCorrespondentName[@i]</span>
+            <div class="col-4" style="padding:5px" id="output_customerContact">
+                @for (var i = 0; i < (temp_jobCorrespondentName.Count); i++)
+                {
+                    <span class="" id="" style="pointer-events:none">@temp_jobCorrespondentName[@i]</span>
+                }
+            </div>
         }
-        </div>
-        }     
     </div>
     <div class="row">
         <div class="col-2" style="padding:5px">
@@ -251,7 +294,7 @@
 </div>
 <hr style="margin:1px; opacity:0" />
 @*BEGIN ALLPAX TEAM*@
-<div class="container" id="contnr_team">
+<div class="container" id="">
     <div class="row">
         <div class="col-2" style="padding:5px">
             <strong>Allpax Team:</strong>
@@ -271,22 +314,28 @@
 </div>
 @*END ALLPAX TEAM*@
 <hr style="margin:1px; opacity:0" />
-<div class="container" id="">
+@*<div class="container" id="">*@
     @{Html.RenderAction("Index", "workDesc", new { dailyReportID = ViewBag.reportID });
     }
-</div>
+@*</div>*@
 <hr style="margin:1px; opacity:0" />
-<div class="container" id="">
+@*<div class="container" id="">*@
     @{Html.RenderAction("Index", "workDescDelays", new { dailyReportID = ViewBag.reportID });
     }
-</div>
+@*</div>*@
 <hr style="margin:1px; opacity:0" />
-<div class="container" id="">
+@*<div class="container" id="">*@
     @{Html.RenderAction("Index", "workDescWntyDelays", new { dailyReportID = ViewBag.reportID });
     }
+@*</div>*@
+<hr style="margin:1px; opacity:0" />
+<div class="container" id="">
+    <div class="row">
+        <div class="col-12" style="padding:5px">
+            <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="background-color: darkseagreen; width: 100%">E-mail Daily Report</button>
+        </div>
+    </div>
 </div>
-
-<button id="printDailyReport">E-mail this report</button>
 
 
 

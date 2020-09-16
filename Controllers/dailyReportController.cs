@@ -15,36 +15,29 @@ namespace allpax_service_record.Controllers
     {
         private allpaxServiceRecordEntities db = new allpaxServiceRecordEntities();
 
-        // GET: customers
         public ActionResult Index()
         {
-            //return View(db.tbl_customers.ToList());
             var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
            
             return View(sql.ToList()); 
         }
 
-        // GET: customers
         public ActionResult Edit()
         {
-            //ViewBag.reportID = reportID;
-
-            //return View(db.tbl_customers.ToList());
             var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
 
             return View(sql.ToList());
         }
 
-        //begin CMPS 411 controller code
         [HttpPost]
         public ActionResult AddDailyReport(tbl_dailyReport dailyReportAdd)
         {
 
-             db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6})",
-                dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime, dailyReportAdd.lunchHours, dailyReportAdd.equipment); 
+             db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6},{7})",
+                dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime, 
+                dailyReportAdd.lunchHours, dailyReportAdd.equipment, dailyReportAdd.dailyReportAuthor); 
             return new EmptyResult();
-            //return RedirectToAction("Home", "Index");
-            //return Redirect("/Home");
+
         }
 
         public ActionResult copyDailyReport(string jobID, string description, string subJobID, string customerName, string location, string customercode, string customerContact)
@@ -81,7 +74,6 @@ namespace allpax_service_record.Controllers
 
             return RedirectToAction("Index");
         }
-
 
         protected override void Dispose(bool disposing)
         {

@@ -61,6 +61,7 @@ namespace allpax_service_record.Controllers
                 dailyRptViewAll.customercode = dr1[8].ToString();
                 dailyRptViewAll.customerContact = dr1[9].ToString();
                 dailyRptViewAll.team = TeamNamesByDailyReportID(dailyRptViewAll.dailyReportID);
+                dailyRptViewAll.workDescription = WorkDescsByDailyReportID(dailyRptViewAll.dailyReportID);
 
                 dailyRptViewAlls.Add(dailyRptViewAll);
             }
@@ -117,12 +118,20 @@ namespace allpax_service_record.Controllers
                 dailyRptViewAll.customercode = dr1[8].ToString();
                 dailyRptViewAll.customerContact = dr1[9].ToString();
                 dailyRptViewAll.team = TeamNamesByDailyReportID(dailyRptViewAll.dailyReportID);
+                dailyRptViewAll.workDescription = WorkDescsByDailyReportID(dailyRptViewAll.dailyReportID);
 
                 dailyRptViewAlls.Add(dailyRptViewAll);
             }
             sqlconn.Close();
 
             return View(dailyRptViewAlls);
+        }
+
+        public ActionResult DeleteDailyReport(tbl_dailyReport dailyReportDelete)
+        {
+            db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReport WHERE dailyReportID=({0})", dailyReportDelete.dailyReportID);
+
+            return RedirectToAction("Index");
         }
 
         public List<string> TeamNamesByDailyReportID(int dailyReportID)
@@ -150,6 +159,33 @@ namespace allpax_service_record.Controllers
                 team.Add(dr1[0].ToString());
             }
             return team;
+        }
+
+        public List<string> WorkDescsByDailyReportID(int dailyReportID)
+        {
+            List<string> workDesc = new List<string>();
+
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            string sqlquery1 = "SELECT tbl_dailyReportTimeEntry.workDescription " +
+            "FROM " +
+            "tbl_dailyReportTimeEntry " +
+            "WHERE " +
+            "tbl_dailyReportTimeEntry.dailyReportID = @dailyReportID "+
+            "AND "+
+            "tbl_dailyReportTimeEntry.workDescriptionCategory = '1'";
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.Add(new SqlParameter("dailyReportID", dailyReportID));
+            SqlDataAdapter sda3 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda3.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                workDesc.Add(dr1[0].ToString());
+            }
+            return workDesc;
         }
 
         protected override void Dispose(bool disposing)

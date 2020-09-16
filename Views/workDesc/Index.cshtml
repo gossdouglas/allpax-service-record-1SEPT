@@ -6,15 +6,9 @@
 @*WORK DESCRIPTION PAGE*@
 
 <head>
-    @*Axios CDN*@
-    @*<script src="https://unpkg.com/axios/dist/axios.min.js"></script>*@
-    @*JQuery CDN*@
-    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>*@
 
     <script>
         $(document).ready(function () {//begin document jquery statements
-
-            $("#contnr_team :input").prop("disabled", true);//disable the daily log section
 
             //begin this partial view's variable declaration section
             var slctd_timeEntryID;
@@ -24,8 +18,10 @@
             var workDescTeamLine_dpdwn = $('.workDescTeamLine_dpdwn_');
             //end this partial view's variable declaration section
 
-            //begin when a new work description is added for a given daily report...
-            $("#addWorkDescBtn").on('click', function () {
+            //BEGIN NEW WORK DESCRIPTION SECTION
+
+            //begin 
+            $("#addWorkDescNarrBtn").on('click', function () {
 
                 //begin suck in variables for eventual axios post
                 var addItem1 = $("#txt_dailyReportID").html();
@@ -35,98 +31,47 @@
                 addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
                 //end suck in variables for eventual axios post
 
-                //begin tattler pop up
-                //alert("dailyReportID: " + addItem1 + '\n' +
-                //    "workDescription: " + addItem2
-                //);
-                //end tattler pop up
-
-                //begin adding team members to a new work description time entry
-                $(".workDescTeam_").each(function () {
-
-                    //begin suck in variables for eventual axios post
-                    var tempTeamMemberUserID = this.id.replace(/workDescTeam_/i, "");//suck out the team member's userName
-                    //end suck in variables for eventual axios post
-
-                    if (tempTeamMemberUserID.length > 0) {//if that userName is greater than 0
-                        //begin axios add post
-                        axios.post('/workDesc/AddWorkDesc', {
-                            dailyReportID: addItem1,
-                            workDescription: addItem2,
-                            userName: tempTeamMemberUserID,
-                            workDescriptionCategory: '1',
-                            hours: '0'
+                if (addItem2.length == 0) {
+                    $.alert({
+                        title: '',
+                        content: 'A Narrative Must be Entered.',
+                    });
+                } else {
+                    //begin axios add post
+                    //begin add the first team member to the database
+                    axios.post('/workDesc/AddWorkDescNarr', {
+                        dailyReportID: addItem1,//0
+                        workDescription: addItem2,//1
+                        workDescriptionCategory: '1',//3
+                        hours: '0'//4
+                    })
+                        .then(function (response) {
+                            console.log(response);
                         })
-                            .then(function (response) {
-                                console.log(response);
-                            })
-                            .catch(function (error) {
-                                console.log(error);
-                            });
-                        //end axios add post
-                    }
-                });
-                //end adding team members to a new work description time entry
-            });
-            //end a new work description is added for a given daily report...
-
-            //begin remove team member from being included in the creation of a new description entry
-            $(".workDescTeam_").on('click', function () {
-
-                //begin suck in variables
-                var tempTeamMemberUserID = this.id;
-                //end suck in variables
-
-                $("#" + $(this).attr("id")).remove();
-            });
-            //end remove team member from being included in the creation of a new description entry
-
-            //begin load team members on work description dpdwn click
-            workDescTeam_dpdwn.click(function () {
-
-                workDescTeam_dpdwn.empty();
-                workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                workDescTeam_dpdwn.val('-1');
-
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: '%', dailyReportID: dailyReportID },
-                    success: function (data) {
-                        $(data).each(function (index, item) {
-                            workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                        .catch(function (error) {
+                            console.log(error);
                         });
-                        //end AddTeamMember
-                    }
-                });
+                    //end add the first team member to the database
+                    //end axios add post
+
+                    $(this).prop("hidden", true);//
+                    $("#workDescTeam_dpdwn").removeAttr("disabled");//
+                    $("#addWorkDescRecordBtn").removeAttr("hidden");//
+                }
             });
-            //end load team members on work description dpdwn click
+            //end 
 
-            //begin load team members on work description dpdwn click
-            workDescTeamLine_dpdwn.click(function () {
-
-                workDescTeamLine_dpdwn.empty();
-                workDescTeamLine_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                workDescTeamLine_dpdwn.val('-1');
-
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: '%', dailyReportID: dailyReportID },
-                    success: function (data) {
-                        $(data).each(function (index, item) {
-                            workDescTeamLine_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                        });
-                        //end AddTeamMember
-                    }
-                });
-            });
-            //end load team members on work description dpdwn click
-
-            //begin load team members on work description dpdwn change
+            //begin 
             workDescTeam_dpdwn.change(function () {
+
+                //begin suck in variables for eventual axios post
+                var addItem1 = $("#txt_dailyReportID").html();
+                var addItem2 = $("#input_workDesc").html();
+                addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
+                addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
+                addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
+                //end suck in variables for eventual axios post
+
                 //begin AddTeamMember
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNamesByReportID',
@@ -136,23 +81,114 @@
                     success: function (data) {
 
                         $(data).each(function (index, item) {
-                            var temp_userName;
-                            var temp_name;
-                            var temp_shortName;
-
-                            temp_userName = item.userName;
-                            temp_name = item.name;
-                            temp_shortName = item.shortName;
+                            var temp_userName = item.userName;
+                            var temp_name = item.name;
+                            var temp_shortName = item.shortName;
 
                             $("#workDescTeam_").clone(true).prop("id", "workDescTeam_" + temp_userName.toString()).appendTo("#txt_teamMembersWorkDesc");
                             $("#workDescTeam_" + temp_userName.toString()).text(temp_shortName);
-                            $("#workDescTeam_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy                           
+                            $("#workDescTeam_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+
+                            axios.post('/workDesc/AddWorkDescTeam', {
+                                dailyReportID: addItem1,//0
+                                workDescription: addItem2,//1
+                                userName: temp_userName,//2
+                                workDescriptionCategory: '1',//3
+                            })
+                                .then(function (response) {
+                                    console.log(response);
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
                         });
-                        //end AddTeamMember
+                //end AddTeamMember
+                    }
+                });
+                $(workDescTeam_dpdwn).val("-1");
+            });
+            //end
+
+            //begin remove team member from being included in the creation of a new description entry
+            $(".workDescTeam_").on('click', function () {
+
+                //begin suck in variables for eventual axios post
+                var addItem1 = $("#txt_dailyReportID").html();
+                var addItem2 = $("#input_workDesc").html();
+                addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
+                addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
+                addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
+                var lastTimeEntry;
+                var tempTeamMemberUserID = this.id.replace(/workDescTeam_[0-9]*/i, "");
+                //end suck in variables for eventual axios post
+
+                //begin get last daily report created by user name
+                $.ajax({
+                    url: 'DataService.asmx/GetLastTimeEntryByRptID_WkDesc_Cat',
+                    method: 'post',
+                    dataType: 'json',
+                    data: {
+                        dailyReportID: addItem1,
+                        workDescription: addItem2,
+                        workDescriptionCategory: '1'
+                    },
+                    success: function (data) {
+                        $(data).each(function (index, item) {
+                            lastTimeEntry = item; 
+                            console.log('last time entry in ajax section ' + lastTimeEntry);
+                            //console.log('last time entry in ajax section ' + item);
+                            console.log('user name to be deleted is ' + tempTeamMemberUserID);
+                            $.confirm({
+                                title: 'Delete Team Member?',
+                                content: '',
+                                buttons: {
+                                    confirm: function () {
+
+                                        //begin deleting team member from a time entry
+                                        //begin axios delete post
+                                        axios.post('/workDesc/DeleteTeamMember', {
+                                            timeEntryID: lastTimeEntry,
+                                            userName: tempTeamMemberUserID,
+                                        })
+                                            .then(function (response) {
+                                                console.log(response);
+                                            })
+                                            .catch(function (error) {
+                                                console.log(error);
+                                            });
+                                        //end axios add post
+                                        //end deleting team member from a time entry
+                                        $("#workDescTeam_" + tempTeamMemberUserID).remove();
+                                        $.alert(tempTeamMemberUserID + ' has been deleted.');
+                                        //remove it from the view after it has been deleted from the database
+                                    },
+                                    cancel: function () {
+                                    }
+                                }
+                            });
+                        });
                     }
                 });
             });
-            //end load team members on work description dpdwn change
+            //end remove team member from being included in the creation of a new description entry
+
+            //begin 
+            $("#addWorkDescRecordBtn").on('click', function () {
+
+                if ($("#txt_teamMembersWorkDesc").children().length <= 1) {
+                    $.alert({
+                        title: '',
+                        content: 'At Least One Team Member Must be Entered.',
+                    });
+                } else {
+                    window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
+                }
+            });
+            //end 
+
+            //END NEW WORK DESCRIPTION SECTION
+
+            //BEGIN RETURNED DB RECORDS
 
             //begin load team members on line dpdwn change
             $(".workDescTeamLine_dpdwn_").change(function () {
@@ -203,6 +239,7 @@
                         });
                     }
                 });
+                $(this).val("-1");
             });
             //end load team members on line dpdwn change
 
@@ -212,17 +249,16 @@
                 var tempTeamMemberUserID = this.id.replace(/workDescTeamLineUserName_[0-9]*/i, "");
                 var tempworkDescTeamLineUserName_ = "#"+$(this).attr("id");
                 //end suck in variables for eventual axios post
-                
+
                 $.confirm({
                     title: 'Delete Team Member?',
                     content: '',
                     buttons: {
                         confirm: function () {
-                            
+
                             //begin deleting team member from a time entry
                             //begin axios delete post
                             axios.post('/workDesc/DeleteTeamMember', {
-
                                 timeEntryID: slctd_timeEntryID,
                                 userName: tempTeamMemberUserID,
                             })
@@ -236,12 +272,12 @@
                             //end deleting team member from a time entry
                             $(tempworkDescTeamLineUserName_).remove();
                             $.alert(tempTeamMemberUserID + ' has been deleted.');
-                            //remove it from the view after it has been deleted from the database                            
+                            //remove it from the view after it has been deleted from the database
                         },
                         cancel: function () {
                         }
                     }
-                });               
+                });
             });
             //end when a line team member class is clicked for the purpose of deletion...
 
@@ -255,27 +291,30 @@
                     title: 'Delete Time Entry '+slctd_timeEntryID+'?',
                     content: '',
                     buttons: {
-                        confirm: function () {                           
+                        confirm: function () {
                             //begin axios delete post
                             axios.post('/workDesc/DeleteWorkDesc', {
                                 timeEntryID: slctd_timeEntryID,
                             })
                                 .then(function (response) {
-                                    console.log(response);                                    
+                                    console.log(response);
+                                    window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
                                 })
                                 .catch(function (error) {
                                 });
-                            //end axios delete post                        
+                            //end axios delete post
                         },
                         cancel: function () {
-                        }                       
+                        }
                     }
-                });              
+                });
             });
             //end when the line delete button is pressed
 
             //begin when the edit line button is pressed
             $(".editWorkDescLineBtn_").on('click', function () {
+
+                $.fn.updateworkDescTeamLineDpdwns();//update the line's team dropdowns with possible team members.
 
                 //begin suck in variables
                 slctd_timeEntryID = this.id.substr(20);
@@ -350,14 +389,38 @@
                     .catch(function (error) {
                         console.log(error);
                     });
-                 //end axios delete post            
+                 //end axios delete post
             });
             //end when the line save button is pressed.
+
+            $.fn.updateworkDescTeamLineDpdwns = function () {
+                //this function keeps the time entry dropdowns in work description
+                //in synch with which team members available for addition
+
+                workDescTeamLine_dpdwn.empty();
+                workDescTeamLine_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                workDescTeamLine_dpdwn.val('-1');
+
+                $.ajax({
+                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { userName: '%', dailyReportID: dailyReportID },
+                    success: function (data) {
+                        $(data).each(function (index, item) {
+                            workDescTeamLine_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                        });
+                    }
+                });
+            }
+
+            //END RETURNED DB RECORDS
+
         });//end document jquery statements
     </script>
 </head>
 
-<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
+<div class=" container pl-auto printable" style="" id="contnr_workDescription">
     <div class="row">
         <div class="col-8" style="padding:5px">
             <strong>Work Description</strong>
@@ -367,7 +430,7 @@
         </div>
     </div>
 
-    @*BEGIN WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
+    @*BEGIN TEMPLATE FOR COPIES*@
     <div class="col-12" id="workDescriptionLine_template">
         <div class="row" id="">
             <div class="col-8" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable="true">
@@ -376,7 +439,7 @@
                 <span class="workDescTeam_" id="workDescTeam_" style="padding:5px"></span>
             </div>
             <div class="col-2" style="padding:5px">
-                <select class="workDescTeam_dpdwn" name="" style="width:100%">
+                <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" style="width:100%" disabled>
                     <option value="">Team</option>
                 </select>
             </div>
@@ -389,15 +452,15 @@
                 </div>
             </div>
             <div class="col-10" style="padding:5px">
-                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="background-color: darkorange; width: 100%">Save Entry</button>
+                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescNarrBtn" style="background-color: darkorange; width: 100%">Save Narrative</button>
+                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescRecordBtn" style="background-color: darkorange; width: 100%" hidden>Save Entry</button>
             </div>
         </div>
     </div>
-</div>
-@*END WORK DESCRIPTION TEMPLATE ADD NEW WORK DESCRIPTION*@
+    @*</div>*@
+    @*END TEMPLATE FOR COPIES*@
 
-@*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
-<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
+    @*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
     @foreach (var item in Model)
     {
         //BEGIN TEMPORARY LOOP VARIABLES
@@ -448,7 +511,7 @@
             </div>
         </div>
     }
-    @*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
+    @*END DISPLAY WORK DESCRIPTION RECORDS*@
 </div>
 
 

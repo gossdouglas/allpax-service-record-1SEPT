@@ -11,6 +11,14 @@
         .container {
             border: 2px solid black;           
         }
+        table {
+            table-layout: fixed;
+        }
+        #record_item8 {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
     </style>
 
     @*<script src="https://unpkg.com/axios/dist/axios.min.js"></script>*@
@@ -165,43 +173,50 @@
                     //BEGIN TEMPORARY LOOP VARIABLES
                     string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
                     List<string> temp_team = item.team;
+                    List<string> temp_workDescription = item.workDescription;
                     Boolean temp_active = item.active;
                     //END TEMPORARY LOOP VARIABLES
 
-                    <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
-                        <td id="record_item0" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
-                        <td id="record_item1" style="text-align:center">
-                            @if (item.active == true)
-                            {
-                                <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
-
-                                <span hidden>@temp_active</span>
-                            }
-                            else
-                            {
-                                <i class="fas fa-stop-circle fa-2x" style="color:red" ;></i>
-                            }
-                        </td>
-                        <td id="record_item2" value=@temp_date>@temp_date</td>
-                        <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
-                        <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
-                        <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
-                        <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
-                        <td id="record_item7" value=>
+                <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
+                    <td id="record_item0" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
+                    <td id="record_item1" style="text-align:center">
+                        @if (item.active == true)
+                        {
+                            <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-stop-circle fa-2x" style="color:red" ;></i>
+                        }
+                        <span class="" id="" style="" hidden>@temp_active</span>
+                    </td>
+                    <td id="record_item2" value=@temp_date>@temp_date</td>
+                    <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
+                    <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
+                    <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
+                    <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
+                    <td id="record_item7" value=>
+                        <span>
                             @for (var i = 0; i < (temp_team.Count); i++)
                             {
-                                <span class="" id="" style="pointer-events:none">@temp_team[@i]|</span>
+                                <span class="" id="" style="">@temp_team[@i]|</span>
                             }
-                        </td>
-                        <td id="record_item8" value=>WORK DESCRIPTION</td>
-                        <td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode) hidden>@Html.DisplayFor(modelItem => item.customercode)</td>
-                        <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact) hidden>@Html.DisplayFor(modelItem => item.customerContact)</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm editButton" style=" background-color: darkorange">Edit</button>
-                            <button class="btn btn-primary btn-sm deleteButton" style=" background-color: darkgoldenrod">Delete</button>
-                            <button class="btn btn-primary btn-sm copyButton" style=" background-color: darkturquoise">Copy</button>
-                        </td>
-                    </tr>
+                        </span>
+                    </td>
+                    <td id="record_item8" value= style="overflow:hidden; white-space:nowrap">
+                        @for (var i = 0; i < (temp_workDescription.Count); i++)
+                        {
+                            @temp_workDescription[@i]
+                        }
+                    </td>
+                    <td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode) hidden>@Html.DisplayFor(modelItem => item.customercode)</td>
+                    <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact) hidden>@Html.DisplayFor(modelItem => item.customerContact)</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm editButton" style=" background-color: darkorange">Edit</button>
+                        <button class="btn btn-primary btn-sm deleteButton" style=" background-color: darkgoldenrod">Delete</button>
+                        <button class="btn btn-primary btn-sm copyButton" style=" background-color: darkturquoise">Copy</button>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
