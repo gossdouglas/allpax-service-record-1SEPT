@@ -68,10 +68,7 @@
                 });
 
                 //begin fill the team names dropdown
-                //var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
                 $('#subJobTypes_dpdwn').empty();//clear the dropdown
-                //$('#input_jobs_dpdown').val('1');//
-                //alert($('#input_jobs_dpdown').val())
 
                 $.ajax({
                     url: '/DataService.asmx/GetSubJobTypesByJobID',
@@ -80,17 +77,12 @@
                     data: { jobID: jobs_dpdown.val() },
                     success: function (data) {
 
-                        //subJobTypes_dpdwn.append($('<option/>', { value: '', text: 'Select a Job Sub-Type' }));
-
                         $(data).each(function (index, item) {
                             subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
-
-                            //console.log(item.subJobID);
                         });
                     }
                 });
                 //end fill sub jobs dropdown
-
             });
             //end jobs id dropdown change
 
@@ -200,8 +192,6 @@
                         //$(this).attr('id')
                     }
                 });
-
-                //alert("all filled? "+filled)
                 return filled;
             }
 
