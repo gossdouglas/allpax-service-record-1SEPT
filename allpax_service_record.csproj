@@ -229,9 +229,6 @@
   <ItemGroup>
     <Content Include="assets\css\normalize.css" />
     <Content Include="assets\css\skeleton.css" />
-    <Content Include="assets\images\cat1.jpg" />
-    <Content Include="assets\images\cat2.jpg" />
-    <Content Include="assets\images\cat3.jpg" />
     <Content Include="assets\images\print.png" />
     <Content Include="bin\allpax_service_record.dll" />
     <Content Include="bin\allpax_service_record.pdb" />
