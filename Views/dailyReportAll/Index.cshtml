@@ -49,7 +49,10 @@
                 });
 
                 //begin when a record class is clicked...
-                $(".record").on('click mouseover', function () {
+                //$(".record").on('click mouseover', function () {
+                //$("#dt_dailyRptAll").on("click mouseover", ".record", function () {
+                $("#dt_dailyRptAll tbody").on("click mouseover", ".record", function () {
+
                     selectedItem0 = $(this).attr("id");//works
                     selectedItem1 = $(this).find("#record_item1").html();//works valid for inner html only
                     selectedItem2 = $(this).find("#record_item2").html();//works valid for inner html only
@@ -73,14 +76,20 @@
                     $("#slctd_address").val(selectedItem6);
                     $("#slctd_customerCode").val(selectedItem9);
                     $("#slctd_customerContact").val(selectedItem10);
+
+                    //console.log(selectedItem0);
                 });
                 //end when a record class is clicked...
 
-                $(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked...
+                //$(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked...
+                $("#dt_dailyRptAll tbody").on("click", ".editButton", function () {
+
+                    //console.log('edit button clicked. ' + selectedItem0);
                     window.location = '/DailyReportByReportID?reportID=' + selectedItem0;
                 });
 
-                $(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked...
+                //$(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked...
+                $("#dt_dailyRptAll tbody").on("click", ".deleteButton", function () {
 
                     $.confirm({
                         title: 'Delete Daily Report ' + selectedItem0 + '?',
@@ -106,7 +115,8 @@
                     });
                 });
 
-                $(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked...
+                //$(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked...
+                $("#dt_dailyRptAll tbody").on("click", ".copyButton", function () {
                     window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
                         + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9 + "&customerContact=" + selectedItem10;
                 });
