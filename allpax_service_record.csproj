@@ -230,8 +230,6 @@
     <Content Include="assets\css\normalize.css" />
     <Content Include="assets\css\skeleton.css" />
     <Content Include="assets\images\allpaxLogo.jpg" />
-    <Content Include="assets\images\allpaxLogo.png" />
-    <Content Include="assets\images\print.png" />
     <Content Include="bin\allpax_service_record.dll" />
     <Content Include="bin\allpax_service_record.pdb" />
     <Content Include="Content\bootstrap-grid.css" />
