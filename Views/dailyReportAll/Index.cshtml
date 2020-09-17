@@ -27,7 +27,7 @@
 
         @*TABLE FILTER*@
         @*<script src="~/Content/tableFilter/test/libs/polyfill.js"></script>*@
-        <link href="~/Content/tableFilter/dist/tablefilter/style/tablefilter.css" rel="stylesheet" />
+        
         @*TABLE FILTER*@
 
         <script>
@@ -245,10 +245,75 @@
         </table>
     </div>
 </div>
+
+<table id="demo" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>From</th>
+            <th>Destination</th>
+            <th>Road Distance (km)</th>
+            <th>By Air (hrs)</th>
+            <th>By Rail (hrs)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Sydney</strong></td>
+            <td>Adelaide</td>
+            <td>1412</td>
+            <td>1.4</td>
+            <td>25.3</td>
+        </tr>
+        <tr>
+            <td><strong>Sydney</strong></td>
+            <td>Brisbane</td>
+            <td>982</td>
+            <td>1.5</td>
+            <td>16</td>
+        </tr>
+        <tr>
+            <td><strong>Sydney</strong></td>
+            <td>Canberra</td>
+            <td>286</td>
+            <td>.6</td>
+            <td>4.3</td>
+        </tr>
+        <tr>
+            <td><strong>Sydney</strong></td>
+            <td>Melbourne</td>
+            <td>872</td>
+            <td>1.1</td>
+            <td>10.5</td>
+        </tr>
+        <tr>
+            <td><strong>Adelaide</strong></td>
+            <td>Perth</td>
+            <td>2781</td>
+            <td>3.1</td>
+            <td>38</td>
+        </tr>
+        <tr>
+            <td><strong>Adelaide</strong></td>
+            <td>Alice Springs</td>
+            <td>1533</td>
+            <td>2</td>
+            <td>20.25</td>
+        </tr>
+        <tr>
+            <td><strong>Adelaide</strong></td>
+            <td>Brisbane</td>
+            <td>2045</td>
+            <td>2.15</td>
+            <td>40</td>
+        </tr>
+    </tbody>
+</table>
+<script src="~/Content/tableFilter/dist/tablefilter/tf-1-2aa33b10e0e549020c12.js"></script>
 <script src="~/Content/tableFilter/dist/tablefilter/tablefilter.js"></script>
+
 <script>
     var tf2 = new TableFilter('dt_dailyRptAll', {
-        base_path: '~/Content/tableFilter/dist/tablefilter/',
+        base_path: '/Content/tableFilter/dist/tablefilter/',
         col_0: 'checklist',
         col_1: 'checklist',
         col_2: 'checklist',
@@ -263,8 +328,83 @@
         col_11: 'none',
         col_12: 'none',
         load_filters_on_demand: false,
+        //columns visibility and sort extension
+        //status_bar: true,
+        extensions: [{
+            name: 'colsVisibility',
+            at_start: [11, 12],
+            text: 'Columns: ',
+            enable_tick_all: true
+        }, {
+            name: 'sort'
+        }]
     });
     tf2.init();
+
+    //var tfConfig = {
+    //    base_path: '~/Content/tableFilter/dist/tablefilter/',
+    //    col_0: 'checklist',
+    //    col_1: 'checklist',
+    //    col_2: 'checklist',
+    //    col_3: 'checklist',
+    //    col_4: 'checklist',
+    //    col_5: 'checklist',
+    //    col_6: 'checklist',
+    //    col_7: 'none',
+    //    col_8: 'none',
+    //    col_9: 'none',
+    //    col_10: 'none',
+    //    col_11: 'none',
+    //    col_12: 'none',
+    //    load_filters_on_demand: false,
+    //    //paging: true,
+    //    //alternate_rows: true,
+    //    //rows_counter: true,
+    //    //btn_reset: true,
+    //    //loader: true,
+    //    //status_bar: true,
+    //    extensions: [{
+    //        name: 'filtersVisibility',
+    //        visible_at_start: false
+    //    }]
+    //};
+    //var tf = new TableFilter('dt_dailyRptAll', tfConfig);
+    //tf.init();
+</script>
+
+<script>
+    //var tf = new TableFilter('demo', {
+    //    //base_path: '../dist/tablefilter/',
+    //    base_path: '~/Content/tableFilter/dist/tablefilter/',
+    //    extensions: [{ name: 'filtersVisibility' }]
+    //});
+    //tf.init();
+    var tfConfig = {
+        //base_path: 'tablefilter/',
+        base_path: '/Content/tableFilter/dist/tablefilter/',
+        col_0: 'checklist',
+        col_1: 'checklist',
+        col_widths: [
+            '75px', '200px', '120px',
+            '100px', '75px', //'350px'
+        ],
+        paging: true,
+        alternate_rows: true,
+        rows_counter: true,
+        btn_reset: true,
+        loader: true,
+        status_bar: true,
+        extensions: [{
+            name: 'filtersVisibility',
+            visible_at_start: false
+        }],
+        // allows Bootstrap table styling
+        themes: [{
+            name: 'transparent'
+        }]
+    };
+    var tf = new TableFilter('demo', tfConfig);
+    tf.init();
 </script>
 
 
