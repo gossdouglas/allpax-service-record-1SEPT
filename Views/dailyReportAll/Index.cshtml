@@ -33,8 +33,6 @@
         <script src="~/Content/tableFilter/dist/tablefilter/tablefilter.js"></script>
         @*END TABLE FILTER*@
 
-
-
         <script>
             $(document).ready(function () {//begin document read jquery statements
 
@@ -207,7 +205,6 @@
                             @if (item.active == true)
                             {
                                 <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
-
                                 <span hidden>@temp_active</span>
                             }
                             else
@@ -254,7 +251,7 @@
 </div>
 
 <script>
-    var tf2 = new TableFilter('dt_dailyRptAll', {
+    var tf = new TableFilter('dt_dailyRptAll', {
         base_path: '/Content/tableFilter/dist/tablefilter/',
         col_0: 'none',
         col_1: 'checklist',
@@ -268,11 +265,6 @@
         col_9: 'none',
         col_10: 'none',
 
-        //col_widths: [
-        //    '7%', '5%', '7%', '5%', '10%', '7%',
-        //    '10%', 'autowidth: true', '15%'
-        //],
-
         extensions: [{
             name: 'filtersVisibility',
             visible_at_start: true
@@ -282,7 +274,7 @@
             name: 'transparent'
         }]
     });
-    tf2.init();
+    tf.init();
 </script>
 
 

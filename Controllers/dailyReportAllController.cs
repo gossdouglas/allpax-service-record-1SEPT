@@ -78,8 +78,8 @@ namespace allpax_service_record.Controllers
             sqlconn.Open();
 
             string sqlquery1 =
-             "SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, " +
-            "tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact, tbl_dailyReport.subJobID " +
+            "SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, tbl_dailyReport.subJobID, " +
+            "tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact " +
             "FROM tbl_dailyReport " +
 
             "INNER JOIN " +
