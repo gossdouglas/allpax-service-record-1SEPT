@@ -131,7 +131,10 @@
                 });
                 //end when the line save button is pressed.
 
-                alert($("#flt8_dt_dailyRptAll").outerHeight);
+            //BEGIN CREATE A CONTAINER TO HOLD THE TOGGLE FILTERS BUTTON
+                $.fn.createFltrTgglBtn();
+
+            //END CREATE A CONTAINER TO HOLD THE TOGGLE FILTERS BUTTON
 
             });//end document read jquery statements
         </script>
@@ -160,6 +163,7 @@
         </div>
     </div>
     <div class="col-md-12" style="border:none">
+        <div id="filteredTable"></div>
         <table id="dt_dailyRptAll" class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -194,11 +198,11 @@
                         Action
                     </th>
                     @*<th class="th-sm" hidden>
-                            Customer Code
-                        </th>
-                        <th class="th-sm" hidden>
-                            Customer Contact
-                        </th>*@
+                        Customer Code
+                    </th>
+                    <th class="th-sm" hidden>
+                        Customer Contact
+                    </th>*@
                 </tr>
             </thead>
             <tbody>
@@ -254,7 +258,7 @@
                             <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
                         </td>
                         @*<td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode) hidden>@Html.DisplayFor(modelItem => item.customercode)</td>
-                            <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact) hidden>@Html.DisplayFor(modelItem => item.customerContact)</td>*@
+                        <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact) hidden>@Html.DisplayFor(modelItem => item.customerContact)</td>*@
                     </tr>
                 }
             </tbody>
@@ -279,7 +283,9 @@
 
         extensions: [{
             name: 'filtersVisibility',
-            visible_at_start: true
+            visible_at_start: true,
+            target_id: 'filteredTable',
+            //target_id: 'fltrTgglBtn',
         }],
         // allows Bootstrap table styling
         themes: [{
@@ -287,6 +293,22 @@
         }]
     });
     tf.init();
+
+    $('.fltrow').hide();
+
+    $.fn.createFltrTgglBtn = function () {
+        //alert('You have successfully defined the function!');
+        //$("#dt_dailyRptAll_filter").before("Some text before");//works
+
+        //var txt2 = "<div><button class='btn btn-primary btn-sm editButton' style=' background-color: darkorange'>Toggle Column Filters</button></div>";
+        //var txt2 = "<button class='btn btn-primary btn-sm editButton' style=' background-color: darkorange'>Toggle Column Filters</button>";
+        var txt2 = "<span>&nbsp;&nbsp;<button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton' style=' background-color: darkorange'>Toggle Column Filters</button></span>";
+        //var txt2 = "<span id= 'fltrTgglBtn'></span>";
+
+        var txt3 = "<b>I </b>";
+        $("#dt_dailyRptAll_filter").before(txt2);
+    }
+
 </script>
 
 
