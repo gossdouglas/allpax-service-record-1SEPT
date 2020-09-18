@@ -132,7 +132,7 @@
                 //end when the line save button is pressed.
 
             //BEGIN CREATE A CONTAINER TO HOLD THE TOGGLE FILTERS BUTTON
-                $.fn.createFltrTgglBtn();
+                //$.fn.createFltrTgglBtn();
 
             //END CREATE A CONTAINER TO HOLD THE TOGGLE FILTERS BUTTON
 
@@ -267,6 +267,34 @@
 </div>
 
 <script>
+
+    //$("#filteredTableTemp").clone(true).prop("id", "filteredTable").appendTo("#dt_dailyRptAll_length");
+
+    $.fn.createFltrTgglBtn = function () {
+        //alert('You have successfully defined the function!');
+        //$("#dt_dailyRptAll_filter").before("Some text before");//works
+
+        //var txt2 = "<div><button class='btn btn-primary btn-sm editButton' style=' background-color: darkorange'>Toggle Column Filters</button></div>";
+        //var txt2 = "<button class='btn btn-primary btn-sm editButton' style=' background-color: darkorange'>Toggle Column Filters</button>";
+
+        //var txt2 = "<span>&nbsp;&nbsp;<button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton' style='background-color: darkorange'>Toggle Column Filters</button></span>";
+        //var txt2 = "<span id= 'fltrTgglBtn'></span>";
+        ///var txt2 = "<div id='filteredTable'><span class='expClpFlt'><span>&nbsp;&nbsp;<button id='fltrTgglBtn' class='btn btn-primary btn-sm editButton' style='background-color: darkorange'>Toggle Column Filters</button></span></span></div>";
+        var txt2 = "<div id='filteredTable'></div>";
+
+        $("#dt_dailyRptAll_filter").before(txt2+'yo');
+
+        //$("#filteredTableTemp").clone(true).prop("id", "filteredTable").appendTo("#dt_dailyRptAll_length");
+        //$("#filteredTable").clone(true).prop("id", "filteredTableTemp").appendTo("#dt_dailyRptAll_length");
+        //$("#filteredTable").clone(true).prop("id", "filteredTableTemp").appendTo("#dt_dailyRptAll_wrapper");
+
+        //$("#filteredTable").clone(true).prop("id", "filteredTableTemp").after($("#dt_dailyRptAll_length"));
+        //$("#filteredTable").clone(true).prop("id", "filteredTableTemp").insertAfter($("#dt_dailyRptAll_length"));
+    }
+
+</script>
+
+<script>
     var tf = new TableFilter('dt_dailyRptAll', {
         base_path: '/Content/tableFilter/dist/tablefilter/',
         col_0: 'none',
@@ -284,7 +312,12 @@
         extensions: [{
             name: 'filtersVisibility',
             visible_at_start: true,
+
+            //target_id: 'filteredTableTemp',
             target_id: 'filteredTable',
+
+            //btn_html: "<span>&nbsp;&nbsp;<button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton' style='background-color: darkorange'>Toggle Column Filters</button></span>",
+            //target_id: 'dataTables_length',
             //target_id: 'fltrTgglBtn',
         }],
         // allows Bootstrap table styling
@@ -293,23 +326,10 @@
         }]
     });
     tf.init();
+    //$('.fltrow').hide();
+    </script>
 
-    $('.fltrow').hide();
-
-    $.fn.createFltrTgglBtn = function () {
-        //alert('You have successfully defined the function!');
-        //$("#dt_dailyRptAll_filter").before("Some text before");//works
-
-        //var txt2 = "<div><button class='btn btn-primary btn-sm editButton' style=' background-color: darkorange'>Toggle Column Filters</button></div>";
-        //var txt2 = "<button class='btn btn-primary btn-sm editButton' style=' background-color: darkorange'>Toggle Column Filters</button>";
-        var txt2 = "<span>&nbsp;&nbsp;<button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton' style=' background-color: darkorange'>Toggle Column Filters</button></span>";
-        //var txt2 = "<span id= 'fltrTgglBtn'></span>";
-
-        var txt3 = "<b>I </b>";
-        $("#dt_dailyRptAll_filter").before(txt2);
-    }
-
-</script>
+    
 
 
 
