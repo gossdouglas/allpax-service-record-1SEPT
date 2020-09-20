@@ -6,6 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @*DAILY REPORT BY REPORT ID PAGE*@
+
 <script>
     $(document).ready(function () {//begin document read jquery statements
 
@@ -195,7 +196,7 @@
                 <span><strong>Author</strong></span>
                 <span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>
             </div>
-        </div>>
+        </div>
     </div>
     <div class="row">
         <div class="md-col-2" style="padding:5px">
@@ -333,7 +334,7 @@
 <div class="container" id="">
     <div class="row">
         <div class="col-12" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="background-color: darkseagreen; width: 100%">E-mail Daily Report</button>
+            <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%">E-mail Daily Report</button>
         </div>
     </div>
 </div>
