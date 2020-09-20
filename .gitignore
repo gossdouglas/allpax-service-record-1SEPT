@@ -7,3 +7,4 @@ bin
 obj
 packages
 *.cache
+obj/Debug/allpax_service_record.csprojAssemblyReference.cache
