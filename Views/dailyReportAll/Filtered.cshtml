@@ -21,6 +21,60 @@
                 white-space: nowrap;
                 text-overflow: ellipsis;
             }
+
+            #filterResetDateBtn {
+                background-color: #D7D8D6;
+                border-style: solid;
+                border-color: black;
+                border-radius: 0px;
+                font-family: Tahoma;
+                color: black;
+            }
+
+            #newDailyRptBtn {
+                background-color: #83B6CC;
+                border-style: solid;
+                border-color: black;
+                border-radius: 0px;
+                font-family: Tahoma;
+                color: black;
+            }
+
+            #fltrTgglBtn {
+                background-color: #D7D8D6;
+                border-style: solid;
+                border-color: black;
+                border-radius: 0px;
+                font-family: Tahoma;
+                color: black;
+            }
+
+            .editButton {
+                background-color: #333F48;
+                border-style: solid;
+                border-color: black;
+                border-radius: 0px;
+                font-family: Tahoma;
+                color: white;
+            }
+
+            .deleteButton {
+                background-color: #83B6CC;
+                border-style: solid;
+                border-color: black;
+                border-radius: 0px;
+                font-family: Tahoma;
+                color: black;
+            }
+
+            .copyButton {
+                background-color: #D7D8D6;
+                border-style: solid;
+                border-color: black;
+                border-radius: 0px;
+                font-family: Tahoma;
+                color: black;
+            }
         </style>
 
         @*BEGIN TABLE FILTER*@
@@ -43,7 +97,9 @@
                         { targets: [4, 6], width: "10%" },
                         { targets: [7], autowidth: "true" },
                         { targets: [8], width: "15%" },
-                    ]
+                    ],
+                    "paging": false,
+                    "searching": false
                 });
 
                 //begin when a record class is clicked...
@@ -133,13 +189,14 @@
                 <button class="btn btn-primary btn-sm" id="filterDateBtn" style=" background-color: royalblue" hidden>Filter</button>
             </div>*@
         <div class="md-col-1" style="padding:5px">
-            <button class="btn btn-primary btn-sm" id="filterResetDateBtn" style=" background-color: darkorange">Reset Filter</button>
+            <button class="btn btn-primary btn-sm" id="filterResetDateBtn">Reset Filter</button>
         </div>
         <div class="md-col-1" style="padding:5px">
-            <button class="btn btn-primary btn-sm" id="newDailyRptBtn" style=" background-color: darkturquoise" onclick="window.location.href='/dailyReport'">New Daily Report</button>
+            <button class="btn btn-primary btn-sm" id="newDailyRptBtn" onclick="window.location.href='/dailyReport'">New Daily Report</button>
         </div>
     </div>
     <div class="col-md-12" style="border:none">
+        <div id="filtersToggle"></div>
         <table id="dt_dailyRptAll" class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -192,50 +249,50 @@
                     Boolean temp_active = item.active;
                     //END TEMPORARY LOOP VARIABLES
 
-                <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
-                    <td id="record_item0" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
-                    <td id="record_item1" style="text-align:center">
-                        @if (item.active == true)
-                        {
-                            <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
-                            <span hidden>@temp_active</span>
-                        }
-                        else
-                        {
-                            <i class="fas fa-stop-circle fa-2x" style="color:red" ;></i>
-                            <span hidden>@temp_active</span>
-                        }
-                        @*<span class="" id="" style="" hidden>@temp_active</span>*@
-                    </td>
-                    <td id="record_item2" value=@temp_date>@temp_date</td>
-                    <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
-                    <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
-                    <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
-                    <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
-                    <td id="record_item7" value=>
-                        <span>
-                            @for (var i = 0; i < (temp_team.Count); i++)
+                    <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
+                        <td id="record_item0" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
+                        <td id="record_item1" style="text-align:center">
+                            @if (item.active == true)
                             {
-                                <span class="" id="" style="">@temp_team[@i]|</span>
+                                <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+                                <span hidden>@temp_active</span>
                             }
-                        </span>
-                    </td>
-                    <td id="record_item8" value= style="overflow:hidden; white-space:nowrap">
-                        @for (var i = 0; i < (temp_workDescription.Count); i++)
-                        {
-                            @temp_workDescription[@i]
-                        }
-                    </td>
-                    @*<td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode) hidden>@Html.DisplayFor(modelItem => item.customercode)</td>
-                    <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact) hidden>@Html.DisplayFor(modelItem => item.customerContact)</td>*@
-                    <td>
-                        <button class="btn btn-primary btn-sm editButton" style=" background-color: darkorange">Edit</button>
-                        <button class="btn btn-primary btn-sm deleteButton" style=" background-color: darkgoldenrod">Delete</button>
-                        <button class="btn btn-primary btn-sm copyButton" style=" background-color: darkturquoise">Copy</button>
-                        <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
-                        <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
-                    </td>
-                </tr>
+                            else
+                            {
+                                <i class="fas fa-stop-circle fa-2x" style="color:red" ;></i>
+                                <span hidden>@temp_active</span>
+                            }
+                            @*<span class="" id="" style="" hidden>@temp_active</span>*@
+                        </td>
+                        <td id="record_item2" value=@temp_date>@temp_date</td>
+                        <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
+                        <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
+                        <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
+                        <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
+                        <td id="record_item7" value=>
+                            <span>
+                                @for (var i = 0; i < (temp_team.Count); i++)
+                                {
+                                    <span class="" id="" style="">@temp_team[@i]|</span>
+                                }
+                            </span>
+                        </td>
+                        <td id="record_item8" value= style="overflow:hidden; white-space:nowrap">
+                            @for (var i = 0; i < (temp_workDescription.Count); i++)
+                            {
+                                @temp_workDescription[@i]
+                            }
+                        </td>
+                        @*<td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode) hidden>@Html.DisplayFor(modelItem => item.customercode)</td>
+                        <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact) hidden>@Html.DisplayFor(modelItem => item.customerContact)</td>*@
+                        <td>
+                            <button class="btn btn-primary btn-sm editButton">Edit</button>
+                            <button class="btn btn-primary btn-sm deleteButton">Delete</button>
+                            <button class="btn btn-primary btn-sm copyButton">Copy</button>
+                            <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
+                            <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -253,13 +310,19 @@
         col_5: 'checklist',
         col_6: 'checklist',
         col_7: 'none',
-        col_8: 'none',
+        col_8: '',
         col_9: 'none',
         col_10: 'none',
 
+        loader: true,
+        status_bar: true,
+        paging: true,
+
         extensions: [{
             name: 'filtersVisibility',
-            visible_at_start: true
+            visible_at_start: true,
+            target_id: 'filtersToggle',
+            btn_html: "<span>&nbsp;&nbsp;<button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton'>Toggle Column Filters</button></span>",
         }],
         // allows Bootstrap table styling
         themes: [{
@@ -267,6 +330,8 @@
         }]
     });
     tf.init();
+    //$('.fltrow').hide();
+    //$(".fltrow").css("display", "none");
 </script>
 
 

@@ -115,7 +115,8 @@ select[multiple="multiple"].ezSelectEditor {
     border-bottom: 1px solid #f4f4f4 !important;
 }
 .div_checklist li.flt_checklist_item:hover {
-    background-color: #335ea8 !important;
+    /* background-color: #335ea8 !important; */
+    background-color: #83B6CC !important;
     color: #fff !important;
 }
 .div_checklist label {
@@ -130,12 +131,14 @@ select[multiple="multiple"].ezSelectEditor {
     background-color: #e5e5e5;
 }
 .flt_checklist_slc_item {
-    background-color: #335ea8 !important;
+    /* background-color: #335ea8 !important; */
+    background-color: #83B6CC !important;
     color: #fff !important;
 }
 .fltrow {
     height: 1em;
-    background-color: #eaeaea;
+    /* background-color: #eaeaea; */
+    background-color:#D7D8D6;
 }
 .fltrow td {
     border-bottom: 1px solid #ccc !important;
