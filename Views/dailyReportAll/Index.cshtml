@@ -193,9 +193,9 @@
             });
             //end when the line save button is pressed.
 
+            //BEGIN HIDE THE FILTER ROW AFTER PAGE LOAD
             $(".fltrow").css("display", "none");
-
-            //filters toggle test
+            //END HIDE THE FILTER ROW AFTER PAGE LOAD
 
         });//end document read jquery statements
     </script>
@@ -217,16 +217,17 @@
             <input type="date" class="form-control form-control-sm" id="endDateInput" placeholder="" value="">
         </div>
         <div class="md-col-1" style="padding:5px">
-            @*<button class="btn btn-primary btn-sm" id="filterDateBtn" style=" background-color: darkorange">Filter</button>*@
             <button class="btn btn-primary btn-sm" id="filterDateBtn">Filter</button>
         </div>
         <div class="md-col-1" style="padding:5px">
-            @*<button class="btn btn-primary btn-sm" id="newDailyRptBtn" style=" background-color: darkturquoise" onclick="window.location.href='/dailyReport'">New Daily Report</button>*@
             <button class="btn btn-primary btn-sm" id="newDailyRptBtn" onclick="window.location.href='/dailyReport'">New Daily Report</button>
+        </div>
+        <div class="md-col-1" style="padding:5px">
+            <div id="filtersToggle"></div>
         </div>
     </div>
     <div class="col-md-12" style="border:none">
-        <div id="filtersToggle"></div>@*<button class="btn btn-primary btn-sm" id="filtersToggleTest">filters toggle test</button>*@
+        @*<div id="filtersToggle"></div>*@
         <div id="filtersStatusBar"></div>
         <table id="dt_dailyRptAll" class="table table-striped table-bordered" style="width:100%">
             <thead>
@@ -292,7 +293,6 @@
                                 <i class="fas fa-stop-circle fa-2x" style="color:red;"></i>
                                 <span hidden>@temp_active</span>
                             }
-                            @*<span class="" id="" style="" hidden>@temp_active</span>*@
                         </td>
                         <td id="record_item2" value=@temp_date>@temp_date</td>
                         <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
@@ -307,7 +307,6 @@
                                 }
                             </span>
                         </td>
-
                         <td id="record_item8" style="width:15%;">
                             @for (var i = 0; i < (temp_workDescription.Count); i++)
                             {
@@ -315,17 +314,12 @@
                             }
                         </td>
                         <td>
-                            @*<button class="btn btn-primary btn-sm editButton" style=" background-color: darkorange">Edit</button>
-                            <button class="btn btn-primary btn-sm deleteButton" style=" background-color: darkgoldenrod">Delete</button>
-                            <button class="btn btn-primary btn-sm copyButton" style=" background-color: darkturquoise">Copy</button>*@
                             <button class="btn btn-primary btn-sm editButton">Edit</button>
                             <button class="btn btn-primary btn-sm deleteButton">Delete</button>
                             <button class="btn btn-primary btn-sm copyButton">Copy</button>
                             <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
                             <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
                         </td>
-                        @*<td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode) hidden>@Html.DisplayFor(modelItem => item.customercode)</td>
-                        <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact) hidden>@Html.DisplayFor(modelItem => item.customerContact)</td>*@
                     </tr>
                 }
             </tbody>
@@ -334,92 +328,49 @@
 </div>
 
 <script>
+    var tf = new TableFilter('dt_dailyRptAll', {//new instance of TableFilter
+        base_path: '/Content/tableFilter/dist/tablefilter/',//where the plugin lives locally
+        col_0: 'none',//reportID
+        col_1: 'checklist',//Active
+        col_2: 'none',//date
+        col_3: 'checklist',//job
+        col_4: 'checklist',//subJob
+        col_5: 'checklist',//customer
+        col_6: 'checklist',//location
+        col_7: 'none',//team
+        col_8: '',//work description
+        col_9: 'none',//action
 
-    //$("#filteredTableTemp").clone(true).prop("id", "filteredTable").appendTo("#dt_dailyRptAll_length");
-
-    $.fn.createFltrTgglBtn = function () {
-        //alert('You have successfully defined the function!');
-        //$("#dt_dailyRptAll_filter").before("Some text before");//works
-
-        //var txt2 = "<div><button class='btn btn-primary btn-sm editButton' style=' background-color: darkorange'>Toggle Column Filters</button></div>";
-        //var txt2 = "<button class='btn btn-primary btn-sm editButton' style=' background-color: darkorange'>Toggle Column Filters</button>";
-
-        //var txt2 = "<span>&nbsp;&nbsp;<button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton' style='background-color: darkorange'>Toggle Column Filters</button></span>";
-        //var txt2 = "<span id= 'fltrTgglBtn'></span>";
-        ///var txt2 = "<div id='filteredTable'><span class='expClpFlt'><span>&nbsp;&nbsp;<button id='fltrTgglBtn' class='btn btn-primary btn-sm editButton' style='background-color: darkorange'>Toggle Column Filters</button></span></span></div>";
-        var txt2 = "<div id='filteredTable'></div>";
-
-        //$("#dt_dailyRptAll_filter").before(txt2+'yo');
-        //$(".fltrow").css("display", "none");
-
-        //$("#filteredTableTemp").clone(true).prop("id", "filteredTable").appendTo("#dt_dailyRptAll_length");
-        //$("#filteredTable").clone(true).prop("id", "filteredTableTemp").appendTo("#dt_dailyRptAll_length");
-        //$("#filteredTable").clone(true).prop("id", "filteredTableTemp").appendTo("#dt_dailyRptAll_wrapper");
-
-        //$("#filteredTable").clone(true).prop("id", "filteredTableTemp").after($("#dt_dailyRptAll_length"));
-        //$("#filteredTable").clone(true).prop("id", "filteredTableTemp").insertAfter($("#dt_dailyRptAll_length"));
-    }
-
-</script>
-
-<script>
-    //$("#thReportID").css("width", "7%");
-    //$("#thActive").css("width", "5%");
-    //$("#thReportID").css("width", "7%");
-    //$("#thTeam").css("width", "20%");
-    //$("#thAction").css("width", "15%");
-</script>
-
-<script>
-    var tf = new TableFilter('dt_dailyRptAll', {
-        base_path: '/Content/tableFilter/dist/tablefilter/',
-        col_0: 'none',
-        col_1: 'checklist',
-        col_2: 'none',
-        col_3: 'checklist',
-        col_4: 'checklist',
-        col_5: 'checklist',
-        col_6: 'checklist',
-        col_7: 'none',
-        col_8: '',
-        col_9: 'none',
-
-        //loader: true,
-        //status_bar: true,
-        //status_bar: {
-        //    target_id: 'filtersStatusBar'
-        //}, 
         toolbar: {
-            target_id: 'filtersStatusBar'
-        }, 
-        paging: true,
+            target_id: 'filtersStatusBar'//the id of the html element in which the status bar lives
+        },
+        paging: true,//enable paging
 
         col_widths: [
-            "120px",
-            "120px",
-            "120px",
-            "120px",
-            "170px",
-            "170px",
-            "170px",
-            "400px",
-            "170px",
-            "auto"],
+            "120px",//reportID
+            "120px",//Active
+            "120px",//date
+            "120px",//job
+            "170px",//subJob
+            "170px",//customer
+            "170px",//location
+            "400px",//team
+            "170px",//work description
+            "auto"],//action
 
         extensions: [{
-            name: 'filtersVisibility',
-            visible_at_start: true,
-            target_id: 'filtersToggle',
+            name: 'filtersVisibility',//bring in the extension
+            visible_at_start: true,//true on page load in order to determine the proper size of the table
+            target_id: 'filtersToggle',//the is of where the filter row lives
+            //shape of the filter visibilty toggle
             btn_html: "<span><button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton'>Toggle Column Filters</button></span>",
         }],
         // allows Bootstrap table styling
         themes: [{
-            name: 'transparent'
+            name: 'transparent'//allow Bootstrap styling to be visible
         }]
     });
-    tf.init();
-    //$('.fltrow').hide();
-    //$(".fltrow").css("display", "none");
+    tf.init();//initialize this instance of TableFilter
 </script>
 
 

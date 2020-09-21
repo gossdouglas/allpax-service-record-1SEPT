@@ -167,6 +167,10 @@
                 });
                 //end
 
+                //BEGIN HIDE THE FILTER ROW AFTER PAGE LOAD
+                $(".fltrow").css("display", "none");
+                //END HIDE THE FILTER ROW AFTER PAGE LOAD
+
             });//end document read jquery statements
         </script>
     </head>
@@ -186,17 +190,21 @@
             <input type="date" class="form-control form-control-sm" id="endDate" placeholder="" value="">
         </div>
         @*<div class="md-col-1" style="padding:5px">
-                <button class="btn btn-primary btn-sm" id="filterDateBtn" style=" background-color: royalblue" hidden>Filter</button>
-            </div>*@
+            <button class="btn btn-primary btn-sm" id="filterDateBtn" style=" background-color: royalblue" hidden>Filter</button>
+        </div>*@
         <div class="md-col-1" style="padding:5px">
             <button class="btn btn-primary btn-sm" id="filterResetDateBtn">Reset Filter</button>
         </div>
         <div class="md-col-1" style="padding:5px">
             <button class="btn btn-primary btn-sm" id="newDailyRptBtn" onclick="window.location.href='/dailyReport'">New Daily Report</button>
         </div>
+        <div class="md-col-1" style="padding:5px">
+            <div id="filtersToggle"></div>
+        </div>
     </div>
     <div class="col-md-12" style="border:none">
-        <div id="filtersToggle"></div>
+        @*<div id="filtersToggle"></div>*@
+        <div id="filtersStatusBar"></div>
         <table id="dt_dailyRptAll" class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -262,7 +270,6 @@
                                 <i class="fas fa-stop-circle fa-2x" style="color:red" ;></i>
                                 <span hidden>@temp_active</span>
                             }
-                            @*<span class="" id="" style="" hidden>@temp_active</span>*@
                         </td>
                         <td id="record_item2" value=@temp_date>@temp_date</td>
                         <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
@@ -283,8 +290,6 @@
                                 @temp_workDescription[@i]
                             }
                         </td>
-                        @*<td id="record_item9" value=@Html.DisplayFor(modelItem => item.customercode) hidden>@Html.DisplayFor(modelItem => item.customercode)</td>
-                        <td id="record_item10" value=@Html.DisplayFor(modelItem => item.customerContact) hidden>@Html.DisplayFor(modelItem => item.customerContact)</td>*@
                         <td>
                             <button class="btn btn-primary btn-sm editButton">Edit</button>
                             <button class="btn btn-primary btn-sm deleteButton">Delete</button>
@@ -300,50 +305,49 @@
 </div>
 
 <script>
-    var tf = new TableFilter('dt_dailyRptAll', {
-        base_path: '/Content/tableFilter/dist/tablefilter/',
-        col_0: 'none',
-        col_1: 'checklist',
-        col_2: 'none',
-        col_3: 'checklist',
-        col_4: 'checklist',
-        col_5: 'checklist',
-        col_6: 'checklist',
-        col_7: 'none',
-        col_8: '',
-        col_9: 'none',,
+    var tf = new TableFilter('dt_dailyRptAll', {//new instance of TableFilter
+        base_path: '/Content/tableFilter/dist/tablefilter/',//where the plugin lives locally
+        col_0: 'none',//reportID
+        col_1: 'checklist',//Active
+        col_2: 'none',//date
+        col_3: 'checklist',//job
+        col_4: 'checklist',//subJob
+        col_5: 'checklist',//customer
+        col_6: 'checklist',//location
+        col_7: 'none',//team
+        col_8: '',//work description
+        col_9: 'none',//action
 
-        loader: true,
-        status_bar: true,
-        paging: true,
-        responsive: true,
+        toolbar: {
+            target_id: 'filtersStatusBar'//the id of the html element in which the status bar lives
+        },
+        paging: true,//enable paging
 
         col_widths: [
-            "120px",
-            "120px",
-            "120px",
-            "120px",
-            "170px",
-            "170px",
-            "170px",
-            "400px",
-            "170px",
-            "auto"],
+            "120px",//reportID
+            "120px",//Active
+            "120px",//date
+            "120px",//job
+            "170px",//subJob
+            "170px",//customer
+            "170px",//location
+            "400px",//team
+            "170px",//work description
+            "auto"],//action
 
         extensions: [{
-            name: 'filtersVisibility',
-            visible_at_start: true,
-            target_id: 'filtersToggle',
-            btn_html: "<span>&nbsp;&nbsp;<button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton'>Toggle Column Filters</button></span>",
+            name: 'filtersVisibility',//bring in the extension
+            visible_at_start: true,//true on page load in order to determine the proper size of the table
+            target_id: 'filtersToggle',//the is of where the filter row lives
+            //shape of the filter visibilty toggle
+            btn_html: "<span><button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton'>Toggle Column Filters</button></span>",
         }],
         // allows Bootstrap table styling
         themes: [{
-            name: 'transparent'
+            name: 'transparent'//allow Bootstrap styling to be visible
         }]
     });
-    tf.init();
-    //$('.fltrow').hide();
-    //$(".fltrow").css("display", "none");
+    tf.init();//initialize this instance of TableFilter
 </script>
 
 
