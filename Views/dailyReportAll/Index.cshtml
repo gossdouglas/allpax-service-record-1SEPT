@@ -16,6 +16,10 @@
             table {
                 table-layout: fixed;
                 /*table-layout: auto;*/
+                /*width: 100%;*/
+            }
+            th.reportID, th.active {
+                /*width: 20%*/
             }
 
             #record_item8 {
@@ -225,42 +229,42 @@
         <table id="dt_dailyRptAll" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th class="th-sm">
+                    <th class="th-sm" id="thReportID">
                         Report ID
                     </th>
-                    <th class="th-sm" style="width:auto">
+                    <th class="th-sm" id="thActive">
                         Active
                     </th>
-                    <th class="th-sm">
+                    <th class="th-sm" id="thDate">
                         Date
                     </th>
-                    <th class="th-sm">
+                    <th class="th-sm" id="thJob">
                         Job
                     </th>
-                    <th class="th-sm">
+                    <th class="th-sm" id="thSubJob">
                         Sub Job
                     </th>
-                    <th class="th-sm">
+                    <th class="th-sm" id="thCustomer">
                         Customer
                     </th>
-                    <th class="th-sm">
+                    <th class="th-sm" id="thLocation">
                         Location
                     </th>
-                    <th class="th-sm">
+                    <th class="th-sm" id="thTeam">
                         Team
                     </th>
-                    <th class="th-sm">
+                    <th class="th-sm" id="thWorkDesc">
                         Work Description
                     </th>
-                    <th class="th-sm">
+                    <th class="th-sm" id="thAction">
                         Action
                     </th>
                     @*<th class="th-sm" hidden>
-                        Customer Code
-                    </th>
-                    <th class="th-sm" hidden>
-                        Customer Contact
-                    </th>*@
+            Customer Code
+        </th>
+        <th class="th-sm" hidden>
+            Customer Contact
+        </th>*@
                 </tr>
             </thead>
             <tbody>
@@ -400,12 +404,15 @@
         ],
         extensions: [{ name: 'sort' }],
         //col_widths: ["10%", null, null, null, null, null, null, null, null, null]
-        //col_widths: ['40%', '40%', '20%', '10%', '10%', '10%', '10%', '10%', '10%', '10%']
+        //col_widths: ['7%', '7%', '10%', '10%', '10%', '10%', '10%', '10%', '10%', '10%']
+        //col_widths: ['12%', null, '15%', '15%', '20%', null, null, '20%', null, null]
+        //col_widths: [null, null, null, null, null, null, null, null, null, null]
     });
     tf.init();
     //$('.fltrow').hide();
     //$(".fltrow").css("display", "none");
-    </script>
+
+</script>
 
     
 
