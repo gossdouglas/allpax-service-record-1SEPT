@@ -90,14 +90,14 @@
 
                 $('#dt_dailyRptAll').DataTable({
 
-                    "columnDefs": [
-                        { targets: [0], width: "7%" },
-                        { targets: [1, 3], width: "5%" },
-                        { targets: [2, 5,], width: "7%" },
-                        { targets: [4, 6], width: "10%" },
-                        { targets: [7], autowidth: "true" },
-                        { targets: [8], width: "15%" },
-                    ],
+                    //"columnDefs": [
+                    //    { targets: [0], width: "7%" },
+                    //    { targets: [1, 3], width: "5%" },
+                    //    { targets: [2, 5,], width: "7%" },
+                    //    { targets: [4, 6], width: "10%" },
+                    //    { targets: [7], autowidth: "true" },
+                    //    { targets: [8], width: "15%" },
+                    //],
                     "paging": false,
                     "searching": false
                 });
@@ -311,12 +311,24 @@
         col_6: 'checklist',
         col_7: 'none',
         col_8: '',
-        col_9: 'none',
-        col_10: 'none',
+        col_9: 'none',,
 
         loader: true,
         status_bar: true,
         paging: true,
+        responsive: true,
+
+        col_widths: [
+            "120px",
+            "120px",
+            "120px",
+            "120px",
+            "170px",
+            "170px",
+            "170px",
+            "400px",
+            "170px",
+            "auto"],
 
         extensions: [{
             name: 'filtersVisibility',
