@@ -193,6 +193,26 @@
             });
             //end when the line save button is pressed.
 
+            //BEGIN ADJUST THE HEIGHT OF THE TEAM FILTER BOX
+            //console.log($(".fltrow").height());
+            //var fltrRowHeight = $(".fltrow").height();
+            var fltrItemHeight = $("#chkdiv_6_dt_dailyRptAll").height();
+            
+            //var workDescInnerHtml = $("#flt8_dt_dailyRptAll").parent().html;
+            
+            //var addItem1 = $("#txt_dailyReportID").html();
+
+            $("#flt8_dt_dailyRptAll").height(fltrItemHeight);
+            console.log("table filter row height is when filter is opened " + $(".fltrow").height());
+            console.log("location filter height is when filter is opened " + $("#chkdiv_6_dt_dailyRptAll").height());
+            console.log("work description height is when filter is opened " + $("#flt8_dt_dailyRptAll").height());
+
+            var workDescInnerHtml = $("#flt8_dt_dailyRptAll").parent().html();
+            $("#flt8_dt_dailyRptAll").parent().html("<textarea id='flt8_dt_dailyRptAll' ct='8' class='flt' style='height: 90px; resize: none;'></textarea>");
+
+            console.log(workDescInnerHtml);
+            //END ADJUST THE HEIGHT OF THE TEAM FILTER BOX
+
             //BEGIN HIDE THE FILTER ROW AFTER PAGE LOAD
             $(".fltrow").css("display", "none");
             //END HIDE THE FILTER ROW AFTER PAGE LOAD
