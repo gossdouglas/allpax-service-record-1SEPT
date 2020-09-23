@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title-Service Record</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -27,16 +27,15 @@
     @*END DATATABLES.NET*@
 
     <style>
-        nav {
-            font-family: Tahoma;
-            color: blue;
+        a:hover, button:hover {
+            color: gray;
         }
-        body {
+        body, a {
             font-family: Tahoma;
             color: black;
         }
 
-        #addWorkDescNarrBtn, #addWorkDescBtn {
+        #addWorkDescNarrBtn, #addWorkDescRecordBtn, #addWorkDescBtn{
             background-color: #333F48;
             border-style: solid;
             border-color: black;
@@ -45,16 +44,16 @@
             color: white;
         }
 
-        #addWorkDescDelaysNarrBtn, #addWorkDescDelaysBtn, #addButton {
-            background-color: #83B6CC;
-            border-style: solid;
-            border-color: black;
-            border-radius: 0px;
-            font-family: Tahoma;
-            color: black;
-        }
+            #addWorkDescDelaysNarrBtn, #addWorkDescDelaysRecordBtn, #addWorkDescDelaysBtn, #addButton {
+                background-color: #83B6CC;
+                border-style: solid;
+                border-color: black;
+                border-radius: 0px;
+                font-family: Tahoma;
+                color: black;
+            }
 
-        #addWorkDescWntyDelaysNarrBtn, #addWorkDescWntyDelaysBtn {
+        #addWorkDescWntyDelaysNarrBtn, #addWorkDescWntyDelaysRecordBtn, #addWorkDescWntyDelaysBtn {
             background-color: #D7D8D6;
             border-style: solid;
             border-color: black;
@@ -74,11 +73,11 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    @*<nav class="navbar navbar-expand-lg navbar-light bg-light">*@
+    <nav class="navbar navbar-expand-lg">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <a href="#" class="navbar-brand">
                 <!-- Logo Image -->
@@ -95,14 +94,14 @@
                     <a class="nav-link" href="/dailyReportAll">Select Daily Report</a>
                 </li>
                 @*<li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Daily Report
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="nav-link" href="/dailyReport">New Daily Report</a>
-                    <a class="nav-link" href="/dailyReportAll">Select Daily Report</a>
-                </div>
-            </li>*@
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Daily Report
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="nav-link" href="/dailyReport">New Daily Report</a>
+                            <a class="nav-link" href="/dailyReportAll">Select Daily Report</a>
+                        </div>
+                    </li>*@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
