@@ -1,8 +1,12 @@
 ﻿@model IEnumerable<allpax_service_record.Models.View_Models.vm_dailyReportViewAll>
 
+@using System.Diagnostics;
+@using Microsoft.AspNet.Identity;
+@using System.Text.RegularExpressions;
+
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @*DAILY REPORT ALL*@
@@ -261,6 +265,9 @@
                         Team
                     </th>
                     <th class="th-sm">
+                        Team User Names
+                    </th>
+                    <th class="th-sm">
                         Work
                     </th>
                     <th class="th-sm">
@@ -273,9 +280,12 @@
                 {
                     //BEGIN TEMPORARY LOOP VARIABLES
                     string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
-                    List<string> temp_team = item.team;
+                    List<string> temp_teamUserNames = item.teamUserNames;
+                    List<string> temp_team = item.teamNames;
                     List<string> temp_workDescription = item.workDescription;
                     Boolean temp_active = item.active;
+                    string userLoggedIn;
+                    Boolean userAuthorized = false;
                     //END TEMPORARY LOOP VARIABLES
 
                     <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
@@ -303,6 +313,26 @@
                                 {
                                     <span class="" id="" style="">@temp_team[@i]|</span>
                                 }
+                            </span>                          
+                        </td>
+                        <td>
+                            <span>
+                                @for (var i = 0; i < (temp_teamUserNames.Count); i++)
+                                {
+                                    userLoggedIn = Regex.Replace(User.Identity.GetUserName(), "@.*", "");
+
+                                    if (temp_teamUserNames[@i] == userLoggedIn | userLoggedIn == "admin1" | @User.Identity.GetUserName() =="admin1@allpax.com")
+                                    {
+                                        userAuthorized = true;
+                                    }
+
+                                    // Define a regular expression for repeated words.
+                                    //Regex rx = new Regex(@"\b(?<word>\w+)\s+(\k<word>)\b",
+                                    //  RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                                    //temp_userName = Regex.Replace(temp_teamUserNames[@i], "@*", "");
+                                <span class="" id="" style="">@userLoggedIn|@userAuthorized</span>
+                                }
                             </span>
                         </td>
                         <td id="record_item8" style="width:15%;">
@@ -312,12 +342,20 @@
                             }
                         </td>
                         <td>
-                            <button class="btn btn-light btn-sm editButton">Edit</button>
+                            @if (userAuthorized == true)
+                            {
+                                <button class="btn btn-light btn-sm editButton">Edit</button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-light btn-sm editButton" disabled>Edit</button>
+                            }
                             <button class="btn btn-light btn-sm deleteButton">Delete</button>
                             <button class="btn btn-light btn-sm copyButton">Copy</button>
                             <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
                             <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
                         </td>
+
                     </tr>
                 }
             </tbody>
