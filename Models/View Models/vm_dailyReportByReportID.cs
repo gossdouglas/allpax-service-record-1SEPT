@@ -44,6 +44,7 @@ namespace allpax_service_record.Models.View_Models
         public List<string> jobCorrespondentName { get; set; }
 
         public string workDescription { get; set; }
+        public string dailyReportAuthor { get; set; }
 
         public Models.tbl_dailyReportTimeEntry tbl_dailyReportTimeEntry;
 

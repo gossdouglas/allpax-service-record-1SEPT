@@ -35,7 +35,7 @@ namespace allpax_service_record.Controllers
             string sqlquery1 =
                 "SELECT tbl_dailyReport.dailyReportID, tbl_dailyReport.jobID, tbl_subJobTypes.description, tbl_dailyReport.date, " +
                 "tbl_Jobs.customerContact,tbl_customers.customerName, tbl_customers.address, tbl_dailyReport.equipment, " +
-                "tbl_dailyReport.startTime, tbl_dailyReport.endTime, tbl_dailyReport.lunchHours, tbl_customers.customerCode  " +
+                "tbl_dailyReport.startTime, tbl_dailyReport.endTime, tbl_dailyReport.lunchHours, tbl_customers.customerCode, tbl_dailyReport.dailyReportAuthor  " +
 
                 "FROM tbl_dailyReport " +
 
@@ -77,6 +77,7 @@ namespace allpax_service_record.Controllers
                 vm_dailyReportByReportID.customerCode = dr1[11].ToString();
                 vm_dailyReportByReportID.jobCorrespondentName = jobCrspdtNameByJobID(vm_dailyReportByReportID.jobID);
                 vm_dailyReportByReportID.jobCorrespondentEmail = jobCrspdtEmailByJobID(vm_dailyReportByReportID.jobID);
+                vm_dailyReportByReportID.dailyReportAuthor = dr1[12].ToString();
 
                 dailyReportByID.Add(vm_dailyReportByReportID);
             }
