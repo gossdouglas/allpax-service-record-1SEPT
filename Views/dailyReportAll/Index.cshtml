@@ -264,9 +264,9 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                     <th class="th-sm">
                         Team
                     </th>
-                    <th class="th-sm">
+                    @*<th class="th-sm">
                         Team User Names
-                    </th>
+                    </th>*@
                     <th class="th-sm">
                         Work
                     </th>
@@ -284,7 +284,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                     List<string> temp_team = item.teamNames;
                     List<string> temp_workDescription = item.workDescription;
                     Boolean temp_active = item.active;
-                    string userLoggedIn;
+                    string userLoggedIn = Regex.Replace(User.Identity.GetUserName(), "@.*", "");
                     Boolean userAuthorized = false;
                     //END TEMPORARY LOOP VARIABLES
 
@@ -315,26 +315,18 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                                 }
                             </span>                          
                         </td>
-                        <td>
+                        @*<td>
                             <span>
                                 @for (var i = 0; i < (temp_teamUserNames.Count); i++)
                                 {
-                                    userLoggedIn = Regex.Replace(User.Identity.GetUserName(), "@.*", "");
-
-                                    if (temp_teamUserNames[@i] == userLoggedIn | userLoggedIn == "admin1" | @User.Identity.GetUserName() =="admin1@allpax.com")
+                                    if (temp_teamUserNames[@i] == userLoggedIn | userLoggedIn == "admin1")
                                     {
                                         userAuthorized = true;
                                     }
-
-                                    // Define a regular expression for repeated words.
-                                    //Regex rx = new Regex(@"\b(?<word>\w+)\s+(\k<word>)\b",
-                                    //  RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-                                    //temp_userName = Regex.Replace(temp_teamUserNames[@i], "@*", "");
                                 <span class="" id="" style="">@userLoggedIn|@userAuthorized</span>
                                 }
                             </span>
-                        </td>
+                        </td>*@
                         <td id="record_item8" style="width:15%;">
                             @for (var i = 0; i < (temp_workDescription.Count); i++)
                             {
@@ -342,20 +334,34 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                             }
                         </td>
                         <td>
+                            @if (userLoggedIn == "admin1")
+                            {
+                                userAuthorized = true;
+                            }
+                            else
+                            {
+                                for (var i = 0; i < (temp_teamUserNames.Count); i++)
+                                {
+                                    if (temp_teamUserNames[@i] == userLoggedIn | userLoggedIn == "admin1")
+                                    {
+                                        userAuthorized = true;
+                                    }
+                                }
+                            }
                             @if (userAuthorized == true)
                             {
                                 <button class="btn btn-light btn-sm editButton">Edit</button>
+                                <button class="btn btn-light btn-sm deleteButton">Delete</button>
                             }
                             else
                             {
                                 <button class="btn btn-light btn-sm editButton" disabled>Edit</button>
+                                <button class="btn btn-light btn-sm deleteButton" disabled>Delete</button>
                             }
-                            <button class="btn btn-light btn-sm deleteButton">Delete</button>
                             <button class="btn btn-light btn-sm copyButton">Copy</button>
                             <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
                             <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
                         </td>
-
                     </tr>
                 }
             </tbody>
