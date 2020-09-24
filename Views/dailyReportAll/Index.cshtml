@@ -286,6 +286,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                     Boolean temp_active = item.active;
                     string userLoggedIn = Regex.Replace(User.Identity.GetUserName(), "@.*", "");
                     Boolean userAuthorized = false;
+                    string temp_author = item.dailyReportAuthor;
                     //END TEMPORARY LOOP VARIABLES
 
                     <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
@@ -322,7 +323,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                             }
                         </td>
                         <td>
-                            @if (userLoggedIn == "admin1")
+                            @if (userLoggedIn == "admin1" | userLoggedIn == temp_author)
                             {
                                 userAuthorized = true;
                             }

@@ -28,8 +28,8 @@ namespace allpax_service_record.Controllers
             sqlconn.Open();
 
             string sqlquery1 =
-                "SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, tbl_dailyReport.subJobID, " +
-                "tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact " +
+                "SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, tbl_dailyReport.subJobID, tbl_subJobTypes.description, " +
+                "tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact, tbl_dailyReport.dailyReportAuthor " +
                 "FROM tbl_dailyReport " +
 
                 "INNER JOIN " +
@@ -64,6 +64,7 @@ namespace allpax_service_record.Controllers
                 dailyRptViewAll.teamUserNames = TeamUserNamesByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.teamNames = TeamNamesByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.workDescription = WorkDescsByDailyReportID(dailyRptViewAll.dailyReportID);
+                dailyRptViewAll.dailyReportAuthor = dr1[10].ToString();
 
                 dailyRptViewAlls.Add(dailyRptViewAll);
             }
@@ -81,7 +82,7 @@ namespace allpax_service_record.Controllers
 
             string sqlquery1 =
             "SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, tbl_dailyReport.subJobID, " +
-            "tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact " +
+            "tbl_subJobTypes.description, tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact, tbl_dailyReport.dailyReportAuthor " +
             "FROM tbl_dailyReport " +
 
             "INNER JOIN " +
@@ -122,6 +123,7 @@ namespace allpax_service_record.Controllers
                 dailyRptViewAll.teamUserNames = TeamNamesByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.teamNames = TeamNamesByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.workDescription = WorkDescsByDailyReportID(dailyRptViewAll.dailyReportID);
+                dailyRptViewAll.dailyReportAuthor = dr1[10].ToString();
 
                 dailyRptViewAlls.Add(dailyRptViewAll);
             }
