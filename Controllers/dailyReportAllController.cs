@@ -120,7 +120,7 @@ namespace allpax_service_record.Controllers
                 dailyRptViewAll.address = dr1[7].ToString();
                 dailyRptViewAll.customercode = dr1[8].ToString();
                 dailyRptViewAll.customerContact = dr1[9].ToString();
-                dailyRptViewAll.teamUserNames = TeamNamesByDailyReportID(dailyRptViewAll.dailyReportID);
+                dailyRptViewAll.teamUserNames = TeamUserNamesByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.teamNames = TeamNamesByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.workDescription = WorkDescsByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.dailyReportAuthor = dr1[10].ToString();

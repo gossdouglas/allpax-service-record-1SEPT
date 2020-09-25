@@ -1,183 +1,196 @@
 ﻿@model IEnumerable<allpax_service_record.Models.View_Models.vm_dailyReportViewAll>
 
+@using System.Diagnostics;
+@using Microsoft.AspNet.Identity;
+@using System.Text.RegularExpressions;
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @*FILTERED DAILY REPORTS*@
-    <head>
-        <style>
-            .container {
-                border: 2px solid black;
-            }
+<head>
+    <style>
+        .container {
+            border: 2px solid black;
+        }
 
-            table {
-                table-layout: fixed;
-            }
+        table {
+            table-layout: fixed;
+        }
 
-            #record_item8 {
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-            }
+        #record_item8 {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
 
-            #filterResetDateBtn {
-                background-color: #D7D8D6;
-                border-style: solid;
-                border-color: black;
-                border-radius: 0px;
-                font-family: Tahoma;
-                color: black;
-            }
+        #filterResetDateBtn {
+            background-color: #D7D8D6;
+            border-style: solid;
+            border-color: black;
+            border-radius: 0px;
+            font-family: Tahoma;
+            color: black;
+        }
 
-            #newDailyRptBtn {
-                background-color: #83B6CC;
-                border-style: solid;
-                border-color: black;
-                border-radius: 0px;
-                font-family: Tahoma;
-                color: black;
-            }
+        #newDailyRptBtn {
+            background-color: #83B6CC;
+            border-style: solid;
+            border-color: black;
+            border-radius: 0px;
+            font-family: Tahoma;
+            color: black;
+        }
 
-            #fltrTgglBtn {
-                background-color: #D7D8D6;
-                border-style: solid;
-                border-color: black;
-                border-radius: 0px;
-                font-family: Tahoma;
-                color: black;
-            }
+        #fltrTgglBtn {
+            background-color: #D7D8D6;
+            border-style: solid;
+            border-color: black;
+            border-radius: 0px;
+            font-family: Tahoma;
+            color: black;
+        }
 
-            .editButton {
-                background-color: #333F48;
-                border-style: solid;
-                border-color: black;
-                border-radius: 0px;
-                font-family: Tahoma;
-                color: white;
-            }
+        .editButton {
+            background-color: #333F48;
+            border-style: solid;
+            border-color: black;
+            border-radius: 0px;
+            font-family: Tahoma;
+            color: white;
+        }
 
-            .deleteButton {
-                background-color: #83B6CC;
-                border-style: solid;
-                border-color: black;
-                border-radius: 0px;
-                font-family: Tahoma;
-                color: black;
-            }
+        .deleteButton {
+            background-color: #83B6CC;
+            border-style: solid;
+            border-color: black;
+            border-radius: 0px;
+            font-family: Tahoma;
+            color: black;
+        }
 
-            .copyButton {
-                background-color: #D7D8D6;
-                border-style: solid;
-                border-color: black;
-                border-radius: 0px;
-                font-family: Tahoma;
-                color: black;
-            }
-        </style>
+        .copyButton {
+            background-color: #D7D8D6;
+            border-style: solid;
+            border-color: black;
+            border-radius: 0px;
+            font-family: Tahoma;
+            color: black;
+        }
+    </style>
 
-        @*BEGIN TABLE FILTER*@
-        <link href="~/Content/tableFilter/dist/tablefilter/style/tablefilter.css" rel="stylesheet" />
-        <link href="~/Content/tableFilter/dist/tablefilter/style/colsVisibility.css" rel="stylesheet" />
-        <link href="~/Content/tableFilter/dist/tablefilter/style/filtersVisibility.css" rel="stylesheet" />
-        <script src="~/Content/tableFilter/dist/tablefilter/tf-1-2aa33b10e0e549020c12.js"></script>
-        <script src="~/Content/tableFilter/dist/tablefilter/tablefilter.js"></script>
-        @*END TABLE FILTER*@
+    @*BEGIN TABLE FILTER*@
+    <link href="~/Content/tableFilter/dist/tablefilter/style/tablefilter.css" rel="stylesheet" />
+    <link href="~/Content/tableFilter/dist/tablefilter/style/colsVisibility.css" rel="stylesheet" />
+    <link href="~/Content/tableFilter/dist/tablefilter/style/filtersVisibility.css" rel="stylesheet" />
+    <script src="~/Content/tableFilter/dist/tablefilter/tf-1-2aa33b10e0e549020c12.js"></script>
+    <script src="~/Content/tableFilter/dist/tablefilter/tablefilter.js"></script>
+    @*END TABLE FILTER*@
 
-        <script>
-            $(document).ready(function () {//begin document read jquery statements
+    <script>
+        $(document).ready(function () {//begin document read jquery statements
 
-                $('#dt_dailyRptAll').DataTable({
+            //$('#dt_dailyRptAll').DataTable({
 
-                    //"columnDefs": [
-                    //    { targets: [0], width: "7%" },
-                    //    { targets: [1, 3], width: "5%" },
-                    //    { targets: [2, 5,], width: "7%" },
-                    //    { targets: [4, 6], width: "10%" },
-                    //    { targets: [7], autowidth: "true" },
-                    //    { targets: [8], width: "15%" },
-                    //],
-                    "paging": false,
-                    "searching": false
+            //    "columnDefs": [
+            //        { targets: [0], width: "7%" },
+            //        { targets: [1, 3], width: "5%" },
+            //        { targets: [2, 5,], width: "7%" },
+            //        { targets: [4, 6], width: "10%" },
+            //        { targets: [7], autowidth: "true" },
+            //        { targets: [8], width: "15%" },
+            //    ],
+            //    "paging": false,
+            //    "searching": false
+            //});
+
+            //begin when a record class is clicked...
+            $(".record").on('click mouseover', function () {
+                selectedItem0 = $(this).attr("id");//works
+                selectedItem1 = $(this).find("#record_item1").html();//works valid for inner html only
+                selectedItem2 = $(this).find("#record_item2").html();//works valid for inner html only
+                selectedItem3 = $(this).find("#record_item3").html();//works valid for inner html only
+                selectedItem4 = $(this).find("#record_item4").html();//works valid for inner html only
+                selectedItem4_1 = $(this).find("#record_item4").attr("value");//
+                selectedItem5 = $(this).find("#record_item5").html();//works valid for inner html only
+                selectedItem6 = $(this).find("#record_item6").html();//works valid for inner html only
+                selectedItem7 = $(this).find("#record_item7").html();//works valid for inner html only
+                selectedItem8 = $(this).find("#record_item8").html();//works valid for inner html only
+                selectedItem9 = $(this).find("#record_item9").html();//works valid for inner html only
+                selectedItem10 = $(this).find("#record_item10").html();//works valid for inner html only
+
+                $("#slctd_reportID").val(selectedItem0);
+                $("#slctd_active").val(selectedItem1);
+                $("#slctd_date").val(selectedItem2);
+                $("#slctd_jobID").val(selectedItem3);
+                $("#slctd_description").val(selectedItem4);
+                $("#slctd_subJobID").val(selectedItem4_1);
+                $("#slctd_customerName").val(selectedItem5);
+                $("#slctd_address").val(selectedItem6);
+                $("#slctd_customerCode").val(selectedItem9);
+                $("#slctd_customerContact").val(selectedItem10);
+
+            });
+            //end when a record class is clicked...
+            //$(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked...
+            $("#dt_dailyRptAll tbody").on("click", ".editButton", function () {
+
+                //console.log('edit button clicked. ' + selectedItem0);
+                window.location = '/DailyReportByReportID?reportID=' + selectedItem0;
+            });
+
+            //$(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked...
+            $("#dt_dailyRptAll tbody").on("click", ".deleteButton", function () {
+
+                $.confirm({
+                    title: 'Delete Daily Report ' + selectedItem0 + '?',
+                    content: '',
+                    buttons: {
+                        confirm: function () {
+                            //begin axios add post
+                            axios.post('/dailyReportAll/DeleteDailyReport', {
+                                dailyReportID: selectedItem0
+                            })
+                                .then(function (response) {
+                                    console.log(response);
+                                    window.location = '/DailyReportAll';//reload the page after a deletion
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                            //end axios add post
+                        },
+                        cancel: function () {
+                        }
+                    }
                 });
+            });
 
-                //begin when a record class is clicked...
-                $(".record").on('click mouseover', function () {
-                    selectedItem0 = $(this).attr("id");//works
-                    selectedItem1 = $(this).find("#record_item1").html();//works valid for inner html only
-                    selectedItem2 = $(this).find("#record_item2").html();//works valid for inner html only
-                    selectedItem3 = $(this).find("#record_item3").html();//works valid for inner html only
-                    selectedItem4 = $(this).find("#record_item4").html();//works valid for inner html only
-                    selectedItem4_1 = $(this).find("#record_item4").attr("value");//
-                    selectedItem5 = $(this).find("#record_item5").html();//works valid for inner html only
-                    selectedItem6 = $(this).find("#record_item6").html();//works valid for inner html only
-                    selectedItem7 = $(this).find("#record_item7").html();//works valid for inner html only
-                    selectedItem8 = $(this).find("#record_item8").html();//works valid for inner html only
-                    selectedItem9 = $(this).find("#record_item9").html();//works valid for inner html only
-                    selectedItem10 = $(this).find("#record_item10").html();//works valid for inner html only
+            //$(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked...
+            $("#dt_dailyRptAll tbody").on("click", ".copyButton", function () {
+                window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
+                    + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9 + "&customerContact=" + selectedItem10;
+            });
 
-                    $("#slctd_reportID").val(selectedItem0);
-                    $("#slctd_active").val(selectedItem1);
-                    $("#slctd_date").val(selectedItem2);
-                    $("#slctd_jobID").val(selectedItem3);
-                    $("#slctd_description").val(selectedItem4);
-                    $("#slctd_subJobID").val(selectedItem4_1);
-                    $("#slctd_customerName").val(selectedItem5);
-                    $("#slctd_address").val(selectedItem6);
-                    $("#slctd_customerCode").val(selectedItem9);
-                    $("#slctd_customerContact").val(selectedItem10);
+            //begin
+            $("#filterResetDateBtn").on('click', function () {
+                window.location = '/dailyReportAll';
+            });
+            //end
 
-                });
-                //end when a record class is clicked...
+            //BEGIN HIDE THE FILTER ROW AFTER PAGE LOAD
+            $(".fltrow").css("display", "none");
+            //END HIDE THE FILTER ROW AFTER PAGE LOAD
 
-                $(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked...
-                    window.location = '/DailyReportByReportID?reportID=' + selectedItem0;
-                });
+            //BEGIN HIDE TABLEFILTER HELP LINK AFTER PAGE LOAD
+            $(".helpBtn").css("display", "none");
+            //END HIDE TABLEFILTER HELP LINK AFTER PAGE LOAD
 
-                $(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked...
-                    //window.location = '/DailyReportByReportID?reportID=' + selectedItem0;
-
-                    //begin axios add post
-                    axios.post('/dailyReportAll/DeleteDailyReport', {
-                        dailyReportID: selectedItem0
-                    })
-                        .then(function (response) {
-                            console.log(response);
-                            window.location = '/DailyReportAll';
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                });
-
-                $(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked...
-
-                    //alert(selectedItem4);
-                    //alert(selectedItem4_1);
-                    //alert($("#record_item4").attr("value"));
-
-                    window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
-                        + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9 + "&customerContact=" + selectedItem10;
-                });
-
-                //begin
-                $("#filterResetDateBtn").on('click', function () {
-                    window.location = '/dailyReportAll';
-                });
-                //end
-
-                //BEGIN HIDE THE FILTER ROW AFTER PAGE LOAD
-                $(".fltrow").css("display", "none");
-                //END HIDE THE FILTER ROW AFTER PAGE LOAD
-
-                //BEGIN HIDE TABLEFILTER HELP LINK AFTER PAGE LOAD
-                $(".helpBtn").css("display", "none");
-                //END HIDE TABLEFILTER HELP LINK AFTER PAGE LOAD
-
-            });//end document read jquery statements
-        </script>
-    </head>
+        });//end document read jquery statements
+    </script>
+</head>
 
 <div class="container-fluid">
     <div class="row">
@@ -194,8 +207,8 @@
             <input type="date" class="form-control form-control-sm" id="endDate" placeholder="" value="">
         </div>
         @*<div class="md-col-1" style="padding:5px">
-            <button class="btn btn-primary btn-sm" id="filterDateBtn" style=" background-color: royalblue" hidden>Filter</button>
-        </div>*@
+                <button class="btn btn-primary btn-sm" id="filterDateBtn" style=" background-color: royalblue" hidden>Filter</button>
+            </div>*@
         <div class="md-col-1" style="padding:5px">
             <button class="btn btn-primary btn-sm" id="filterResetDateBtn">Reset Date Filter</button>
         </div>
@@ -250,9 +263,13 @@
 
                     //BEGIN TEMPORARY LOOP VARIABLES
                     string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
-                    List<string> temp_team = item.team;
+                    List<string> temp_teamUserNames = item.teamUserNames;
+                    List<string> temp_team = item.teamNames;
                     List<string> temp_workDescription = item.workDescription;
                     Boolean temp_active = item.active;
+                    string userLoggedIn = Regex.Replace(User.Identity.GetUserName(), "@.*", "");
+                    Boolean userAuthorized = false;
+                    string temp_author = item.dailyReportAuthor;
                     //END TEMPORARY LOOP VARIABLES
 
                     <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
@@ -289,8 +306,30 @@
                             }
                         </td>
                         <td>
-                            <button class="btn btn-light btn-sm editButton">Edit</button>
-                            <button class="btn btn-light btn-sm deleteButton">Delete</button>
+                            @if (userLoggedIn == "admin1" | userLoggedIn == temp_author)
+                            {
+                                userAuthorized = true;
+                            }
+                            else
+                            {
+                                for (var i = 0; i < (temp_teamUserNames.Count); i++)
+                                {
+                                    if (temp_teamUserNames[@i] == userLoggedIn | userLoggedIn == "admin1")
+                                    {
+                                        userAuthorized = true;
+                                    }
+                                }
+                            }
+                            @if (userAuthorized == true)
+                            {
+                                <button class="btn btn-light btn-sm editButton">Edit</button>
+                                <button class="btn btn-light btn-sm deleteButton">Delete</button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-light btn-sm editButton" disabled>Edit</button>
+                                <button class="btn btn-light btn-sm deleteButton" disabled>Delete</button>
+                            }
                             <button class="btn btn-light btn-sm copyButton">Copy</button>
                             <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
                             <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
@@ -315,15 +354,18 @@
         col_7: 'none',//team
         col_8: '',//work description
         col_9: 'none',//action
-
         toolbar: {
             target_id: 'filtersStatusBar'//the id of the html element in which the status bar lives
         },
-        paging: true,//enable paging,
+        paging: {
+            results_per_page: ['Records: ', [10, 25, 50, 100]],
+        },//enable paging
+        rows_counter: {
+            text: 'Total items: ', over_text: ' of '
+        },
         auto_filter: {
             delay: 250
         },
-
         col_widths: [
             "120px",//reportID
             "120px",//Active
@@ -335,21 +377,35 @@
             "400px",//team
             "170px",//work description
             "auto"],//action
-
         extensions: [{
             name: 'filtersVisibility',//bring in the extension
             visible_at_start: true,//true on page load in order to determine the proper size of the table
             target_id: 'filtersToggle',//the is of where the filter row lives
             //shape of the filter visibilty toggle
             btn_html: "<span><button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton'>Toggle Column Filters</button></span>",
-        }],
+        },
+        { name: 'sort' }
+        ],
         // allows Bootstrap table styling
         themes: [{
             name: 'transparent'//allow Bootstrap styling to be visible
-        }]
+        }],
+        // columns data types
+        col_types: [
+            'number',
+            'string',
+            { type: 'date', locale: 'en-US' },
+            'string',
+            'string',
+            'string',
+            'string',
+            'none',
+            'none',
+            'none',
+        ],
     });
     tf.init();//initialize this instance of TableFilter
-</script>>
+</script>
 
 
 
