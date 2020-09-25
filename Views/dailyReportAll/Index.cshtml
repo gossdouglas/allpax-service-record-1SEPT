@@ -197,6 +197,14 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             });
             //end when the line save button is pressed.
 
+            //BEGIN ADJUST THE HEIGHT OF THE TEAM FILTER BOX
+            //var fltrRowHeight = $(".fltrow").height();
+            //var fltrItemHeight = $("#chkdiv_6_dt_dailyRptAll").height();          
+            //var workDescInnerHtml = $("#flt8_dt_dailyRptAll").parent().html;
+            //$("#flt8_dt_dailyRptAll").height(fltrItemHeight);
+            //$("#flt8_dt_dailyRptAll").parent().html("<textarea id='flt8_dt_dailyRptAll' ct='8' class='flt' style='height: 90px; resize: none;'></textarea>");
+            //END ADJUST THE HEIGHT OF THE TEAM FILTER BOX
+
             //BEGIN HIDE THE FILTER ROW AFTER PAGE LOAD
             $(".fltrow").css("display", "none");
             //END HIDE THE FILTER ROW AFTER PAGE LOAD
@@ -375,7 +383,10 @@ Layout = "~/Views/Shared/_Layout.cshtml";
         toolbar: {
             target_id: 'filtersStatusBar'//the id of the html element in which the status bar lives
         },
-        paging: true,//enable paging
+        paging: true,//enable paging,
+        auto_filter: {
+            delay: 250
+        },
 
         col_widths: [
             "120px",//reportID

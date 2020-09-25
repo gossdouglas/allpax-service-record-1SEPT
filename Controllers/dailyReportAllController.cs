@@ -142,7 +142,6 @@ namespace allpax_service_record.Controllers
         public List<string> TeamUserNamesByDailyReportID(int dailyReportID)
         {
             List<string> teamUserNames = new List<string>();
-            //Debug.WriteLine("Hello World");
 
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
