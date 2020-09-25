@@ -52,13 +52,9 @@
                     dataType: 'json',
                     data: { jobID: jobs_dpdown.val() },
                     success: function (data) {
-                        //console.log(data.customerCode);
-                        //console.log(jobs_dpdown.val());
 
                         $(data).each(function (index, item) {
-                            //console.log(item.customerCode);
-                            //console.log(item.customerName);
-                            //console.log(item.address);
+
                             $("#output_customerName").html(item.customerName.toString());
                             $("#output_location").html(item.address.toString());
                             $("#output_customerCode").html(item.customerCode.toString());
