@@ -329,4 +329,3 @@ C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\Westwind
 C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\Westwind.Utilities.xml
 C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\Westwind.Web.xml
 C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\Westwind.Web.Mvc.xml
-C:\Users\goss\Documents\Github\service-record\allpax_service_record\obj\Debug\allpax_service_record.csprojAssemblyReference.cache
