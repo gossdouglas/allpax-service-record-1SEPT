@@ -67,10 +67,9 @@
                 });
 
                 //begin fill the team names dropdown
-                //var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+                $('#subJobTypes_dpdwn').removeAttr("disabled");
                 $('#subJobTypes_dpdwn').empty();//clear the dropdown
                 $('#input_jobs_dpdown').val('1');//
-                //alert($('#input_jobs_dpdown').val())
 
                 $.ajax({
                     url: 'DataService.asmx/GetSubJobTypesByJobID',
@@ -245,7 +244,7 @@
             <strong>Sub Job:</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <select name="subJobTypes_dpdwn" id="subJobTypes_dpdwn" style="width:100%">
+            <select name="subJobTypes_dpdwn" id="subJobTypes_dpdwn" style="width:100%" disabled>
             </select>
         </div>
     </div>
