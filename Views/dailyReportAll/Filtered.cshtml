@@ -88,19 +88,19 @@
         <script>
             $(document).ready(function () {//begin document read jquery statements
 
-                //$('#dt_dailyRptAll').DataTable({
+                $('#dt_dailyRptAll').DataTable({
 
-                //    "columnDefs": [
-                //        { targets: [0], width: "7%" },
-                //        { targets: [1, 3], width: "5%" },
-                //        { targets: [2, 5,], width: "7%" },
-                //        { targets: [4, 6], width: "10%" },
-                //        { targets: [7], autowidth: "true" },
-                //        { targets: [8], width: "15%" },
-                //    ],
-                //    "paging": false,
-                //    "searching": false
-                //});
+                    //"columnDefs": [
+                    //    { targets: [0], width: "7%" },
+                    //    { targets: [1, 3], width: "5%" },
+                    //    { targets: [2, 5,], width: "7%" },
+                    //    { targets: [4, 6], width: "10%" },
+                    //    { targets: [7], autowidth: "true" },
+                    //    { targets: [8], width: "15%" },
+                    //],
+                    "paging": false,
+                    "searching": false
+                });
 
                 //begin when a record class is clicked...
                 $(".record").on('click mouseover', function () {
@@ -315,18 +315,15 @@
         col_7: 'none',//team
         col_8: '',//work description
         col_9: 'none',//action
+
         toolbar: {
             target_id: 'filtersStatusBar'//the id of the html element in which the status bar lives
         },
-        paging: {
-            results_per_page: ['Records: ', [10, 25, 50, 100]],
-        },//enable paging
-        rows_counter: {
-            text: 'Total items: ', over_text: ' of '
-        },
+        paging: true,//enable paging,
         auto_filter: {
             delay: 250
         },
+
         col_widths: [
             "120px",//reportID
             "120px",//Active
@@ -338,35 +335,21 @@
             "400px",//team
             "170px",//work description
             "auto"],//action
+
         extensions: [{
             name: 'filtersVisibility',//bring in the extension
             visible_at_start: true,//true on page load in order to determine the proper size of the table
             target_id: 'filtersToggle',//the is of where the filter row lives
             //shape of the filter visibilty toggle
             btn_html: "<span><button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton'>Toggle Column Filters</button></span>",
-        },
-        { name: 'sort' }
-        ],
+        }],
         // allows Bootstrap table styling
         themes: [{
             name: 'transparent'//allow Bootstrap styling to be visible
-        }],
-        // columns data types
-        col_types: [
-            'string',
-            'string',
-            { type: 'date', locale: 'en-US' },
-            'string',
-            'string',
-            'string',
-            'string',
-            'none',
-            'none',
-            'none',
-        ],
+        }]
     });
     tf.init();//initialize this instance of TableFilter
-</script>
+</script>>
 
 
 
