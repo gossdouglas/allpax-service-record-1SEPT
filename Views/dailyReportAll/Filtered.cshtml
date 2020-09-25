@@ -319,7 +319,10 @@
         toolbar: {
             target_id: 'filtersStatusBar'//the id of the html element in which the status bar lives
         },
-        paging: true,//enable paging
+        paging: true,//enable paging,
+        auto_filter: {
+            delay: 250
+        },
 
         col_widths: [
             "120px",//reportID
@@ -346,7 +349,7 @@
         }]
     });
     tf.init();//initialize this instance of TableFilter
-</script>
+</script>>
 
 
 
