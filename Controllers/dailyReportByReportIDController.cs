@@ -19,8 +19,6 @@ namespace allpax_service_record.Controllers
     {
         private allpaxServiceRecordEntities db = new allpaxServiceRecordEntities();
 
-        // GET: customers
-        //public ActionResult Index(string reportID)
             public ActionResult Index(int reportID)
         {
             ViewBag.reportID = reportID;           
@@ -31,7 +29,6 @@ namespace allpax_service_record.Controllers
 
             sqlconn.Open();
 
-            //begin query for kits available, but not installed
             string sqlquery1 =
                 "SELECT tbl_dailyReport.dailyReportID, tbl_dailyReport.jobID, tbl_subJobTypes.description, tbl_dailyReport.date, " +
                 "tbl_Jobs.customerContact,tbl_customers.customerName, tbl_customers.address, tbl_dailyReport.equipment, " +
@@ -171,17 +168,6 @@ namespace allpax_service_record.Controllers
 
             //return RedirectToAction("Index");
             return new EmptyResult();
-        }
-
-        public ActionResult UpdateCustomer(tbl_dailyReport custUpdate)
-        {
-            //db.Database.ExecuteSqlCommand("UPDATE cmps411.tbl_customer SET customerCode={0},name={1},address={2}, city={3}, state={4}, zipCode={5} WHERE id={6}",
-            //      custUpdate.customerCode, custUpdate.name, custUpdate.address, custUpdate.city, custUpdate.state, custUpdate.zipCode, custUpdate.id);
-
-            //db.Database.ExecuteSqlCommand("UPDATE tbl_customers SET customerCode={0}, customerName={1}, address={2} WHERE id={3}",
-            //      custUpdate.customerCode, custUpdate.customerName, custUpdate.address, custUpdate.id);
-
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

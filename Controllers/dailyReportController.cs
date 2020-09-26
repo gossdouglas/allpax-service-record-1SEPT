@@ -22,25 +22,16 @@ namespace allpax_service_record.Controllers
             return View(sql.ToList()); 
         }
 
-        public ActionResult Edit()
-        {
-            var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
-
-            return View(sql.ToList());
-        }
-
         [HttpPost]
         public ActionResult AddDailyReport(tbl_dailyReport dailyReportAdd)
         {
-
              db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6},{7})",
                 dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime, 
                 dailyReportAdd.lunchHours, dailyReportAdd.equipment, dailyReportAdd.dailyReportAuthor); 
             return new EmptyResult();
-
         }
 
-        public ActionResult copyDailyReport(string jobID, string description, string subJobID, string customerName, string location, string customercode, string customerContact)
+        public ActionResult copyDailyReport(string jobID, string description, string subJobID, string customerName, string location, string customercode, string customerContact, string equipment)
         {
             ViewBag.jobiD = jobID;
             ViewBag.subJobID = subJobID;
@@ -49,11 +40,8 @@ namespace allpax_service_record.Controllers
             ViewBag.location = location;
             ViewBag.customercode = customercode;
             ViewBag.customerContact = customerContact;
+            ViewBag.equipment = equipment;
 
-            //return View(db.tbl_customers.ToList());
-            //var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
-
-            //return View(sql.ToList());
             return View();
         }
 

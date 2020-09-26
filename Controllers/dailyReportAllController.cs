@@ -29,7 +29,7 @@ namespace allpax_service_record.Controllers
 
             string sqlquery1 =
                 "SELECT tbl_dailyReport.dailyReportID, tbl_Jobs.active, tbl_dailyReport.date, tbl_dailyReport.jobID, tbl_dailyReport.subJobID, tbl_subJobTypes.description, " +
-                "tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact, tbl_dailyReport.dailyReportAuthor " +
+                "tbl_customers.customerName, tbl_customers.address, tbl_customers.customerCode, tbl_jobs.customerContact, tbl_dailyReport.dailyReportAuthor, tbl_dailyReport.equipment " +
                 "FROM tbl_dailyReport " +
 
                 "INNER JOIN " +
@@ -65,6 +65,7 @@ namespace allpax_service_record.Controllers
                 dailyRptViewAll.teamNames = TeamNamesByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.workDescription = WorkDescsByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.dailyReportAuthor = dr1[10].ToString();
+                dailyRptViewAll.equipment = dr1[11].ToString();
 
                 dailyRptViewAlls.Add(dailyRptViewAll);
             }

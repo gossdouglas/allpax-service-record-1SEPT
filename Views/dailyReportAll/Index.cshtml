@@ -124,6 +124,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                 selectedItem8 = $(this).find("#record_item8").html();//works valid for inner html only
                 selectedItem9 = $(this).find("#record_item9").html();//works valid for inner html only
                 selectedItem10 = $(this).find("#record_item10").html();//works valid for inner html only
+                selectedItem11 = $(this).find("#record_item11").html();//works valid for inner html only
 
                 $("#slctd_reportID").val(selectedItem0);
                 $("#slctd_active").val(selectedItem1);
@@ -135,6 +136,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                 $("#slctd_address").val(selectedItem6);
                 $("#slctd_customerCode").val(selectedItem9);
                 $("#slctd_customerContact").val(selectedItem10);
+                $("#slctd_equipment").val(selectedItem11);
 
                 //console.log(selectedItem0);
             });
@@ -177,7 +179,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             //$(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked...
             $("#dt_dailyRptAll tbody").on("click", ".copyButton", function () {
                 window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
-                    + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9 + "&customerContact=" + selectedItem10;
+                    + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9 + "&customerContact=" + selectedItem10 + "&equipment=" + selectedItem11;
             });
 
             //begin when the line save button is pressed
@@ -187,13 +189,6 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                 var endDate = $("#endDateInput").val();
 
                 window.location = 'dailyReportAll/filtered?startDate=' + startDate + "&" + "endDate=" + endDate;
-            });
-            //end when the line save button is pressed.
-
-            //filters toggle test
-            //begin when the line save button is pressed
-            $("#filtersToggleTest").on('click', function () {
-                $/*(".fltrow").css("display", "none");*/
             });
             //end when the line save button is pressed.
 
@@ -358,6 +353,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                             <button class="btn btn-light btn-sm copyButton">Copy</button>
                             <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
                             <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
+                            <span id="record_item11" hidden>@Html.DisplayFor(modelItem => item.equipment)</span>
                         </td>
                     </tr>
                 }
