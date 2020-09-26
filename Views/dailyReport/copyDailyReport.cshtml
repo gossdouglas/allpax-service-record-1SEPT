@@ -118,6 +118,7 @@
                 var addItem7 = $("#input_equipment").val();
                 var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
+                var addItem9 = $("#copiedDailyReportID").html();
 
                 alert(
                     "Selected for Add POST:" + '\n' +
@@ -128,7 +129,8 @@
                     "addItem5: " + addItem5 + '\n' +
                     "addItem6: " + addItem6 + '\n' +
                     "addItem7: " + addItem7 + '\n' +
-                    "addItem8: " + addItem8 + '\n'
+                    "addItem8: " + addItem8 + '\n' +
+                    "addItem9: " + addItem9 + '\n' 
                 );
                 $("#addRecordItem1").val('');
                 $("#addRecordItem2").val('');
@@ -138,6 +140,7 @@
                 $("#addRecordItem6").val('');
                 $("#addRecordItem7").val('');
                 $("#addRecordItem8").val('');
+                $("#addRecordItem9").val('');
 
                 //begin axios add post
                 axios.post('/dailyReport/AddDailyReport',  {
@@ -148,7 +151,8 @@
                     endTime: addItem5,
                     lunchHours: addItem6,
                     equipment: addItem7,
-                    dailyReportAuthor: addItem8
+                    dailyReportAuthor: addItem8,
+                    dailyReportID: addItem9
                 })
                     .then(function (response) {
                         console.log(response);
@@ -214,6 +218,12 @@
             <div>
                 <span><strong>Author</strong></span>
                 <span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>
+            </div>
+        </div>
+        <div class="col-3" style="padding:5px">
+            <div>
+                <span><strong>Copied Daily Report</strong></span>
+                <span class="" id="copiedDailyReportID">@ViewBag.copiedDailyReportID</span>
             </div>
         </div>
     </div>

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using allpax_service_record.Models;
+
 
 namespace allpax_service_record.Controllers
 {
@@ -27,11 +30,37 @@ namespace allpax_service_record.Controllers
         {
              db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6},{7})",
                 dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime, 
-                dailyReportAdd.lunchHours, dailyReportAdd.equipment, dailyReportAdd.dailyReportAuthor); 
+                dailyReportAdd.lunchHours, dailyReportAdd.equipment, dailyReportAdd.dailyReportAuthor);
+
+            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            List<string> new_dailyRptID = new List<string>();
+
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+
+                SqlCommand cmd = new SqlCommand("spGetLastDlyRptCrtdByUserName", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter param = new SqlParameter()
+                {
+                    ParameterName = "@dailyReportAuthor",
+                    Value = dailyReportAdd.dailyReportAuthor
+                };
+                cmd.Parameters.Add(param);
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    new_dailyRptID.Add(rdr["dailyReportID"].ToString());
+                }
+            }
+
+            db.Database.ExecuteSqlCommand("spCopyDailyRpt @p0, @p1", dailyReportAdd.dailyReportID, new_dailyRptID[0]);
+
             return new EmptyResult();
         }
 
-        public ActionResult copyDailyReport(string jobID, string description, string subJobID, string customerName, string location, string customercode, string customerContact, string equipment)
+        public ActionResult copyDailyReport(string jobID, string description, string subJobID, string customerName, 
+            string location, string customercode, string customerContact, string equipment, int copiedDailyReportID)
         {
             ViewBag.jobiD = jobID;
             ViewBag.subJobID = subJobID;
@@ -41,6 +70,7 @@ namespace allpax_service_record.Controllers
             ViewBag.customercode = customercode;
             ViewBag.customerContact = customerContact;
             ViewBag.equipment = equipment;
+            ViewBag.copiedDailyReportID = copiedDailyReportID;
 
             return View();
         }

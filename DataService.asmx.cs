@@ -174,40 +174,39 @@ namespace allpax_service_record
             Context.Response.Write(js.Serialize(jobTypes));
         }
 
-        [WebMethod]
-        public void SaveNewWorkDescEntry(int dailyReportID, string workDescription, string userName)
-        {
-            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
-            List<dpdwn_teamNames> teamNames = new List<dpdwn_teamNames>();
-            using (SqlConnection con = new SqlConnection(cs))
-            {
-                SqlCommand cmd = new SqlCommand("spSaveWorkDescEntry", con);
-                cmd.CommandType = CommandType.StoredProcedure;
+        //[WebMethod]
+        //public void SaveNewWorkDescEntry(int dailyReportID, string workDescription, string userName)
+        //{
+        //    string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+        //    List<dpdwn_teamNames> teamNames = new List<dpdwn_teamNames>();
+        //    using (SqlConnection con = new SqlConnection(cs))
+        //    {
+        //        SqlCommand cmd = new SqlCommand("spSaveWorkDescEntry", con);
+        //        cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@dailyReportID", dailyReportID);
-                cmd.Parameters.AddWithValue("@workDescription", workDescription);
-                cmd.Parameters.AddWithValue("@userName", userName);
+        //        cmd.Parameters.AddWithValue("@dailyReportID", dailyReportID);
+        //        cmd.Parameters.AddWithValue("@workDescription", workDescription);
+        //        cmd.Parameters.AddWithValue("@userName", userName);
 
-                //con.Open();
-                //SqlDataReader rdr = cmd.ExecuteReader();
-                //while (rdr.Read())
-                //{
-                //    dpdwn_teamNames teamName = new dpdwn_teamNames();
-                //    teamName.name = rdr["name"].ToString();
-                //    teamName.shortName = rdr["shortName"].ToString();
-                //    teamName.userName = rdr["userName"].ToString();
-                //    teamNames.Add(teamName);
-                //}
-            }
-            //JavaScriptSerializer js = new JavaScriptSerializer();
-            //Context.Response.Write(js.Serialize(teamNames));
-        }
+        //        //con.Open();
+        //        //SqlDataReader rdr = cmd.ExecuteReader();
+        //        //while (rdr.Read())
+        //        //{
+        //        //    dpdwn_teamNames teamName = new dpdwn_teamNames();
+        //        //    teamName.name = rdr["name"].ToString();
+        //        //    teamName.shortName = rdr["shortName"].ToString();
+        //        //    teamName.userName = rdr["userName"].ToString();
+        //        //    teamNames.Add(teamName);
+        //        //}
+        //    }
+        //    //JavaScriptSerializer js = new JavaScriptSerializer();
+        //    //Context.Response.Write(js.Serialize(teamNames));
+        //}
 
         [WebMethod]
         public void GetLastDlyRptCrtdByUserName(string dailyReportAuthor)
         {
             string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
-            //List<tbl_dailyReport> dlyRptAuthor = new List<tbl_dailyReport>();
             List<string> dailyRptID = new List<string>();
 
             using (SqlConnection con = new SqlConnection(cs))
@@ -265,32 +264,32 @@ namespace allpax_service_record
             Context.Response.Write(js.Serialize(lastTimeEntry));
         }
 
-        [WebMethod]
-        public void CopyDailyRpt(int copied_dailyReportID, int new_dailyReportID)
-        {
-            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
-            //List<dpdwn_teamNames> teamNames = new List<dpdwn_teamNames>();
-            using (SqlConnection con = new SqlConnection(cs))
-            {
-                SqlCommand cmd = new SqlCommand("spCopyDailyRpt", con);
-                cmd.CommandType = CommandType.StoredProcedure;
+        //[WebMethod]
+        //public void CopyDailyRpt(int copied_dailyReportID, int new_dailyReportID)
+        //{
+        //    string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+        //    //List<dpdwn_teamNames> teamNames = new List<dpdwn_teamNames>();
+        //    using (SqlConnection con = new SqlConnection(cs))
+        //    {
+        //        SqlCommand cmd = new SqlCommand("spCopyDailyRpt", con);
+        //        cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@copied_dailyReportID", copied_dailyReportID);
-                cmd.Parameters.AddWithValue("@new_dailyReportID", new_dailyReportID);
+        //        cmd.Parameters.AddWithValue("@copied_dailyReportID", copied_dailyReportID);
+        //        cmd.Parameters.AddWithValue("@new_dailyReportID", new_dailyReportID);
 
-                con.Open();
-                //SqlDataReader rdr = cmd.ExecuteReader();
-                //while (rdr.Read())
-                //{
-                //    dpdwn_teamNames teamName = new dpdwn_teamNames();
-                //    teamName.name = rdr["name"].ToString();
-                //    teamName.shortName = rdr["shortName"].ToString();
-                //    teamName.userName = rdr["userName"].ToString();
-                //    teamNames.Add(teamName);
-                //}
-            }
-            //JavaScriptSerializer js = new JavaScriptSerializer();
-            //Context.Response.Write(js.Serialize(teamNames));
-        }
+        //        con.Open();
+        //        SqlDataReader rdr = cmd.ExecuteReader();
+        //        //while (rdr.Read())
+        //        //{
+        //        //    dpdwn_teamNames teamName = new dpdwn_teamNames();
+        //        //    teamName.name = rdr["name"].ToString();
+        //        //    teamName.shortName = rdr["shortName"].ToString();
+        //        //    teamName.userName = rdr["userName"].ToString();
+        //        //    teamNames.Add(teamName);
+        //        //}
+        //    }
+        //    //JavaScriptSerializer js = new JavaScriptSerializer();
+        //    //Context.Response.Write(js.Serialize(teamNames));
+        //}
     }
 }
