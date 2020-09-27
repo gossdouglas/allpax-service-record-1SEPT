@@ -29,12 +29,13 @@
                 addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
                 addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
                 var addItem3 = $("#inputHours_workDescDelays").val();
+                //alert(addItem3);
                 //end suck in variables for eventual axios post
 
-                if (addItem2.length == 0) {
+                if ((addItem2.length == 0) || (addItem3.length == 0)) {
                     $.alert({
                         title: '',
-                        content: 'A Narrative Must be Entered.',
+                        content: 'A narrative and time entry must be entered to proceed.',
                     });
                 } else {
 
