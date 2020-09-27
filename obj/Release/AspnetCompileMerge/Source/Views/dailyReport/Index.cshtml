@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<allpax_service_record.Models.tbl_dailyReport>
-
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@*Daily Report By Report ID*@
+@*Create new daily report*@
 
 <head>
     <style>
@@ -20,23 +20,14 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            //var queries = {};
-            //var dailyReportID = '';
-
-            //$.each(document.location.search.substr(1).split('&'), function (c, q) {
-            //    var i = q.split('=');
-            //    queries[i[0].toString()] = i[1].toString();
-            //    dailyReportID = queries[i[0].toString()];
-            //});
-            //alert(dailyReportID)
-
-            //alert($(".recordNo").html())
-            //alert($("#subJobTypes_dpdwn").val())
+            var jobs_dpdown = $('#jobs_dpdown');
+            var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+            var team_dpdwn = $('#team_dpdwn');
+            var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
+            dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
+            var lastDlyRptCrtdByUser;
 
             //begin fill the jobs dropdown
-            var jobs_dpdown = $('#jobs_dpdown');
-            //var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
-
             $.ajax({
                 url: 'DataService.asmx/GetAllJobNos',
                 method: 'post',
@@ -54,19 +45,15 @@
 
             //begin jobs id dropdown change
             jobs_dpdown.change(function () {
+
                 $.ajax({
                     url: 'DataService.asmx/GetCustomerInfoByJobID',
                     method: 'post',
                     dataType: 'json',
                     data: { jobID: jobs_dpdown.val() },
                     success: function (data) {
-                        //console.log(data.customerCode);
-                        //console.log(jobs_dpdown.val());
 
                         $(data).each(function (index, item) {
-                            //console.log(item.customerCode);
-                            //console.log(item.customerName);
-                            //console.log(item.address);
                             $("#output_customerName").html(item.customerName.toString());
                             $("#output_location").html(item.address.toString());
                             $("#output_customerCode").html(item.customerCode.toString());
@@ -76,10 +63,9 @@
                 });
 
                 //begin fill the team names dropdown
-                var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+                $('#subJobTypes_dpdwn').removeAttr("disabled");
                 $('#subJobTypes_dpdwn').empty();//clear the dropdown
                 $('#input_jobs_dpdown').val('1');//
-                //alert($('#input_jobs_dpdown').val())
 
                 $.ajax({
                     url: 'DataService.asmx/GetSubJobTypesByJobID',
@@ -92,8 +78,6 @@
 
                         $(data).each(function (index, item) {
                             subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
-
-                            //console.log(item.subJobID);
                         });
                     }
                 });
@@ -103,15 +87,12 @@
             //end jobs id dropdown change
 
             //begin fill the team names dropdown
-            var team_dpdwn = $('#team_dpdwn');
-
             $.ajax({
                 url: 'DataService.asmx/GetAllTeamNames',
                 method: 'post',
                 dataType: 'json',
                 data: { userName: '%' },
                 success: function (data) {
-
                     team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
 
                     $(data).each(function (index, item) {
@@ -119,22 +100,20 @@
                     });
                 }
             });
-            //end fill the sub job dropdown
+            //end fill the team names dropdown
 
             //begin #addButton
             $("#addButton").click(function () {//when the add button is clicked...
 
-                //window.location = '/home';
-
-                //var addItem1 = $("#jobs_dpdown").val();
-                //var addItem2 = $("#slct_date").val();
-                //var addItem3 = $("#subJobTypes_dpdwn").val();
-                //var addItem4 = $("#input_startTime").val();
-                //var addItem5 = $("#input_endTime").val();
-                //var addItem6 = $("#input_lunch").val();
-                //var addItem7 = $("#input_equipment").val();
-
-                //console.log(addItem3);
+                var addItem1 = $("#jobs_dpdown").val();
+                var addItem2 = $("#slct_date").val();
+                var addItem3 = $("#subJobTypes_dpdwn").val();
+                var addItem4 = $("#input_startTime").val();
+                var addItem5 = $("#input_endTime").val();
+                var addItem6 = $("#input_lunch").val();
+                var addItem7 = $("#input_equipment").val();
+                var addItem7 = $("#input_equipment").val();
+                var addItem8 = dailyRptAuthor;
 
                 //alert(
                 //    "Selected for Add POST:" + '\n' +
@@ -144,176 +123,51 @@
                 //    "addItem4: " + addItem4 + '\n' +
                 //    "addItem5: " + addItem5 + '\n' +
                 //    "addItem6: " + addItem6 + '\n' +
-                //    "addItem7: " + addItem7 + '\n'
+                //    "addItem7: " + addItem7 + '\n' +
+                //    "addItem8: " + addItem8 + '\n'
                 //);
                 //$("#addRecordItem1").val('');
                 //$("#addRecordItem2").val('');
-                //$("#addRecordItem3").val(''); 
+                //$("#addRecordItem3").val('');
                 //$("#addRecordItem4").val('');
                 //$("#addRecordItem5").val('');
                 //$("#addRecordItem6").val('');
                 //$("#addRecordItem7").val('');
+                //$("#addRecordItem8").val('');
 
                 //begin axios add post
-                //axios.post('/dailyReport/AddDailyReport', {
-                //    jobID: addItem1,
-                //    date: addItem2,
-                //    subJobID: addItem3,
-                //    startTime: addItem4,
-                //    endTime: addItem5,
-                //    lunchHours: addItem6,
-                //    equipment: addItem7,
-                //})
-
-                axios.post('/workDescByTimeEntryID/AddWorkDesc', {
-                    dailyReportID: '50',
-                    workDescription: 'yo',
-                    userName: 'tgoss',
-
+                axios.post('/dailyReport/AddDailyReport', {
+                    jobID: addItem1,
+                    date: addItem2,
+                    subJobID: addItem3,
+                    startTime: addItem4,
+                    endTime: addItem5,
+                    lunchHours: addItem6,
+                    equipment: addItem7,
+                    dailyReportAuthor: addItem8
                 })
                     .then(function (response) {
                         console.log(response);
-                        //window.location = '/home';
-                        //window.location.href = '/home';
-                        
-                    })
+                        //begin get last daily report created by user name
+                        $.ajax({
+                            url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
+                            method: 'post',
+                            dataType: 'json',
+                            data: { dailyReportAuthor: dailyRptAuthor },
+                            success: function (data) {
+
+                                $(data).each(function (index, item) {
+                                    lastDlyRptCrtdByUser = item;
+                                    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                                });
+                            }
+                        });
+                    })               
                     .catch(function (error) {
                         console.log(error);
                     });
-
-                //window.location = '/home';
-                //end axios add post
-
-                //$('#contnr_team').removeAttr('hidden');
-                //$('#contnr_workDescription').removeAttr('hidden');
-                //$('#contnr_delays').removeAttr('hidden');
-                //$('#contnr_warrantyDelays').removeAttr('hidden');
-
-                
-
             });
-            //end #addButton
 
-            //begin #addTeamBtn
-            //$("#addTeamBtn").click(function () {//when the add button is clicked...
-
-            //    alert($('#team_dpdwn').val())
-
-            //    //$('#Crd').val()
-
-            //    //$("#output_customerName").html(item.customerName.toString());
-
-            //    //$("#output_customerName")
-
-            //    //var addItem1 = $("#jobs_dpdown").val();
-            //    //var addItem2 = $("#slct_date").val();
-            //    //var addItem3 = $("#subJobTypes_dpdwn").val();
-            //    //var addItem4 = $("#input_startTime").val();
-            //    //var addItem5 = $("#input_endTime").val();
-            //    //var addItem6 = $("#input_lunch").val();
-            //    //var addItem7 = $("#input_equipment").val();
-
-            //    //console.log(addItem3);
-
-            //    //alert(
-            //    //    "Selected for Add POST:" + '\n' +
-            //    //    "addItem1: " + addItem1 + '\n' +
-            //    //    "addItem2: " + addItem2 + '\n' +
-            //    //    "addItem3: " + addItem3 + '\n' +
-            //    //    "addItem4: " + addItem4 + '\n' +
-            //    //    "addItem5: " + addItem5 + '\n' +
-            //    //    "addItem6: " + addItem6 + '\n' +
-            //    //    "addItem7: " + addItem7 + '\n'
-            //    //);
-            //    //$("#addRecordItem1").val('');
-            //    //$("#addRecordItem2").val('');
-            //    //$("#addRecordItem3").val('');
-            //    //$("#addRecordItem4").val('');
-            //    //$("#addRecordItem5").val('');
-            //    //$("#addRecordItem6").val('');
-            //    //$("#addRecordItem7").val('');
-
-            //    //begin axios add post
-            //    //axios.post('/dailyReport/AddDailyReport', {
-            //    //    jobID: addItem1,
-            //    //    date: addItem2,
-            //    //    subJobID: addItem3,
-            //    //    startTime: addItem4,
-            //    //    endTime: addItem5,
-            //    //    lunchHours: addItem6,
-            //    //    equipment: addItem7
-            //    //    //dailyReportID: '6'
-            //    //})
-            //    //    .then(function (response) {
-            //    //        console.log(response);
-            //    //    })
-            //    //    .catch(function (error) {
-            //    //        console.log(error);
-            //    //    });
-            //    //end axios add post
-            //});
-            //end #addTeamBtn
-
-            //begin
-            //team_dpdwn.change(function () {
-
-            //    //alert($(this).val())
-
-            //    //alert($('#team_dpdwn').val())
-
-            //    //begin
-            //    var team_dpdwn = $('#team_dpdwn');
-
-            //    $.ajax({
-            //        url: 'DataService.asmx/GetAllTeamNames',
-            //        method: 'post',
-            //        dataType: 'json',
-            //        data: { userName: $(this).val() },
-            //        success: function (data) {
-
-            //            //alert($('#team_dpdwn').val())
-            //            //team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
-
-            //            $(data).each(function (index, item) {
-            //                //team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
-            //                //alert(item.userName)
-            //                //alert(item.name)
-            //                //alert(item.shortName)
-            //                var temp_userName;
-            //                var temp_name;
-            //                var temp_shortName;
-
-            //                temp_userName = item.userName;
-            //                temp_name = item.name;
-            //                temp_shortName = item.shortName;
-
-            //                $("#teamMember_template").clone().prop("id", "user_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-
-            //                $("#user_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-
-            //                //$("#btn_delete_temp_userName").clone().prop("id", "btn_delete_temp_" + temp_userName.toString()).appendTo("#user_" + temp_userName.toString());
-
-            //                $("#user_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
-            //            });
-            //        }
-            //    });
-
-            //    //$("#tabTemplate").clone().prop("id", "tab_" + tempJobNo.toString()).appendTo("#jobNoTabs");
-
-            //    //$("#tab_" + tempJobNo.toString()).removeAttr('hidden');//unhide the copy
-            //});
-            //end
-
-            //begin
-            //subJobTypes_dpdwn.change(function () {
-
-            //    //alert($('#subJobTypes_dpdwn').val())
-
-            //    //alert(allFilled().val())
-                
-            //});
-            //end
-            
             var fields = "#slct_date, #input_jobs_dpdown, #input_equipment, #input_startTime, #input_endTime, #input_lunch, #subJobTypes_dpdwn";
 
             $(fields).on('change', function () {
@@ -329,271 +183,255 @@
                 $(fields).each(function () {
                     if ($(this).val() == '') {
                         filled = false;
-                        //alert("not filled: " + $(this).attr('id'))
-
-                        //$(this).attr('id')
                     }
                 });
-
-                //alert("all filled? "+filled)
                 return filled;
             }
 
         });//end document read jquery statements
     </script>
 </head>
-<br />
-<hr />
-<form>
-    <div class=" container" style="margin:5px">
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <strong>Daily Log Information</strong>
-            </div>
-            <div class="col-3" style="padding:5px">
-                <div>
-                    <span><strong>Record No</strong></span>
-                    <span class="recordNo">new</span>
-                </div>
+
+<div class="container">
+    <h3 style="text-align:center">CREATE A NEW FIELD SERVICE RECORD</h3>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Daily Log Information</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <div>
+                <span><strong>Record No</strong></span>
+                <span class="recordNo">new</span>
             </div>
         </div>
-        <div class="row">
-            <div class="md-col-2" style="padding:5px">
-                <strong>Job:</strong>
-            </div>
-            <div class="md-col-2" style="padding:5px">
-                <select name="jobs_dpdown" id="jobs_dpdown" style="width:100%" value="">
-                </select>
-                <input type="text" id="input_jobs_dpdown" name="" style="width:100%" hidden>
-            </div>
-            <div class="md-col-5" style="padding:5px"></div>
-            <div class="md-col-1" style="padding:5px">
-                <strong>Date:</strong>
-            </div>
-            <div class="md-col-2" style="padding:5px">
-                <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value="">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <strong>Customer:</strong>:
-            </div>
-            <div class="col-7" style="padding:5px" id="output_customerName"></div>
-            <div class="col-1" style="padding:5px">
-                <strong>Sub Job:</strong>
-            </div>
-            <div class="col-2" style="padding:5px">
-                <select name="subJobTypes_dpdwn" id="subJobTypes_dpdwn" style="width:100%">
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <strong>Location:</strong>
-            </div>
-            <div class="col-7" style="padding:5px" id="output_location"></div>
-            <div class="col-1" style="padding:5px">
-                <strong>Code:</strong>
-            </div>
-            <div class="col-2" style="padding:5px" id="output_customerCode"></div>
-        </div>
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <strong>Customer Contact:</strong>
-            </div>
-            <div class="col-10" style="padding:5px" id="output_customerContact"></div>
-        </div>
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <strong>Equipment:</strong>
-            </div>
-            <div class="col-10" style="padding:5px">
-                <input type="text" value="" id="input_equipment" name="" style="width:100%">
-            </div>
-        </div>        
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <strong>Start Time:</strong>
-            </div>
-            <div class="col-2" style="padding:5px">
-                <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="">
-            </div>
-            <div class="col-2" style="padding:5px">
-                <strong>End Time:</strong>
-            </div>
-            <div class="col-2" style="padding:5px">
-                <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="">
-            </div>
-            <div class="col-2" style="padding:5px">
-                <strong>Lunch (hr)</strong>
-            </div>
-            <div class="col-1" style="padding:5px">
-                <input type="text" class="form-control form-control-sm" id="input_lunch">
-            </div>
-            <div class="col-1" style="padding:5px">
+        <div class="col-3" style="padding:5px">
+            <div>
+                <span><strong>Author</strong></span>
+                <span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>
             </div>
         </div>
     </div>
-
-    <!--allpax team-->
-    <div class="container pl-auto" style="margin:5px" id="contnr_team" hidden>
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <strong>Allpax Team:</strong>
+    <div class="row">
+        <div class="md-col-2" style="padding:5px">
+            <strong>Job:</strong>
+        </div>
+        <div class="md-col-2" style="padding:5px">
+            <select name="jobs_dpdown" id="jobs_dpdown" style="width:100%" value="">
+            </select>
+            <input type="text" id="input_jobs_dpdown" name="" style="width:100%" hidden>
+        </div>
+        <div class="md-col-5" style="padding:5px"></div>
+        <div class="md-col-1" style="padding:5px">
+            <strong>Date:</strong>
+        </div>
+        <div class="md-col-2" style="padding:5px">
+            <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value="@DateTime.Today.ToString("yyyy-MM-dd")">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Customer:</strong>:
+        </div>
+        <div class="col-7" style="padding:5px" id="output_customerName"></div>
+        <div class="col-1" style="padding:5px">
+            <strong>Sub Job:</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <select name="subJobTypes_dpdwn" id="subJobTypes_dpdwn" style="width:100%" disabled>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Location:</strong>
+        </div>
+        <div class="col-7" style="padding:5px" id="output_location"></div>
+        <div class="col-1" style="padding:5px">
+            <strong>Code:</strong>
+        </div>
+        <div class="col-2" style="padding:5px" id="output_customerCode"></div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Customer Contact:</strong>
+        </div>
+        <div class="col-10" style="padding:5px" id="output_customerContact"></div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Equipment:</strong>
+        </div>
+        <div class="col-10" style="padding:5px">
+            <input type="text" value="" id="input_equipment" name="" style="width:100%">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Start Time:</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <input type="time" class="form-control form-control-sm" id="input_startTime">
+        </div>
+        <div class="col-2" style="padding:5px">
+            <strong>End Time:</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <input type="time" class="form-control form-control-sm" id="input_endTime">
+        </div>
+        <div class="col-2" style="padding:5px">
+            <strong>Lunch (hr)</strong>
+        </div>
+        <div class="col-1" style="padding:5px">
+            <input type="text" class="form-control form-control-sm" id="input_lunch" value="1">
+        </div>
+        <div class="col-1" style="padding:5px">
+        </div>
+    </div>
+</div>
+<hr style="margin:1px; opacity:0" />
+<div class=" container">
+    <button type="submit" class="btn btn-primary btn-sm" id="addButton" disabled>Save and Continue</button>
+</div>
+<hr style="margin:1px; opacity:0">
+<div class="container" id="contnr_team">
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Allpax Team:</strong>
+        </div>
+        <div class="col-10" style="padding:5px">
+            <div class="row" style="margin:0px;">
+                <select name="team_dpdwn" id="team_dpdwn" style="width:100%" disabled>
+                    <option value="-1">Add Team Member</option>                   
+                </select>
             </div>
-            <div class="col-9" style="padding:5px">
-                <div class="row" style="margin:0px;">
-                    <select name="team_dpdwn" id="team_dpdwn" style="width:100%">
-                    </select>
-                </div>
-
-                <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
-                    <div class="col-3" id="teamMember_template" style="padding:5px; border:solid black 1px">
-                        Johnny Watkins|JW
-                        @*<button type="button" class="btn btn-sm btn-primary" id="btn_delete_temp_userName">Delete</button>*@
-                    </div>
-                    <div class="col-1">
-                        <button type="button" class="btn btn-sm btn-primary" id="btn_delete_temp_userName">Delete</button>
-                    </div>
-                    <div class="col-3" id="teamMember_template" style="padding:5px; border:solid black 1px">
-                        Warren Wood|WW
-                        @*<button type="button" class="btn btn-sm btn-primary" id="btn_delete_temp_userName">Delete</button>*@
-                    </div>
-                    <div class="col-1">
-                        <button type="button" class="btn btn-sm btn-primary" id="btn_delete_temp_userName">Delete</button>
-                    </div>
-                    <div class="col-3" id="teamMember_template" style="padding:5px; border:solid black 1px">
-                        John Holmestead|JH
-                        @*<button type="button" class="btn btn-sm btn-primary" id="btn_delete_temp_userName">Delete</button>*@
-                    </div>
-                    <div class="col-1">
-                        <button type="button" class="btn btn-sm btn-primary" id="btn_delete_temp_userName">Delete</button>
-                    </div>
-                    <div class="col-3" id="teamMember_template" style="padding:5px; border:solid black 1px">
-                        Perr Wills|PW
-                        @*<button type="button" class="btn btn-sm btn-primary" id="btn_delete_temp_userName">Delete</button>*@
-                    </div>
-                    <div class="col-1">
-                        <button type="button" class="btn btn-sm btn-primary" id="btn_delete_temp_userName">Delete</button>
-                    </div>
-                </div>
+            <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
             </div>
         </div>
     </div>
-    <!--allpax team-->
-
-    <div class=" container pl-auto" style="margin:5px" id="contnr_workDescription" hidden>
+</div>
+<hr style="margin:1px; opacity:0">
+<div class="container" id="">
+    <div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
         <div class="row">
-            <div class="col-10" style="padding:5px">
+            <div class="col-8" style="padding:5px">
                 <strong>Work Description</strong>
             </div>
-            <div class="col-2" style="padding:5px">Team</div>
-        </div>
-        <div class="row">
-            <div class="col-10" style="padding:5px">
-                <input type="text" value="Water recovery system....." id="input_workDesc" name="" style="width:100%">
+            <div class="col-4" style="padding:5px">
+                <strong>Team</strong>
             </div>
-            <div class="col-2" style="padding:5px">
-                <select name="" id="slct_team2" style="width:100%">
-                    <option value="">All</option>
-                </select>
+        </div>
+        <div class="col-12" id="workDescriptionLine_template">
+            <div class="row" id="">
+                <div class="col-8" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable="false">
+                </div>
+                <div class="col-2" name="txt_teamMembersWorkDesc" id="txt_teamMembersWorkDesc" style="padding:5px">
+                    <span class="workDescTeam_" id="workDescTeam_" style="padding:5px"></span>
+                </div>
+                <div class="col-2" style="padding:5px">
+                    <select class="workDescTeam_dpdwn" name="" style="width:100%" disabled>
+                        <option value="">Team</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2" style="padding:5px">
+                    <div>
+                        <span><strong>Time Entry:</strong></span>
+                        <span id="txt_timeEntryID" value="">new</span>
+                    </div>
+                </div>
+                <div class="col-10" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="width: 100%" disabled>Save Entry</button>
+                </div>
             </div>
         </div>
     </div>
-
-    <div class=" container pl-auto" style="margin:5px" id="contnr_delays" hidden>
+</div>
+<hr style="margin:1px; opacity:0">
+<div class="container" id="">
+    <div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
         <div class="row">
-            <div class="col-10" style="padding:5px">
+            <div class="col-7" style="padding:5px">
                 <strong>Delays</strong>
             </div>
-            <div class="col-2" style="padding:5px">Team</div>
-        </div>
-        <div class="row">
-            <div class="col-10" style="padding:5px">
-                <input type="text" value="Water recovery system....." id="" name="" style="width:100%">
+            <div class="col-1" style="padding:5px">
+                <strong>Hours</strong>
             </div>
-            <div class="col-2" style="padding:5px">
-                <select name="" id="" style="width:100%">
-                    <option value="">All</option>
-                </select>
+            <div class="col-4" style="padding:5px">
+                <strong>Team</strong>
+            </div>
+        </div>
+        <div class="col-12" id="workDescriptionDelaysLine_template">
+            <div class="row" id="">
+                <div class="col-7" id="input_workDescDelays" style="padding:5px; border: 1px solid black;" contenteditable="false">
+                </div>
+                <div class="col-1" style="padding:5px">
+                    <input type="text" class="form-control form-control-sm" id="inputHours_workDescDelays" value="" disabled>
+                </div>
+                <div class="col-2" name="txt_teamMembersWorkDescDelays" id="txt_teamMembersWorkDescDelays" style="padding:5px">
+                    <span class="workDescDelaysTeam_" id="workDescDelaysTeam_" style="padding:5px"></span>
+                </div>
+                <div class="col-2" style="padding:5px">
+                    <select class="workDescDelaysTeam_dpdwn" name="" style="width:100%" disabled>
+                        <option value="">Team</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2" style="padding:5px">
+                    <div>
+                        <span><strong>Time Entry:</strong></span>
+                        <span id="txt_timeEntryIDDelays" value="">new</span>
+                    </div>
+                </div>
+                <div class="col-10" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysBtn" style="width: 100%" disabled>Save Entry</button>
+                </div>
             </div>
         </div>
     </div>
-
-    <div class=" container pl-auto" style="margin:5px" id="contnr_warrantyDelays" hidden>
+</div>
+<hr style="margin:1px; opacity:0">
+<div class="container" id="">
+    <div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">
         <div class="row">
-            <div class="col-10" style="padding:5px">
+            <div class="col-7" style="padding:5px">
                 <strong>Warranty Delays</strong>
             </div>
-            <div class="col-2" style="padding:5px">Team</div>
-        </div>
-        <div class="row">
-            <div class="col-10" style="padding:5px">
-                <input type="text" value="Water recovery system....." id="" name="" style="width:100%">
+            <div class="col-1" style="padding:5px">
+                <strong>Hours</strong>
             </div>
-            <div class="col-2" style="padding:5px">
-                <select name="" id="" style="width:100%">
-                    <option value="">All</option>
-                </select>
+            <div class="col-4" style="padding:5px">
+                <strong>Team</strong>
+            </div>
+        </div>
+        <div class="col-12" id="workDescriptionWntyDelaysLine_template">
+            <div class="row" id="">
+                <div class="col-7" id="input_workDescWntyDelays" style="padding:5px; border: 1px solid black;" contenteditable="false">
+                </div>
+                <div class="col-1" style="padding:5px">
+                    <input type="text" class="form-control form-control-sm" id="inputHours_workDescWntyDelays" value="" disabled>
+                </div>
+                <div class="col-2" name="txt_teamMembersWorkDescWntyDelays" id="txt_teamMembersWorkDescWntyDelays" style="padding:5px">
+                    <span class="workDescWntyDelaysTeam_" id="workDescWntyDelaysTeam_" style="padding:5px"></span>
+                </div>
+                <div class="col-2" style="padding:5px">
+                    <select class="workDescWntyDelaysTeam_dpdwn" name="" style="width:100%" disabled>
+                        <option value="">Team</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2" style="padding:5px">
+                    <div>
+                        <span><strong>Time Entry:</strong></span>
+                        <span id="txt_timeEntryIDWntyDelays" value="">new</span>
+                    </div>
+                </div>
+                <div class="col-10" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescWntyDelaysBtn" style="width: 100%" disabled>Save Entry</button>
+                </div>
             </div>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary btn-sm" id="addButton" style="background-color: royalblue" disabled>Save Record</button>
-</form>
-
-@*<div class="container-fluid">
-    <div class="col-md-12" style="border:none">
-        <table id="datatable_current_eqpmt_kits" class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th class="th-sm">
-                        Date
-                    </th>
-                    <th class="th-sm">
-                        Job
-                    </th>
-                    <th class="th-sm">
-                        Sub Job
-                    </th>
-                    <th class="th-sm">
-                        Customer
-                    </th>
-                    <th class="th-sm">
-                        Location
-                    </th>
-                    <th class="th-sm">
-                        Team
-                    </th>
-                    <th class="th-sm">
-                        Work Description
-                    </th>
-                    <th class="th-sm">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                <tr class="record" id=@Html.DisplayFor(modelItem => item.jobID)>
-                    <td id="record_item0" value=@Html.DisplayFor(modelItem => item.date)>@Html.DisplayFor(modelItem => item.date)</td>
-                    <td id="record_item1" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
-                    <td id="record_item2" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.subJobID)</td>
-                    <td id="record_item2" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.subJobID)</td>
-                    <td id="record_item2" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.subJobID)</td>
-                    <td id="record_item2" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.subJobID)</td>
-                    <td id="record_item2" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.subJobID)</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm editButton" style=" background-color: royalblue">Edit</button>
-                        <button class="btn btn-primary btn-sm updateButton" style="display:none;">Update</button>
-                        <button class="btn btn-primary btn-sm deleteButton" style=" background-color: royalblue">Delete</button>
-                        <button class="btn btn-primary btn-sm confirmButton" style="display:none;">Confirm</button>
-                        <button class="btn btn-primary btn-sm cancelButton" style="display:none;">Cancel</button>
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>*@
-        <!--table end-->
-
-
+</div>

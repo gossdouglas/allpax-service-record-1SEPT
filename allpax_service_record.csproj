@@ -2355,6 +2355,7 @@
     <Content Include="Content\tableFilter\static\style\toolbar.styl" />
     <None Include="Properties\PublishProfiles\allpaxServiceRecord - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\GoDaddy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

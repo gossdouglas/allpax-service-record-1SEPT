@@ -45,19 +45,15 @@
 
             //begin jobs id dropdown change
             jobs_dpdown.change(function () {
+
                 $.ajax({
                     url: 'DataService.asmx/GetCustomerInfoByJobID',
                     method: 'post',
                     dataType: 'json',
                     data: { jobID: jobs_dpdown.val() },
                     success: function (data) {
-                        //console.log(data.customerCode);
-                        //console.log(jobs_dpdown.val());
 
                         $(data).each(function (index, item) {
-                            //console.log(item.customerCode);
-                            //console.log(item.customerName);
-                            //console.log(item.address);
                             $("#output_customerName").html(item.customerName.toString());
                             $("#output_location").html(item.address.toString());
                             $("#output_customerCode").html(item.customerCode.toString());
@@ -67,10 +63,9 @@
                 });
 
                 //begin fill the team names dropdown
-                //var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+                $('#subJobTypes_dpdwn').removeAttr("disabled");
                 $('#subJobTypes_dpdwn').empty();//clear the dropdown
                 $('#input_jobs_dpdown').val('1');//
-                //alert($('#input_jobs_dpdown').val())
 
                 $.ajax({
                     url: 'DataService.asmx/GetSubJobTypesByJobID',
@@ -83,8 +78,6 @@
 
                         $(data).each(function (index, item) {
                             subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
-
-                            //console.log(item.subJobID);
                         });
                     }
                 });
@@ -100,7 +93,6 @@
                 dataType: 'json',
                 data: { userName: '%' },
                 success: function (data) {
-
                     team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
 
                     $(data).each(function (index, item) {
@@ -123,25 +115,25 @@
                 var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
 
-                alert(
-                    "Selected for Add POST:" + '\n' +
-                    "addItem1: " + addItem1 + '\n' +
-                    "addItem2: " + addItem2 + '\n' +
-                    "addItem3: " + addItem3 + '\n' +
-                    "addItem4: " + addItem4 + '\n' +
-                    "addItem5: " + addItem5 + '\n' +
-                    "addItem6: " + addItem6 + '\n' +
-                    "addItem7: " + addItem7 + '\n' +
-                    "addItem8: " + addItem8 + '\n'
-                );
-                $("#addRecordItem1").val('');
-                $("#addRecordItem2").val('');
-                $("#addRecordItem3").val('');
-                $("#addRecordItem4").val('');
-                $("#addRecordItem5").val('');
-                $("#addRecordItem6").val('');
-                $("#addRecordItem7").val('');
-                $("#addRecordItem8").val('');
+                //alert(
+                //    "Selected for Add POST:" + '\n' +
+                //    "addItem1: " + addItem1 + '\n' +
+                //    "addItem2: " + addItem2 + '\n' +
+                //    "addItem3: " + addItem3 + '\n' +
+                //    "addItem4: " + addItem4 + '\n' +
+                //    "addItem5: " + addItem5 + '\n' +
+                //    "addItem6: " + addItem6 + '\n' +
+                //    "addItem7: " + addItem7 + '\n' +
+                //    "addItem8: " + addItem8 + '\n'
+                //);
+                //$("#addRecordItem1").val('');
+                //$("#addRecordItem2").val('');
+                //$("#addRecordItem3").val('');
+                //$("#addRecordItem4").val('');
+                //$("#addRecordItem5").val('');
+                //$("#addRecordItem6").val('');
+                //$("#addRecordItem7").val('');
+                //$("#addRecordItem8").val('');
 
                 //begin axios add post
                 axios.post('/dailyReport/AddDailyReport', {
@@ -233,7 +225,7 @@
             <strong>Date:</strong>
         </div>
         <div class="md-col-2" style="padding:5px">
-            <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value="">
+            <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value="@DateTime.Today.ToString("yyyy-MM-dd")">
         </div>
     </div>
     <div class="row">
@@ -245,7 +237,7 @@
             <strong>Sub Job:</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <select name="subJobTypes_dpdwn" id="subJobTypes_dpdwn" style="width:100%">
+            <select name="subJobTypes_dpdwn" id="subJobTypes_dpdwn" style="width:100%" disabled>
             </select>
         </div>
     </div>
@@ -290,7 +282,7 @@
             <strong>Lunch (hr)</strong>
         </div>
         <div class="col-1" style="padding:5px">
-            <input type="text" class="form-control form-control-sm" id="input_lunch">
+            <input type="text" class="form-control form-control-sm" id="input_lunch" value="1">
         </div>
         <div class="col-1" style="padding:5px">
         </div>

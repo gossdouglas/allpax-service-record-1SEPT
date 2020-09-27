@@ -31,10 +31,10 @@
                 var addItem3 = $("#inputHours_workDescWntyDelays").val();
                     //end suck in variables for eventual axios post
 
-                if (addItem2.length == 0) {
+                if ((addItem2.length == 0) || (addItem3.length == 0)) {
                     $.alert({
                         title: '',
-                        content: 'A Narrative Must be Entered.',
+                        content: 'A narrative and time entry must be entered to proceed.',
                     });
                 } else {
 

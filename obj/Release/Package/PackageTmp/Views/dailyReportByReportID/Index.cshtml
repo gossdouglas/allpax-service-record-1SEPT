@@ -194,7 +194,8 @@
         <div class="col-3" style="padding:5px">
             <div>
                 <span><strong>Author</strong></span>
-                <span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>
+                @*<span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>*@
+            <span class="" id="dailyRptAuthor">@Model.First().dailyReportAuthor</span>
             </div>
         </div>
     </div>
