@@ -23,7 +23,6 @@
 
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
-            //var team_dpdwn = $('#team_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
             var lastDlyRptCrtdByUser;
@@ -52,13 +51,8 @@
                     dataType: 'json',
                     data: { jobID: jobs_dpdown.val() },
                     success: function (data) {
-                        //console.log(data.customerCode);
-                        //console.log(jobs_dpdown.val());
 
                         $(data).each(function (index, item) {
-                            //console.log(item.customerCode);
-                            //console.log(item.customerName);
-                            //console.log(item.address);
                             $("#output_customerName").html(item.customerName.toString());
                             $("#output_location").html(item.address.toString());
                             $("#output_customerCode").html(item.customerCode.toString());
@@ -120,18 +114,19 @@
                 var addItem8 = dailyRptAuthor;
                 var addItem9 = $("#copiedDailyReportID").html();
 
-                alert(
-                    "Selected for Add POST:" + '\n' +
-                    "addItem1: " + addItem1 + '\n' +
-                    "addItem2: " + addItem2 + '\n' +
-                    "addItem3: " + addItem3 + '\n' +
-                    "addItem4: " + addItem4 + '\n' +
-                    "addItem5: " + addItem5 + '\n' +
-                    "addItem6: " + addItem6 + '\n' +
-                    "addItem7: " + addItem7 + '\n' +
-                    "addItem8: " + addItem8 + '\n' +
-                    "addItem9: " + addItem9 + '\n' 
-                );
+                //alert(
+                //    "Selected for Add POST:" + '\n' +
+                //    "addItem1: " + addItem1 + '\n' +
+                //    "addItem2: " + addItem2 + '\n' +
+                //    "addItem3: " + addItem3 + '\n' +
+                //    "addItem4: " + addItem4 + '\n' +
+                //    "addItem5: " + addItem5 + '\n' +
+                //    "addItem6: " + addItem6 + '\n' +
+                //    "addItem7: " + addItem7 + '\n' +
+                //    "addItem8: " + addItem8 + '\n' +
+                //    "addItem9: " + addItem9 + '\n' 
+                //);
+
                 $("#addRecordItem1").val('');
                 $("#addRecordItem2").val('');
                 $("#addRecordItem3").val('');
@@ -191,9 +186,6 @@
                 $(fields).each(function () {
                     if ($(this).val() == '') {
                         filled = false;
-                        //alert("not filled: " + $(this).attr('id'))
-
-                        //$(this).attr('id')
                     }
                 });
                 return filled;
@@ -220,7 +212,7 @@
                 <span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>
             </div>
         </div>
-        <div class="col-3" style="padding:5px">
+        <div class="col-3" style="padding:5px" hidden>
             <div>
                 <span><strong>Copied Daily Report</strong></span>
                 <span class="" id="copiedDailyReportID">@ViewBag.copiedDailyReportID</span>
@@ -241,7 +233,7 @@
             <strong>Date:</strong>
         </div>
         <div class="md-col-2" style="padding:5px">
-            <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value="">
+            <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value="@DateTime.Today.ToString("yyyy-MM-dd")">
         </div>
     </div>
     <div class="row">
@@ -299,7 +291,7 @@
             <strong>Lunch (hr)</strong>
         </div>
         <div class="col-1" style="padding:5px">
-            <input type="text" class="form-control form-control-sm" id="input_lunch">
+            <input type="text" class="form-control form-control-sm" id="input_lunch" value="1">
         </div>
         <div class="col-1" style="padding:5px">
         </div>
