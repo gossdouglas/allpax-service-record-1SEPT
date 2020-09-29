@@ -1,4 +1,7 @@
-﻿@model IEnumerable<allpax_service_record.Models.tbl_dailyReport>
+﻿@*@model IEnumerable<allpax_service_record.Models.tbl_dailyReport>
+    @using Microsoft.AspNet.Identity*@
+
+@model List<allpax_service_record.Models.View_Models.vm_dailyReportByReportID>
 @using Microsoft.AspNet.Identity
 
 @{
@@ -20,6 +23,11 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {//begin document read jquery statements
+
+            $(".lockable :input").prop("disabled", true);//
+            $("#input_workDesc").prop("contenteditable", false);//
+            $("#input_workDescDelays").prop("contenteditable", false);//
+            $("#input_workDescWntyDelays").prop("contenteditable", false);//
 
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
@@ -124,7 +132,7 @@
                 //    "addItem6: " + addItem6 + '\n' +
                 //    "addItem7: " + addItem7 + '\n' +
                 //    "addItem8: " + addItem8 + '\n' +
-                //    "addItem9: " + addItem9 + '\n' 
+                //    "addItem9: " + addItem9 + '\n'
                 //);
 
                 $("#addRecordItem1").val('');
@@ -138,7 +146,7 @@
                 $("#addRecordItem9").val('');
 
                 //begin axios add post
-                axios.post('/dailyReport/AddDailyReport',  {
+                axios.post('/dailyReport/AddDailyReport', {
                     jobID: addItem1,
                     date: addItem2,
                     subJobID: addItem3,
@@ -297,16 +305,16 @@
         </div>
     </div>
 </div>
-    @*<hr style="margin:1px; opacity:0" />
-        <div class=" container">
-            <button type="submit" class="btn btn-primary btn-sm" id="addButton" style="background-color: darkturquoise" disabled>Save Record</button>
-        </div>*@
-    <hr style="margin:1px; opacity:0" />
+@*<hr style="margin:1px; opacity:0" />
     <div class=" container">
-        <button type="submit" class="btn btn-primary btn-sm" id="addButton" disabled>Save and Continue</button>
-    </div>
-    <hr style="margin:1px; opacity:0">
-    <div class="container" id="contnr_team">
+        <button type="submit" class="btn btn-primary btn-sm" id="addButton" style="background-color: darkturquoise" disabled>Save Record</button>
+    </div>*@
+<hr style="margin:1px; opacity:0" />
+<div class=" container">
+    <button type="submit" class="btn btn-primary btn-sm" id="addButton" disabled>Save and Continue</button>
+</div>
+<hr style="margin:1px; opacity:0">
+@*<div class="container" id="contnr_team">
         <div class="row">
             <div class="col-2" style="padding:5px">
                 <strong>Allpax Team:</strong>
@@ -444,6 +452,58 @@
                     <div class="col-10" style="padding:5px">
                         <button type="button" class="btn btn-primary btn-sm" id="addWorkDescWntyDelaysBtn" style="width: 100%" disabled>Save Entry</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+<hr style="margin:1px; opacity:0" />
+@*BEGIN ALLPAX TEAM*@
+<div class="lockable">
+    <div class="container" id="">
+        <div class="row">
+            <div class="col-2" style="padding:5px">
+                <strong>Allpax Team:</strong>
+            </div>
+            <div class="col-10" style="padding:5px">
+                <div class="row" style="margin:0px;">
+                    <select name="team_dpdwn" id="team_dpdwn" style="width:100%">
+                    </select>
+                </div>
+                <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
+                    <div class="team_" id="team_" style="padding:5px; border:solid black 1px" hidden>
+                        Johnny Watkins|JW
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    @*END ALLPAX TEAM*@
+    <hr style="margin:1px; opacity:0" />
+    @*<div class="container" id="">*@
+    <div class="lockable">
+        @{Html.RenderAction("Index", "workDesc", new { dailyReportID = ViewBag.copiedDailyReportID });
+        }
+    </div>
+    <hr style="margin:1px; opacity:0" />
+    @*<div class="container" id="">*@
+    <div class="lockable">
+    @{Html.RenderAction("Index", "workDescDelays", new { dailyReportID = ViewBag.copiedDailyReportID });
+    }
+    </div>
+    <hr style="margin:1px; opacity:0" />
+    @*<div class="container" id="">*@
+    <div class="lockable">
+        @{Html.RenderAction("Index", "workDescWntyDelays", new { dailyReportID = ViewBag.copiedDailyReportID });
+        }
+    </div>
+    <hr style="margin:1px; opacity:0" />
+    <div class="lockable">
+        <div class="container" id="">
+            <div class="row">
+                <div class="col-12" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%">E-mail Daily Report</button>
                 </div>
             </div>
         </div>
