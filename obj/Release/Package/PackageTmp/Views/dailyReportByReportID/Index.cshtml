@@ -7,66 +7,49 @@
 }
 @*DAILY REPORT BY REPORT ID PAGE*@
 
-<script>
-    $(document).ready(function () {//begin document read jquery statements
+<head>
+    <style>
+        .container {
+            border: 2px solid black;
+        }
+    </style>
 
-        $("#contnrDailyLog :input").prop("disabled", true);//disable the daily log section
+    <script>
+        $(document).ready(function () {//begin document read jquery statements
 
-        //begin fill the team names dropdown
-        var team_dpdwn = $('#team_dpdwn');
-        var addWorkDescBtn = $('#addWorkDescBtn');
-        var dailyReportID = $("#txt_dailyReportID").html();
-        var workDescTeam_dpdwn = $(".workDescTeam_dpdwn");
-        var workDescDelaysTeam_dpdwn = $('.workDescDelaysTeam_dpdwn');
-        var workDescWntyDelaysTeam_dpdwn = $('.workDescWntyDelaysTeam_dpdwn');
+            $("#contnrDailyLog :input").prop("disabled", true);//disable the daily log section
 
-        //begin fill the team names dropdown
-        $.ajax({
-            url: 'DataService.asmx/GetAllTeamNames',
-            method: 'post',
-            dataType: 'json',
-            data: { userName: '%' },
-            success: function (data) {
+            //begin fill the team names dropdown
+            var team_dpdwn = $('#team_dpdwn');
+            var addWorkDescBtn = $('#addWorkDescBtn');
+            var dailyReportID = $("#txt_dailyReportID").html();
+            var workDescTeam_dpdwn = $(".workDescTeam_dpdwn");
+            var workDescDelaysTeam_dpdwn = $('.workDescDelaysTeam_dpdwn');
+            var workDescWntyDelaysTeam_dpdwn = $('.workDescWntyDelaysTeam_dpdwn');
 
-                team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
-
-                $(data).each(function (index, item) {
-                    team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
-                });
-            }
-        });
-        //end fill the team names dropdown
-
-        //begin load team members on page load
-        $.ajax({
-            url: 'DataService.asmx/GetAllTeamNamesByReportID',
-            method: 'post',
-            dataType: 'json',
-            data: { userName: '%', dailyReportID: dailyReportID },
-            success: function (data) {
-
-                $(data).each(function (index, item) {
-                    var temp_userName = item.userName;
-                    var temp_name = item.name;
-                    var temp_shortName = item.shortName;
-
-                    $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                    $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                    $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
-                });
-                $.fn.updateSectionDpdwns();
-            }
-        });
-        //end load team members on page load
-
-        //begin add team member on drop down change
-        team_dpdwn.change(function () {
-
+            //begin fill the team names dropdown
             $.ajax({
                 url: 'DataService.asmx/GetAllTeamNames',
                 method: 'post',
                 dataType: 'json',
-                data: { userName: $(this).val() },
+                data: { userName: '%' },
+                success: function (data) {
+
+                    team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+
+                    $(data).each(function (index, item) {
+                        team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+                    });
+                }
+            });
+            //end fill the team names dropdown
+
+            //begin load team members on page load
+            $.ajax({
+                url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                method: 'post',
+                dataType: 'json',
+                data: { userName: '%', dailyReportID: dailyReportID },
                 success: function (data) {
 
                     $(data).each(function (index, item) {
@@ -77,107 +60,132 @@
                         $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
                         $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
                         $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+                    });
+                    $.fn.updateSectionDpdwns();
+                }
+            });
+            //end load team members on page load
 
-                        //begin AddTeamMember
-                        //begin axios add post
-                        axios.post('/dailyReportByReportID/AddTeamMember', {
-                            dailyReportID: dailyReportID,
-                            userName: temp_userName,
-                        })
-                            .then(function (response) {
-                                $.fn.updateSectionDpdwns();
+            //begin add team member on drop down change
+            team_dpdwn.change(function () {
+
+                $.ajax({
+                    url: 'DataService.asmx/GetAllTeamNames',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { userName: $(this).val() },
+                    success: function (data) {
+
+                        $(data).each(function (index, item) {
+                            var temp_userName = item.userName;
+                            var temp_name = item.name;
+                            var temp_shortName = item.shortName;
+
+                            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
+                            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
+                            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+
+                            //begin AddTeamMember
+                            //begin axios add post
+                            axios.post('/dailyReportByReportID/AddTeamMember', {
+                                dailyReportID: dailyReportID,
+                                userName: temp_userName,
                             })
-                            .catch(function (error) {
-                                console.log(error);
-                            });
-                        //end axios add post
-                    });
-                    //end AddTeamMember
-                }
+                                .then(function (response) {
+                                    $.fn.updateSectionDpdwns();
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                            //end axios add post
+                        });
+                        //end AddTeamMember
+                    }
+                });
+                $(team_dpdwn).val("-1");
             });
-            $(team_dpdwn).val("-1");
-        });
-        //end add team member on drop down change
+            //end add team member on drop down change
 
-        //begin when a team member class is clicked...
-        $(".team_").on('click', function () {
-            var tempTeamMemberUserID = this.id.substr(5);
+            //begin when a team member class is clicked...
+            $(".team_").on('click', function () {
+                var tempTeamMemberUserID = this.id.substr(5);
 
-            //begin DeleteTeamMember
-            //begin axios delete post
-            axios.post('/dailyReportByReportID/DeleteTeamMember', {
+                //begin DeleteTeamMember
+                //begin axios delete post
+                axios.post('/dailyReportByReportID/DeleteTeamMember', {
 
-                dailyReportID: dailyReportID,
-                userName: tempTeamMemberUserID,
-            })
-                .then(function (response) {
-                    console.log(response);
-                    $.fn.updateSectionDpdwns();                  
+                    dailyReportID: dailyReportID,
+                    userName: tempTeamMemberUserID,
                 })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            //end axios delete post
-            $("#" + $(this).attr("id")).remove();
-        });
-        //end when a team member class is clicked...
-        //end when a record class is clicked...
-
-        $("#printDailyReport").click(function () {//when a record's edit button is clicked...
-
-            //begin axios delete post
-            axios.post('/DailyReportByReportIDPrint', {
-
-                reportID: dailyReportID,
-            })
-                .then(function (response) {
-                    console.log(response);
-                    $.alert({
-                    title: 'Confirmation',
-                    content: 'This daily report has been e-mailed.',
-                });
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            //end axios add pos
-        });
-
-        $.fn.updateSectionDpdwns = function () {
-            //this function keeps the new record dropdowns in sections work description, delays and warranty delays 
-            //in synch with which team members available for addition to a new record
-
-            //begin load work description dropdown with possible team members                
-            workDescTeam_dpdwn.empty();
-            workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-            workDescTeam_dpdwn.val('-1');
-
-            workDescDelaysTeam_dpdwn.empty();
-            workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-            workDescDelaysTeam_dpdwn.val('-1');
-
-            workDescWntyDelaysTeam_dpdwn.empty();
-            workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-            workDescWntyDelaysTeam_dpdwn.val('-1');
-
-            $.ajax({
-                url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                method: 'post',
-                dataType: 'json',
-                data: { userName: '%', dailyReportID: dailyReportID },
-                success: function (data) {
-                    $(data).each(function (index, item) {
-                        workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                        workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                        workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                    .then(function (response) {
+                        console.log(response);
+                        $.fn.updateSectionDpdwns();
+                    })
+                    .catch(function (error) {
+                        console.log(error);
                     });
-                }
+                //end axios delete post
+                $("#" + $(this).attr("id")).remove();
             });
-            //end load work description dropdown with possible team members
-        }
+            //end when a team member class is clicked...
+            //end when a record class is clicked...
 
-    });//end document read jquery statements
-</script>
+            $("#printDailyReport").click(function () {//when a record's edit button is clicked...
+
+                //begin axios delete post
+                axios.post('/DailyReportByReportIDPrint', {
+
+                    reportID: dailyReportID,
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        $.alert({
+                            title: 'Confirmation',
+                            content: 'This daily report has been e-mailed.',
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //end axios add pos
+            });
+
+            $.fn.updateSectionDpdwns = function () {
+                //this function keeps the new record dropdowns in sections work description, delays and warranty delays
+                //in synch with which team members available for addition to a new record
+
+                //begin load work description dropdown with possible team members
+                workDescTeam_dpdwn.empty();
+                workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                workDescTeam_dpdwn.val('-1');
+
+                workDescDelaysTeam_dpdwn.empty();
+                workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                workDescDelaysTeam_dpdwn.val('-1');
+
+                workDescWntyDelaysTeam_dpdwn.empty();
+                workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                workDescWntyDelaysTeam_dpdwn.val('-1');
+
+                $.ajax({
+                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { userName: '%', dailyReportID: dailyReportID },
+                    success: function (data) {
+                        $(data).each(function (index, item) {
+                            workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                            workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                            workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                        });
+                    }
+                });
+                //end load work description dropdown with possible team members
+            }
+
+        });//end document read jquery statements
+    </script>
+</head>    
 
 <div class="container" id="contnrDailyLog">
     <h3 style="text-align:center">FIELD SERVICE RECORD</h3>
