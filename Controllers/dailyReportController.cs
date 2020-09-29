@@ -130,10 +130,7 @@ namespace allpax_service_record.Controllers
             }
 
             sqlconn.Close();
-            //end query
             return View(dailyReportByID);
-
-            //return View();
         }
 
         public List<string> jobCrspdtNameByJobID(string jobID)
