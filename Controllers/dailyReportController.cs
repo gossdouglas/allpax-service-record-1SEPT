@@ -36,10 +36,9 @@ namespace allpax_service_record.Controllers
                dailyReportAdd.lunchHours, dailyReportAdd.equipment, dailyReportAdd.dailyReportAuthor);
 
             string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
-            //List<string> new_dailyRptID = new List<string>();
-            String new_dailyRptID = "";
+            //String new_dailyRptID = "";
 
-            int tempDailyReportID = 170;
+            int new_dailyRptID= new int();
 
             using (SqlConnection con = new SqlConnection(cs))
             {
@@ -57,7 +56,8 @@ namespace allpax_service_record.Controllers
                 while (rdr.Read())
                 {
                     //new_dailyRptID.Add(rdr["dailyReportID"].ToString());
-                    new_dailyRptID = rdr["dailyReportID"].ToString();
+                    //new_dailyRptID = rdr["dailyReportID"].ToString();works
+                    new_dailyRptID = (int)rdr["dailyReportID"];
                 }
             }
 
@@ -79,6 +79,9 @@ namespace allpax_service_record.Controllers
 
                 //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
                 //tempDailyReportID, item);works
+
+                //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
+                //new_dailyRptID, item);works
 
                 db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
                 new_dailyRptID, item);
