@@ -28,8 +28,8 @@ namespace allpax_service_record.Models.View_Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int dailyReportID { get; set; }
 
-        //public List<string> dailyRptTeamArr { get; set; }
         public string[] dailyRptTeamArr { get; set; }
+
         public string dailyReportAuthor { get; set; }
     }
 }

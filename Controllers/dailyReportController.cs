@@ -30,13 +30,11 @@ namespace allpax_service_record.Controllers
         [HttpPost]
         public ActionResult AddDailyReport(vm_dailyReport dailyReportAdd)
         {
-
             db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6},{7})",
                dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime,
                dailyReportAdd.lunchHours, dailyReportAdd.equipment, dailyReportAdd.dailyReportAuthor);
 
             string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
-            //String new_dailyRptID = "";
 
             int new_dailyRptID= new int();
 
@@ -55,78 +53,20 @@ namespace allpax_service_record.Controllers
                 SqlDataReader rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
-                    //new_dailyRptID.Add(rdr["dailyReportID"].ToString());
-                    //new_dailyRptID = rdr["dailyReportID"].ToString();works
                     new_dailyRptID = (int)rdr["dailyReportID"];
                 }
             }
 
-            //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-            //   "169", "dbanner");  works
-
-            //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-            //   "169", dailyReportAdd.dailyRptTeamArr[0]);works
-
-            //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-            //   tempDailyReportID, dailyReportAdd.dailyRptTeamArr[0]);works
-
-
             foreach (string item in dailyReportAdd.dailyRptTeamArr)
-            { // Loop through List with foreach
-
-                //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-                //new_dailyRptID, item);
-
-                //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-                //tempDailyReportID, item);works
-
-                //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-                //new_dailyRptID, item);works
-
+            {
                 db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
                 new_dailyRptID, item);
-
-                //Debug.WriteLine(new_dailyRptID + " " + item);
             }
 
             //db.Database.ExecuteSqlCommand("spCopyDailyRpt @p0, @p1", dailyReportAdd.dailyReportID, new_dailyRptID[0]);
 
             return new EmptyResult();
         }
-
-        //[HttpPost]
-        //public ActionResult AddDailyReport(tbl_dailyReport dailyReportAdd)
-        //{
-        //     db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6},{7})",
-        //        dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime, 
-        //        dailyReportAdd.lunchHours, dailyReportAdd.equipment, dailyReportAdd.dailyReportAuthor);
-
-        //    string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
-        //    List<string> new_dailyRptID = new List<string>();
-
-        //    using (SqlConnection con = new SqlConnection(cs))
-        //    {
-        //        con.Open();
-
-        //        SqlCommand cmd = new SqlCommand("spGetLastDlyRptCrtdByUserName", con);
-        //        cmd.CommandType = CommandType.StoredProcedure;
-        //        SqlParameter param = new SqlParameter()
-        //        {
-        //            ParameterName = "@dailyReportAuthor",
-        //            Value = dailyReportAdd.dailyReportAuthor
-        //        };
-        //        cmd.Parameters.Add(param);
-        //        SqlDataReader rdr = cmd.ExecuteReader();
-        //        while (rdr.Read())
-        //        {
-        //            new_dailyRptID.Add(rdr["dailyReportID"].ToString());
-        //        }
-        //    }
-
-        //    db.Database.ExecuteSqlCommand("spCopyDailyRpt @p0, @p1", dailyReportAdd.dailyReportID, new_dailyRptID[0]);
-
-        //    return new EmptyResult();
-        //}
 
         public ActionResult copyDailyReport(string jobID, string description, string subJobID, string customerName, 
             string location, string customercode, string customerContact, string equipment, int copiedDailyReportID)
@@ -256,17 +196,6 @@ namespace allpax_service_record.Controllers
         public ActionResult DeleteDailyReport(tbl_dailyReport dailyReportDelete)
         {
             db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReport WHERE jobID=({0})", dailyReportDelete.jobID);
-
-            return RedirectToAction("Index");
-        }
-
-        public ActionResult UpdateCustomer(tbl_dailyReport custUpdate)
-        {
-            //db.Database.ExecuteSqlCommand("UPDATE cmps411.tbl_customer SET customerCode={0},name={1},address={2}, city={3}, state={4}, zipCode={5} WHERE id={6}",
-            //      custUpdate.customerCode, custUpdate.name, custUpdate.address, custUpdate.city, custUpdate.state, custUpdate.zipCode, custUpdate.id);
-
-            //db.Database.ExecuteSqlCommand("UPDATE tbl_customers SET customerCode={0}, customerName={1}, address={2} WHERE id={3}",
-            //      custUpdate.customerCode, custUpdate.customerName, custUpdate.address, custUpdate.id);
 
             return RedirectToAction("Index");
         }

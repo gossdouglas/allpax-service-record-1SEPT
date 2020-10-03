@@ -204,7 +204,7 @@
             //begin #addButton
             $("#addButton").click(function () {//when the add button is clicked...
 
-                dailyRptTeamArr_process();//remove duplicates from the dailyRptTeamArr array before posting to the controller
+                dailyRptTeamArr_clean();//remove duplicates from the dailyRptTeamArr array before posting to the controller
 
                 var addItem1 = $("#jobs_dpdown").val();
                 var addItem2 = $("#slct_date").val();
@@ -215,10 +215,8 @@
                 var addItem7 = $("#input_equipment").val();
                 var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
-                //var addItem9 = JSON.stringify(dailyRptTeamArr);
                 var addItem9 = [];
                 addItem9 = dailyRptTeamArr;
-                //var addItem9 = { values: dailyRptTeamArr };
 
                 alert(
                     "Selected for Add POST:" + '\n' +
@@ -257,25 +255,23 @@
                     .then(function (response) {
                         console.log(response);
                         //begin get last daily report created by user name
-                        //$.ajax({
-                        //    url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
-                        //    method: 'post',
-                        //    dataType: 'json',
-                        //    data: { dailyReportAuthor: dailyRptAuthor },
-                        //    success: function (data) {
+                        $.ajax({
+                            url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
+                            method: 'post',
+                            dataType: 'json',
+                            data: { dailyReportAuthor: dailyRptAuthor },
+                            success: function (data) {
 
-                        //        $(data).each(function (index, item) {
-                        //            lastDlyRptCrtdByUser = item;
-                        //            //window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                        //        });
-                        //    }
-                        //});
+                                $(data).each(function (index, item) {
+                                    lastDlyRptCrtdByUser = item;
+                                    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                                });
+                            }
+                        });
                     })
                     .catch(function (error) {
                         console.log(error);
-                    });
-
-                
+                    });   
             });
 
             var fields = "#slct_date, #input_jobs_dpdown, #input_equipment, #input_startTime, #input_endTime, #input_lunch, #subJobTypes_dpdwn";
@@ -298,22 +294,14 @@
                 return filled;
             }
 
-            function dailyRptTeamArr_process() {
-
-                //let chars = ['A', 'B', 'A', 'C', 'B'];
+            function dailyRptTeamArr_clean() {
 
                 $(".team_").each(function (index) {
-                    //console.log(index + ": " + $(this).text());
                     var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
-                    //console.log(this.id);
+
                     if ($(tempTeamMemberUserID.length).length > 0) {
-                        //console.log(tempTeamMemberUserID.length);
-                        //console.log(tempTeamMemberUserID);
                         dailyRptTeamArr.push(tempTeamMemberUserID);
-                        //console.log(dailyRptTeamArr);
                     }
-                    //console.log(index + ": " + $(this).attr("id"));
-                    //console.log(index + ": " + $(this).attr(tempTeamMemberUserID));
                 });
 
                 var dailyRptTeamArr_processed = [];
@@ -325,7 +313,6 @@
 
                 dailyRptTeamArr = dailyRptTeamArr_processed;
                 dailyRptTeamArr_processed = [];
-                //console.log(dailyRptTeamArr);
             }
 
         });//end document read jquery statements
