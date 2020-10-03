@@ -215,7 +215,10 @@
                 var addItem7 = $("#input_equipment").val();
                 var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
-                var addItem9 = dailyRptTeamArr;
+                //var addItem9 = JSON.stringify(dailyRptTeamArr);
+                var addItem9 = [];
+                addItem9 = dailyRptTeamArr;
+                //var addItem9 = { values: dailyRptTeamArr };
 
                 alert(
                     "Selected for Add POST:" + '\n' +
@@ -240,36 +243,37 @@
                 $("#addRecordItem9").val('');
 
                 //begin axios add post
-                //axios.post('/dailyReport/AddDailyReport', {
-                //    jobID: addItem1,
-                //    date: addItem2,
-                //    subJobID: addItem3,
-                //    startTime: addItem4,
-                //    endTime: addItem5,
-                //    lunchHours: addItem6,
-                //    equipment: addItem7,
-                //    dailyReportAuthor: addItem8
-                //})
-                //    .then(function (response) {
-                //        console.log(response);
-                //        //begin get last daily report created by user name
-                //        $.ajax({
-                //            url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
-                //            method: 'post',
-                //            dataType: 'json',
-                //            data: { dailyReportAuthor: dailyRptAuthor },
-                //            success: function (data) {
+                axios.post('/dailyReport/AddDailyReport', {
+                    jobID: addItem1,
+                    date: addItem2,
+                    subJobID: addItem3,
+                    startTime: addItem4,
+                    endTime: addItem5,
+                    lunchHours: addItem6,
+                    equipment: addItem7,
+                    dailyReportAuthor: addItem8,
+                    dailyRptTeamArr: addItem9
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        //begin get last daily report created by user name
+                        //$.ajax({
+                        //    url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
+                        //    method: 'post',
+                        //    dataType: 'json',
+                        //    data: { dailyReportAuthor: dailyRptAuthor },
+                        //    success: function (data) {
 
-                //                $(data).each(function (index, item) {
-                //                    lastDlyRptCrtdByUser = item;
-                //                    //window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                //                });
-                //            }
-                //        });
-                //    })
-                //    .catch(function (error) {
-                //        console.log(error);
-                //    });
+                        //        $(data).each(function (index, item) {
+                        //            lastDlyRptCrtdByUser = item;
+                        //            //window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                        //        });
+                        //    }
+                        //});
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
 
                 
             });
