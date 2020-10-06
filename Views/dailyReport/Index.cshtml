@@ -24,16 +24,7 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            //$('#cars').attr('multiple', true);
-            //$("#cars").chosen(
-            //    {
-            //        width: "100%",
-            //        placeholder_text_multiple: "Select Team",
-            //        hide_results_on_select: "true",
-            //        disable_search: "true"
-            //    });
-
-            $('.js-example-basic-multiple').select2({
+            $('.workDescTeam_dpdwn').select2({
                 width: "100%",
                 placeholder: "Select Team"
             });
@@ -44,6 +35,7 @@
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
             var team_dpdwn = $('#team_dpdwn');
+            var workDescTeam_dpdwn = $('#workDescTeam_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
             var lastDlyRptCrtdByUser;
@@ -144,6 +136,7 @@
 
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
+                            console.log(dailyRptTeamArr);
 
                             //begin AddTeamMember
                             //begin axios add post
@@ -160,6 +153,7 @@
                             //end axios add post
 
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
+                            updateSectionDpdwns();
                         });
                         //end AddTeamMember
                     }
@@ -199,6 +193,8 @@
 
                 $("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
                 $("#" + $(this).attr("id")).remove();
+
+                updateSectionDpdwns();
             });
             //end when a team member class is clicked...
             //end when a record class is clicked...
@@ -292,6 +288,43 @@
                     }
                 });
                 return filled;
+            }
+
+            function updateSectionDpdwns() {
+                //this function keeps the new record dropdowns in sections work description, delays and warranty delays
+                //in synch with which team members available for addition to a new record
+
+                //begin load work description dropdown with possible team members
+                workDescTeam_dpdwn.empty();
+                $(dailyRptTeamArr).each(function (index, item) {
+                    console.log(dailyRptTeamArr[index][1])
+                    $("<option value=" + dailyRptTeamArr[index][0] + ">" + dailyRptTeamArr[index][2] + "</option>").appendTo("#workDescTeam_dpdwn");
+                });
+                //workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                //workDescTeam_dpdwn.val('-1');
+
+                //workDescDelaysTeam_dpdwn.empty();
+                //workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                //workDescDelaysTeam_dpdwn.val('-1');
+
+                //workDescWntyDelaysTeam_dpdwn.empty();
+                //workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                //workDescWntyDelaysTeam_dpdwn.val('-1');
+
+                //$.ajax({
+                //    url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { userName: '%', dailyReportID: dailyReportID },
+                //    success: function (data) {
+                //        $(data).each(function (index, item) {
+                //            workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                //            workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                //            workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                //        });
+                //    }
+                //});
+                //end load work description dropdown with possible team members
             }
 
         });//end document read jquery statements
@@ -421,8 +454,8 @@
 </div>
 @*END ALLPAX TEAM*@
 
-<div class="container" id="contnr_team">
-    @*<div class="row">
+@*<div class="container" id="contnr_team">
+    <div class="row">
             <div class="col-2" style="padding:5px">
                 <strong>Allpax Team:</strong>
             </div>
@@ -435,77 +468,77 @@
                 <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
                 </div>
             </div>
-        </div>*@
-</div>
+        </div>
+</div>*@
 <hr style="margin:1px; opacity:0">
 <div class="container" id="">
     <div class="row">
-        <div class="col-8" style="padding:5px">
+        <div class="col-6" style="padding:5px">
             <strong>Work Description</strong>
         </div>
         <div class="col-4" style="padding:5px">
             <strong>Team</strong>
         </div>
-    </div>
-    <div class="col-12" id="workDescriptionLine_template">
-        <div class="row" id="">
-            <div class="col-8" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable>
-            </div>
-            <div class="col-2" name="txt_teamMembersWorkDesc" id="txt_teamMembersWorkDesc" style="padding:5px">
-                <span class="workDescTeam_" id="workDescTeam_" style="padding:5px"></span>
-            </div>
-            <div class="col-2" style="padding:5px">
-                <select class="workDescTeam_dpdwn" name="" style="width:100%">
-                    <option value="">Team</option>
-                </select>
-            </div>
+        <div class="col-2" style="padding:5px">
+            <strong>Action</strong>
         </div>
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <div>
-                    <span><strong>Time Entry:</strong></span>
-                    <span id="txt_timeEntryID" value="">new</span>
+    </div>
+    @*BEGIN OLD WORK DESCRIPTION TEMPLATE*@
+    @*<div class="col-12" id="workDescriptionLine_template">
+            <div class="row" id="">
+                <div class="col-8" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable>
+                </div>
+                <div class="col-2" name="txt_teamMembersWorkDesc" id="txt_teamMembersWorkDesc" style="padding:5px">
+                    <span class="workDescTeam_" id="workDescTeam_" style="padding:5px"></span>
+                </div>
+                <div class="col-2" style="padding:5px">
+                    <select class="workDescTeam_dpdwn" name="" style="width:100%">
+                        <option value="">Team</option>
+                    </select>
                 </div>
             </div>
-            <div class="col-10" style="padding:5px">
-                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="width: 100%">Save Entry</button>
+            <div class="row">
+                <div class="col-2" style="padding:5px">
+                    <div>
+                        <span><strong>Time Entry:</strong></span>
+                        <span id="txt_timeEntryID" value="">new</span>
+                    </div>
+                </div>
+                <div class="col-10" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="width: 100%">Save Entry</button>
+                </div>
             </div>
-        </div>
-    </div>
+        </div>*@
+    @*END OLD WORK DESCRIPTION TEMPLATE*@
 
+    @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
     <div class="col-12" id="workDescriptionLine_template">
-        <div class="row" id="">
-            <div class="col-8" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable>
+        <div class="row" id="" style="border:1px solid black">
+            @*<div class="col-6" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable>
+            </div>*@
+            <div class="col-6" id="" style="padding:5px;">
+                <input type="text" id="input_workDesc" style="width:100%">
             </div>
             <div class="col-4" style="padding:5px">
-                @*CHOSEN TESTING*@
-                @*<select name="cars" id="cars">
-            <option selected disabled="disabled" value=""></option>
-            <option value="abundy">abundy</option>
-            <option value="dbanner">dbanner</option>
-            <option value="jblow">jblow</option>
-            <option value="jdoe">jdoe</option>
-            <option value="jwatkins">jwatkins</option>
-            <option value="tgoss">tgoss</option>
-            <option value="user1">user1</option>
-            <option value="wjohnson">wjohnson</option>
-        </select>*@
-                @*CHOSEN TESTING*@
-
-                <select class="js-example-basic-multiple" name="workDesc_Team" multiple="multiple">
-                    <option value="abundy">AB</option>
-                    <option value="dbanner">DB</option>
-                    <option value="jblow">JB</option>
-                    <option value="jdoe">JD</option>
-                    <option value="jwatkins">JW</option>
-                    <option value="tgoss">TG</option>
-                    <option value="user1">U1</option>
-                    <option value="wjohnson">WJ</option>
+                <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" multiple="multiple">
+                    @*<option value="abundy">AB</option>
+                <option value="dbanner">DB</option>
+                <option value="jblow">JB</option>
+                <option value="jdoe">JD</option>
+                <option value="jwatkins">JW</option>
+                <option value="tgoss">TG</option>
+                <option value="user1">U1</option>
+                <option value="wjohnson">WJ</option>*@
                 </select>
-
-            </div>  
+            </div>
+            <div class="col-2" style="padding:5px">
+                <button class="btn btn-light btn-sm copyButton"><i class="far fa-save fa-2x" style="color:black;"></i></button>
+                @*<button class="btn btn-light btn-sm copyButton"><i class="fas fa-save"></i></button>
+            <button class="btn btn-light btn-sm copyButton" style="background-color: transparent; outline:none; border: none;"><i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i></button>
+            <button style="border:1px solid black; background-color: transparent;">Test</button>*@
+            </div>
         </div>
-        <div class="row">
+        @*<div class="row">
             <div class="col-2" style="padding:5px">
                 <div>
                     <span><strong>Time Entry:</strong></span>
@@ -515,9 +548,9 @@
             <div class="col-10" style="padding:5px">
                 <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="width: 100%">Save Entry</button>
             </div>
-        </div>
+        </div>*@
     </div>
-
+    @*END NEW WORK DESCRIPTION TEMPLATE*@
 </div>
 <hr style="margin:1px; opacity:0">
 <div class="container" id="">

@@ -17,12 +17,25 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- JQuery -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    @*<script src="~/Scripts/chosen.jquery.min.js"></script>*@
+    @*<script src="~/Scripts/chosen.jquery.js"></script>*@
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {//begin document read jquery statements
+
+            $('.workDescTeam_dpdwn').select2({
+                width: "100%",
+                placeholder: "Select Team"
+            });
+
+            var dailyRptTeamArr = [];
+            var dailyRptTeamUserIDArr = [];
 
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
             var team_dpdwn = $('#team_dpdwn');
+            var workDescTeam_dpdwn = $('#workDescTeam_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
             var lastDlyRptCrtdByUser;
@@ -102,6 +115,90 @@
             });
             //end fill the team names dropdown
 
+            //begin add team member on drop down change
+            team_dpdwn.change(function () {
+
+                $.ajax({
+                    url: 'DataService.asmx/GetAllTeamNames',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { userName: $(this).val() },
+                    success: function (data) {
+
+                        $(data).each(function (index, item) {
+                            var temp_userName = item.userName;
+                            var temp_name = item.name;
+                            var temp_shortName = item.shortName;
+
+                            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
+                            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
+                            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+
+                            dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
+                            dailyRptTeamUserIDArr.push(temp_userName);
+                            console.log(dailyRptTeamArr);
+
+                            //begin AddTeamMember
+                            //begin axios add post
+                            //axios.post('/dailyReportByReportID/AddTeamMember', {
+                            //    dailyReportID: dailyReportID,
+                            //    userName: temp_userName,
+                            //})
+                            //    .then(function (response) {
+                            //        $.fn.updateSectionDpdwns();
+                            //    })
+                            //    .catch(function (error) {
+                            //        console.log(error);
+                            //    });
+                            //end axios add post
+
+                            $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
+                            updateSectionDpdwns();
+                        });
+                        //end AddTeamMember
+                    }
+                });
+
+                $(team_dpdwn).val("-1");
+            });
+            //end add team member on drop down change
+
+            //begin when a team member class is clicked...
+            $(".team_").on('click', function () {
+                //var tempTeamMemberUserID = this.id.substr(5);
+
+                //begin DeleteTeamMember
+                //begin axios delete post
+                //axios.post('/dailyReportByReportID/DeleteTeamMember', {
+
+                //    dailyReportID: dailyReportID,
+                //    userName: tempTeamMemberUserID,
+                //})
+                //    .then(function (response) {
+                //        console.log(response);
+                //        $.fn.updateSectionDpdwns();
+                //    })
+                //    .catch(function (error) {
+                //        console.log(error);
+                //    });
+                //end axios delete post
+
+                var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
+                for (var row = 0; row < dailyRptTeamArr.length; row++) {
+                    if (dailyRptTeamArr[row][0] == tempTeamMemberUserID) {
+                        dailyRptTeamArr.splice(row, 1);
+                        dailyRptTeamUserIDArr.splice(row, 1);
+                    }
+                }
+
+                $("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
+                $("#" + $(this).attr("id")).remove();
+
+                updateSectionDpdwns();
+            });
+            //end when a team member class is clicked...
+            //end when a record class is clicked...
+
             //begin #addButton
             $("#addButton").click(function () {//when the add button is clicked...
 
@@ -114,26 +211,30 @@
                 var addItem7 = $("#input_equipment").val();
                 var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
+                var addItem9 = [];
+                addItem9 = dailyRptTeamUserIDArr;
 
-                //alert(
-                //    "Selected for Add POST:" + '\n' +
-                //    "addItem1: " + addItem1 + '\n' +
-                //    "addItem2: " + addItem2 + '\n' +
-                //    "addItem3: " + addItem3 + '\n' +
-                //    "addItem4: " + addItem4 + '\n' +
-                //    "addItem5: " + addItem5 + '\n' +
-                //    "addItem6: " + addItem6 + '\n' +
-                //    "addItem7: " + addItem7 + '\n' +
-                //    "addItem8: " + addItem8 + '\n'
-                //);
-                //$("#addRecordItem1").val('');
-                //$("#addRecordItem2").val('');
-                //$("#addRecordItem3").val('');
-                //$("#addRecordItem4").val('');
-                //$("#addRecordItem5").val('');
-                //$("#addRecordItem6").val('');
-                //$("#addRecordItem7").val('');
-                //$("#addRecordItem8").val('');
+                alert(
+                    "Selected for Add POST:" + '\n' +
+                    "addItem1: " + addItem1 + '\n' +
+                    "addItem2: " + addItem2 + '\n' +
+                    "addItem3: " + addItem3 + '\n' +
+                    "addItem4: " + addItem4 + '\n' +
+                    "addItem5: " + addItem5 + '\n' +
+                    "addItem6: " + addItem6 + '\n' +
+                    "addItem7: " + addItem7 + '\n' +
+                    "addItem8: " + addItem8 + '\n' +
+                    "addItem9: " + addItem9 + '\n'
+                );
+                $("#addRecordItem1").val('');
+                $("#addRecordItem2").val('');
+                $("#addRecordItem3").val('');
+                $("#addRecordItem4").val('');
+                $("#addRecordItem5").val('');
+                $("#addRecordItem6").val('');
+                $("#addRecordItem7").val('');
+                $("#addRecordItem8").val('');
+                $("#addRecordItem9").val('');
 
                 //begin axios add post
                 axios.post('/dailyReport/AddDailyReport', {
@@ -144,7 +245,8 @@
                     endTime: addItem5,
                     lunchHours: addItem6,
                     equipment: addItem7,
-                    dailyReportAuthor: addItem8
+                    dailyReportAuthor: addItem8,
+                    dailyRptTeamArr: addItem9
                 })
                     .then(function (response) {
                         console.log(response);
@@ -162,7 +264,7 @@
                                 });
                             }
                         });
-                    })               
+                    })
                     .catch(function (error) {
                         console.log(error);
                     });
@@ -186,6 +288,43 @@
                     }
                 });
                 return filled;
+            }
+
+            function updateSectionDpdwns() {
+                //this function keeps the new record dropdowns in sections work description, delays and warranty delays
+                //in synch with which team members available for addition to a new record
+
+                //begin load work description dropdown with possible team members
+                workDescTeam_dpdwn.empty();
+                $(dailyRptTeamArr).each(function (index, item) {
+                    console.log(dailyRptTeamArr[index][1])
+                    $("<option value=" + dailyRptTeamArr[index][0] + ">" + dailyRptTeamArr[index][2] + "</option>").appendTo("#workDescTeam_dpdwn");
+                });
+                //workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                //workDescTeam_dpdwn.val('-1');
+
+                //workDescDelaysTeam_dpdwn.empty();
+                //workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                //workDescDelaysTeam_dpdwn.val('-1');
+
+                //workDescWntyDelaysTeam_dpdwn.empty();
+                //workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                //workDescWntyDelaysTeam_dpdwn.val('-1');
+
+                //$.ajax({
+                //    url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { userName: '%', dailyReportID: dailyReportID },
+                //    success: function (data) {
+                //        $(data).each(function (index, item) {
+                //            workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                //            workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                //            workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
+                //        });
+                //    }
+                //});
+                //end load work description dropdown with possible team members
             }
 
         });//end document read jquery statements
@@ -290,45 +429,70 @@
 </div>
 <hr style="margin:1px; opacity:0" />
 <div class=" container">
-    <button type="submit" class="btn btn-primary btn-sm" id="addButton" disabled>Save and Continue</button>
+    <button type="submit" class="btn btn-primary btn-sm" id="addButton">Save and Continue</button>
 </div>
 <hr style="margin:1px; opacity:0">
-<div class="container" id="contnr_team">
+
+@*BEGIN ALLPAX TEAM*@
+<div class="container" id="">
     <div class="row">
         <div class="col-2" style="padding:5px">
             <strong>Allpax Team:</strong>
         </div>
         <div class="col-10" style="padding:5px">
             <div class="row" style="margin:0px;">
-                <select name="team_dpdwn" id="team_dpdwn" style="width:100%" disabled>
-                    <option value="-1">Add Team Member</option>                   
+                <select name="team_dpdwn" id="team_dpdwn" style="width:100%">
                 </select>
             </div>
             <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
+                <div class="team_" id="team_" style="padding:5px; border:solid black 1px" hidden>
+                    Johnny Watkins|JW
+                </div>
             </div>
         </div>
     </div>
 </div>
-<hr style="margin:1px; opacity:0">
-<div class="container" id="">
-    @*<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">*@
-        <div class="row">
-            <div class="col-8" style="padding:5px">
-                <strong>Work Description</strong>
+@*END ALLPAX TEAM*@
+
+@*<div class="container" id="contnr_team">
+    <div class="row">
+            <div class="col-2" style="padding:5px">
+                <strong>Allpax Team:</strong>
             </div>
-            <div class="col-4" style="padding:5px">
-                <strong>Team</strong>
+            <div class="col-10" style="padding:5px">
+                <div class="row" style="margin:0px;">
+                    <select name="team_dpdwn" id="team_dpdwn" style="width:100%">
+                        <option value="-1">Add Team Member</option>
+                    </select>
+                </div>
+                <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
+                </div>
             </div>
         </div>
-        <div class="col-12" id="workDescriptionLine_template">
+</div>*@
+<hr style="margin:1px; opacity:0">
+<div class="container" id="">
+    <div class="row">
+        <div class="col-6" style="padding:5px">
+            <strong>Work Description</strong>
+        </div>
+        <div class="col-4" style="padding:5px">
+            <strong>Team</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <strong>Action</strong>
+        </div>
+    </div>
+    @*BEGIN OLD WORK DESCRIPTION TEMPLATE*@
+    @*<div class="col-12" id="workDescriptionLine_template">
             <div class="row" id="">
-                <div class="col-8" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable="false">
+                <div class="col-8" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable>
                 </div>
                 <div class="col-2" name="txt_teamMembersWorkDesc" id="txt_teamMembersWorkDesc" style="padding:5px">
                     <span class="workDescTeam_" id="workDescTeam_" style="padding:5px"></span>
                 </div>
                 <div class="col-2" style="padding:5px">
-                    <select class="workDescTeam_dpdwn" name="" style="width:100%" disabled>
+                    <select class="workDescTeam_dpdwn" name="" style="width:100%">
                         <option value="">Team</option>
                     </select>
                 </div>
@@ -341,97 +505,135 @@
                     </div>
                 </div>
                 <div class="col-10" style="padding:5px">
-                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="width: 100%" disabled>Save Entry</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="width: 100%">Save Entry</button>
                 </div>
             </div>
+        </div>*@
+    @*END OLD WORK DESCRIPTION TEMPLATE*@
+
+    @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
+    <div class="col-12" id="workDescriptionLine_template">
+        <div class="row" id="">
+            <div class="col-6" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable>
+            </div>
+            <div class="col-4" style="padding:5px">
+                <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" multiple="multiple">
+                    <option value="abundy">AB</option>
+                    <option value="dbanner">DB</option>
+                    <option value="jblow">JB</option>
+                    <option value="jdoe">JD</option>
+                    <option value="jwatkins">JW</option>
+                    <option value="tgoss">TG</option>
+                    <option value="user1">U1</option>
+                    <option value="wjohnson">WJ</option>
+                </select>
+            </div>
+            <div class="col-2" style="padding:5px">
+                <button class="btn btn-light btn-sm copyButton"><i class="far fa-save fa-2x" style="color:black;"></i></button>
+                @*<button class="btn btn-light btn-sm copyButton"><i class="fas fa-save"></i></button>
+                    <button class="btn btn-light btn-sm copyButton" style="background-color: transparent; outline:none; border: none;"><i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i></button>
+                    <button style="border:1px solid black; background-color: transparent;">Test</button>*@
+            </div>
         </div>
+        @*<div class="row">
+            <div class="col-2" style="padding:5px">
+                <div>
+                    <span><strong>Time Entry:</strong></span>
+                    <span id="txt_timeEntryID" value="">new</span>
+                </div>
+            </div>
+            <div class="col-10" style="padding:5px">
+                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="width: 100%">Save Entry</button>
+            </div>
+        </div>*@
+    </div>
+    @*END NEW WORK DESCRIPTION TEMPLATE*@
+</div>
+<hr style="margin:1px; opacity:0">
+<div class="container" id="">
+    @*<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">*@
+    <div class="row">
+        <div class="col-7" style="padding:5px">
+            <strong>Delays</strong>
+        </div>
+        <div class="col-1" style="padding:5px">
+            <strong>Hours</strong>
+        </div>
+        <div class="col-4" style="padding:5px">
+            <strong>Team</strong>
+        </div>
+    </div>
+    <div class="col-12" id="workDescriptionDelaysLine_template">
+        <div class="row" id="">
+            <div class="col-7" id="input_workDescDelays" style="padding:5px; border: 1px solid black;" contenteditable="true">
+            </div>
+            <div class="col-1" style="padding:5px">
+                <input type="text" class="form-control form-control-sm" id="inputHours_workDescDelays" value="">
+            </div>
+            <div class="col-2" name="txt_teamMembersWorkDescDelays" id="txt_teamMembersWorkDescDelays" style="padding:5px">
+                <span class="workDescDelaysTeam_" id="workDescDelaysTeam_" style="padding:5px"></span>
+            </div>
+            <div class="col-2" style="padding:5px">
+                <select class="workDescDelaysTeam_dpdwn" name="" style="width:100%">
+                    <option value="">Team</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2" style="padding:5px">
+                <div>
+                    <span><strong>Time Entry:</strong></span>
+                    <span id="txt_timeEntryIDDelays" value="">new</span>
+                </div>
+            </div>
+            <div class="col-10" style="padding:5px">
+                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysBtn" style="width: 100%">Save Entry</button>
+            </div>
+        </div>
+    </div>
     @*</div>*@
 </div>
 <hr style="margin:1px; opacity:0">
 <div class="container" id="">
     @*<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">*@
-        <div class="row">
-            <div class="col-7" style="padding:5px">
-                <strong>Delays</strong>
+    <div class="row">
+        <div class="col-7" style="padding:5px">
+            <strong>Warranty Delays</strong>
+        </div>
+        <div class="col-1" style="padding:5px">
+            <strong>Hours</strong>
+        </div>
+        <div class="col-4" style="padding:5px">
+            <strong>Team</strong>
+        </div>
+    </div>
+    <div class="col-12" id="workDescriptionWntyDelaysLine_template">
+        <div class="row" id="">
+            <div class="col-7" id="input_workDescWntyDelays" style="padding:5px; border: 1px solid black;" contenteditable="true">
             </div>
             <div class="col-1" style="padding:5px">
-                <strong>Hours</strong>
+                <input type="text" class="form-control form-control-sm" id="inputHours_workDescWntyDelays" value="">
             </div>
-            <div class="col-4" style="padding:5px">
-                <strong>Team</strong>
+            <div class="col-2" name="txt_teamMembersWorkDescWntyDelays" id="txt_teamMembersWorkDescWntyDelays" style="padding:5px">
+                <span class="workDescWntyDelaysTeam_" id="workDescWntyDelaysTeam_" style="padding:5px"></span>
             </div>
-        </div>
-        <div class="col-12" id="workDescriptionDelaysLine_template">
-            <div class="row" id="">
-                <div class="col-7" id="input_workDescDelays" style="padding:5px; border: 1px solid black;" contenteditable="false">
-                </div>
-                <div class="col-1" style="padding:5px">
-                    <input type="text" class="form-control form-control-sm" id="inputHours_workDescDelays" value="" disabled>
-                </div>
-                <div class="col-2" name="txt_teamMembersWorkDescDelays" id="txt_teamMembersWorkDescDelays" style="padding:5px">
-                    <span class="workDescDelaysTeam_" id="workDescDelaysTeam_" style="padding:5px"></span>
-                </div>
-                <div class="col-2" style="padding:5px">
-                    <select class="workDescDelaysTeam_dpdwn" name="" style="width:100%" disabled>
-                        <option value="">Team</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-2" style="padding:5px">
-                    <div>
-                        <span><strong>Time Entry:</strong></span>
-                        <span id="txt_timeEntryIDDelays" value="">new</span>
-                    </div>
-                </div>
-                <div class="col-10" style="padding:5px">
-                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysBtn" style="width: 100%" disabled>Save Entry</button>
-                </div>
+            <div class="col-2" style="padding:5px">
+                <select class="workDescWntyDelaysTeam_dpdwn" name="" style="width:100%">
+                    <option value="">Team</option>
+                </select>
             </div>
         </div>
-    @*</div>*@
-</div>
-<hr style="margin:1px; opacity:0">
-<div class="container" id="">
-    @*<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">*@
         <div class="row">
-            <div class="col-7" style="padding:5px">
-                <strong>Warranty Delays</strong>
-            </div>
-            <div class="col-1" style="padding:5px">
-                <strong>Hours</strong>
-            </div>
-            <div class="col-4" style="padding:5px">
-                <strong>Team</strong>
-            </div>
-        </div>
-        <div class="col-12" id="workDescriptionWntyDelaysLine_template">
-            <div class="row" id="">
-                <div class="col-7" id="input_workDescWntyDelays" style="padding:5px; border: 1px solid black;" contenteditable="false">
-                </div>
-                <div class="col-1" style="padding:5px">
-                    <input type="text" class="form-control form-control-sm" id="inputHours_workDescWntyDelays" value="" disabled>
-                </div>
-                <div class="col-2" name="txt_teamMembersWorkDescWntyDelays" id="txt_teamMembersWorkDescWntyDelays" style="padding:5px">
-                    <span class="workDescWntyDelaysTeam_" id="workDescWntyDelaysTeam_" style="padding:5px"></span>
-                </div>
-                <div class="col-2" style="padding:5px">
-                    <select class="workDescWntyDelaysTeam_dpdwn" name="" style="width:100%" disabled>
-                        <option value="">Team</option>
-                    </select>
+            <div class="col-2" style="padding:5px">
+                <div>
+                    <span><strong>Time Entry:</strong></span>
+                    <span id="txt_timeEntryIDWntyDelays" value="">new</span>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-2" style="padding:5px">
-                    <div>
-                        <span><strong>Time Entry:</strong></span>
-                        <span id="txt_timeEntryIDWntyDelays" value="">new</span>
-                    </div>
-                </div>
-                <div class="col-10" style="padding:5px">
-                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescWntyDelaysBtn" style="width: 100%" disabled>Save Entry</button>
-                </div>
+            <div class="col-10" style="padding:5px">
+                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescWntyDelaysBtn" style="width: 100%">Save Entry</button>
             </div>
         </div>
+    </div>
     @*</div>*@
 </div>

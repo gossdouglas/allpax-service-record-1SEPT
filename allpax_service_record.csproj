@@ -2379,6 +2379,7 @@
     <Content Include="Content\fontawesome-free-5.14.0-web\webfonts\fa-solid-900.woff" />
     <Content Include="Content\fontawesome-free-5.14.0-web\webfonts\fa-solid-900.woff2" />
     <None Include="Properties\PublishProfiles\allpaxServiceRecord - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Alternate Allpax Customer Service.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\GoDaddy.pubxml" />
     <Content Include="Scripts\chosen_v1.8.7\composer.json" />
