@@ -29,6 +29,7 @@ namespace allpax_service_record.Models.View_Models
         public int dailyReportID { get; set; }
 
         public string[] dailyRptTeamArr { get; set; }
+        //public string[][] dailyRptTeamArr { get; set; }
 
         public string dailyReportAuthor { get; set; }
     }
