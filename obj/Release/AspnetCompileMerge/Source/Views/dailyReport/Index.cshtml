@@ -513,26 +513,29 @@
 
     @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
     <div class="col-12" id="workDescriptionLine_template">
-        <div class="row" id="">
-            <div class="col-6" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable>
+        <div class="row" id="" style="border:1px solid black">
+            @*<div class="col-6" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable>
+            </div>*@
+            <div class="col-6" id="" style="padding:0px;">
+                <input type="text" id="input_workDesc" style="width:100%">
             </div>
-            <div class="col-4" style="padding:5px">
+            <div class="col-4" style="padding:0px">
                 <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" multiple="multiple">
-                    <option value="abundy">AB</option>
-                    <option value="dbanner">DB</option>
-                    <option value="jblow">JB</option>
-                    <option value="jdoe">JD</option>
-                    <option value="jwatkins">JW</option>
-                    <option value="tgoss">TG</option>
-                    <option value="user1">U1</option>
-                    <option value="wjohnson">WJ</option>
+                    @*<option value="abundy">AB</option>
+                <option value="dbanner">DB</option>
+                <option value="jblow">JB</option>
+                <option value="jdoe">JD</option>
+                <option value="jwatkins">JW</option>
+                <option value="tgoss">TG</option>
+                <option value="user1">U1</option>
+                <option value="wjohnson">WJ</option>*@
                 </select>
             </div>
-            <div class="col-2" style="padding:5px">
+            <div class="col-2" style="padding:0px">
                 <button class="btn btn-light btn-sm copyButton"><i class="far fa-save fa-2x" style="color:black;"></i></button>
                 @*<button class="btn btn-light btn-sm copyButton"><i class="fas fa-save"></i></button>
-                    <button class="btn btn-light btn-sm copyButton" style="background-color: transparent; outline:none; border: none;"><i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i></button>
-                    <button style="border:1px solid black; background-color: transparent;">Test</button>*@
+            <button class="btn btn-light btn-sm copyButton" style="background-color: transparent; outline:none; border: none;"><i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i></button>
+            <button style="border:1px solid black; background-color: transparent;">Test</button>*@
             </div>
         </div>
         @*<div class="row">
@@ -551,8 +554,7 @@
 </div>
 <hr style="margin:1px; opacity:0">
 <div class="container" id="">
-    @*<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">*@
-    <div class="row">
+    @*<div class="row">
         <div class="col-7" style="padding:5px">
             <strong>Delays</strong>
         </div>
@@ -590,13 +592,11 @@
                 <button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysBtn" style="width: 100%">Save Entry</button>
             </div>
         </div>
-    </div>
-    @*</div>*@
+    </div>*@
 </div>
 <hr style="margin:1px; opacity:0">
 <div class="container" id="">
-    @*<div class=" container pl-auto printable" style="margin:5px" id="contnr_workDescription">*@
-    <div class="row">
+    @*<div class="row">
         <div class="col-7" style="padding:5px">
             <strong>Warranty Delays</strong>
         </div>
@@ -634,6 +634,5 @@
                 <button type="button" class="btn btn-primary btn-sm" id="addWorkDescWntyDelaysBtn" style="width: 100%">Save Entry</button>
             </div>
         </div>
-    </div>
-    @*</div>*@
+    </div>*@
 </div>
