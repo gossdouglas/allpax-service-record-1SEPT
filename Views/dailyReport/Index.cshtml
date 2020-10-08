@@ -26,7 +26,8 @@
 
             $('.workDescTeam_dpdwn').select2({
                 width: "100%",
-                placeholder: "Select Team"
+                placeholder: "Select Team",
+                closeOnSelect: "false"
             });
 
             var dailyRptTeamArr = [];
@@ -153,7 +154,9 @@
                             //end axios add post
 
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-                            updateSectionDpdwns();
+
+                            $("<option id=workDescTeam_dpdwn_" + temp_userName + " value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo("#workDescTeam_dpdwn");
+                            //updateSectionDpdwns();
                         });
                         //end AddTeamMember
                     }
@@ -192,9 +195,10 @@
                 }
 
                 $("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
+                $("#workDescTeam_dpdwn option[value='" + tempTeamMemberUserID + "']").remove();
                 $("#" + $(this).attr("id")).remove();
 
-                updateSectionDpdwns();
+                //updateSectionDpdwns();
             });
             //end when a team member class is clicked...
             //end when a record class is clicked...
