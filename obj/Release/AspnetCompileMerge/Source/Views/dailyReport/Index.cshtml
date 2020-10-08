@@ -12,6 +12,14 @@
         .container {
             border: 2px solid black;
         }
+        .btn {
+            background-color: transparent;
+            background-repeat: no-repeat;
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            outline: none;
+        }
     </style>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -24,9 +32,13 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
+            var standardElementHeight = $("#newWorkDescBtn_save").height();
+            $(".standardInput").height(standardElementHeight);
+
             $('.workDescTeam_dpdwn').select2({
                 width: "100%",
-                placeholder: "Select Team"
+                placeholder: "Select Team",
+                closeOnSelect: "false"
             });
 
             var dailyRptTeamArr = [];
@@ -136,7 +148,7 @@
 
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
-                            console.log(dailyRptTeamArr);
+                            //console.log(dailyRptTeamArr);
 
                             //begin AddTeamMember
                             //begin axios add post
@@ -153,7 +165,9 @@
                             //end axios add post
 
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-                            updateSectionDpdwns();
+
+                            $("<option id=workDescTeam_dpdwn_" + temp_userName + " value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo("#workDescTeam_dpdwn");
+                            //updateSectionDpdwns();
                         });
                         //end AddTeamMember
                     }
@@ -192,9 +206,10 @@
                 }
 
                 $("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
+                $("#workDescTeam_dpdwn option[value='" + tempTeamMemberUserID + "']").remove();
                 $("#" + $(this).attr("id")).remove();
 
-                updateSectionDpdwns();
+                //updateSectionDpdwns();
             });
             //end when a team member class is clicked...
             //end when a record class is clicked...
@@ -270,6 +285,60 @@
                     });
             });
 
+            //begin #addButton
+            $("#newWorkDescBtn_add").click(function () {//when the add button is clicked...
+
+                var currentWorkDescNarr = "";
+                var currentTeamDpdwn = $(this).parent().parent().find(".workDescTeam_dpdwn_div").find("#select2-workDescTeam_dpdwn-container li");
+                //var currentTeamDpdwnParsed = $(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").html();
+                var currentTeamDpdwnParsed = $(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div");
+
+                console.clear();
+                //console.log(currentTeamDpdwnParsed);
+
+                $(currentTeamDpdwn).each(function (index) {
+                    //console.log(index + ": " + $(this).attr("title"));
+                    currentWorkDescNarr = currentWorkDescNarr.concat($(this).attr("title") + "|");
+                });
+                currentTeamDpdwnParsed.html(currentWorkDescNarr);
+              
+                $(this).hide();
+                $("#newWorkDescBtn_edit").removeAttr("hidden");
+
+                //$("#workDescTeam_dpdwn_parsed").removeAttr("hidden");
+                $(".workDescTeam_dpdwn_parsed_div").removeAttr("hidden");
+                //$("#workDescTeam_dpdwn_parsed").show();
+                $(".workDescTeam_dpdwn_parsed_div").show();
+
+                //$("#workDescTeam_dpdwn").hide();
+                $(".workDescTeam_dpdwn_div").hide();
+                $("#newWorkDescBtn_edit").show();
+
+                //$("#input_workDesc").attr("disabled", "true");//set the  description input to editable
+                $(".workDescTeam_narr_div").attr("contenteditable", "false");//set the  description input to editable
+
+                //alert($(this).parent().parent().attr("class"));
+                //console.log($(this).parent().parent().find(".workDescTeam_dpdwn_div").attr("class"));               
+            });
+
+            $("#newWorkDescBtn_edit").click(function () {//when the add button is clicked...
+                $(this).hide();
+                //$("#workDescTeam_dpdwn_parsed").hide();
+                $(".workDescTeam_dpdwn_parsed_div").hide();
+                $(".workDescTeam_dpdwn_div").show();
+
+                $("#newWorkDescBtn_add").show();
+
+                $(".workDescTeam_narr_div").attr("contenteditable", "true");//set the  description input to editable
+            });
+
+            //begin #
+            $(workDescTeam_dpdwn).change(function () {//when the add button is clicked...
+
+                //alert($(this).val());
+                //alert($(this).find(":selected").text());
+            });
+
             var fields = "#slct_date, #input_jobs_dpdown, #input_equipment, #input_startTime, #input_endTime, #input_lunch, #subJobTypes_dpdwn";
 
             $(fields).on('change', function () {
@@ -290,6 +359,7 @@
                 return filled;
             }
 
+            //DELETE THIS FUNCTION
             function updateSectionDpdwns() {
                 //this function keeps the new record dropdowns in sections work description, delays and warranty delays
                 //in synch with which team members available for addition to a new record
@@ -512,44 +582,26 @@
     @*END OLD WORK DESCRIPTION TEMPLATE*@
 
     @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
-    <div class="col-12" id="workDescriptionLine_template">
-        <div class="row" id="" style="border:1px solid black">
-            @*<div class="col-6" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable>
-            </div>*@
-            <div class="col-6" id="" style="padding:0px;">
-                <input type="text" id="input_workDesc" style="width:100%">
-            </div>
-            <div class="col-4" style="padding:0px">
-                <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" multiple="multiple">
-                    @*<option value="abundy">AB</option>
-                <option value="dbanner">DB</option>
-                <option value="jblow">JB</option>
-                <option value="jdoe">JD</option>
-                <option value="jwatkins">JW</option>
-                <option value="tgoss">TG</option>
-                <option value="user1">U1</option>
-                <option value="wjohnson">WJ</option>*@
-                </select>
-            </div>
-            <div class="col-2" style="padding:0px">
-                <button class="btn btn-light btn-sm copyButton"><i class="far fa-save fa-2x" style="color:black;"></i></button>
-                @*<button class="btn btn-light btn-sm copyButton"><i class="fas fa-save"></i></button>
-            <button class="btn btn-light btn-sm copyButton" style="background-color: transparent; outline:none; border: none;"><i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i></button>
-            <button style="border:1px solid black; background-color: transparent;">Test</button>*@
-            </div>
+<div class="col-12" id="workDescriptionLine_template">
+    <div class="row" id="" style="border: 1px solid black;">
+        <div class="col-6 workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px;">
+            
+            @*<input type="text" class="standardInput" id="input_workDesc" style="width:100%">*@
         </div>
-        @*<div class="row">
-            <div class="col-2" style="padding:5px">
-                <div>
-                    <span><strong>Time Entry:</strong></span>
-                    <span id="txt_timeEntryID" value="">new</span>
-                </div>
-            </div>
-            <div class="col-10" style="padding:5px">
-                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="width: 100%">Save Entry</button>
-            </div>
-        </div>*@
+        <div class="col-4 workDescTeam_dpdwn_div" style="padding:0px;">
+            <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" multiple="multiple">
+            </select>
+        </div>
+        <div class="col-4 workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px;">
+                fdkjfjdklfjdfdjfl
+        </div>
+        <div class="col-2" style="padding:0px;">
+            <button id="newWorkDescBtn_add" class="btn btn-light btn-sm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+            <button id="newWorkDescBtn_edit" class="btn btn-light btn-sm" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+            <button id="newWorkDescBtn_clear" class="btn btn-light btn-sm" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+        </div>
     </div>
+</div>
     @*END NEW WORK DESCRIPTION TEMPLATE*@
 </div>
 <hr style="margin:1px; opacity:0">
