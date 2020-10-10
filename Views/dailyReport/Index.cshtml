@@ -291,40 +291,34 @@
             //begin #addButton
             $("#newWorkDescBtn_add").click(function () {//when the add button is clicked...
 
+
                 var currentWorkDescNarr = "";
                 var currentTeamDpdwn = $(this).parent().parent().find(".workDescTeam_dpdwn_div").find("#select2-workDescTeam_dpdwn-container li");
-                //var currentTeamDpdwnParsed = $(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").html();
                 var currentTeamDpdwnParsed = $(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div");
 
-                console.clear();
-                //console.log(currentTeamDpdwnParsed);
-
                 $(currentTeamDpdwn).each(function (index) {
-                    //console.log(index + ": " + $(this).attr("title"));
                     currentWorkDescNarr = currentWorkDescNarr.concat($(this).attr("title") + "|");
                 });
                 currentTeamDpdwnParsed.html(currentWorkDescNarr);
               
-                $(this).hide();
                 $("#newWorkDescBtn_edit").removeAttr("hidden");
 
-                //$("#workDescTeam_dpdwn_parsed").removeAttr("hidden");
                 $(".workDescTeam_dpdwn_parsed_div").removeAttr("hidden");
-                //$("#workDescTeam_dpdwn_parsed").show();
                 $(".workDescTeam_dpdwn_parsed_div").show();
 
-                //$("#workDescTeam_dpdwn").hide();
                 $(".workDescTeam_dpdwn_div").hide();
                 $("#newWorkDescBtn_edit").show();
 
-                //$("#input_workDesc").attr("disabled", "true");//set the  description input to editable
                 $(".workDescTeam_narr_div").attr("contenteditable", "false");//set the  description input to editable
 
-                //$("#workDescriptionLine_template").children().clone(true).appendTo("#workDescriptionLine_template");
-                $("#workDescriptionLine_template_row").clone(true).appendTo("#workDescriptionLine_template");
+                $("#workDescriptionLine_template_row").clone(true).prop("id", "").appendTo("#workDescriptionLine_entries");
 
-                //alert($(this).parent().parent().attr("class"));
-                //console.log($(this).parent().parent().find(".workDescTeam_dpdwn_div").attr("class"));               
+                $("#workDescriptionLine_entries").find(".workDescTeam_dpdwn").prop("id", "");//
+
+                $("#workDescriptionLine_template_row").find(".workDescTeam_narr_div").html("");//clear the new work description narrative text
+                $("#workDescriptionLine_template_row").find(".workDescTeam_narr_div").attr("contenteditable", "true");//set the work description input to editable
+                $("#workDescriptionLine_template_row").find(".workDescTeam_dpdwn_parsed_div").hide();
+                $("#workDescriptionLine_template_row").find(".workDescTeam_dpdwn_div").show();
             });
 
             $("#newWorkDescBtn_edit").click(function () {//when the add button is clicked...
@@ -547,7 +541,7 @@
         </div>
 </div>*@
 <hr style="margin:1px; opacity:0">
-<div class="container" id="">
+<div class="container" id="workDesc_container">
     <div class="row">
         <div class="col-6" style="padding:5px">
             <strong>Work Description</strong>
@@ -587,26 +581,31 @@
         </div>*@
     @*END OLD WORK DESCRIPTION TEMPLATE*@
 
-    @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
-<div class="col-12" id="workDescriptionLine_template">
-    <div class="row" id="workDescriptionLine_template_row" style="border:1px solid black;">
-        <div class="col-6 workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+    <div class="col-12" id="workDescriptionLine_entries">
 
+
+    </div>
+    @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
+    <div class="col-12" id="workDescriptionLine_template">
+        <div class="row" id="workDescriptionLine_template_row" style="border:1px solid black;">
+            <div class="col-6 workDescTeam_narr_div" id="workDescTeam_narr_div_template" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-4 workDescTeam_dpdwn_div" style="padding:0px;">
+                <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" multiple="multiple">
+                </select>
+            </div>
+            <div class="col-4 workDescTeam_dpdwn_parsed_div" id="workDescTeam_dpdwn_parsed_div" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
+                fdkjfjdklfjdfdjfl
+            </div>
+            <div class="col-2 workDescTeam_button_div" style="padding:0px; border:1px solid black">
+                <button id="newWorkDescBtn_add" class="btn btn-light btn-sm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                @*<button id="" class="btn btn-light btn-sm lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+        <button id="" class="btn btn-light btn-sm lineWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
+            </div>
         </div>
-        <div class="col-4 workDescTeam_dpdwn_div" style="padding:0px;">
-            <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" multiple="multiple">
-            </select>
-        </div>
-        <div class="col-4 workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
-            fdkjfjdklfjdfdjfl
-        </div>
-        <div class="col-2" style="padding:0px; border:1px solid black">
-            <button id="newWorkDescBtn_add" class="btn btn-light btn-sm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-            <button id="newWorkDescBtn_edit" class="btn btn-light btn-sm" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-            <button id="newWorkDescBtn_clear" class="btn btn-light btn-sm" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
-        </div>
-    </div>    
-</div>
+    </div>
+
     @*END NEW WORK DESCRIPTION TEMPLATE*@
 </div>
 <hr style="margin:1px; opacity:0">
