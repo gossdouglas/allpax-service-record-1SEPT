@@ -20,6 +20,9 @@
             overflow: hidden;
             outline: none;
         }
+        .select2 {
+            border: 1px solid black;
+        }
     </style>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -317,6 +320,9 @@
                 //$("#input_workDesc").attr("disabled", "true");//set the  description input to editable
                 $(".workDescTeam_narr_div").attr("contenteditable", "false");//set the  description input to editable
 
+                //$("#workDescriptionLine_template").children().clone(true).appendTo("#workDescriptionLine_template");
+                $("#workDescriptionLine_template_row").clone(true).appendTo("#workDescriptionLine_template");
+
                 //alert($(this).parent().parent().attr("class"));
                 //console.log($(this).parent().parent().find(".workDescTeam_dpdwn_div").attr("class"));               
             });
@@ -583,24 +589,23 @@
 
     @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
 <div class="col-12" id="workDescriptionLine_template">
-    <div class="row" id="" style="border: 1px solid black;">
-        <div class="col-6 workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px;">
-            
-            @*<input type="text" class="standardInput" id="input_workDesc" style="width:100%">*@
+    <div class="row" id="workDescriptionLine_template_row" style="border:1px solid black;">
+        <div class="col-6 workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
         </div>
         <div class="col-4 workDescTeam_dpdwn_div" style="padding:0px;">
             <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" multiple="multiple">
             </select>
         </div>
-        <div class="col-4 workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px;">
-                fdkjfjdklfjdfdjfl
+        <div class="col-4 workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
+            fdkjfjdklfjdfdjfl
         </div>
-        <div class="col-2" style="padding:0px;">
+        <div class="col-2" style="padding:0px; border:1px solid black">
             <button id="newWorkDescBtn_add" class="btn btn-light btn-sm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
             <button id="newWorkDescBtn_edit" class="btn btn-light btn-sm" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
             <button id="newWorkDescBtn_clear" class="btn btn-light btn-sm" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
         </div>
-    </div>
+    </div>    
 </div>
     @*END NEW WORK DESCRIPTION TEMPLATE*@
 </div>
