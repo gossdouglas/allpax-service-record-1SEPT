@@ -23,6 +23,9 @@
         .select2 {
             border: 1px solid black;
         }
+        i {
+            pointer-events: none;
+        }
     </style>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -313,23 +316,43 @@
 
                 $("#workDescriptionLine_template_row").clone(true).prop("id", "").appendTo("#workDescriptionLine_entries");
 
-                $("#workDescriptionLine_entries").find(".workDescTeam_dpdwn").prop("id", "");//
+                $("#workDescriptionLine_entries").last().find(".workDescTeam_dpdwn").prop("id", "");//
+
+                //$("#workDescriptionLine_entries").last().find(".workDescTeam_button_div").
+                //    html("<button class='btn btn-light btn-sm lineWorkDescBtn_edit'><i class='far fa-edit fa-2x' style='color: black;'></i></button> "+
+                //        "<button class= 'btn btn-light btn-sm lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button >");
+                $("#workDescriptionLine_entries").last().find(".workDescTeam_button_div").
+                    html("<button class='lineWorkDescBtn_edit'>EDIT</button>" +
+                        "<button class= 'lineWorkDescBtn_save' hidden>SAVE</i></button >");
 
                 $("#workDescriptionLine_template_row").find(".workDescTeam_narr_div").html("");//clear the new work description narrative text
                 $("#workDescriptionLine_template_row").find(".workDescTeam_narr_div").attr("contenteditable", "true");//set the work description input to editable
                 $("#workDescriptionLine_template_row").find(".workDescTeam_dpdwn_parsed_div").hide();
                 $("#workDescriptionLine_template_row").find(".workDescTeam_dpdwn_div").show();
+                $("#workDescriptionLine_template_row").find(".select2-selection__rendered li").remove();
+                //$("#workDescriptionLine_template_row").find(".select2-search__field").attr("placeholder", "Select Team");
+            });
+
+            //$(".workDescTeam_button_div").click(function () {
+            $(".lineWorkDescBtn_edit").click(function () {
+                //$(this).hide();
+                alert('yo dude')
+                //$(".workDescTeam_dpdwn_parsed_div").hide();
+                //$(".workDescTeam_dpdwn_div").show();
+
+                //$("#newWorkDescBtn_add").show();
+
+                //$(".workDescTeam_narr_div").attr("contenteditable", "true");
             });
 
             $("#newWorkDescBtn_edit").click(function () {//when the add button is clicked...
-                $(this).hide();
-                //$("#workDescTeam_dpdwn_parsed").hide();
-                $(".workDescTeam_dpdwn_parsed_div").hide();
-                $(".workDescTeam_dpdwn_div").show();
+                //$(this).hide();
+                //$(".workDescTeam_dpdwn_parsed_div").hide();
+                //$(".workDescTeam_dpdwn_div").show();
 
-                $("#newWorkDescBtn_add").show();
+                //$("#newWorkDescBtn_add").show();
 
-                $(".workDescTeam_narr_div").attr("contenteditable", "true");//set the  description input to editable
+                //$(".workDescTeam_narr_div").attr("contenteditable", "true");
             });
 
             //begin #
