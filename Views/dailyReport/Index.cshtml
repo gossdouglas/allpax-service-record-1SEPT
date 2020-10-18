@@ -41,22 +41,21 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            var standardElementHeight = $("#newWorkDescBtn_save").height();
-            $(".standardInput").height(standardElementHeight);
+            var standardElementHeight = $("#newWorkDescBtn_save").height();//get the height of the save button...
+            $(".standardInput").height(standardElementHeight);//...and assign its height to all other buttons with a class of standardInput
 
-            fn_enableSelect2();
+            fn_enableSelect2();//enable the select2 add-on on page load
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
 
-            var indexWorkDescEntries = 0;
-            var indexDelaysEntries = 0;
-            var indexWntyDelaysEntries = 0;
+            var indexWorkDescEntries = 0;//keep track of the number of work description entries
+            var indexDelaysEntries = 0;//keep track of the number of delays entries
+            var indexWntyDelaysEntries = 0;//keep track of the number of warranty delays entries
 
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
             var team_dpdwn = $('#team_dpdwn');
-            //var workDescTeam_dpdwn = $('#workDescTeam_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
             var lastDlyRptCrtdByUser;
@@ -107,7 +106,6 @@
                     dataType: 'json',
                     data: { jobID: jobs_dpdown.val() },
                     success: function (data) {
-
                         subJobTypes_dpdwn.append($('<option/>', { value: '', text: 'Select a Job Sub-Type' }));
 
                         $(data).each(function (index, item) {
@@ -156,65 +154,21 @@
                             $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
 
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
-                            console.log(dailyRptTeamArr.length)
                             dailyRptTeamUserIDArr.push(temp_userName);
-                            //console.log(dailyRptTeamArr);
-
-                            //begin AddTeamMember
-                            //begin axios add post
-                            //axios.post('/dailyReportByReportID/AddTeamMember', {
-                            //    dailyReportID: dailyReportID,
-                            //    userName: temp_userName,
-                            //})
-                            //    .then(function (response) {
-                            //        $.fn.updateSectionDpdwns();
-                            //    })
-                            //    .catch(function (error) {
-                            //        console.log(error);
-                            //    });
-                            //end axios add post
 
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-
-                            //$("<option id=workDescTeam_dpdwn_" + temp_userName + " value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo("#workDescTeam_dpdwn");
-                            //$("<option id=workDescTeam_dpdwn_" + temp_userName + " value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".workDescTeam_dpdwn");
-
-                            //$("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".workDescTeam_dpdwn");
-                            //$("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".delaysTeam_dpdwn");
-                            //$("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".wntyDelaysTeam_dpdwn");
-
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
-                            enable_disableSave();                          
-                        });
-                        
+                            enable_disableSave();//determine if the save button needs to be enabled or disabled                          
+                        });                      
                         //end AddTeamMember
                     }
-                });
-                
-                $(team_dpdwn).val("-1");
-                
+                });               
+                $(team_dpdwn).val("-1");                
             });
             //end add team member on drop down change
 
             //begin when a team member class is clicked...
             $(".team_").on('click', function () {
-                //var tempTeamMemberUserID = this.id.substr(5);
-
-                //begin DeleteTeamMember
-                //begin axios delete post
-                //axios.post('/dailyReportByReportID/DeleteTeamMember', {
-
-                //    dailyReportID: dailyReportID,
-                //    userName: tempTeamMemberUserID,
-                //})
-                //    .then(function (response) {
-                //        console.log(response);
-                //        $.fn.updateSectionDpdwns();
-                //    })
-                //    .catch(function (error) {
-                //        console.log(error);
-                //    });
-                //end axios delete post
 
                 var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
                 for (var row = 0; row < dailyRptTeamArr.length; row++) {
@@ -227,82 +181,10 @@
                 $("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
                 $(".Team_dpdwn option[value='" + tempTeamMemberUserID + "']").remove();
                 $("#" + $(this).attr("id")).remove();
-                enable_disableSave();
+                enable_disableSave();//determine if the save button needs to be enabled or disabled
             });
             //end when a team member class is clicked...
-            //end when a record class is clicked...
-
-            //begin #addButton
-            $("#addButton").click(function () {//when the add button is clicked...
-
-                var addItem1 = $("#jobs_dpdown").val();
-                var addItem2 = $("#slct_date").val();
-                var addItem3 = $("#subJobTypes_dpdwn").val();
-                var addItem4 = $("#input_startTime").val();
-                var addItem5 = $("#input_endTime").val();
-                var addItem6 = $("#input_lunch").val();
-                var addItem7 = $("#input_equipment").val();
-                var addItem7 = $("#input_equipment").val();
-                var addItem8 = dailyRptAuthor;
-                var addItem9 = [];
-                addItem9 = dailyRptTeamUserIDArr;
-
-                alert(
-                    "Selected for Add POST:" + '\n' +
-                    "addItem1: " + addItem1 + '\n' +
-                    "addItem2: " + addItem2 + '\n' +
-                    "addItem3: " + addItem3 + '\n' +
-                    "addItem4: " + addItem4 + '\n' +
-                    "addItem5: " + addItem5 + '\n' +
-                    "addItem6: " + addItem6 + '\n' +
-                    "addItem7: " + addItem7 + '\n' +
-                    "addItem8: " + addItem8 + '\n' +
-                    "addItem9: " + addItem9 + '\n'
-                );
-                $("#addRecordItem1").val('');
-                $("#addRecordItem2").val('');
-                $("#addRecordItem3").val('');
-                $("#addRecordItem4").val('');
-                $("#addRecordItem5").val('');
-                $("#addRecordItem6").val('');
-                $("#addRecordItem7").val('');
-                $("#addRecordItem8").val('');
-                $("#addRecordItem9").val('');
-
-                //begin axios add post
-                axios.post('/dailyReport/AddDailyReport', {
-                    jobID: addItem1,
-                    date: addItem2,
-                    subJobID: addItem3,
-                    startTime: addItem4,
-                    endTime: addItem5,
-                    lunchHours: addItem6,
-                    equipment: addItem7,
-                    dailyReportAuthor: addItem8,
-                    dailyRptTeamArr: addItem9
-                })
-                    .then(function (response) {
-                        console.log(response);
-                        //begin get last daily report created by user name
-                        $.ajax({
-                            url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
-                            method: 'post',
-                            dataType: 'json',
-                            data: { dailyReportAuthor: dailyRptAuthor },
-                            success: function (data) {
-
-                                $(data).each(function (index, item) {
-                                    lastDlyRptCrtdByUser = item;
-                                    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                                });
-                            }
-                        });
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            });
-
+            
             $(".Btn_add").click(function () {
 
                 fn_produceParsedShortNames($(this));
@@ -394,31 +276,17 @@
 
             var fields = "#slct_date, #input_jobs_dpdown, #input_equipment, #input_startTime, #input_endTime, #input_lunch, #subJobTypes_dpdwn";
 
+            //when one of the basic fields changes...
             $(fields).on('change', function () {
-                //if (allFilled() ) {
-                //    $('#addButton').removeAttr('disabled');
-                //} else {
-                //    $('#addButton').attr('disabled', 'disabled');
-                //}
-                enable_disableSave();
+                enable_disableSave();//determine if the save button needs to be enabled or disabled
             });
 
-            function enable_disableSave() {
-                if (allFilled()) {
-                    $('#addButton').removeAttr('disabled');
-                } else {
-                    $('#addButton').attr('disabled', 'disabled');
-                }
-            }
-
+            //determine if the save button needs to be enabled or disabled
             function allFilled() {
                 var filled = true;
                 $(fields).each(function () {
-                    if ($(this).val() == '' ) {
-                    //if (($(this).val() == '') || (dailyRptTeamArr.length < 1)) {
-
+                    if ($(this).val() == '') {
                         filled = false;
-                        //filled = true;
                     }
                 });
                 if (dailyRptTeamArr.length == 0) {
@@ -427,6 +295,16 @@
                 return filled;
             }
 
+            //enable or disable the save button
+            function enable_disableSave() {
+                if (allFilled()) {
+                    $('#addButton').removeAttr('disabled');
+                } else {
+                    $('#addButton').attr('disabled', 'disabled');
+                }
+            }
+
+            //enable the select2 add-on
             function fn_enableSelect2() {
                 $('.Team_dpdwn').select2({
                     width: "100%",
@@ -435,6 +313,7 @@
                 })
             }
 
+            //disable the select2 add-on
             function fn_disableSelect2() {
                 $('.Team_dpdwn').select2('destroy')
             }
@@ -451,6 +330,77 @@
                 });
                 currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
             }
+
+            //begin #addButton
+            $("#addButton").click(function () {//when the add button is clicked...
+
+                var addItem1 = $("#jobs_dpdown").val();
+                var addItem2 = $("#slct_date").val();
+                var addItem3 = $("#subJobTypes_dpdwn").val();
+                var addItem4 = $("#input_startTime").val();
+                var addItem5 = $("#input_endTime").val();
+                var addItem6 = $("#input_lunch").val();
+                var addItem7 = $("#input_equipment").val();
+                var addItem7 = $("#input_equipment").val();
+                var addItem8 = dailyRptAuthor;
+                var addItem9 = [];
+                addItem9 = dailyRptTeamUserIDArr;
+
+                alert(
+                    "Selected for Add POST:" + '\n' +
+                    "addItem1: " + addItem1 + '\n' +
+                    "addItem2: " + addItem2 + '\n' +
+                    "addItem3: " + addItem3 + '\n' +
+                    "addItem4: " + addItem4 + '\n' +
+                    "addItem5: " + addItem5 + '\n' +
+                    "addItem6: " + addItem6 + '\n' +
+                    "addItem7: " + addItem7 + '\n' +
+                    "addItem8: " + addItem8 + '\n' +
+                    "addItem9: " + addItem9 + '\n'
+                );
+                $("#addRecordItem1").val('');
+                $("#addRecordItem2").val('');
+                $("#addRecordItem3").val('');
+                $("#addRecordItem4").val('');
+                $("#addRecordItem5").val('');
+                $("#addRecordItem6").val('');
+                $("#addRecordItem7").val('');
+                $("#addRecordItem8").val('');
+                $("#addRecordItem9").val('');
+
+                //begin axios add post
+                axios.post('/dailyReport/AddDailyReport', {
+                    jobID: addItem1,
+                    date: addItem2,
+                    subJobID: addItem3,
+                    startTime: addItem4,
+                    endTime: addItem5,
+                    lunchHours: addItem6,
+                    equipment: addItem7,
+                    dailyReportAuthor: addItem8,
+                    dailyRptTeamArr: addItem9
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        //begin get last daily report created by user name
+                        $.ajax({
+                            url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
+                            method: 'post',
+                            dataType: 'json',
+                            data: { dailyReportAuthor: dailyRptAuthor },
+                            success: function (data) {
+
+                                $(data).each(function (index, item) {
+                                    lastDlyRptCrtdByUser = item;
+                                    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                                });
+                            }
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            });
 
         });//end document read jquery statements
     </script>
