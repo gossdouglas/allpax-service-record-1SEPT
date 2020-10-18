@@ -395,7 +395,12 @@
             }
 
             function fn_enableSelect2() {
-                $('.workDescTeam_dpdwn, .delaysTeam_dpdwn, .wntyDelaysTeam_dpdwn').select2({
+                //$('.workDescTeam_dpdwn, .delaysTeam_dpdwn, .wntyDelaysTeam_dpdwn').select2({
+                //    width: "100%",
+                //    placeholder: "Select Team",
+                //    closeOnSelect: "false"
+                //})
+                $('.Team_dpdwn').select2({
                     width: "100%",
                     placeholder: "Select Team",
                     closeOnSelect: "false"
@@ -403,7 +408,8 @@
             }
 
             function fn_disableSelect2() {
-                $('.workDescTeam_dpdwn, .delaysTeam_dpdwn, .wntyDelaysTeam_dpdwn').select2('destroy')
+                //$('.workDescTeam_dpdwn, .delaysTeam_dpdwn, .wntyDelaysTeam_dpdwn').select2('destroy')
+                $('.Team_dpdwn').select2('destroy')
             }
 
             function fn_produceParsedShortNames(button) {
