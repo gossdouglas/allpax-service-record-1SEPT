@@ -299,29 +299,9 @@
             });
 
             $(".Btn_add").click(function () {
-            //$(".newWorkDescBtn_add").click(function () {
                 indexWorkDescEntries = indexWorkDescEntries + 1;
                 fn_produceParsedShortNames($(this));
                 fn_disableSelect2();
-
-                //$(this).parent().parent().find(".workDescTeam_narr_div").attr("contenteditable", "false");//lock the narrative for edits
-                //$(this).parent().parent().find(".workDescTeam_dpdwn_div").hide();//hide the team dropdown
-                //$(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
-                //$(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").show();//show the parsed version of the team dropdown
-                //$(this).parent().parent().find(".newWorkDescBtn_add").hide();//remove the add button, only needed for new work descriptions
-                //$(this).parent().parent().find(".newWorkDescBtn_clear").hide();//remove the clear button, only needed for new work descriptions
-                //$(this).parent().parent().find(".lineWorkDescBtn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
-                //$(this).parent().parent().find(".lineWorkDescBtn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
-                //$(this).parent().parent().last().find(".workDescTeam_narr_div").css('border-bottom-style', 'none');
-                //$(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").css('border-bottom-style', 'none');
-                //$(this).parent().parent().find(".workDescTeam_button_div").css('border-bottom-style', 'none');
-
-                //$(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
-
-                //$(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
-                //$(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
-
-                //$(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
 
                 $(this).parent().parent().find(".narr_div").attr("contenteditable", "false");//lock the narrative for edits
                 $(this).parent().parent().find(".dpdwn_div").hide();//hide the team dropdown
@@ -344,18 +324,10 @@
                 fn_enableSelect2();
             });
            
-            //$(".lineWorkDescBtn_edit").click(function () {
             $(".Btn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
 
                 $(this).hide();
-                //$(currentRow).find(".lineWorkDescBtn_save").removeAttr("hidden");
-                //$(currentRow).find(".lineWorkDescBtn_save").show();
-
-                //$(currentRow).find(".workDescTeam_narr_div").attr("contenteditable", "true");
-                //$(currentRow).find(".workDescTeam_dpdwn_parsed_div").hide();
-                //$(currentRow).find(".workDescTeam_dpdwn_div").show();
-
                 $(currentRow).find(".Btn_save").removeAttr("hidden");
                 $(currentRow).find(".Btn_save").show();
 
@@ -364,18 +336,10 @@
                 $(currentRow).find(".dpdwn_div").show();
             });
 
-            //$(".lineWorkDescBtn_save").click(function () {
             $(".Btn_save").click(function () {
                 var currentRow = $(this).parent().parent();
 
                 $(this).hide();
-                //$(currentRow).find(".lineWorkDescBtn_edit").removeAttr("hidden");
-                //$(currentRow).find(".lineWorkDescBtn_edit").show();
-
-                //$(currentRow).find(".workDescTeam_narr_div").attr("contenteditable", "false");
-                //$(currentRow).find(".workDescTeam_dpdwn_parsed_div").show();
-                //$(currentRow).find(".workDescTeam_dpdwn_div").hide();
-
                 $(currentRow).find(".Btn_edit").removeAttr("hidden");
                 $(currentRow).find(".Btn_edit").show();
 
@@ -386,7 +350,6 @@
                 fn_produceParsedShortNames($(this));
             });
 
-            //$(".lineWorkDescBtn_delete").click(function () {
             $(".Btn_delete").click(function () {
                 var currentRow = $(this).parent().parent();
 
@@ -424,11 +387,6 @@
             }
 
             function fn_enableSelect2() {
-                //$('.workDescTeam_dpdwn, .delaysTeam_dpdwn, .wntyDelaysTeam_dpdwn').select2({
-                //    width: "100%",
-                //    placeholder: "Select Team",
-                //    closeOnSelect: "false"
-                //})
                 $('.Team_dpdwn').select2({
                     width: "100%",
                     placeholder: "Select Team",
@@ -437,17 +395,14 @@
             }
 
             function fn_disableSelect2() {
-                //$('.workDescTeam_dpdwn, .delaysTeam_dpdwn, .wntyDelaysTeam_dpdwn').select2('destroy')
                 $('.Team_dpdwn').select2('destroy')
             }
 
             function fn_produceParsedShortNames(button) {
                 var currentWorkDescTeamShortNamesParsed = "";
                 //select the list elements that contain the short names of the team members
-                //var currentTeamShortNameLists = $(button).parent().parent().find(".workDescTeam_dpdwn_div").find(".select2-selection__rendered li");
                 var currentTeamShortNameLists = $(button).parent().parent().find(".dpdwn_div").find(".select2-selection__rendered li");
                 //select the div where the short names will be written
-                //var currentTeamDpdwnParsed = $(button).parent().parent().find(".workDescTeam_dpdwn_parsed_div");
                 var currentTeamDpdwnParsed = $(button).parent().parent().find(".dpdwn_parsed_div");
 
                 $(currentTeamShortNameLists).each(function (index) {
