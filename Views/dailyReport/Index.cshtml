@@ -298,61 +298,96 @@
                     });
             });
 
-            //begin #addButton
-            $(".newWorkDescBtn_add").click(function () {//when the add button is clicked...
+            $(".Btn_add").click(function () {
+            //$(".newWorkDescBtn_add").click(function () {
                 indexWorkDescEntries = indexWorkDescEntries + 1;
                 fn_produceParsedShortNames($(this));
                 fn_disableSelect2();
 
-                $(this).parent().parent().find(".workDescTeam_narr_div").attr("contenteditable", "false");//lock the narrative for edits
-                $(this).parent().parent().find(".workDescTeam_dpdwn_div").hide();//hide the team dropdown
-                $(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
-                $(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").show();//show the parsed version of the team dropdown
-                $(this).parent().parent().find(".newWorkDescBtn_add").hide();//remove the add button, only needed for new work descriptions
-                $(this).parent().parent().find(".newWorkDescBtn_clear").hide();//remove the clear button, only needed for new work descriptions
-                $(this).parent().parent().find(".lineWorkDescBtn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
-                $(this).parent().parent().find(".lineWorkDescBtn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
-                $(this).parent().parent().last().find(".workDescTeam_narr_div").css('border-bottom-style', 'none');
-                $(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").css('border-bottom-style', 'none');
-                $(this).parent().parent().find(".workDescTeam_button_div").css('border-bottom-style', 'none');
+                //$(this).parent().parent().find(".workDescTeam_narr_div").attr("contenteditable", "false");//lock the narrative for edits
+                //$(this).parent().parent().find(".workDescTeam_dpdwn_div").hide();//hide the team dropdown
+                //$(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
+                //$(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").show();//show the parsed version of the team dropdown
+                //$(this).parent().parent().find(".newWorkDescBtn_add").hide();//remove the add button, only needed for new work descriptions
+                //$(this).parent().parent().find(".newWorkDescBtn_clear").hide();//remove the clear button, only needed for new work descriptions
+                //$(this).parent().parent().find(".lineWorkDescBtn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
+                //$(this).parent().parent().find(".lineWorkDescBtn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
+                //$(this).parent().parent().last().find(".workDescTeam_narr_div").css('border-bottom-style', 'none');
+                //$(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").css('border-bottom-style', 'none');
+                //$(this).parent().parent().find(".workDescTeam_button_div").css('border-bottom-style', 'none');
+
+                //$(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
+
+                //$(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
+                //$(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
+
+                //$(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
+
+                $(this).parent().parent().find(".narr_div").attr("contenteditable", "false");//lock the narrative for edits
+                $(this).parent().parent().find(".dpdwn_div").hide();//hide the team dropdown
+                $(this).parent().parent().find(".dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
+                $(this).parent().parent().find(".dpdwn_parsed_div").show();//show the parsed version of the team dropdown
+                $(this).parent().parent().find(".Btn_add").hide();//remove the add button, only needed for new work descriptions
+                $(this).parent().parent().find(".Btn_clear").hide();//remove the clear button, only needed for new work descriptions
+                $(this).parent().parent().find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
+                $(this).parent().parent().find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
+                $(this).parent().parent().last().find(".narr_div").css('border-bottom-style', 'none');
+                $(this).parent().parent().find(".dpdwn_parsed_div").css('border-bottom-style', 'none');
+                $(this).parent().parent().find(".button_div").css('border-bottom-style', 'none');
 
                 $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
 
                 $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
                 $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
 
-                $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");//
+                $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
                 fn_enableSelect2();
             });
-
-            $(".lineWorkDescBtn_edit").click(function () {
+           
+            //$(".lineWorkDescBtn_edit").click(function () {
+            $(".Btn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
 
                 $(this).hide();
-                $(currentRow).find(".lineWorkDescBtn_save").removeAttr("hidden");
-                $(currentRow).find(".lineWorkDescBtn_save").show();
+                //$(currentRow).find(".lineWorkDescBtn_save").removeAttr("hidden");
+                //$(currentRow).find(".lineWorkDescBtn_save").show();
 
-                $(currentRow).find(".workDescTeam_narr_div").attr("contenteditable", "true");
-                $(currentRow).find(".workDescTeam_dpdwn_parsed_div").hide();
-                $(currentRow).find(".workDescTeam_dpdwn_div").show();
+                //$(currentRow).find(".workDescTeam_narr_div").attr("contenteditable", "true");
+                //$(currentRow).find(".workDescTeam_dpdwn_parsed_div").hide();
+                //$(currentRow).find(".workDescTeam_dpdwn_div").show();
+
+                $(currentRow).find(".Btn_save").removeAttr("hidden");
+                $(currentRow).find(".Btn_save").show();
+
+                $(currentRow).find(".narr_div").attr("contenteditable", "true");
+                $(currentRow).find(".dpdwn_parsed_div").hide();
+                $(currentRow).find(".dpdwn_div").show();
             });
 
-            $(".lineWorkDescBtn_save").click(function () {
+            //$(".lineWorkDescBtn_save").click(function () {
+            $(".Btn_save").click(function () {
                 var currentRow = $(this).parent().parent();
 
                 $(this).hide();
-                $(currentRow).find(".lineWorkDescBtn_edit").removeAttr("hidden");
-                $(currentRow).find(".lineWorkDescBtn_edit").show();
+                //$(currentRow).find(".lineWorkDescBtn_edit").removeAttr("hidden");
+                //$(currentRow).find(".lineWorkDescBtn_edit").show();
 
-                $(currentRow).find(".workDescTeam_narr_div").attr("contenteditable", "false");
-                $(currentRow).find(".workDescTeam_dpdwn_parsed_div").show();
-                $(currentRow).find(".workDescTeam_dpdwn_div").hide();
+                //$(currentRow).find(".workDescTeam_narr_div").attr("contenteditable", "false");
+                //$(currentRow).find(".workDescTeam_dpdwn_parsed_div").show();
+                //$(currentRow).find(".workDescTeam_dpdwn_div").hide();
+
+                $(currentRow).find(".Btn_edit").removeAttr("hidden");
+                $(currentRow).find(".Btn_edit").show();
+
+                $(currentRow).find(".narr_div").attr("contenteditable", "false");
+                $(currentRow).find(".dpdwn_parsed_div").show();
+                $(currentRow).find(".dpdwn_div").hide();
 
                 fn_produceParsedShortNames($(this));
             });
 
-            $(".lineWorkDescBtn_delete").click(function () {
-                //var currentRow = $(this).parents(":eq(2)");
+            //$(".lineWorkDescBtn_delete").click(function () {
+            $(".Btn_delete").click(function () {
                 var currentRow = $(this).parent().parent();
 
                 $.confirm({
@@ -366,12 +401,6 @@
                         }
                     }
                 });
-            });
-
-            $(workDescTeam_dpdwn).change(function () {//when the add button is clicked...
-
-                //alert($(this).val());
-                //alert($(this).find(":selected").text());
             });
 
             var fields = "#slct_date, #input_jobs_dpdown, #input_equipment, #input_startTime, #input_endTime, #input_lunch, #subJobTypes_dpdwn";
@@ -575,12 +604,12 @@
 
             </div>
             <div class="col-2 button_div workDescTeam_button_div" style="padding:0px; border:1px solid black">
-                <button id="" class="btn btn-light btn-sm newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                <button id="" class="btn btn-light btn-sm newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
 
-                <button id="" class="btn btn-light btn-sm lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                <button class='btn btn-light btn-sm lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
             </div>
         </div>
 
@@ -596,12 +625,12 @@
 
             </div>
             <div class="col-2 button_div workDescTeam_button_div" style="padding:0px; border:1px solid black">
-                <button id="" class="btn btn-light btn-sm newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                <button id="" class="btn btn-light btn-sm newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
 
-                <button id="" class="btn btn-light btn-sm lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                <button class='btn btn-light btn-sm lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
             </div>
         </div>
     @*END NEW WORK DESCRIPTION TEMPLATE*@
