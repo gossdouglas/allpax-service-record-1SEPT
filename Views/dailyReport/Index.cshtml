@@ -409,9 +409,11 @@
             function fn_produceParsedShortNames(button) {
                 var currentWorkDescTeamShortNamesParsed = "";
                 //select the list elements that contain the short names of the team members
-                var currentTeamShortNameLists = $(button).parent().parent().find(".workDescTeam_dpdwn_div").find(".select2-selection__rendered li");
+                //var currentTeamShortNameLists = $(button).parent().parent().find(".workDescTeam_dpdwn_div").find(".select2-selection__rendered li");
+                var currentTeamShortNameLists = $(button).parent().parent().find(".dpdwn_div").find(".select2-selection__rendered li");
                 //select the div where the short names will be written
-                var currentTeamDpdwnParsed = $(button).parent().parent().find(".workDescTeam_dpdwn_parsed_div");
+                //var currentTeamDpdwnParsed = $(button).parent().parent().find(".workDescTeam_dpdwn_parsed_div");
+                var currentTeamDpdwnParsed = $(button).parent().parent().find(".dpdwn_parsed_div");
 
                 $(currentTeamShortNameLists).each(function (index) {
                     currentWorkDescTeamShortNamesParsed = currentWorkDescTeamShortNamesParsed.concat($(this).attr("title") + "|");
@@ -577,17 +579,17 @@
         </div>
 
         <div class="row workDescriptionLine_template_row_hidden" id="" style="border:1px solid black;" hidden>
-            <div class="col-6 workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+            <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
 
             </div>
-            <div class="col-4 workDescTeam_dpdwn_div" style="padding:0px;">
-                <select class="workDescTeam_dpdwn" id="" multiple="multiple">
+            <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
+                <select class="Team_dpdwn workDescTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
-            <div class="col-4 workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
+            <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
 
             </div>
-            <div class="col-2 workDescTeam_button_div" style="padding:0px; border:1px solid black">
+            <div class="col-2 button_div workDescTeam_button_div" style="padding:0px; border:1px solid black">
                 <button id="" class="btn btn-light btn-sm newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
                 <button id="" class="btn btn-light btn-sm newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
 
@@ -596,7 +598,6 @@
                 <button class='btn btn-light btn-sm lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
             </div>
         </div>
-    </div>
     @*END NEW WORK DESCRIPTION TEMPLATE*@
 </div>
 @*<hr style="margin:1px; opacity:0">
