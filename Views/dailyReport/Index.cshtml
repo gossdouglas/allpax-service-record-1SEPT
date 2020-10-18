@@ -334,6 +334,7 @@
                 $(currentRow).find(".narr_div").attr("contenteditable", "true");
                 $(currentRow).find(".dpdwn_parsed_div").hide();
                 $(currentRow).find(".dpdwn_div").show();
+                $(currentRow).css("color", "red");
             });
 
             $(".Btn_save").click(function () {
@@ -346,6 +347,7 @@
                 $(currentRow).find(".narr_div").attr("contenteditable", "false");
                 $(currentRow).find(".dpdwn_parsed_div").show();
                 $(currentRow).find(".dpdwn_div").hide();
+                $(currentRow).css("color", "black");
 
                 fn_produceParsedShortNames($(this));
             });
