@@ -12,6 +12,7 @@
         .container {
             border: 2px solid black;
         }
+
         .btn {
             background-color: transparent;
             background-repeat: no-repeat;
@@ -20,9 +21,11 @@
             overflow: hidden;
             outline: none;
         }
+
         .select2 {
             border: 1px solid black;
         }
+
         i {
             pointer-events: none;
         }
@@ -41,20 +44,12 @@
             var standardElementHeight = $("#newWorkDescBtn_save").height();
             $(".standardInput").height(standardElementHeight);
 
-            $('.workDescTeam_dpdwn').select2({
-                width: "100%",
-                placeholder: "Select Team",
-                closeOnSelect: "false"
-            });
-
-            $('.workDescTeam_dpdwn').on('select2:opening select2:closing', function (event) {
-                var $searchfield = $(this).parent().find('.select2-search__field');
-                $searchfield.prop('disabled', true);
-            });
-
+            fn_enableSelect2();
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
+
+            var indexWorkDescEntries = 0;
 
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
@@ -179,7 +174,11 @@
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
 
                             //$("<option id=workDescTeam_dpdwn_" + temp_userName + " value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo("#workDescTeam_dpdwn");
-                            $("<option id=workDescTeam_dpdwn_" + temp_userName + " value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".workDescTeam_dpdwn");
+                            //$("<option id=workDescTeam_dpdwn_" + temp_userName + " value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".workDescTeam_dpdwn");
+                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".workDescTeam_dpdwn");
+                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".delaysTeam_dpdwn");
+                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".wntyDelaysTeam_dpdwn");
+                            //$("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".workDescTeam_dpdwnLine");
                             //updateSectionDpdwns();
                         });
                         //end AddTeamMember
@@ -220,6 +219,7 @@
 
                 $("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
                 $("#workDescTeam_dpdwn option[value='" + tempTeamMemberUserID + "']").remove();
+                $(".workDescTeam_dpdwnLine option[value='" + tempTeamMemberUserID + "']").remove();
                 $("#" + $(this).attr("id")).remove();
 
                 //updateSectionDpdwns();
@@ -299,42 +299,32 @@
             });
 
             //begin #addButton
-            $("#newWorkDescBtn_add").click(function () {//when the add button is clicked...
-                var currentWorkDescNarr = "";
-                var currentTeamDpdwn = $(this).parent().parent().find(".workDescTeam_dpdwn_div").find("#select2-workDescTeam_dpdwn-container li");
-                var currentTeamDpdwnParsed = $(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div");
+            $(".newWorkDescBtn_add").click(function () {//when the add button is clicked...
+                indexWorkDescEntries = indexWorkDescEntries + 1;
+                fn_produceParsedShortNames($(this));
+                fn_disableSelect2();
 
-                $(currentTeamDpdwn).each(function (index) {
-                    currentWorkDescNarr = currentWorkDescNarr.concat($(this).attr("title") + "|");
-                });
-                currentTeamDpdwnParsed.html(currentWorkDescNarr);
-              
-                //$("#newWorkDescBtn_edit").removeAttr("hidden");
+                $(this).parent().parent().find(".workDescTeam_narr_div").attr("contenteditable", "false");//lock the narrative for edits
+                $(this).parent().parent().find(".workDescTeam_dpdwn_div").hide();//hide the team dropdown
+                $(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
+                $(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").show();//show the parsed version of the team dropdown
+                $(this).parent().parent().find(".newWorkDescBtn_add").hide();//remove the add button, only needed for new work descriptions
+                $(this).parent().parent().find(".newWorkDescBtn_clear").hide();//remove the clear button, only needed for new work descriptions
+                $(this).parent().parent().find(".lineWorkDescBtn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
+                $(this).parent().parent().find(".lineWorkDescBtn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
+                $(this).parent().parent().last().find(".workDescTeam_narr_div").css('border-bottom-style', 'none');
+                $(this).parent().parent().find(".workDescTeam_dpdwn_parsed_div").css('border-bottom-style', 'none');
+                $(this).parent().parent().find(".workDescTeam_button_div").css('border-bottom-style', 'none');
 
-                $(".workDescTeam_dpdwn_parsed_div").removeAttr("hidden");
-                $(".workDescTeam_dpdwn_parsed_div").show();
+                $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
 
-                $(".workDescTeam_dpdwn_div").hide();
-                $("#newWorkDescBtn_edit").show();
+                $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
+                $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
 
-                $(".workDescTeam_narr_div").attr("contenteditable", "false");//set the  description input to editable
-
-                $("#workDescriptionLine_template_row").clone(true).prop("id", "").appendTo("#workDescriptionLine_entries");
-
-                $("#workDescriptionLine_entries").last().find(".workDescTeam_dpdwn").prop("id", "xxx");//
-                $("#workDescriptionLine_entries").last().find("#newWorkDescBtn_add").remove();
-                $("#workDescriptionLine_entries").last().find(".lineWorkDescBtn_edit").removeAttr("hidden");//
-                //$("#workDescriptionLine_entries").last().find(".lineWorkDescBtn_save").removeAttr("hidden");//
-
-                $("#workDescriptionLine_template_row").find(".workDescTeam_narr_div").html("");//clear the new work description narrative text
-                $("#workDescriptionLine_template_row").find(".workDescTeam_narr_div").attr("contenteditable", "true");//set the work description input to editable
-                $("#workDescriptionLine_template_row").find(".workDescTeam_dpdwn_parsed_div").hide();
-                $("#workDescriptionLine_template_row").find(".workDescTeam_dpdwn_div").show();
-                $("#workDescriptionLine_template_row").find(".select2-selection__rendered li").remove();
-                //$("#workDescriptionLine_template_row").find(".select2-search__field").attr("placeholder", "Select Team");
+                $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");//
+                fn_enableSelect2();
             });
 
-            //$(".workDescTeam_button_div").click(function () {
             $(".lineWorkDescBtn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
 
@@ -345,12 +335,6 @@
                 $(currentRow).find(".workDescTeam_narr_div").attr("contenteditable", "true");
                 $(currentRow).find(".workDescTeam_dpdwn_parsed_div").hide();
                 $(currentRow).find(".workDescTeam_dpdwn_div").show();
-                //$(currentRow).find(".workDescTeam_dpdwn_div").removeAttr("hidden");
-                
-                //$(".workDescTeam_dpdwn_parsed_div").hide();
-                //$(".workDescTeam_dpdwn_div").show();
-                //$("#newWorkDescBtn_add").show();
-                //$(".workDescTeam_narr_div").attr("contenteditable", "true");
             });
 
             $(".lineWorkDescBtn_save").click(function () {
@@ -363,27 +347,27 @@
                 $(currentRow).find(".workDescTeam_narr_div").attr("contenteditable", "false");
                 $(currentRow).find(".workDescTeam_dpdwn_parsed_div").show();
                 $(currentRow).find(".workDescTeam_dpdwn_div").hide();
-                //$(currentRow).find(".workDescTeam_dpdwn_div").removeAttr("hidden");
 
-                //$(".workDescTeam_dpdwn_parsed_div").hide();
-                //$(".workDescTeam_dpdwn_div").show();
-
-                //$("#newWorkDescBtn_add").show();
-
-                //$(".workDescTeam_narr_div").attr("contenteditable", "true");
+                fn_produceParsedShortNames($(this));
             });
 
-            $("#newWorkDescBtn_edit").click(function () {//when the add button is clicked...
-                //$(this).hide();
-                //$(".workDescTeam_dpdwn_parsed_div").hide();
-                //$(".workDescTeam_dpdwn_div").show();
+            $(".lineWorkDescBtn_delete").click(function () {
+                //var currentRow = $(this).parents(":eq(2)");
+                var currentRow = $(this).parent().parent();
 
-                //$("#newWorkDescBtn_add").show();
-
-                //$(".workDescTeam_narr_div").attr("contenteditable", "true");
+                $.confirm({
+                    title: 'Delete Entry?',
+                    content: '',
+                    buttons: {
+                        confirm: function () {
+                            $(currentRow).remove();
+                        },
+                        cancel: function () {
+                        }
+                    }
+                });
             });
 
-            //begin #
             $(workDescTeam_dpdwn).change(function () {//when the add button is clicked...
 
                 //alert($(this).val());
@@ -410,42 +394,29 @@
                 return filled;
             }
 
-            //DELETE THIS FUNCTION
-            function updateSectionDpdwns() {
-                //this function keeps the new record dropdowns in sections work description, delays and warranty delays
-                //in synch with which team members available for addition to a new record
+            function fn_enableSelect2() {
+                $('.workDescTeam_dpdwn, .delaysTeam_dpdwn, .wntyDelaysTeam_dpdwn').select2({
+                    width: "100%",
+                    placeholder: "Select Team",
+                    closeOnSelect: "false"
+                })
+            }
 
-                //begin load work description dropdown with possible team members
-                workDescTeam_dpdwn.empty();
-                $(dailyRptTeamArr).each(function (index, item) {
-                    console.log(dailyRptTeamArr[index][1])
-                    $("<option value=" + dailyRptTeamArr[index][0] + ">" + dailyRptTeamArr[index][2] + "</option>").appendTo("#workDescTeam_dpdwn");
+            function fn_disableSelect2() {
+                $('.workDescTeam_dpdwn, .delaysTeam_dpdwn, .wntyDelaysTeam_dpdwn').select2('destroy')
+            }
+
+            function fn_produceParsedShortNames(button) {
+                var currentWorkDescTeamShortNamesParsed = "";
+                //select the list elements that contain the short names of the team members
+                var currentTeamShortNameLists = $(button).parent().parent().find(".workDescTeam_dpdwn_div").find(".select2-selection__rendered li");
+                //select the div where the short names will be written
+                var currentTeamDpdwnParsed = $(button).parent().parent().find(".workDescTeam_dpdwn_parsed_div");
+
+                $(currentTeamShortNameLists).each(function (index) {
+                    currentWorkDescTeamShortNamesParsed = currentWorkDescTeamShortNamesParsed.concat($(this).attr("title") + "|");
                 });
-                //workDescTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                //workDescTeam_dpdwn.val('-1');
-
-                //workDescDelaysTeam_dpdwn.empty();
-                //workDescDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                //workDescDelaysTeam_dpdwn.val('-1');
-
-                //workDescWntyDelaysTeam_dpdwn.empty();
-                //workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                //workDescWntyDelaysTeam_dpdwn.val('-1');
-
-                //$.ajax({
-                //    url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                //    method: 'post',
-                //    dataType: 'json',
-                //    data: { userName: '%', dailyReportID: dailyReportID },
-                //    success: function (data) {
-                //        $(data).each(function (index, item) {
-                //            workDescTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                //            workDescDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                //            workDescWntyDelaysTeam_dpdwn.append($('<option/>', { value: item.userName, text: item.shortName }))
-                //        });
-                //    }
-                //});
-                //end load work description dropdown with possible team members
+                currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
             }
 
         });//end document read jquery statements
@@ -549,11 +520,6 @@
     </div>
 </div>
 <hr style="margin:1px; opacity:0" />
-<div class=" container">
-    <button type="submit" class="btn btn-primary btn-sm" id="addButton">Save and Continue</button>
-</div>
-<hr style="margin:1px; opacity:0">
-
 @*BEGIN ALLPAX TEAM*@
 <div class="container" id="">
     <div class="row">
@@ -574,23 +540,6 @@
     </div>
 </div>
 @*END ALLPAX TEAM*@
-
-@*<div class="container" id="contnr_team">
-    <div class="row">
-            <div class="col-2" style="padding:5px">
-                <strong>Allpax Team:</strong>
-            </div>
-            <div class="col-10" style="padding:5px">
-                <div class="row" style="margin:0px;">
-                    <select name="team_dpdwn" id="team_dpdwn" style="width:100%">
-                        <option value="-1">Add Team Member</option>
-                    </select>
-                </div>
-                <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
-                </div>
-            </div>
-        </div>
-</div>*@
 <hr style="margin:1px; opacity:0">
 <div class="container" id="workDesc_container">
     <div class="row">
@@ -604,16 +553,144 @@
             <strong>Action</strong>
         </div>
     </div>
-    @*BEGIN OLD WORK DESCRIPTION TEMPLATE*@
-    @*<div class="col-12" id="workDescriptionLine_template">
+    @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
+    <div class="col-12" id="workDescriptionLine_template">
+        <div class="row workDescriptionLine_template_row_active" id="" style="border:1px solid black;">
+            <div class="col-6 workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-4 workDescTeam_dpdwn_div" style="padding:0px;">
+                <select class="workDescTeam_dpdwn" id="" multiple="multiple">
+                </select>
+            </div>
+            <div class="col-4 workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-2 workDescTeam_button_div" style="padding:0px; border:1px solid black">
+                <button id="" class="btn btn-light btn-sm newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+
+                <button id="" class="btn btn-light btn-sm lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+            </div>
+        </div>
+
+        <div class="row workDescriptionLine_template_row_hidden" id="" style="border:1px solid black;" hidden>
+            <div class="col-6 workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-4 workDescTeam_dpdwn_div" style="padding:0px;">
+                <select class="workDescTeam_dpdwn" id="" multiple="multiple">
+                </select>
+            </div>
+            <div class="col-4 workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-2 workDescTeam_button_div" style="padding:0px; border:1px solid black">
+                <button id="" class="btn btn-light btn-sm newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+
+                <button id="" class="btn btn-light btn-sm lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+            </div>
+        </div>
+    </div>
+    @*END NEW WORK DESCRIPTION TEMPLATE*@
+</div>
+@*<hr style="margin:1px; opacity:0">
+<div class="container" id="delays_container">
+    <div class="row">
+        <div class="col-6" style="padding:5px">
+            <strong>Delays</strong>
+        </div>
+        <div class="col-3" style="padding:5px">
+            <strong>Team</strong>
+        </div>
+        <div class="col-1" style="padding:5px">
+            <strong>Hours</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <strong>Action</strong>
+        </div>
+    </div>*@
+    @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
+    @*<div class="col-12" id="delaysLine_template">
+        <div class="row delaysLine_template_row_active" id="" style="border:1px solid black;">
+            <div class="col-6 delaysTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-3 delaysTeam_dpdwn_div" style="padding:0px;">
+                <select class="delaysTeam_dpdwn" id="" multiple="multiple">
+                </select>
+            </div>
+            <div class="col-3 delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-1 delaysTeam_hours_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-2 delaysTeam_button_div" style="padding:0px; border:1px solid black">
+                <button id="" class="btn btn-light btn-sm newDelaysBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm newDelaysBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+
+                <button id="" class="btn btn-light btn-sm lineDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm lineDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm lineDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+            </div>
+        </div>
+
+        <div class="row delaysLine_template_row_hidden" id="" style="border:1px solid black;" hidden>
+            <div class="col-6 delaysTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-3 delaysTeam_dpdwn_div" style="padding:0px;">
+                <select class="delaysTeam_dpdwn" id="" multiple="multiple">
+                </select>
+            </div>
+            <div class="col-3 delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-1 delaysTeam_hours_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-2 delaysTeam_button_div" style="padding:0px; border:1px solid black">
+                <button id="" class="btn btn-light btn-sm newDelaysBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm newDelaysBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+
+                <button id="" class="btn btn-light btn-sm lineDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm lineDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm lineDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+            </div>
+        </div>
+    </div>*@
+    @*END NEW WORK DESCRIPTION TEMPLATE*@
+
+    @*BEGIN OLD DELAYS TEMPLATE*@
+    @*<div class="row">
+            <div class="col-7" style="padding:5px">
+                <strong>Delays</strong>
+            </div>
+            <div class="col-1" style="padding:5px">
+                <strong>Hours</strong>
+            </div>
+            <div class="col-4" style="padding:5px">
+                <strong>Team</strong>
+            </div>
+        </div>
+        <div class="col-12" id="workDescriptionDelaysLine_template">
             <div class="row" id="">
-                <div class="col-8" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable>
+                <div class="col-7" id="input_workDescDelays" style="padding:5px; border: 1px solid black;" contenteditable="true">
                 </div>
-                <div class="col-2" name="txt_teamMembersWorkDesc" id="txt_teamMembersWorkDesc" style="padding:5px">
-                    <span class="workDescTeam_" id="workDescTeam_" style="padding:5px"></span>
+                <div class="col-1" style="padding:5px">
+                    <input type="text" class="form-control form-control-sm" id="inputHours_workDescDelays" value="">
+                </div>
+                <div class="col-2" name="txt_teamMembersWorkDescDelays" id="txt_teamMembersWorkDescDelays" style="padding:5px">
+                    <span class="workDescDelaysTeam_" id="workDescDelaysTeam_" style="padding:5px"></span>
                 </div>
                 <div class="col-2" style="padding:5px">
-                    <select class="workDescTeam_dpdwn" name="" style="width:100%">
+                    <select class="workDescDelaysTeam_dpdwn" name="" style="width:100%">
                         <option value="">Team</option>
                     </select>
                 </div>
@@ -622,124 +699,60 @@
                 <div class="col-2" style="padding:5px">
                     <div>
                         <span><strong>Time Entry:</strong></span>
-                        <span id="txt_timeEntryID" value="">new</span>
+                        <span id="txt_timeEntryIDDelays" value="">new</span>
                     </div>
                 </div>
                 <div class="col-10" style="padding:5px">
-                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescBtn" style="width: 100%">Save Entry</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysBtn" style="width: 100%">Save Entry</button>
                 </div>
             </div>
         </div>*@
-    @*END OLD WORK DESCRIPTION TEMPLATE*@
-
-    <div class="col-12" id="workDescriptionLine_entries">
-
-    </div>
-    @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
-    <div class="col-12" id="workDescriptionLine_template">
-        <div class="row" id="workDescriptionLine_template_row" style="border:1px solid black;">
-            <div class="col-6 workDescTeam_narr_div" id="workDescTeam_narr_div_template" contenteditable="true" style="padding:5px; border:1px solid black;">
-
-            </div>
-            <div class="col-4 workDescTeam_dpdwn_div" style="padding:0px;">
-                <select class="workDescTeam_dpdwn" id="workDescTeam_dpdwn" multiple="multiple">
-                </select>
-            </div>
-            <div class="col-4 workDescTeam_dpdwn_parsed_div" id="workDescTeam_dpdwn_parsed_div" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
-                fdkjfjdklfjdfdjfl
-            </div>
-            <div class="col-2 workDescTeam_button_div" style="padding:0px; border:1px solid black">
-                <button id="newWorkDescBtn_add" class="btn btn-light btn-sm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                <button id="" class="btn btn-light btn-sm lineWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
-                <button id="" class="btn btn-light btn-sm lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                <button class='btn btn-light btn-sm lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-            </div>
-        </div>
-    </div>
-
-    @*END NEW WORK DESCRIPTION TEMPLATE*@
+    @*END OLD DELAYS TEMPLATE*@
 </div>
 <hr style="margin:1px; opacity:0">
 <div class="container" id="">
     @*<div class="row">
-        <div class="col-7" style="padding:5px">
-            <strong>Delays</strong>
-        </div>
-        <div class="col-1" style="padding:5px">
-            <strong>Hours</strong>
-        </div>
-        <div class="col-4" style="padding:5px">
-            <strong>Team</strong>
-        </div>
-    </div>
-    <div class="col-12" id="workDescriptionDelaysLine_template">
-        <div class="row" id="">
-            <div class="col-7" id="input_workDescDelays" style="padding:5px; border: 1px solid black;" contenteditable="true">
+            <div class="col-7" style="padding:5px">
+                <strong>Warranty Delays</strong>
             </div>
             <div class="col-1" style="padding:5px">
-                <input type="text" class="form-control form-control-sm" id="inputHours_workDescDelays" value="">
+                <strong>Hours</strong>
             </div>
-            <div class="col-2" name="txt_teamMembersWorkDescDelays" id="txt_teamMembersWorkDescDelays" style="padding:5px">
-                <span class="workDescDelaysTeam_" id="workDescDelaysTeam_" style="padding:5px"></span>
-            </div>
-            <div class="col-2" style="padding:5px">
-                <select class="workDescDelaysTeam_dpdwn" name="" style="width:100%">
-                    <option value="">Team</option>
-                </select>
+            <div class="col-4" style="padding:5px">
+                <strong>Team</strong>
             </div>
         </div>
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <div>
-                    <span><strong>Time Entry:</strong></span>
-                    <span id="txt_timeEntryIDDelays" value="">new</span>
+        <div class="col-12" id="workDescriptionWntyDelaysLine_template">
+            <div class="row" id="">
+                <div class="col-7" id="input_workDescWntyDelays" style="padding:5px; border: 1px solid black;" contenteditable="true">
+                </div>
+                <div class="col-1" style="padding:5px">
+                    <input type="text" class="form-control form-control-sm" id="inputHours_workDescWntyDelays" value="">
+                </div>
+                <div class="col-2" name="txt_teamMembersWorkDescWntyDelays" id="txt_teamMembersWorkDescWntyDelays" style="padding:5px">
+                    <span class="workDescWntyDelaysTeam_" id="workDescWntyDelaysTeam_" style="padding:5px"></span>
+                </div>
+                <div class="col-2" style="padding:5px">
+                    <select class="workDescWntyDelaysTeam_dpdwn" name="" style="width:100%">
+                        <option value="">Team</option>
+                    </select>
                 </div>
             </div>
-            <div class="col-10" style="padding:5px">
-                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescDelaysBtn" style="width: 100%">Save Entry</button>
-            </div>
-        </div>
-    </div>*@
-</div>
-<hr style="margin:1px; opacity:0">
-<div class="container" id="">
-    @*<div class="row">
-        <div class="col-7" style="padding:5px">
-            <strong>Warranty Delays</strong>
-        </div>
-        <div class="col-1" style="padding:5px">
-            <strong>Hours</strong>
-        </div>
-        <div class="col-4" style="padding:5px">
-            <strong>Team</strong>
-        </div>
-    </div>
-    <div class="col-12" id="workDescriptionWntyDelaysLine_template">
-        <div class="row" id="">
-            <div class="col-7" id="input_workDescWntyDelays" style="padding:5px; border: 1px solid black;" contenteditable="true">
-            </div>
-            <div class="col-1" style="padding:5px">
-                <input type="text" class="form-control form-control-sm" id="inputHours_workDescWntyDelays" value="">
-            </div>
-            <div class="col-2" name="txt_teamMembersWorkDescWntyDelays" id="txt_teamMembersWorkDescWntyDelays" style="padding:5px">
-                <span class="workDescWntyDelaysTeam_" id="workDescWntyDelaysTeam_" style="padding:5px"></span>
-            </div>
-            <div class="col-2" style="padding:5px">
-                <select class="workDescWntyDelaysTeam_dpdwn" name="" style="width:100%">
-                    <option value="">Team</option>
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <div>
-                    <span><strong>Time Entry:</strong></span>
-                    <span id="txt_timeEntryIDWntyDelays" value="">new</span>
+            <div class="row">
+                <div class="col-2" style="padding:5px">
+                    <div>
+                        <span><strong>Time Entry:</strong></span>
+                        <span id="txt_timeEntryIDWntyDelays" value="">new</span>
+                    </div>
+                </div>
+                <div class="col-10" style="padding:5px">
+                    <button type="button" class="btn btn-primary btn-sm" id="addWorkDescWntyDelaysBtn" style="width: 100%">Save Entry</button>
                 </div>
             </div>
-            <div class="col-10" style="padding:5px">
-                <button type="button" class="btn btn-primary btn-sm" id="addWorkDescWntyDelaysBtn" style="width: 100%">Save Entry</button>
-            </div>
-        </div>
-    </div>*@
+        </div>*@
 </div>
+
+@*<div class=" container">
+    <button type="submit" class="btn btn-primary btn-sm" id="addButton">Save</button> 
+</div>
+<hr style="margin:1px; opacity:0">*@
