@@ -346,30 +346,30 @@
                 var addItem9 = [];
                 addItem9 = dailyRptTeamUserIDArr;
 
-                alert(
-                    "Selected for Add POST:" + '\n' +
-                    "addItem1: " + addItem1 + '\n' +
-                    "addItem2: " + addItem2 + '\n' +
-                    "addItem3: " + addItem3 + '\n' +
-                    "addItem4: " + addItem4 + '\n' +
-                    "addItem5: " + addItem5 + '\n' +
-                    "addItem6: " + addItem6 + '\n' +
-                    "addItem7: " + addItem7 + '\n' +
-                    "addItem8: " + addItem8 + '\n' +
-                    "addItem9: " + addItem9 + '\n'
-                );
-                $("#addRecordItem1").val('');
-                $("#addRecordItem2").val('');
-                $("#addRecordItem3").val('');
-                $("#addRecordItem4").val('');
-                $("#addRecordItem5").val('');
-                $("#addRecordItem6").val('');
-                $("#addRecordItem7").val('');
-                $("#addRecordItem8").val('');
-                $("#addRecordItem9").val('');
+                //alert(
+                //    "Selected for Add POST:" + '\n' +
+                //    "addItem1: " + addItem1 + '\n' +
+                //    "addItem2: " + addItem2 + '\n' +
+                //    "addItem3: " + addItem3 + '\n' +
+                //    "addItem4: " + addItem4 + '\n' +
+                //    "addItem5: " + addItem5 + '\n' +
+                //    "addItem6: " + addItem6 + '\n' +
+                //    "addItem7: " + addItem7 + '\n' +
+                //    "addItem8: " + addItem8 + '\n' +
+                //    "addItem9: " + addItem9 + '\n'
+                //);
 
-                //begin axios add post
-                axios.post('/dailyReport/AddDailyReport', {
+                //$("#addRecordItem1").val('');
+                //$("#addRecordItem2").val('');
+                //$("#addRecordItem3").val('');
+                //$("#addRecordItem4").val('');
+                //$("#addRecordItem5").val('');
+                //$("#addRecordItem6").val('');
+                //$("#addRecordItem7").val('');
+                //$("#addRecordItem8").val('');
+                //$("#addRecordItem9").val('');
+
+                var data = {
                     jobID: addItem1,
                     date: addItem2,
                     subJobID: addItem3,
@@ -378,28 +378,60 @@
                     lunchHours: addItem6,
                     equipment: addItem7,
                     dailyReportAuthor: addItem8,
-                    dailyRptTeamArr: addItem9
-                })
-                    .then(function (response) {
-                        console.log(response);
-                        //begin get last daily report created by user name
-                        $.ajax({
-                            url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
-                            method: 'post',
-                            dataType: 'json',
-                            data: { dailyReportAuthor: dailyRptAuthor },
-                            success: function (data) {
+                    dailyRptTeamArr: addItem9,
+                    workDescArr: [
+                        { workDescription: 'workDescription', userName: 'userName', workDescriptionCategory: 1, hours: 0, userNames: ['1', '2'] },
+                        { workDescription: 'workDescription2', userName: 'userName', workDescriptionCategory: 1, hours: 0, userNames: dailyRptTeamUserIDArr },
+                    ]
+                };
 
-                                $(data).each(function (index, item) {
-                                    lastDlyRptCrtdByUser = item;
-                                    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                                });
-                            }
-                        });
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+                $.ajax({
+                    url: '/dailyReport/AddDailyReport',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (data) {
+                        //$(data).each(function (index, item) {
+                        //    lastDlyRptCrtdByUser = item;
+                        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                        //});
+                    }
+                });
+
+                //begin axios add post
+                //axios.post('/dailyReport/AddDailyReport', {
+                //    jobID: addItem1,
+                //    date: addItem2,
+                //    subJobID: addItem3,
+                //    startTime: addItem4,
+                //    endTime: addItem5,
+                //    lunchHours: addItem6,
+                //    equipment: addItem7,
+                //    dailyReportAuthor: addItem8,
+                //    dailyRptTeamArr: addItem9
+                //})
+                //    .then(function (response) {
+                //        console.log(response);
+                //        //begin get last daily report created by user name
+                //        $.ajax({
+                //            url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
+                //            method: 'post',
+                //            dataType: 'json',
+                //            data: { dailyReportAuthor: dailyRptAuthor },
+                //            success: function (data) {
+
+                //                $(data).each(function (index, item) {
+                //                    lastDlyRptCrtdByUser = item;
+                //                    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                //                });
+                //            }
+                //        });
+                //    })
+                //    .catch(function (error) {
+                //        console.log(error);
+                //    });
             });
 
         });//end document read jquery statements
