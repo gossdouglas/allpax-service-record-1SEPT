@@ -30,40 +30,40 @@ namespace allpax_service_record.Controllers
         [HttpPost]
         public ActionResult AddDailyReport(vm_dailyReport dailyReportAdd)
         {
-            db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6},{7})",
-               dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime,
-               dailyReportAdd.lunchHours, dailyReportAdd.equipment, dailyReportAdd.dailyReportAuthor);
+            //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6},{7})",
+            //   dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime,
+            //   dailyReportAdd.lunchHours, dailyReportAdd.equipment, dailyReportAdd.dailyReportAuthor);
 
-            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            //string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
 
-            int new_dailyRptID= new int();
+            //int new_dailyRptID= new int();
 
-            using (SqlConnection con = new SqlConnection(cs))
-            {
-                con.Open();
+            //using (SqlConnection con = new SqlConnection(cs))
+            //{
+            //    con.Open();
 
-                SqlCommand cmd = new SqlCommand("spGetLastDlyRptCrtdByUserName", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                SqlParameter param = new SqlParameter()
-                {
-                    ParameterName = "@dailyReportAuthor",
-                    Value = dailyReportAdd.dailyReportAuthor
-                };
-                cmd.Parameters.Add(param);
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                    new_dailyRptID = (int)rdr["dailyReportID"];
-                }
-            }
+            //    SqlCommand cmd = new SqlCommand("spGetLastDlyRptCrtdByUserName", con);
+            //    cmd.CommandType = CommandType.StoredProcedure;
+            //    SqlParameter param = new SqlParameter()
+            //    {
+            //        ParameterName = "@dailyReportAuthor",
+            //        Value = dailyReportAdd.dailyReportAuthor
+            //    };
+            //    cmd.Parameters.Add(param);
+            //    SqlDataReader rdr = cmd.ExecuteReader();
+            //    while (rdr.Read())
+            //    {
+            //        new_dailyRptID = (int)rdr["dailyReportID"];
+            //    }
+            //}
 
-            foreach (string item in dailyReportAdd.dailyRptTeamArr)
-            {
-                db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-                new_dailyRptID, item);
-            }
+            //foreach (string item in dailyReportAdd.dailyRptTeamArr)
+            //{
+            //    db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
+            //    new_dailyRptID, item);
+            //}
 
-            //db.Database.ExecuteSqlCommand("spCopyDailyRpt @p0, @p1", dailyReportAdd.dailyReportID, new_dailyRptID[0]);
+            ////db.Database.ExecuteSqlCommand("spCopyDailyRpt @p0, @p1", dailyReportAdd.dailyReportID, new_dailyRptID[0]);
 
             return new EmptyResult();
         }
