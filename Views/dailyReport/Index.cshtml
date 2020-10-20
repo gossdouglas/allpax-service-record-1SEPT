@@ -49,6 +49,9 @@
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
 
+            var workDescNarrArr = [];
+            var workDescUserNamesArr = [];
+
             var indexWorkDescEntries = 0;//keep track of the number of work description entries
             var indexDelaysEntries = 0;//keep track of the number of delays entries
             var indexWntyDelaysEntries = 0;//keep track of the number of warranty delays entries
@@ -158,7 +161,7 @@
 
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
-                            enable_disableSave();//determine if the save button needs to be enabled or disabled                          
+                            //enable_disableSave();//determine if the save button needs to be enabled or disabled                          
                         });                      
                         //end AddTeamMember
                     }
@@ -206,15 +209,19 @@
                     indexWorkDescEntries = indexWorkDescEntries + 1;
 
                     $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
+                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template"); 
+                    $("#workDescLine_" + indexWorkDescEntries).prop("class", " row workDescriptionLine_template_row_active workDescLine");
+
                     $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
-                    $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
+                    $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");                  
                 }
                 else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
                     indexDelaysEntries = indexDelaysEntries + 1;
 
                     $(".delaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries).appendTo("#delaysLine_template");
+                    $("#delaysLine_" + indexDelaysEntries).prop("class", " row delaysLine_template_row_active delaysLine");
+
                     $(".delaysLine_template_row_hidden").clone(true).prop("class", "row delaysLine_template_row_active").appendTo("#delaysLine_template");
                     $(".delaysLine_template_row_hidden").attr("hidden", "true");
                 }
@@ -223,11 +230,14 @@
 
                     $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries).appendTo("#wntyDelaysLine_template");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
+
                     $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
                     $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
                 }
 
                 fn_enableSelect2();
+                //fn_loadTimeEntries();
             });
 
             $(".Btn_edit").click(function () {
@@ -331,8 +341,118 @@
                 currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
             }
 
+            function fn_loadTimeEntries() {
+                var workDescTeam_narr_div_Content = $("#workDescriptionLine_template").find(".workDescLine").find(".workDescTeam_narr_div");
+                //var workDescTeam_dpdwn_Content = $("#workDescriptionLine_template").find(".workDescLine").find(".workDescTeam_dpdwn option");
+                var workDescTeam_dpdwn_Content;
+                //var currentDropdownID;
+                var currentDropdownLine;
+                var temp_workDescUserNamesArr;
+                
+
+                $(workDescTeam_narr_div_Content).each(function (index1) {
+
+                    var workDescUserNamesArrTemp = [];
+
+                    //console.log($(workDescTeam_narr_div_Content[index]).html());
+                    workDescNarrArr.push([$(workDescTeam_narr_div_Content[index1]).html()]);
+                    console.log($(workDescTeam_narr_div_Content[index1]).html());
+
+                    //var workDescTeam_dpdwn_Content = $(this).parent().find(".workDescTeam_dpdwn option");
+                    //var workDescTeam_dpdwn_Content = $(this).parent().find("workDescTeam_dpdwn").attr("data-select2-id");
+                    //var workDescTeam_dpdwn_Content = $(this).parent().find(".workDescTeam_dpdwn option");
+
+                    //console.log($(this).parent().find(".workDescTeam_dpdwn").attr("data-select2-id"));
+                    //currentDropdownID = $(this).parent().attr("id");
+                    currentDropdownLine = $(this).parent().attr("id");
+                    console.log("current line is: " +currentDropdownLine);
+                    //console.log($(currentDropdownLine).find(".workDescTeam_dpdwn option"));
+                    //console.log($("#" + currentDropdownLine).find(".workDescTeam_dpdwn").html());
+                    //console.log($("#" + currentDropdownLine).find(".workDescTeam_dpdwn").attr("data-select2-id"));
+                    //currentDropdownLine = $("#" + currentDropdownLine).find(".workDescTeam_dpdwn").attr("data-select2-id");
+                    //console.log($("#" + currentDropdownLine).find(".workDescTeam_dpdwn").html());
+                    //console.log($("#" + currentDropdownLine).find(".select2-selection__choice__display").attr("id"));
+
+                    //workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display").attr("id");
+
+                    //workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice");
+                    workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+
+                    //console.log(workDescTeam_dpdwn_Content);
+
+                    $(workDescTeam_dpdwn_Content).each(function (index2) {
+
+                        //const paragraph = 'select2--container-choice-sjrd-tgoss';
+                        //const regex = /\w+$/;
+                        //const found = paragraph.match(regex);
+
+                        //console.log(found[0]);
+
+                        var paragraph = $(workDescTeam_dpdwn_Content[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var found = paragraph.match(regex);
+                        var tempUserID = found[0];
+                        console.log(tempUserID);
+
+                        workDescUserNamesArrTemp.push(tempUserID);
+
+                        //console.log($(workDescTeam_dpdwn_Content[index2]).attr("id"));
+                        //var currentUserID = $(workDescTeam_dpdwn_Content[index2]).attr("id");
+                        //currentUserID2 = currentUserID.match(/\w + $/);
+                        //console.log(currentUserID2);
+                        //workDescUserNamesArr.push([index1][$(workDescTeam_dpdwn_Content[index2]).val()]);
+                        //workDescUserNamesArr.push([index1[tempUserID]]);
+                        //workDescUserNamesArr.push([index1]['yo']);
+                        //workDescUserNamesArr[index1].push([$(workDescTeam_dpdwn_Content[index2]).val()]);
+
+                        //temp_workDescUserNamesArr.push($(workDescTeam_dpdwn_Content[index2]).val());
+                    });
+
+                    //console.log($(this).parent().attr("id"));
+
+                    //workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".workDescTeam_dpdwn option");
+                    //workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find("option");
+                    //workDescTeam_dpdwn_Content = $("#" + currentDropdownLine);
+
+                    //console.log(workDescTeam_dpdwn_Content.html());
+
+                    //console.log($(workDescTeam_dpdwn_Content).attr("id"));
+                    //console.log($(workDescTeam_dpdwn_Content));
+
+                    //$(workDescTeam_dpdwn_Content).each(function (index2) {
+                    //    console.log($(workDescTeam_dpdwn_Content[index2]).val());
+                    //    //workDescUserNamesArr.push([index1][$(workDescTeam_dpdwn_Content[index2]).val()]);
+                    //    //workDescUserNamesArr.push([index1]['yo']);
+                    //    //workDescUserNamesArr[index1].push([$(workDescTeam_dpdwn_Content[index2]).val()]);
+
+                    //    //temp_workDescUserNamesArr.push($(workDescTeam_dpdwn_Content[index2]).val());
+                    //});
+                    //workDescUserNamesArr.push(temp_workDescUserNamesArr);
+                    console.log("user IDs for this line: " +workDescUserNamesArrTemp);
+                });
+
+                //$(workDescTeam_dpdwn_Content).each(function (index2) {
+                //    //console.log($(workDescTeam_dpdwn_Content[index]).val());
+                //    workDescUserNamesArr.push([$(workDescTeam_dpdwn_Content[index]).val()]); 
+                //});
+
+                //$(workDescNarrArr).each(function (index) {
+                //    //console.log(workDescNarrArr);
+                //    //$(workDescNarrArr).each(function (index) {
+                //    //    console.log(workDescNarrArr);
+
+                //    //});
+                    
+                //});
+
+                console.log(workDescNarrArr);
+                console.log(workDescUserNamesArr);
+            }
+
             //begin #addButton
             $("#addButton").click(function () {//when the add button is clicked...
+
+                fn_loadTimeEntries();
 
                 var addItem1 = $("#jobs_dpdown").val();
                 var addItem2 = $("#slct_date").val();
@@ -385,20 +505,20 @@
                     ]
                 };
 
-                $.ajax({
-                    url: '/dailyReport/AddDailyReport',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function (data) {
-                        //$(data).each(function (index, item) {
-                        //    lastDlyRptCrtdByUser = item;
-                        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                        //});
-                    }
-                });
+                //$.ajax({
+                //    url: '/dailyReport/AddDailyReport',
+                //    method: 'post',
+                //    contentType: 'application/json',
+                //    dataType: 'json',
+                //    data: JSON.stringify(data),
+                //    traditional: true,
+                //    success: function (data) {
+                //        //$(data).each(function (index, item) {
+                //        //    lastDlyRptCrtdByUser = item;
+                //        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                //        //});
+                //    }
+                //});
 
                 //begin axios add post
                 //axios.post('/dailyReport/AddDailyReport', {
@@ -761,7 +881,7 @@
 <div class="container" id="">
     <div class="row">
         <div class="col-12" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="addButton" style="width: 100%" disabled>Save and Submit for Review</button>
+            <button type="button" class="btn btn-primary btn-sm" id="addButton" style="width: 100%">Save and Submit for Review</button>
         </div>
     </div>
 </div>
