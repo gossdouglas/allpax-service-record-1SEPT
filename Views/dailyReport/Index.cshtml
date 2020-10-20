@@ -343,107 +343,30 @@
 
             function fn_loadTimeEntries() {
                 var workDescTeam_narr_div_Content = $("#workDescriptionLine_template").find(".workDescLine").find(".workDescTeam_narr_div");
-                //var workDescTeam_dpdwn_Content = $("#workDescriptionLine_template").find(".workDescLine").find(".workDescTeam_dpdwn option");
                 var workDescTeam_dpdwn_Content;
-                //var currentDropdownID;
-                var currentDropdownLine;
-                var temp_workDescUserNamesArr;
-                
 
+                var currentDropdownLine;//generic
+                
                 $(workDescTeam_narr_div_Content).each(function (index1) {
 
                     var workDescUserNamesArrTemp = [];
 
-                    //console.log($(workDescTeam_narr_div_Content[index]).html());
                     workDescNarrArr.push([$(workDescTeam_narr_div_Content[index1]).html()]);
-                    console.log($(workDescTeam_narr_div_Content[index1]).html());
 
-                    //var workDescTeam_dpdwn_Content = $(this).parent().find(".workDescTeam_dpdwn option");
-                    //var workDescTeam_dpdwn_Content = $(this).parent().find("workDescTeam_dpdwn").attr("data-select2-id");
-                    //var workDescTeam_dpdwn_Content = $(this).parent().find(".workDescTeam_dpdwn option");
-
-                    //console.log($(this).parent().find(".workDescTeam_dpdwn").attr("data-select2-id"));
-                    //currentDropdownID = $(this).parent().attr("id");
                     currentDropdownLine = $(this).parent().attr("id");
-                    console.log("current line is: " +currentDropdownLine);
-                    //console.log($(currentDropdownLine).find(".workDescTeam_dpdwn option"));
-                    //console.log($("#" + currentDropdownLine).find(".workDescTeam_dpdwn").html());
-                    //console.log($("#" + currentDropdownLine).find(".workDescTeam_dpdwn").attr("data-select2-id"));
-                    //currentDropdownLine = $("#" + currentDropdownLine).find(".workDescTeam_dpdwn").attr("data-select2-id");
-                    //console.log($("#" + currentDropdownLine).find(".workDescTeam_dpdwn").html());
-                    //console.log($("#" + currentDropdownLine).find(".select2-selection__choice__display").attr("id"));
-
-                    //workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display").attr("id");
-
-                    //workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice");
                     workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
-
-                    //console.log(workDescTeam_dpdwn_Content);
 
                     $(workDescTeam_dpdwn_Content).each(function (index2) {
 
-                        //const paragraph = 'select2--container-choice-sjrd-tgoss';
-                        //const regex = /\w+$/;
-                        //const found = paragraph.match(regex);
-
-                        //console.log(found[0]);
-
-                        var paragraph = $(workDescTeam_dpdwn_Content[index2]).attr("id");
+                        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content[index2]).attr("id");
                         var regex = /\w+$/;
-                        var found = paragraph.match(regex);
-                        var tempUserID = found[0];
-                        console.log(tempUserID);
+                        var temp_workDescTeam_dpdwn_ID_object = tempworkDescTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_workDescTeam_dpdwn_ID_object[0];
 
-                        workDescUserNamesArrTemp.push(tempUserID);
-
-                        //console.log($(workDescTeam_dpdwn_Content[index2]).attr("id"));
-                        //var currentUserID = $(workDescTeam_dpdwn_Content[index2]).attr("id");
-                        //currentUserID2 = currentUserID.match(/\w + $/);
-                        //console.log(currentUserID2);
-                        //workDescUserNamesArr.push([index1][$(workDescTeam_dpdwn_Content[index2]).val()]);
-                        //workDescUserNamesArr.push([index1[tempUserID]]);
-                        //workDescUserNamesArr.push([index1]['yo']);
-                        //workDescUserNamesArr[index1].push([$(workDescTeam_dpdwn_Content[index2]).val()]);
-
-                        //temp_workDescUserNamesArr.push($(workDescTeam_dpdwn_Content[index2]).val());
+                        workDescUserNamesArrTemp.push(temp_UserID);
                     });
-
-                    //console.log($(this).parent().attr("id"));
-
-                    //workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".workDescTeam_dpdwn option");
-                    //workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find("option");
-                    //workDescTeam_dpdwn_Content = $("#" + currentDropdownLine);
-
-                    //console.log(workDescTeam_dpdwn_Content.html());
-
-                    //console.log($(workDescTeam_dpdwn_Content).attr("id"));
-                    //console.log($(workDescTeam_dpdwn_Content));
-
-                    //$(workDescTeam_dpdwn_Content).each(function (index2) {
-                    //    console.log($(workDescTeam_dpdwn_Content[index2]).val());
-                    //    //workDescUserNamesArr.push([index1][$(workDescTeam_dpdwn_Content[index2]).val()]);
-                    //    //workDescUserNamesArr.push([index1]['yo']);
-                    //    //workDescUserNamesArr[index1].push([$(workDescTeam_dpdwn_Content[index2]).val()]);
-
-                    //    //temp_workDescUserNamesArr.push($(workDescTeam_dpdwn_Content[index2]).val());
-                    //});
-                    //workDescUserNamesArr.push(temp_workDescUserNamesArr);
-                    console.log("user IDs for this line: " +workDescUserNamesArrTemp);
+                    workDescUserNamesArr.push(workDescUserNamesArrTemp);
                 });
-
-                //$(workDescTeam_dpdwn_Content).each(function (index2) {
-                //    //console.log($(workDescTeam_dpdwn_Content[index]).val());
-                //    workDescUserNamesArr.push([$(workDescTeam_dpdwn_Content[index]).val()]); 
-                //});
-
-                //$(workDescNarrArr).each(function (index) {
-                //    //console.log(workDescNarrArr);
-                //    //$(workDescNarrArr).each(function (index) {
-                //    //    console.log(workDescNarrArr);
-
-                //    //});
-                    
-                //});
 
                 console.log(workDescNarrArr);
                 console.log(workDescUserNamesArr);
