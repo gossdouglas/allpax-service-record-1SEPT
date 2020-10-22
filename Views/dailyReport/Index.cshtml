@@ -50,15 +50,20 @@
             var dailyRptTeamUserIDArr = [];
 
             var workDescNarrArr = [];
+            var workDescHoursArr = [];
             var workDescUserNamesArr = [];
-
+            //var workDescArrPreJson = [];
+            var workDescArrPreJson = [];
+           
             var delaysNarrArr = [];
             var delaysHoursArr = [];
             var delaysUserNamesArr = [];
+            var delaysArrPreJson = [];
 
             var wntyDelaysNarrArr = [];
             var wntyDelaysHoursArr = [];
             var wntyDelaysUserNamesArr = [];
+            var wntyDelaysArrPreJson = [];
 
             var indexWorkDescEntries = 0;//keep track of the number of work description entries
             var indexDelaysEntries = 0;//keep track of the number of delays entries
@@ -366,11 +371,12 @@
                 $(workDescTeam_narr_div_Content).each(function (index1) {
 
                     var workDescUserNamesArrTemp = [];
-
+                    
                     //workDescNarrArr.push([$(workDescTeam_narr_div_Content[index1]).html()]);
                     workDescNarrArr.push($(workDescTeam_narr_div_Content[index1]).html());
 
                     currentDropdownLine = $(this).parent().attr("id");
+                    workDescHoursArr.push(0);
                     workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
 
                     $(workDescTeam_dpdwn_Content).each(function (index2) {
@@ -389,11 +395,13 @@
 
                     var delaysUserNamesArrTemp = [];
 
-                    delaysNarrArr.push([$(delaysTeam_narr_div_Content[index1]).html()]);
+                    //delaysNarrArr.push([$(delaysTeam_narr_div_Content[index1]).html()]);
+                    delaysNarrArr.push($(delaysTeam_narr_div_Content[index1]).html());
 
                     currentDropdownLine = $(this).parent().attr("id");
                     delaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".delaysTeam_hours_div").html());
-                    delaysHoursArr.push([delaysTeam_hours_div_Content]);
+                    //delaysHoursArr.push([delaysTeam_hours_div_Content]);
+                    delaysHoursArr.push(delaysTeam_hours_div_Content);
                     delaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
 
                     $(delaysTeam_dpdwn_Content).each(function (index2) {
@@ -412,12 +420,14 @@
 
                     var wntyDelaysUserNamesArrTemp = [];
 
-                    wntyDelaysNarrArr.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
+                    //wntyDelaysNarrArr.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
+                    wntyDelaysNarrArr.push($(wntyDelaysTeam_narr_div_Content[index1]).html());
 
                     currentDropdownLine = $(this).parent().attr("id");
                     wntyDelaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".wntyDelaysTeam_hours_div").html());
                     //console.log(wntyDelaysTeam_hours_div_Content);
-                    wntyDelaysHoursArr.push([wntyDelaysTeam_hours_div_Content]);
+                    //wntyDelaysHoursArr.push([wntyDelaysTeam_hours_div_Content]);
+                    wntyDelaysHoursArr.push(wntyDelaysTeam_hours_div_Content);
                     wntyDelaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
 
                     $(wntyDelaysTeam_dpdwn_Content).each(function (index2) {
@@ -432,19 +442,54 @@
                     wntyDelaysUserNamesArr.push(wntyDelaysUserNamesArrTemp);
                 });
 
-                console.log("work description section follows:");
-                console.log(workDescNarrArr);
-                console.log(workDescUserNamesArr);
+                for (var i = 0; i < workDescNarrArr.length; i++) {
+                    workDescArrPreJson[i] = {
+                        workDescription: workDescNarrArr[i],
+                        workDescriptionCategory: "1",
+                        hours: workDescHoursArr[i],
+                        userNames: workDescUserNamesArr[i]
+                    };
+                }
+                console.log(workDescArrPreJson);
 
-                console.log("delays section follows:");
-                console.log(delaysNarrArr);
-                console.log(delaysHoursArr);
-                console.log(delaysUserNamesArr);
+                for (var i = 0; i < delaysNarrArr.length; i++) {
+                    delaysArrPreJson[i] = {
+                        workDescription: delaysNarrArr[i],
+                        workDescriptionCategory: "2",
+                        hours: delaysHoursArr[i],
+                        userNames: delaysUserNamesArr[i]
+                    };
+                }
+                console.log(delaysArrPreJson);
 
-                console.log("warranty delays section follows:");
-                console.log(wntyDelaysNarrArr);
-                console.log(wntyDelaysHoursArr);
-                console.log(wntyDelaysUserNamesArr);
+                for (var i = 0; i < wntyDelaysNarrArr.length; i++) {
+                    wntyDelaysArrPreJson[i] = {
+                        workDescription: wntyDelaysNarrArr[i],
+                        workDescriptionCategory: "3",
+                        hours: wntyDelaysHoursArr[i],
+                        userNames: wntyDelaysUserNamesArr[i]
+                    };
+                }
+                console.log(wntyDelaysArrPreJson);
+
+                //console.log("work description section follows:");
+                //console.log(workDescNarrArr);
+                //console.log(delaysHoursArr);
+                //console.log(workDescUserNamesArr);
+                //console.log(workDescArrPreJson);
+
+
+                //console.log("delays section follows:");
+                //console.log(delaysNarrArr);
+                //console.log(delaysHoursArr);
+                //console.log(delaysUserNamesArr);               
+                //console.log(delaysArrPreJson);
+
+                //console.log("warranty delays section follows:");
+                //console.log(wntyDelaysNarrArr);
+                //console.log(wntyDelaysHoursArr);
+                //console.log(wntyDelaysUserNamesArr);
+                //console.log(wntyDelaysArrPreJson);
             }
 
             //begin #addButton
@@ -487,27 +532,36 @@
                 //$("#addRecordItem8").val('');
                 //$("#addRecordItem9").val('');
 
+                //var testObject = { workDescription: workDescNarrArr[0], workDescriptionCategory: 1, hours: 0, userNames: workDescUserNamesArr[0] }//works
+
+                //var testObject = {
+                //    workDescription: workDescNarrArr[0], workDescriptionCategory: 1, hours: 0, userNames: workDescUserNamesArr[0],
+                //    workDescription: workDescNarrArr[1], workDescriptionCategory: 2, hours: 0, userNames: workDescUserNamesArr[1],
+                //}//only passes the last entry
+
+                //var testObject = [
+                //{ workDescription: workDescNarrArr[0], workDescriptionCategory: 1, hours: 0, userNames: workDescUserNamesArr[0] },
+                //{ workDescription: workDescNarrArr[1], workDescriptionCategory: 2, hours: 0, userNames: workDescUserNamesArr[1] }
+                //]//works
+               
+                
+
                 var data = {
-                    jobID: addItem1,
-                    date: addItem2,
-                    subJobID: addItem3,
-                    startTime: addItem4,
-                    endTime: addItem5,
-                    lunchHours: addItem6,
-                    equipment: addItem7,
-                    dailyReportAuthor: addItem8,
+                    //jobID: addItem1,
+                    //date: addItem2,
+                    //subJobID: addItem3,
+                    //startTime: addItem4,
+                    //endTime: addItem5,
+                    //lunchHours: addItem6,
+                    //equipment: addItem7,
+                    //dailyReportAuthor: addItem8,
                     dailyRptTeamArr: addItem9,
-                    workDescArr: [
-                        //{ workDescription: 'workDescription', userName: 'userName', workDescriptionCategory: 1, hours: 0, userNames: ['1', '2'] },//works
-                        //{ workDescription: 'workDescription2', userName: 'userName', workDescriptionCategory: 1, hours: 0, userNames: dailyRptTeamUserIDArr },//works
-
-                        //{ hours: 1, workDescription: workDescNarrArr[0][0], userNames: workDescUserNamesArr[0] },//works
-                        //{ hours: 2, workDescription: workDescNarrArr[1][0], userNames: workDescUserNamesArr[1] },//works
-
-                        { workDescription: workDescNarrArr[0], workDescriptionCategory: 1, hours: 1, userNames: workDescUserNamesArr[0] },//works
-                        { workDescription: workDescNarrArr[1], workDescriptionCategory: 1, hours: 2, userNames: workDescUserNamesArr[1] },//works
-                    ]
+                    workDescArr: workDescArrPreJson,
+                    delaysArr: delaysArrPreJson,
+                    wntyDelaysArr: wntyDelaysArrPreJson
                 };
+
+                console.log(data)
 
                 $.ajax({
                     url: '/dailyReport/AddDailyReport',
