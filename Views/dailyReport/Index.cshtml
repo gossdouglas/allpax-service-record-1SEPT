@@ -52,7 +52,6 @@
             var workDescNarrArr = [];
             var workDescHoursArr = [];
             var workDescUserNamesArr = [];
-            //var workDescArrPreJson = [];
             var workDescArrPreJson = [];
            
             var delaysNarrArr = [];
@@ -442,6 +441,11 @@
                     wntyDelaysUserNamesArr.push(wntyDelaysUserNamesArrTemp);
                 });
 
+                fn_buildPreJsonObjects()
+            }
+
+            function fn_buildPreJsonObjects() {
+                //BEGIN BUILD THE WORK DESCRIPTION PRE-JSON OBJECT
                 for (var i = 0; i < workDescNarrArr.length; i++) {
                     workDescArrPreJson[i] = {
                         workDescription: workDescNarrArr[i],
@@ -450,8 +454,9 @@
                         userNames: workDescUserNamesArr[i]
                     };
                 }
-                console.log(workDescArrPreJson);
+                //END BUILD THE DELAYS PRE-JSON OBJECT
 
+                //BEGIN BUILD THE WORK DESCRIPTION PRE-JSON OBJECT
                 for (var i = 0; i < delaysNarrArr.length; i++) {
                     delaysArrPreJson[i] = {
                         workDescription: delaysNarrArr[i],
@@ -460,8 +465,9 @@
                         userNames: delaysUserNamesArr[i]
                     };
                 }
-                console.log(delaysArrPreJson);
+                //END BUILD THE DELAYS PRE-JSON OBJECT
 
+                //BEGIN BUILD THE WNTY DELAYS PRE-JSON OBJECT
                 for (var i = 0; i < wntyDelaysNarrArr.length; i++) {
                     wntyDelaysArrPreJson[i] = {
                         workDescription: wntyDelaysNarrArr[i],
@@ -470,26 +476,28 @@
                         userNames: wntyDelaysUserNamesArr[i]
                     };
                 }
+                //END BUILD THE WNTY DELAYS PRE-JSON OBJECT
+            }
+
+            function fn_printArrays() {
+                console.log("work description section follows:");
+                console.log(workDescNarrArr);
+                console.log(delaysHoursArr);
+                console.log(workDescUserNamesArr);
+                console.log(workDescArrPreJson);
+
+
+                console.log("delays section follows:");
+                console.log(delaysNarrArr);
+                console.log(delaysHoursArr);
+                console.log(delaysUserNamesArr);               
+                console.log(delaysArrPreJson);
+
+                console.log("warranty delays section follows:");
+                console.log(wntyDelaysNarrArr);
+                console.log(wntyDelaysHoursArr);
+                console.log(wntyDelaysUserNamesArr);
                 console.log(wntyDelaysArrPreJson);
-
-                //console.log("work description section follows:");
-                //console.log(workDescNarrArr);
-                //console.log(delaysHoursArr);
-                //console.log(workDescUserNamesArr);
-                //console.log(workDescArrPreJson);
-
-
-                //console.log("delays section follows:");
-                //console.log(delaysNarrArr);
-                //console.log(delaysHoursArr);
-                //console.log(delaysUserNamesArr);               
-                //console.log(delaysArrPreJson);
-
-                //console.log("warranty delays section follows:");
-                //console.log(wntyDelaysNarrArr);
-                //console.log(wntyDelaysHoursArr);
-                //console.log(wntyDelaysUserNamesArr);
-                //console.log(wntyDelaysArrPreJson);
             }
 
             //begin #addButton
@@ -531,21 +539,7 @@
                 //$("#addRecordItem7").val('');
                 //$("#addRecordItem8").val('');
                 //$("#addRecordItem9").val('');
-
-                //var testObject = { workDescription: workDescNarrArr[0], workDescriptionCategory: 1, hours: 0, userNames: workDescUserNamesArr[0] }//works
-
-                //var testObject = {
-                //    workDescription: workDescNarrArr[0], workDescriptionCategory: 1, hours: 0, userNames: workDescUserNamesArr[0],
-                //    workDescription: workDescNarrArr[1], workDescriptionCategory: 2, hours: 0, userNames: workDescUserNamesArr[1],
-                //}//only passes the last entry
-
-                //var testObject = [
-                //{ workDescription: workDescNarrArr[0], workDescriptionCategory: 1, hours: 0, userNames: workDescUserNamesArr[0] },
-                //{ workDescription: workDescNarrArr[1], workDescriptionCategory: 2, hours: 0, userNames: workDescUserNamesArr[1] }
-                //]//works
-               
-                
-
+                         
                 var data = {
                     //jobID: addItem1,
                     //date: addItem2,
