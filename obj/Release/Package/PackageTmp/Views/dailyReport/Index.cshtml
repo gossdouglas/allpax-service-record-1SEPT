@@ -49,6 +49,21 @@
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
 
+            var workDescNarrArr = [];
+            var workDescHoursArr = [];
+            var workDescUserNamesArr = [];
+            var workDescArrPreJson = [];
+           
+            var delaysNarrArr = [];
+            var delaysHoursArr = [];
+            var delaysUserNamesArr = [];
+            var delaysArrPreJson = [];
+
+            var wntyDelaysNarrArr = [];
+            var wntyDelaysHoursArr = [];
+            var wntyDelaysUserNamesArr = [];
+            var wntyDelaysArrPreJson = [];
+
             var indexWorkDescEntries = 0;//keep track of the number of work description entries
             var indexDelaysEntries = 0;//keep track of the number of delays entries
             var indexWntyDelaysEntries = 0;//keep track of the number of warranty delays entries
@@ -158,7 +173,7 @@
 
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
-                            enable_disableSave();//determine if the save button needs to be enabled or disabled                          
+                            //enable_disableSave();//determine if the save button needs to be enabled or disabled                          
                         });                      
                         //end AddTeamMember
                     }
@@ -206,15 +221,19 @@
                     indexWorkDescEntries = indexWorkDescEntries + 1;
 
                     $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
+                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template"); 
+                    $("#workDescLine_" + indexWorkDescEntries).prop("class", " row workDescriptionLine_template_row_active workDescLine");
+
                     $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
-                    $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
+                    $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");                  
                 }
                 else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
                     indexDelaysEntries = indexDelaysEntries + 1;
 
                     $(".delaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries).appendTo("#delaysLine_template");
+                    $("#delaysLine_" + indexDelaysEntries).prop("class", " row delaysLine_template_row_active delaysLine");
+
                     $(".delaysLine_template_row_hidden").clone(true).prop("class", "row delaysLine_template_row_active").appendTo("#delaysLine_template");
                     $(".delaysLine_template_row_hidden").attr("hidden", "true");
                 }
@@ -223,11 +242,14 @@
 
                     $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries).appendTo("#wntyDelaysLine_template");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
+
                     $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
                     $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
                 }
 
                 fn_enableSelect2();
+                //fn_loadTimeEntries();
             });
 
             $(".Btn_edit").click(function () {
@@ -278,7 +300,7 @@
 
             //when one of the basic fields changes...
             $(fields).on('change', function () {
-                enable_disableSave();//determine if the save button needs to be enabled or disabled
+                //enable_disableSave();//determine if the save button needs to be enabled or disabled
             });
 
             //determine if the save button needs to be enabled or disabled
@@ -331,8 +353,157 @@
                 currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
             }
 
+            function fn_loadTimeEntries() {
+                var workDescTeam_narr_div_Content = $("#workDescriptionLine_template").find(".workDescLine").find(".workDescTeam_narr_div");
+                var workDescTeam_dpdwn_Content;
+
+                var delaysTeam_narr_div_Content = $("#delaysLine_template").find(".delaysLine").find(".delaysTeam_narr_div");
+                var delaysTeam_hours_div_Content;
+                var delaysTeam_dpdwn_Content;
+
+                var wntyDelaysTeam_narr_div_Content = $("#wntyDelaysLine_template").find(".wntyDelaysLine").find(".wntyDelaysTeam_narr_div");
+                var wntyDelaysTeam_hours_div_Content;
+                var wntyDelaysTeam_dpdwn_Content;
+
+                var currentDropdownLine;//generic
+                
+                $(workDescTeam_narr_div_Content).each(function (index1) {
+
+                    var workDescUserNamesArrTemp = [];
+                    
+                    //workDescNarrArr.push([$(workDescTeam_narr_div_Content[index1]).html()]);
+                    workDescNarrArr.push($(workDescTeam_narr_div_Content[index1]).html());
+
+                    currentDropdownLine = $(this).parent().attr("id");
+                    workDescHoursArr.push(0);
+                    workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+
+                    $(workDescTeam_dpdwn_Content).each(function (index2) {
+
+                        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var temp_workDescTeam_dpdwn_ID_object = tempworkDescTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_workDescTeam_dpdwn_ID_object[0];
+
+                        workDescUserNamesArrTemp.push(temp_UserID);
+                    });
+                    workDescUserNamesArr.push(workDescUserNamesArrTemp);
+                });
+
+                $(delaysTeam_narr_div_Content).each(function (index1) {
+
+                    var delaysUserNamesArrTemp = [];
+
+                    //delaysNarrArr.push([$(delaysTeam_narr_div_Content[index1]).html()]);
+                    delaysNarrArr.push($(delaysTeam_narr_div_Content[index1]).html());
+
+                    currentDropdownLine = $(this).parent().attr("id");
+                    delaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".delaysTeam_hours_div").html());
+                    //delaysHoursArr.push([delaysTeam_hours_div_Content]);
+                    delaysHoursArr.push(delaysTeam_hours_div_Content);
+                    delaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+
+                    $(delaysTeam_dpdwn_Content).each(function (index2) {
+
+                        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var temp_delaysTeam_dpdwn_ID_object = tempDelaysTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_delaysTeam_dpdwn_ID_object[0];
+
+                        delaysUserNamesArrTemp.push(temp_UserID);
+                    });
+                    delaysUserNamesArr.push(delaysUserNamesArrTemp);
+                });
+
+                $(wntyDelaysTeam_narr_div_Content).each(function (index1) {
+
+                    var wntyDelaysUserNamesArrTemp = [];
+
+                    //wntyDelaysNarrArr.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
+                    wntyDelaysNarrArr.push($(wntyDelaysTeam_narr_div_Content[index1]).html());
+
+                    currentDropdownLine = $(this).parent().attr("id");
+                    wntyDelaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".wntyDelaysTeam_hours_div").html());
+                    //console.log(wntyDelaysTeam_hours_div_Content);
+                    //wntyDelaysHoursArr.push([wntyDelaysTeam_hours_div_Content]);
+                    wntyDelaysHoursArr.push(wntyDelaysTeam_hours_div_Content);
+                    wntyDelaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+
+                    $(wntyDelaysTeam_dpdwn_Content).each(function (index2) {
+
+                        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var temp_wntyDelaysTeam_dpdwn_ID_object = tempWntyDelaysTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_wntyDelaysTeam_dpdwn_ID_object[0];
+
+                        wntyDelaysUserNamesArrTemp.push(temp_UserID);
+                    });
+                    wntyDelaysUserNamesArr.push(wntyDelaysUserNamesArrTemp);
+                });
+
+                fn_buildPreJsonObjects();
+            }
+
+            function fn_buildPreJsonObjects() {
+                //BEGIN BUILD THE WORK DESCRIPTION PRE-JSON OBJECT
+                for (var i = 0; i < workDescNarrArr.length; i++) {
+                    workDescArrPreJson[i] = {
+                        workDescription: workDescNarrArr[i],
+                        workDescriptionCategory: "1",
+                        hours: workDescHoursArr[i],
+                        userNames: workDescUserNamesArr[i]
+                    };
+                }
+                //END BUILD THE DELAYS PRE-JSON OBJECT
+
+                //BEGIN BUILD THE WORK DESCRIPTION PRE-JSON OBJECT
+                for (var i = 0; i < delaysNarrArr.length; i++) {
+                    delaysArrPreJson[i] = {
+                        workDescription: delaysNarrArr[i],
+                        workDescriptionCategory: "2",
+                        hours: delaysHoursArr[i],
+                        userNames: delaysUserNamesArr[i]
+                    };
+                }
+                //END BUILD THE DELAYS PRE-JSON OBJECT
+
+                //BEGIN BUILD THE WNTY DELAYS PRE-JSON OBJECT
+                for (var i = 0; i < wntyDelaysNarrArr.length; i++) {
+                    wntyDelaysArrPreJson[i] = {
+                        workDescription: wntyDelaysNarrArr[i],
+                        workDescriptionCategory: "3",
+                        hours: wntyDelaysHoursArr[i],
+                        userNames: wntyDelaysUserNamesArr[i]
+                    };
+                }
+                //END BUILD THE WNTY DELAYS PRE-JSON OBJECT
+            }
+
+            function fn_printArrays() {
+                console.log("work description section follows:");
+                console.log(workDescNarrArr);
+                console.log(delaysHoursArr);
+                console.log(workDescUserNamesArr);
+                console.log(workDescArrPreJson);
+
+
+                console.log("delays section follows:");
+                console.log(delaysNarrArr);
+                console.log(delaysHoursArr);
+                console.log(delaysUserNamesArr);               
+                console.log(delaysArrPreJson);
+
+                console.log("warranty delays section follows:");
+                console.log(wntyDelaysNarrArr);
+                console.log(wntyDelaysHoursArr);
+                console.log(wntyDelaysUserNamesArr);
+                console.log(wntyDelaysArrPreJson);
+            }
+
             //begin #addButton
             $("#addButton").click(function () {//when the add button is clicked...
+
+                fn_loadTimeEntries();
 
                 var addItem1 = $("#jobs_dpdown").val();
                 var addItem2 = $("#slct_date").val();
@@ -346,30 +517,30 @@
                 var addItem9 = [];
                 addItem9 = dailyRptTeamUserIDArr;
 
-                alert(
-                    "Selected for Add POST:" + '\n' +
-                    "addItem1: " + addItem1 + '\n' +
-                    "addItem2: " + addItem2 + '\n' +
-                    "addItem3: " + addItem3 + '\n' +
-                    "addItem4: " + addItem4 + '\n' +
-                    "addItem5: " + addItem5 + '\n' +
-                    "addItem6: " + addItem6 + '\n' +
-                    "addItem7: " + addItem7 + '\n' +
-                    "addItem8: " + addItem8 + '\n' +
-                    "addItem9: " + addItem9 + '\n'
-                );
-                $("#addRecordItem1").val('');
-                $("#addRecordItem2").val('');
-                $("#addRecordItem3").val('');
-                $("#addRecordItem4").val('');
-                $("#addRecordItem5").val('');
-                $("#addRecordItem6").val('');
-                $("#addRecordItem7").val('');
-                $("#addRecordItem8").val('');
-                $("#addRecordItem9").val('');
+                //alert(
+                //    "Selected for Add POST:" + '\n' +
+                //    "addItem1: " + addItem1 + '\n' +
+                //    "addItem2: " + addItem2 + '\n' +
+                //    "addItem3: " + addItem3 + '\n' +
+                //    "addItem4: " + addItem4 + '\n' +
+                //    "addItem5: " + addItem5 + '\n' +
+                //    "addItem6: " + addItem6 + '\n' +
+                //    "addItem7: " + addItem7 + '\n' +
+                //    "addItem8: " + addItem8 + '\n' +
+                //    "addItem9: " + addItem9 + '\n'
+                //);
 
-                //begin axios add post
-                axios.post('/dailyReport/AddDailyReport', {
+                //$("#addRecordItem1").val('');
+                //$("#addRecordItem2").val('');
+                //$("#addRecordItem3").val('');
+                //$("#addRecordItem4").val('');
+                //$("#addRecordItem5").val('');
+                //$("#addRecordItem6").val('');
+                //$("#addRecordItem7").val('');
+                //$("#addRecordItem8").val('');
+                //$("#addRecordItem9").val('');
+                         
+                var data = {
                     jobID: addItem1,
                     date: addItem2,
                     subJobID: addItem3,
@@ -378,28 +549,78 @@
                     lunchHours: addItem6,
                     equipment: addItem7,
                     dailyReportAuthor: addItem8,
-                    dailyRptTeamArr: addItem9
-                })
-                    .then(function (response) {
-                        console.log(response);
-                        //begin get last daily report created by user name
-                        $.ajax({
-                            url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
-                            method: 'post',
-                            dataType: 'json',
-                            data: { dailyReportAuthor: dailyRptAuthor },
-                            success: function (data) {
+                    dailyRptTeamArr: addItem9,
+                    workDescArr: workDescArrPreJson,
+                    delaysArr: delaysArrPreJson,
+                    wntyDelaysArr: wntyDelaysArrPreJson
+                };
 
-                                $(data).each(function (index, item) {
-                                    lastDlyRptCrtdByUser = item;
-                                    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                                });
-                            }
-                        });
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+                //console.log(data)
+
+                $.ajax({
+                    url: '/dailyReport/AddDailyReport',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function () {
+                        //$(data).each(function (index, item) {
+                        //    lastDlyRptCrtdByUser = item;
+                        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                        //});  
+                    }
+                });
+
+                //begin get last daily report created by user name
+                //$.ajax({
+                //    url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { dailyReportAuthor: dailyRptAuthor },
+                //    success: function (data) {
+
+                //        $(data).each(function (index, item) {
+                //            console.log(item);
+                //            lastDlyRptCrtdByUser = item;
+                //            console.log(lastDlyRptCrtdByUser)
+                //            window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                //        });
+                //    }
+                //});
+
+                //begin axios add post
+                //axios.post('/dailyReport/AddDailyReport', {
+                //    jobID: addItem1,
+                //    date: addItem2,
+                //    subJobID: addItem3,
+                //    startTime: addItem4,
+                //    endTime: addItem5,
+                //    lunchHours: addItem6,
+                //    equipment: addItem7,
+                //    dailyReportAuthor: addItem8,
+                //    dailyRptTeamArr: addItem9
+                //})
+                //    .then(function (response) {
+                //        console.log(response);
+                //        //begin get last daily report created by user name
+                //        $.ajax({
+                //            url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
+                //            method: 'post',
+                //            dataType: 'json',
+                //            data: { dailyReportAuthor: dailyRptAuthor },
+                //            success: function (data) {
+
+                //                $(data).each(function (index, item) {
+                //                    lastDlyRptCrtdByUser = item;
+                //                    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                //                });
+                //            }
+                //        });
+                //    })
+                //    .catch(function (error) {
+                //        console.log(error);
+                //    });
             });
 
         });//end document read jquery statements
@@ -729,7 +950,7 @@
 <div class="container" id="">
     <div class="row">
         <div class="col-12" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="addButton" style="width: 100%" disabled>Save and Submit for Review</button>
+            <button type="button" class="btn btn-primary btn-sm" id="addButton" style="width: 100%">Save and Submit for Review</button>
         </div>
     </div>
 </div>

@@ -30,44 +30,155 @@ namespace allpax_service_record.Controllers
         [HttpPost]
         public ActionResult AddDailyReport(vm_dailyReport dailyReportAdd)
         {
-            //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6},{7})",
-            //   dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime,
-            //   dailyReportAdd.lunchHours, dailyReportAdd.equipment, dailyReportAdd.dailyReportAuthor);
+            db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6},{7})",
+               dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime,
+               dailyReportAdd.lunchHours, dailyReportAdd.equipment, dailyReportAdd.dailyReportAuthor);
 
-            //string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
 
-            //int new_dailyRptID= new int();
+            int new_dailyRptID = new int();
 
-            //using (SqlConnection con = new SqlConnection(cs))
-            //{
-            //    con.Open();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
 
-            //    SqlCommand cmd = new SqlCommand("spGetLastDlyRptCrtdByUserName", con);
-            //    cmd.CommandType = CommandType.StoredProcedure;
-            //    SqlParameter param = new SqlParameter()
-            //    {
-            //        ParameterName = "@dailyReportAuthor",
-            //        Value = dailyReportAdd.dailyReportAuthor
-            //    };
-            //    cmd.Parameters.Add(param);
-            //    SqlDataReader rdr = cmd.ExecuteReader();
-            //    while (rdr.Read())
-            //    {
-            //        new_dailyRptID = (int)rdr["dailyReportID"];
-            //    }
-            //}
+                SqlCommand cmd = new SqlCommand("spGetLastDlyRptCrtdByUserName", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter param = new SqlParameter()
+                {
+                    ParameterName = "@dailyReportAuthor",
+                    Value = dailyReportAdd.dailyReportAuthor
+                };
+                cmd.Parameters.Add(param);
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    new_dailyRptID = (int)rdr["dailyReportID"];
+                }
+            }
 
-            //foreach (string item in dailyReportAdd.dailyRptTeamArr)
-            //{
-            //    db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-            //    new_dailyRptID, item);
-            //}
+            foreach (string item in dailyReportAdd.dailyRptTeamArr)
+            {
+                db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
+                new_dailyRptID, item);
+            }
 
-            ////db.Database.ExecuteSqlCommand("spCopyDailyRpt @p0, @p1", dailyReportAdd.dailyReportID, new_dailyRptID[0]);
+            foreach (vm_workDesc item in dailyReportAdd.workDescArr)
+            {
+
+                db.Database.ExecuteSqlCommand(
+
+                "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
+
+                //191, item.workDescription, item.workDescriptionCategory, item.hours);
+                new_dailyRptID, item.workDescription, item.workDescriptionCategory, item.hours);
+
+                //System.Diagnostics.Debug.WriteLine(item.workDescription);
+
+                foreach (string userNames in item.userNames)
+                {
+                    //System.Diagnostics.Debug.WriteLine(userNames);
+                    db.Database.ExecuteSqlCommand(
+
+                "DECLARE @timeEntryID INT " +
+
+                "SET @timeEntryID = " +
+                    "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
+                    "FROM tbl_dailyReportTimeEntry " +
+                    "WHERE " +
+
+                    "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
+                    "AND " +
+                    "workDescription = {1} " +
+                    "AND " +
+                    "workDescriptionCategory = {3}) " +
+
+                "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
+
+                //191, item.workDescription, userNames, item.workDescriptionCategory);
+                new_dailyRptID, item.workDescription, userNames, item.workDescriptionCategory);
+                }
+            }
+
+            foreach (vm_delays item in dailyReportAdd.delaysArr)
+            {
+
+                db.Database.ExecuteSqlCommand(
+
+                "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
+
+                //191, item.workDescription, item.workDescriptionCategory, item.hours);
+                new_dailyRptID, item.workDescription, item.workDescriptionCategory, item.hours);
+
+                //System.Diagnostics.Debug.WriteLine(item.workDescription);
+
+                foreach (string userNames in item.userNames)
+                {
+                    //System.Diagnostics.Debug.WriteLine(userNames);
+                    db.Database.ExecuteSqlCommand(
+
+                "DECLARE @timeEntryID INT " +
+
+                "SET @timeEntryID = " +
+                    "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
+                    "FROM tbl_dailyReportTimeEntry " +
+                    "WHERE " +
+
+                    "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
+                    "AND " +
+                    "workDescription = {1} " +
+                    "AND " +
+                    "workDescriptionCategory = {3}) " +
+
+                "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
+
+                //191, item.workDescription, userNames, item.workDescriptionCategory);
+                new_dailyRptID, item.workDescription, userNames, item.workDescriptionCategory);
+                }
+            }
+
+            foreach (vm_wntyDelays item in dailyReportAdd.wntyDelaysArr)
+            {
+
+                db.Database.ExecuteSqlCommand(
+
+                "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
+
+                //191, item.workDescription, item.workDescriptionCategory, item.hours);
+                new_dailyRptID, item.workDescription, item.workDescriptionCategory, item.hours);
+
+                //System.Diagnostics.Debug.WriteLine(item.workDescription);
+
+                foreach (string userNames in item.userNames)
+                {
+                    //System.Diagnostics.Debug.WriteLine(userNames);
+                    db.Database.ExecuteSqlCommand(
+
+                "DECLARE @timeEntryID INT " +
+
+                "SET @timeEntryID = " +
+                    "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
+                    "FROM tbl_dailyReportTimeEntry " +
+                    "WHERE " +
+
+                    "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
+                    "AND " +
+                    "workDescription = {1} " +
+                    "AND " +
+                    "workDescriptionCategory = {3}) " +
+
+                "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
+
+                //191, item.workDescription, userNames, item.workDescriptionCategory);
+                new_dailyRptID, item.workDescription, userNames, item.workDescriptionCategory);
+                }
+            }
+
+            //db.Database.ExecuteSqlCommand("spCopyDailyRpt @p0, @p1", dailyReportAdd.dailyReportID, new_dailyRptID[0]);
 
             return new EmptyResult();
         }
-
+      
         public ActionResult copyDailyReport(string jobID, string description, string subJobID, string customerName, 
             string location, string customercode, string customerContact, string equipment, int copiedDailyReportID)
         {
@@ -192,7 +303,7 @@ namespace allpax_service_record.Controllers
             }
             return jobCrspdtEmails;
         }
-
+   
         public ActionResult DeleteDailyReport(tbl_dailyReport dailyReportDelete)
         {
             db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReport WHERE jobID=({0})", dailyReportDelete.jobID);

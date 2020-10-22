@@ -441,7 +441,7 @@
                     wntyDelaysUserNamesArr.push(wntyDelaysUserNamesArrTemp);
                 });
 
-                fn_buildPreJsonObjects()
+                fn_buildPreJsonObjects();
             }
 
             function fn_buildPreJsonObjects() {
@@ -541,21 +541,21 @@
                 //$("#addRecordItem9").val('');
                          
                 var data = {
-                    //jobID: addItem1,
-                    //date: addItem2,
-                    //subJobID: addItem3,
-                    //startTime: addItem4,
-                    //endTime: addItem5,
-                    //lunchHours: addItem6,
-                    //equipment: addItem7,
-                    //dailyReportAuthor: addItem8,
+                    jobID: addItem1,
+                    date: addItem2,
+                    subJobID: addItem3,
+                    startTime: addItem4,
+                    endTime: addItem5,
+                    lunchHours: addItem6,
+                    equipment: addItem7,
+                    dailyReportAuthor: addItem8,
                     dailyRptTeamArr: addItem9,
                     workDescArr: workDescArrPreJson,
                     delaysArr: delaysArrPreJson,
                     wntyDelaysArr: wntyDelaysArrPreJson
                 };
 
-                console.log(data)
+                //console.log(data)
 
                 $.ajax({
                     url: '/dailyReport/AddDailyReport',
@@ -564,13 +564,30 @@
                     dataType: 'json',
                     data: JSON.stringify(data),
                     traditional: true,
-                    success: function (data) {
+                    success: function () {
                         //$(data).each(function (index, item) {
                         //    lastDlyRptCrtdByUser = item;
                         //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                        //});
+                        //});  
                     }
                 });
+
+                //begin get last daily report created by user name
+                //$.ajax({
+                //    url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { dailyReportAuthor: dailyRptAuthor },
+                //    success: function (data) {
+
+                //        $(data).each(function (index, item) {
+                //            console.log(item);
+                //            lastDlyRptCrtdByUser = item;
+                //            console.log(lastDlyRptCrtdByUser)
+                //            window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                //        });
+                //    }
+                //});
 
                 //begin axios add post
                 //axios.post('/dailyReport/AddDailyReport', {
