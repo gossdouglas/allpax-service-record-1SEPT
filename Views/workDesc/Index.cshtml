@@ -14,7 +14,7 @@
             var standardElementHeight = $("#newWorkDescBtn_save").height();//get the height of the save button...
             $(".standardInput").height(standardElementHeight);//...and assign its height to all other buttons with a class of standardInput
 
-            fn_enableSelect2();//enable the select2 add-on on page load
+            //fn_enableSelect2();//enable the select2 add-on on page load
 
             //begin this partial view's variable declaration section
             var slctd_timeEntryID;
@@ -31,9 +31,9 @@
                 //begin suck in variables for eventual axios post
                 var addItem1 = $("#txt_dailyReportID").html();
                 var addItem2 = $("#input_workDesc").html();
-                addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
-                addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
-                addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
+                //addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
+                //addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
+                //addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
                 //end suck in variables for eventual axios post
 
                 if (addItem2.length == 0) {
@@ -72,45 +72,45 @@
                 //begin suck in variables for eventual axios post
                 var addItem1 = $("#txt_dailyReportID").html();
                 var addItem2 = $("#input_workDesc").html();
-                addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
-                addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
-                addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
+                //addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
+                //addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
+                //addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
                 //end suck in variables for eventual axios post
 
                 //begin AddTeamMember
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: $(this).val(), dailyReportID: dailyReportID },
-                    success: function (data) {
+                //$.ajax({
+                //    url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { userName: $(this).val(), dailyReportID: dailyReportID },
+                //    success: function (data) {
 
-                        $(data).each(function (index, item) {
-                            var temp_userName = item.userName;
-                            var temp_name = item.name;
-                            var temp_shortName = item.shortName;
+                //        $(data).each(function (index, item) {
+                //            var temp_userName = item.userName;
+                //            var temp_name = item.name;
+                //            var temp_shortName = item.shortName;
 
-                            $("#workDescTeam_").clone(true).prop("id", "workDescTeam_" + temp_userName.toString()).appendTo("#txt_teamMembersWorkDesc");
-                            $("#workDescTeam_" + temp_userName.toString()).text(temp_shortName);
-                            $("#workDescTeam_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+                //            $("#workDescTeam_").clone(true).prop("id", "workDescTeam_" + temp_userName.toString()).appendTo("#txt_teamMembersWorkDesc");
+                //            $("#workDescTeam_" + temp_userName.toString()).text(temp_shortName);
+                //            $("#workDescTeam_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
 
-                            axios.post('/workDesc/AddWorkDescTeam', {
-                                dailyReportID: addItem1,//0
-                                workDescription: addItem2,//1
-                                userName: temp_userName,//2
-                                workDescriptionCategory: '1',//3
-                            })
-                                .then(function (response) {
-                                    console.log(response);
-                                })
-                                .catch(function (error) {
-                                    console.log(error);
-                                });
-                        });
-                        //end AddTeamMember
-                    }
-                });
-                $(workDescTeam_dpdwn).val("-1");
+                //            axios.post('/workDesc/AddWorkDescTeam', {
+                //                dailyReportID: addItem1,//0
+                //                workDescription: addItem2,//1
+                //                userName: temp_userName,//2
+                //                workDescriptionCategory: '1',//3
+                //            })
+                //                .then(function (response) {
+                //                    console.log(response);
+                //                })
+                //                .catch(function (error) {
+                //                    console.log(error);
+                //                });
+                //        });
+                //        //end AddTeamMember
+                //    }
+                //});
+                //$(workDescTeam_dpdwn).val("-1");
             });
             //end
 
@@ -120,9 +120,9 @@
                 //begin suck in variables for eventual axios post
                 var addItem1 = $("#txt_dailyReportID").html();
                 var addItem2 = $("#input_workDesc").html();
-                addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
-                addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
-                addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
+                //addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
+                //addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
+                //addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
                 var lastTimeEntry;
                 var tempTeamMemberUserID = this.id.replace(/workDescTeam_[0-9]*/i, "");
                 //end suck in variables for eventual axios post
@@ -476,6 +476,7 @@
                 var currentRow = $(this).parent().parent();
                 var temp_selectedItem
 
+                //console.log(dailyRptTeamUserIDArr);
                 //alert('yo')
 
                 $(this).hide();
@@ -505,7 +506,7 @@
                         //var temp_selectedItem = $(this).val(); 
                         temp_selectedItem = $(this).val(); 
                         //console.log($(this).val() + " has been selected");
-                        console.log(temp_selectedItem + " has been selected");
+                        //console.log(temp_selectedItem + " has been selected");
 
                         //$($(currentRow)).find('.Team_dpdwn option').each(function () {
                         //    //if ($(this).val() == temp_selectedItem) {
@@ -526,11 +527,11 @@
 
                     else {
                         if ($(this).val() == temp_selectedItem) {
-                            console.log($(this).val() + " has not been selected and will be removed.");
-                            $(this).remove()
+                            //console.log($(this).val() + " has not been selected and will be removed.");
+                            //$(this).remove()
                         }
                         //console.log($(this).attr("selected"));
-                        console.log($(this).val() + " has not been selected, but has not been removed.");
+                        //console.log($(this).val() + " has not been selected, but has not been removed.");
                     }
 
                     //console.log($(this).attr("selected"));
@@ -639,7 +640,7 @@
             <div class="col-4" style="padding:5px">
                 <strong>Team</strong>
             </div>*@
-        <div class="col-6" style="padding:5px">
+        @*<div class="col-6" style="padding:5px">
             <strong>Work Description</strong>
         </div>
         <div class="col-4" style="padding:5px">
@@ -647,12 +648,12 @@
         </div>
         <div class="col-2" style="padding:5px">
             <strong>Action</strong>
-        </div>
+        </div>*@
     </div>
 
     @*BEGIN TEMPLATE FOR COPIES*@
     <div class="col-12" id="workDescriptionLine_template">
-        <div class="row" id="">
+        @*<div class="row" id="">
             <div class="col-8" id="input_workDesc" style="padding:5px; border: 1px solid black;" contenteditable="true">
             </div>
             <div class="col-2" name="txt_teamMembersWorkDesc" id="txt_teamMembersWorkDesc" style="padding:5px">
@@ -674,7 +675,7 @@
             <div class="col-10" style="padding:5px">
                 <button type="button" class="btn btn-primary btn-sm" id="addWorkDescNarrBtn" style="width: 100%">Save Narrative</button>
                 <button type="button" class="btn btn-primary btn-sm" id="addWorkDescRecordBtn" style="width: 100%" hidden>Save Entry</button>
-            </div>
+            </div>*@
         </div>
     </div>
     @*</div>*@
@@ -683,7 +684,7 @@
     @*BEGIN DISPLAY WORK DESCRIPTION RECORDS*@
     @foreach (var item in Model)
     {
-        //BEGIN TEMPORARY LOOP VARIABLES
+        @*//BEGIN TEMPORARY LOOP VARIABLES
         int temp_timeEntryID = item.timeEntryID;
         List<string> temp_userNames = item.userNames;
         List<string> temp_userShortNames = item.userShortNames;
@@ -729,7 +730,7 @@
                     <button type="button" class="btn btn-primary btn-sm saveWorkDescLineBtn_" id="saveWorkDescLineBtn_@temp_timeEntryID" style="background-color: grey; width: 100%;" disabled>Save Edits</button>
                 </div>
             </div>
-        </div>
+        </div>*@
     }
     @*END DISPLAY WORK DESCRIPTION RECORDS*@
 
@@ -757,7 +758,13 @@
         </div>*@
     <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
         <select class="Team_dpdwn workDescTeam_dpdwn" id="" multiple="" tabindex="0" aria-hidden="false">
-            <option value="abundy" selected>AB</option>
+            @*<option value="abundy" selected>AB</option>
+        <option value="dbanner" selected>DB</option>
+        <option value="jwatkins" selected>JW</option>*@
+
+            <option value="abundy">AB</option>
+            <option value="dbanner">DB</option>
+            <option value="jwatkins">JW</option>
         </select>
     </div>
     @*<div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial; display: none;">AB|</div>*@

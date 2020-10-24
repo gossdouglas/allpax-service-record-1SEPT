@@ -53,19 +53,18 @@
             var workDescHoursArr = [];
             var workDescUserNamesArr = [];
             var workDescArrPreJson = [];
-           
+            var indexWorkDescEntries = 0;//keep track of the number of work description entries
+
             var delaysNarrArr = [];
             var delaysHoursArr = [];
             var delaysUserNamesArr = [];
             var delaysArrPreJson = [];
+            var indexDelaysEntries = 0;//keep track of the number of delays entries
 
             var wntyDelaysNarrArr = [];
             var wntyDelaysHoursArr = [];
             var wntyDelaysUserNamesArr = [];
             var wntyDelaysArrPreJson = [];
-
-            var indexWorkDescEntries = 0;//keep track of the number of work description entries
-            var indexDelaysEntries = 0;//keep track of the number of delays entries
             var indexWntyDelaysEntries = 0;//keep track of the number of warranty delays entries
 
             var jobs_dpdown = $('#jobs_dpdown');
@@ -172,12 +171,12 @@
 
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
-                            //enable_disableSave();//determine if the save button needs to be enabled or disabled                          
-                        });                      
+                            //enable_disableSave();//determine if the save button needs to be enabled or disabled
+                        });
                         //end AddTeamMember
                     }
-                });               
-                $(team_dpdwn).val("-1");                
+                });
+                $(team_dpdwn).val("-1");
             });
             //end add team member on drop down change
 
@@ -198,7 +197,7 @@
                 enable_disableSave();//determine if the save button needs to be enabled or disabled
             });
             //end when a team member class is clicked...
-            
+
             $(".Btn_add").click(function () {
 
                 fn_produceParsedShortNames($(this));
@@ -220,11 +219,11 @@
                     indexWorkDescEntries = indexWorkDescEntries + 1;
 
                     $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template"); 
+                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
                     $("#workDescLine_" + indexWorkDescEntries).prop("class", " row workDescriptionLine_template_row_active workDescLine");
 
                     $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
-                    $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");                  
+                    $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
                 }
                 else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
                     indexDelaysEntries = indexDelaysEntries + 1;
@@ -365,11 +364,11 @@
                 var wntyDelaysTeam_dpdwn_Content;
 
                 var currentDropdownLine;//generic
-                
+
                 $(workDescTeam_narr_div_Content).each(function (index1) {
 
                     var workDescUserNamesArrTemp = [];
-                    
+
                     //workDescNarrArr.push([$(workDescTeam_narr_div_Content[index1]).html()]);
                     workDescNarrArr.push($(workDescTeam_narr_div_Content[index1]).html());
 
@@ -489,7 +488,7 @@
                 console.log("delays section follows:");
                 console.log(delaysNarrArr);
                 console.log(delaysHoursArr);
-                console.log(delaysUserNamesArr);               
+                console.log(delaysUserNamesArr);
                 console.log(delaysArrPreJson);
 
                 console.log("warranty delays section follows:");
@@ -528,7 +527,7 @@
                 //    "addItem8: " + addItem8 + '\n' +
                 //    "addItem9: " + addItem9 + '\n'
                 //);
-                       
+
                 var data = {
                     jobID: addItem1,
                     date: addItem2,
@@ -555,13 +554,13 @@
                         //$(data).each(function (index, item) {
                         //    lastDlyRptCrtdByUser = item;
                         //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                        //});  
+                        //});
                     }
-                });                
+                });
             });
 
             $("#enableSelect2").click(function () {//when the add button is clicked...
-                fn_enableSelect2()              
+                fn_enableSelect2()
             });
 
             $("#disableSelect2").click(function () {//when the add button is clicked...
@@ -692,6 +691,8 @@
 </div>
 @*END ALLPAX TEAM*@
 <hr style="margin:1px; opacity:0">
+
+@*BEGIN WORK DESCRIPTION SECTION*@
 <div class="container" id="workDesc_container">
     <div class="row">
         <div class="col-6" style="padding:5px">
@@ -744,12 +745,13 @@
 
                 <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>               
+                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
             </div>
         </div>
         @*END NEW WORK DESCRIPTION TEMPLATE*@
     </div>
 </div>
+@*END WORK DESCRIPTION SECTION*@
 
 <hr style="margin:1px; opacity:0">
 @*BEGIN DELAYS*@

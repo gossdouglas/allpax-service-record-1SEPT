@@ -8,6 +8,8 @@
 @*DAILY REPORT BY REPORT ID PAGE*@
 
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <style>
         .container {
             border: 2px solid black;
@@ -22,13 +24,21 @@
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
 
-            //begin fill the team names dropdown
             var team_dpdwn = $('#team_dpdwn');
-            var addWorkDescBtn = $('#addWorkDescBtn');
+            ///var addWorkDescBtn = $('#addWorkDescBtn');
             var dailyReportID = $("#txt_dailyReportID").html();
             var workDescTeam_dpdwn = $(".workDescTeam_dpdwn");
             var workDescDelaysTeam_dpdwn = $('.workDescDelaysTeam_dpdwn');
             var workDescWntyDelaysTeam_dpdwn = $('.workDescWntyDelaysTeam_dpdwn');
+
+            //begin added for new one shot work
+            fn_enableSelect2();//enable the select2 add-on on page load
+            var workDescNarrArr = [];
+            var workDescHoursArr = [];
+            var workDescUserNamesArr = [];
+            var workDescArrPreJson = [];
+            var indexWorkDescEntries = 0;//keep track of the number of work description entries
+            //end added for new one shot work
 
             //begin fill the team names dropdown
             $.ajax({
@@ -68,8 +78,10 @@
                         dailyRptTeamUserIDArr.push(temp_userName);
 
                         $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-                        $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
-                            //enable_disableSave();//determine if the save button needs to be enabled or disabled
+
+                        //$("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
+                        $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
+                        //enable_disableSave();//determine if the save button needs to be enabled or disabled
                     });
                     //$.fn.updateSectionDpdwns();
                 }
@@ -95,6 +107,11 @@
                             $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
                             $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
 
+                            dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
+                            dailyRptTeamUserIDArr.push(temp_userName);
+
+                            $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
+
                             //begin AddTeamMember
                             //begin axios add post
                             axios.post('/dailyReportByReportID/AddTeamMember', {
@@ -118,22 +135,22 @@
 
             //begin when a team member class is clicked...
             $(".team_").on('click', function () {
-                //var tempTeamMemberUserID = this.id.substr(5);
-
+                var tempTeamMemberUserID = this.id.substr(5);
+                alert("delete member")
                 ////begin DeleteTeamMember
                 ////begin axios delete post
-                //axios.post('/dailyReportByReportID/DeleteTeamMember', {
+                axios.post('/dailyReportByReportID/DeleteTeamMember', {
 
-                //    dailyReportID: dailyReportID,
-                //    userName: tempTeamMemberUserID,
-                //})
-                //    .then(function (response) {
-                //        console.log(response);
-                //        $.fn.updateSectionDpdwns();
-                //    })
-                //    .catch(function (error) {
-                //        console.log(error);
-                //    });
+                    dailyReportID: dailyReportID,
+                    userName: tempTeamMemberUserID
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        $.fn.updateSectionDpdwns();
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
                 ////end axios delete post
                 //$("#" + $(this).attr("id")).remove();
 
@@ -208,6 +225,118 @@
                 //end load work description dropdown with possible team members
             }
 
+            //BEGIN ONE SHOT LOGIC
+
+            $(".Btn_add").click(function () {
+
+                fn_produceParsedShortNames($(this));
+                fn_disableSelect2();
+
+                $(this).parent().parent().find(".narr_div").attr("contenteditable", "false");//lock the narrative for edits
+                $(this).parent().parent().find(".dpdwn_div").hide();//hide the team dropdown
+                $(this).parent().parent().find(".dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
+                $(this).parent().parent().find(".dpdwn_parsed_div").show();//show the parsed version of the team dropdown
+                $(this).parent().parent().find(".Btn_add").hide();//remove the add button, only needed for new work descriptions
+                $(this).parent().parent().find(".Btn_clear").hide();//remove the clear button, only needed for new work descriptions
+                $(this).parent().parent().find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
+                $(this).parent().parent().find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
+                $(this).parent().parent().last().find(".narr_div").css('border-bottom-style', 'none');
+                $(this).parent().parent().find(".dpdwn_parsed_div").css('border-bottom-style', 'none');
+                $(this).parent().parent().find(".button_div").css('border-bottom-style', 'none');
+
+                if (/newWorkDescBtn_add/i.test($(this).attr("class"))) {
+                    indexWorkDescEntries = indexWorkDescEntries + 1;
+
+                    $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
+                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
+                    $("#workDescLine_" + indexWorkDescEntries).prop("class", " row workDescriptionLine_template_row_active workDescLine");
+                    $("#workDescLine_" + indexWorkDescEntries).find(".newRecord").removeAttr("hidden");
+
+                    $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
+                    $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
+                }
+                else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
+                    indexDelaysEntries = indexDelaysEntries + 1;
+
+                    $(".delaysLine_template_row_hidden").removeAttr("hidden");
+                    $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries).appendTo("#delaysLine_template");
+                    $("#delaysLine_" + indexDelaysEntries).prop("class", " row delaysLine_template_row_active delaysLine");
+
+                    $(".delaysLine_template_row_hidden").clone(true).prop("class", "row delaysLine_template_row_active").appendTo("#delaysLine_template");
+                    $(".delaysLine_template_row_hidden").attr("hidden", "true");
+                }
+                else if (/newWntyDelaysBtn_add/i.test($(this).attr("class"))) {
+                    indexWntyDelaysEntries = indexWntyDelaysEntries + 1;
+
+                    $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
+                    $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries).appendTo("#wntyDelaysLine_template");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
+
+                    $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
+                    $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
+                }
+
+                fn_enableSelect2();
+                //fn_loadTimeEntries();
+            });
+
+            $(".Btn_edit").click(function () {
+                var currentRow = $(this).parent().parent();
+
+                $(this).hide();
+                $(currentRow).find(".Btn_save").removeAttr("hidden");
+                $(currentRow).find(".Btn_save").show();
+
+                $(currentRow).find(".narr_div").attr("contenteditable", "true");
+                $(currentRow).find(".dpdwn_parsed_div").hide();
+                $(currentRow).find(".dpdwn_div").show();
+                $(currentRow).css("color", "red");
+            });
+
+            $(".Btn_save").click(function () {
+                var currentRow = $(this).parent().parent();
+
+                $(this).hide();
+                $(currentRow).find(".Btn_edit").removeAttr("hidden");
+                $(currentRow).find(".Btn_edit").show();
+
+                $(currentRow).find(".narr_div").attr("contenteditable", "false");
+                $(currentRow).find(".dpdwn_parsed_div").show();
+                $(currentRow).find(".dpdwn_div").hide();
+                $(currentRow).css("color", "black");
+
+                fn_produceParsedShortNames($(this));
+            });
+
+            $(".Btn_delete").click(function () {
+                var currentRow = $(this).parent().parent();
+
+                $.confirm({
+                    title: 'Delete Entry?',
+                    content: '',
+                    buttons: {
+                        confirm: function () {
+                            $(currentRow).remove();
+                        },
+                        cancel: function () {
+                        }
+                    }
+                });
+            });
+
+            function fn_produceParsedShortNames(button) {
+                var currentWorkDescTeamShortNamesParsed = "";
+                //select the list elements that contain the short names of the team members
+                var currentTeamShortNameLists = $(button).parent().parent().find(".dpdwn_div").find(".select2-selection__rendered li");
+                //select the div where the short names will be written
+                var currentTeamDpdwnParsed = $(button).parent().parent().find(".dpdwn_parsed_div");
+
+                $(currentTeamShortNameLists).each(function (index) {
+                    currentWorkDescTeamShortNamesParsed = currentWorkDescTeamShortNamesParsed.concat($(this).attr("title") + "|");
+                });
+                currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
+            }
+
             //enable the select2 add-on
             function fn_enableSelect2() {
                 $('.Team_dpdwn').select2({
@@ -230,9 +359,19 @@
                 fn_disableSelect2()
             });
 
+            let a = ['a', 'b', 'c'];
+            let b = ['c', 'a', 'd'];
+            let c = ['f', 'g', 'h'];
+            //console.log(a, b, a.some(v => b.includes(v)));
+            console.log(a.some(v => b.includes(v)));
+            //console.log(a, c, a.some(v => c.includes(v)));
+            console.log(a.some(v => c.includes(v)));
+
+            //END ONE SHOT LOGIC
+
         });//end document read jquery statements
     </script>
-</head>    
+</head>
 
 <div class="container" id="contnrDailyLog">
     <h3 style="text-align:center">FIELD SERVICE RECORD</h3>
@@ -250,7 +389,7 @@
             <div>
                 <span><strong>Author</strong></span>
                 @*<span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>*@
-            <span class="" id="dailyRptAuthor">@Model.First().dailyReportAuthor</span>
+                <span class="" id="dailyRptAuthor">@Model.First().dailyReportAuthor</span>
             </div>
         </div>
     </div>
@@ -375,18 +514,111 @@
 @*END ALLPAX TEAM*@
 <hr style="margin:1px; opacity:0" />
 @*<div class="container" id="">*@
-    @{Html.RenderAction("Index", "workDesc", new { dailyReportID = ViewBag.reportID });
-    }
+@*@{Html.RenderAction("Index", "workDesc", new { dailyReportID = ViewBag.reportID });
+    }*@
+@*</div>*@
+
+@*BEGIN WORK DESCRIPTION SECTION*@
+<div class="container" id="workDesc_container">
+    <div class="row">
+        <div class="col-6" style="padding:5px">
+            <strong>Work Description</strong>
+        </div>
+        <div class="col-4" style="padding:5px">
+            <strong>Team</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <strong>Action</strong>
+        </div>
+    </div>
+
+    @*BEGIN RETURNED RECORDS*@
+<div class=" row workDescriptionLine_template_row_active workDescLine" id="workDescLine_timeEntryID" style="border: 1px solid black; color: black;">
+    <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
+
+    <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
+        <select class="Team_dpdwn workDescTeam_dpdwn" id="" multiple="" tabindex="0" aria-hidden="false">
+            <option value="abundy" selected>AB</option>
+            <option value="dbanner" selected>DB</option>
+            <option value="jwatkins" selected>JW</option>
+        </select>
+    </div>
+
+    <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+        AB|
+    </div>
+
+    <div class="col-2 button_div workDescTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+        @*<button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
+        @*<button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
+
+        <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+    </div>
+</div>
+    @*END RETURNED RECORDS*@
+
+    @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
+    @*<div class="col-12" id="workDescriptionLine_template">*@
+    <div class="" id="workDescriptionLine_template">
+        <div class="row workDescriptionLine_template_row_active" id="" style="border:1px solid black;">
+            <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
+                <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
+                </select>
+            </div>
+            <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-2 button_div workDescTeam_button_div" style="padding:0px; border:1px solid black">
+                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+
+                <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <span class="newRecord" hidden>NEW</span>
+            </div>
+        </div>
+
+        <div class="row workDescriptionLine_template_row_hidden" id="" style="border:1px solid black;" hidden>
+            <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
+                <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
+                </select>
+            </div>
+            <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-2 button_div workDescTeam_button_div" style="padding:0px; border:1px solid black">
+                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+
+                <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <span class="newRecord" hidden>NEW</span>
+            </div>
+        </div>
+        @*END NEW WORK DESCRIPTION TEMPLATE*@
+    </div>
+</div>
+@*END WORK DESCRIPTION SECTION*@
+
+<hr style="margin:1px; opacity:0" />
+@*<div class="container" id="">*@
+@*@{Html.RenderAction("Index", "workDescDelays", new { dailyReportID = ViewBag.reportID });
+    }*@
 @*</div>*@
 <hr style="margin:1px; opacity:0" />
 @*<div class="container" id="">*@
-    @{Html.RenderAction("Index", "workDescDelays", new { dailyReportID = ViewBag.reportID });
-    }
-@*</div>*@
-<hr style="margin:1px; opacity:0" />
-@*<div class="container" id="">*@
-    @{Html.RenderAction("Index", "workDescWntyDelays", new { dailyReportID = ViewBag.reportID });
-    }
+@*@{Html.RenderAction("Index", "workDescWntyDelays", new { dailyReportID = ViewBag.reportID });
+    }*@
 @*</div>*@
 <hr style="margin:1px; opacity:0" />
 <div class="container" id="">
