@@ -6,15 +6,8 @@
 @*WORK DESCRIPTION PAGE*@
 
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {//begin document jquery statements
-
-            var standardElementHeight = $("#newWorkDescBtn_save").height();//get the height of the save button...
-            $(".standardInput").height(standardElementHeight);//...and assign its height to all other buttons with a class of standardInput
-
-            fn_enableSelect2();//enable the select2 add-on on page load
 
             //begin this partial view's variable declaration section
             var slctd_timeEntryID;
@@ -25,7 +18,7 @@
             //end this partial view's variable declaration section
 
             //BEGIN NEW WORK DESCRIPTION SECTION
-            //begin
+            //begin 
             $("#addWorkDescNarrBtn").on('click', function () {
 
                 //begin suck in variables for eventual axios post
@@ -64,9 +57,9 @@
                     $("#addWorkDescRecordBtn").removeAttr("hidden");//
                 }
             });
-            //end
+            //end 
 
-            //begin
+            //begin 
             workDescTeam_dpdwn.change(function () {
 
                 //begin suck in variables for eventual axios post
@@ -107,7 +100,7 @@
                                     console.log(error);
                                 });
                         });
-                        //end AddTeamMember
+                //end AddTeamMember
                     }
                 });
                 $(workDescTeam_dpdwn).val("-1");
@@ -139,7 +132,7 @@
                     },
                     success: function (data) {
                         $(data).each(function (index, item) {
-                            lastTimeEntry = item;
+                            lastTimeEntry = item; 
                             console.log('last time entry in ajax section ' + lastTimeEntry);
                             //console.log('last time entry in ajax section ' + item);
                             console.log('user name to be deleted is ' + tempTeamMemberUserID);
@@ -177,7 +170,7 @@
             });
             //end remove team member from being included in the creation of a new description entry
 
-            //begin
+            //begin 
             $("#addWorkDescRecordBtn").on('click', function () {
 
                 if ($("#txt_teamMembersWorkDesc").children().length <= 1) {
@@ -189,7 +182,7 @@
                     window.location = '/DailyReportByReportID?reportID=' + dailyReportID;
                 }
             });
-            //end
+            //end 
             //END NEW WORK DESCRIPTION SECTION
 
             //BEGIN RETURNED DB RECORDS
@@ -253,7 +246,7 @@
             $(".workDescTeamLineUserName_").on('click', function () {
                 //begin suck in variables for eventual axios post
                 var tempTeamMemberUserID = this.id.replace(/workDescTeamLineUserName_[0-9]*/i, "");
-                var tempworkDescTeamLineUserName_ = "#" + $(this).attr("id");
+                var tempworkDescTeamLineUserName_ = "#"+$(this).attr("id");
                 //end suck in variables for eventual axios post
 
                 $.confirm({
@@ -294,7 +287,7 @@
                 //end suck in variables
 
                 $.confirm({
-                    title: 'Delete Time Entry ' + slctd_timeEntryID + '?',
+                    title: 'Delete Time Entry '+slctd_timeEntryID+'?',
                     content: '',
                     buttons: {
                         confirm: function () {
@@ -395,7 +388,7 @@
                     .catch(function (error) {
                         console.log(error);
                     });
-                //end axios delete post
+                 //end axios delete post
             });
             //end when the line save button is pressed.
 
@@ -404,8 +397,8 @@
                 //in synch with which team members available for addition
 
                 workDescTeamLine_dpdwn.empty();
-                //workDescTeamLine_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
-                //workDescTeamLine_dpdwn.val('-1');
+                workDescTeamLine_dpdwn.append($('<option/>', { value: -1, text: 'Team' }));
+                workDescTeamLine_dpdwn.val('-1');
 
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNamesByReportID',
@@ -419,213 +412,6 @@
                     }
                 });
             }
-
-            $(".Btn_add").click(function () {
-
-                fn_produceParsedShortNames($(this));
-                fn_disableSelect2();
-
-                $(this).parent().parent().find(".narr_div").attr("contenteditable", "false");//lock the narrative for edits
-                $(this).parent().parent().find(".dpdwn_div").hide();//hide the team dropdown
-                $(this).parent().parent().find(".dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
-                $(this).parent().parent().find(".dpdwn_parsed_div").show();//show the parsed version of the team dropdown
-                $(this).parent().parent().find(".Btn_add").hide();//remove the add button, only needed for new work descriptions
-                $(this).parent().parent().find(".Btn_clear").hide();//remove the clear button, only needed for new work descriptions
-                $(this).parent().parent().find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
-                $(this).parent().parent().find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
-                $(this).parent().parent().last().find(".narr_div").css('border-bottom-style', 'none');
-                $(this).parent().parent().find(".dpdwn_parsed_div").css('border-bottom-style', 'none');
-                $(this).parent().parent().find(".button_div").css('border-bottom-style', 'none');
-
-                if (/newWorkDescBtn_add/i.test($(this).attr("class"))) {
-                    indexWorkDescEntries = indexWorkDescEntries + 1;
-
-                    $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
-                    $("#workDescLine_" + indexWorkDescEntries).prop("class", " row workDescriptionLine_template_row_active workDescLine");
-
-                    $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
-                    $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
-                }
-                else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
-                    indexDelaysEntries = indexDelaysEntries + 1;
-
-                    $(".delaysLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries).appendTo("#delaysLine_template");
-                    $("#delaysLine_" + indexDelaysEntries).prop("class", " row delaysLine_template_row_active delaysLine");
-
-                    $(".delaysLine_template_row_hidden").clone(true).prop("class", "row delaysLine_template_row_active").appendTo("#delaysLine_template");
-                    $(".delaysLine_template_row_hidden").attr("hidden", "true");
-                }
-                else if (/newWntyDelaysBtn_add/i.test($(this).attr("class"))) {
-                    indexWntyDelaysEntries = indexWntyDelaysEntries + 1;
-
-                    $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries).appendTo("#wntyDelaysLine_template");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
-
-                    $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
-                    $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
-                }
-
-                fn_enableSelect2();
-                //fn_loadTimeEntries();
-            });
-
-            $(".Btn_edit").click(function () {
-                var currentRow = $(this).parent().parent();
-                var temp_selectedItem
-
-                //alert('yo')
-
-                $(this).hide();
-                $(currentRow).find(".Btn_save").removeAttr("hidden");
-                $(currentRow).find(".Btn_save").show();
-
-                $(currentRow).find(".narr_div").attr("contenteditable", "true");
-                $(currentRow).find(".dpdwn_parsed_div").hide();
-                $(currentRow).find(".dpdwn_div").show();
-                $(currentRow).css("color", "red");
-
-                //temp_selectedItem = $(currentRow).find(".Team_dpdwn option").val();
-                //temp_selectedItem = $(currentRow).find(".select2-hidden-accessible option").html();
-
-                //temp_selectedItem = $(currentRow).find(".Team_dpdwn").html();
-                //console.log(temp_selectedItem);
-
-                //temp_selectedItem = $(currentRow).find(".Team_dpdwn option").html();
-                //console.log(temp_selectedItem);
-
-                //temp_selectedItem = $(currentRow).find(".Team_dpdwn option").length;
-                //console.log(temp_selectedItem);
-
-                $($(currentRow)).find('.Team_dpdwn option').each(function () {
-
-                    if ($(this).attr("selected")) {
-                        //var temp_selectedItem = $(this).val(); 
-                        temp_selectedItem = $(this).val(); 
-                        //console.log($(this).val() + " has been selected");
-                        console.log(temp_selectedItem + " has been selected");
-
-                        //$($(currentRow)).find('.Team_dpdwn option').each(function () {
-                        //    //if ($(this).val() == temp_selectedItem) {
-                        //    //    $(this).remove()
-                        //    //}
-
-                        //    if (($(this).val() == temp_selectedItem) && ($(this).attr("selected", "false"))) {
-                        //        //console.log($(this).val() + " has not been selected");
-                        //        console.log($(this).val() + " has not been selected, but in the list");
-                        //        //$(this).remove();
-                        //    }
-                        //})
-                    }
-
-                    //if ($(this).attr("selected", "false")) {
-                    //    console.log($(this).val() + " has not been selected");
-                    //}
-
-                    else {
-                        if ($(this).val() == temp_selectedItem) {
-                            console.log($(this).val() + " has not been selected and will be removed.");
-                            $(this).remove()
-                        }
-                        //console.log($(this).attr("selected"));
-                        console.log($(this).val() + " has not been selected, but has not been removed.");
-                    }
-
-                    //console.log($(this).attr("selected"));
-                    //console.log($(this).val());
-                });
-
-                //temp_selectedItem = $(currentRow).find(".Team_dpdwn option");
-                //temp_selectedItem = $(currentRow).find(".Team_dpdwn option").val();
-                //console.log(temp_selectedItem);
-                //console.log(temp_selectedItem[0]);
-                //console.log(temp_selectedItem[1]);
-                //console.log(temp_selectedItem[2]);
-  
-
-                ////temp_selectedItem = $(currentRow).find(".Team_dpdwn option").val();
-                ////console.log(temp_selectedItem);
-
-                //temp_selectedItem = $(currentRow).find(".Team_dpdwn option").attr("value");
-                //console.log(temp_selectedItem);
-
-                
-
-                $(temp_selectedItem).each(function (index, item) {
-                    //console.log("value is: "+item.val())
-                    //console.log("value is: " + item)
-                });
-
-                fn_produceParsedShortNames($(this));
-            });
-
-            $(".Btn_save").click(function () {
-                var currentRow = $(this).parent().parent();
-
-                $(this).hide();
-                $(currentRow).find(".Btn_edit").removeAttr("hidden");
-                $(currentRow).find(".Btn_edit").show();
-
-                $(currentRow).find(".narr_div").attr("contenteditable", "false");
-                $(currentRow).find(".dpdwn_parsed_div").show();
-                $(currentRow).find(".dpdwn_div").hide();
-                $(currentRow).css("color", "black");
-
-                fn_produceParsedShortNames($(this));
-            });
-
-            $(".Btn_delete").click(function () {
-                var currentRow = $(this).parent().parent();
-
-                $.confirm({
-                    title: 'Delete Entry?',
-                    content: '',
-                    buttons: {
-                        confirm: function () {
-                            $(currentRow).remove();
-                        },
-                        cancel: function () {
-                        }
-                    }
-                });
-            });
-
-            function fn_produceParsedShortNames(button) {
-                var currentWorkDescTeamShortNamesParsed = "";
-                //select the list elements that contain the short names of the team members
-                var currentTeamShortNameLists = $(button).parent().parent().find(".dpdwn_div").find(".select2-selection__rendered li");
-                //select the div where the short names will be written
-                var currentTeamDpdwnParsed = $(button).parent().parent().find(".dpdwn_parsed_div");
-
-                $(currentTeamShortNameLists).each(function (index) {
-                    currentWorkDescTeamShortNamesParsed = currentWorkDescTeamShortNamesParsed.concat($(this).attr("title") + "|");
-                });
-                currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
-            }
-
-            //enable the select2 add-on
-            function fn_enableSelect2() {
-                $('.Team_dpdwn').select2({
-                    width: "100%",
-                    placeholder: "Select Team",
-                    closeOnSelect: "false"
-                })
-            }
-
-            //disable the select2 add-on
-            function fn_disableSelect2() {
-                $('.Team_dpdwn').select2('destroy')
-            }
-
-            $("#enableSelect2").click(function () {//when the add button is clicked...
-                fn_enableSelect2()
-            });
-
-            $("#disableSelect2").click(function () {//when the add button is clicked...
-                fn_disableSelect2()
-            });
             //END RETURNED DB RECORDS
 
         });//end document jquery statements
@@ -633,20 +419,11 @@
 </head>
 <div class=" container pl-auto printable" style="" id="contnr_workDescription">
     <div class="row">
-        @*<div class="col-8" style="padding:5px">
-                <strong>Work Description</strong>
-            </div>
-            <div class="col-4" style="padding:5px">
-                <strong>Team</strong>
-            </div>*@
-        <div class="col-6" style="padding:5px">
+        <div class="col-8" style="padding:5px">
             <strong>Work Description</strong>
         </div>
         <div class="col-4" style="padding:5px">
             <strong>Team</strong>
-        </div>
-        <div class="col-2" style="padding:5px">
-            <strong>Action</strong>
         </div>
     </div>
 
@@ -699,6 +476,7 @@
                     <div class="col-2 teamWorkDescLine" id="teamWorkDescLine_@temp_timeEntryID" style="padding:5px">
                         @for (var i = 0; i < (temp_userNames.Count); i++)
                         {
+                            @*<span class="workDescTeamLineUserName_" id="workDescTeamLineUserName_@temp_timeEntryID@temp_userNames[@i]" style="pointer-events:none">@temp_userShortNames[@i]</span>*@
                             <span class="workDescTeamLineUserName_" id="workDescTeamLineUserName_@(temp_timeEntryID +"_"+@temp_userNames[@i])" style="pointer-events:none">@temp_userShortNames[@i]</span>
                         }
                     </div>
@@ -732,94 +510,6 @@
         </div>
     }
     @*END DISPLAY WORK DESCRIPTION RECORDS*@
-
-    @*BEGIN TEST*@
-<div class="container" id="workDesc_container">
-    <div class="row">
-        <div class="col-6" style="padding:5px">
-            <strong>Work Description</strong>
-        </div>
-        <div class="col-4" style="padding:5px">
-            <strong>Team</strong>
-        </div>
-        <div class="col-2" style="padding:5px">
-            <strong>Action</strong>
-        </div>
-    </div>
-
-    @*BEGIN RETURNED RECORDS*@
-<div class=" row workDescriptionLine_template_row_active workDescLine" id="workDescLine_1" style="border: 1px solid black; color: black;">
-    <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
-    @*<div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px;">
-            <select class="Team_dpdwn workDescTeam_dpdwn" id="" multiple="" tabindex="0" aria-hidden="false">
-                <option value="abundy">AB</option>
-            </select>
-        </div>*@
-    <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
-        <select class="Team_dpdwn workDescTeam_dpdwn" id="" multiple="" tabindex="0" aria-hidden="false">
-            <option value="abundy" selected>AB</option>
-        </select>
-    </div>
-    @*<div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial; display: none;">AB|</div>*@
-    <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">AB|</div>
-    <div class="col-2 button_div workDescTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
-        @*<button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
-        @*<button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
-
-        <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-    </div>
-</div>
-    @*END RETURNED RECORDS*@
-
-    @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
-    <div class="col-12" id="workDescriptionLine_template">
-        <div class="row workDescriptionLine_template_row_active" id="" style="border:1px solid black;">
-            <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
-
-            </div>
-            <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
-                <select class="Team_dpdwn workDescTeam_dpdwn" id="" multiple="multiple">
-                </select>
-            </div>
-            <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
-
-            </div>
-            <div class="col-2 button_div workDescTeam_button_div" style="padding:0px; border:1px solid black">
-                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
-
-                <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-            </div>
-        </div>
-
-        <div class="row workDescriptionLine_template_row_hidden" id="" style="border:1px solid black;" hidden>
-            <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
-
-            </div>
-            <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
-                <select class="Team_dpdwn workDescTeam_dpdwn" id="" multiple="multiple">
-                </select>
-            </div>
-            <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
-
-            </div>
-            <div class="col-2 button_div workDescTeam_button_div" style="padding:0px; border:1px solid black">
-                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
-
-                <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-            </div>
-        </div>
-        @*END NEW WORK DESCRIPTION TEMPLATE*@
-    </div>
-</div>
-    @*END TEST*@
 </div>
 
 

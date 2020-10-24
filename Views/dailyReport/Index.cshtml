@@ -129,7 +129,6 @@
                     }
                 });
                 //end fill sub jobs dropdown
-
             });
             //end jobs id dropdown change
 
@@ -529,17 +528,7 @@
                 //    "addItem8: " + addItem8 + '\n' +
                 //    "addItem9: " + addItem9 + '\n'
                 //);
-
-                //$("#addRecordItem1").val('');
-                //$("#addRecordItem2").val('');
-                //$("#addRecordItem3").val('');
-                //$("#addRecordItem4").val('');
-                //$("#addRecordItem5").val('');
-                //$("#addRecordItem6").val('');
-                //$("#addRecordItem7").val('');
-                //$("#addRecordItem8").val('');
-                //$("#addRecordItem9").val('');
-                         
+                       
                 var data = {
                     jobID: addItem1,
                     date: addItem2,
@@ -555,8 +544,6 @@
                     wntyDelaysArr: wntyDelaysArrPreJson
                 };
 
-                //console.log(data)
-
                 $.ajax({
                     url: '/dailyReport/AddDailyReport',
                     method: 'post',
@@ -570,57 +557,15 @@
                         //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
                         //});  
                     }
-                });
+                });                
+            });
 
-                //begin get last daily report created by user name
-                //$.ajax({
-                //    url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
-                //    method: 'post',
-                //    dataType: 'json',
-                //    data: { dailyReportAuthor: dailyRptAuthor },
-                //    success: function (data) {
+            $("#enableSelect2").click(function () {//when the add button is clicked...
+                fn_enableSelect2()              
+            });
 
-                //        $(data).each(function (index, item) {
-                //            console.log(item);
-                //            lastDlyRptCrtdByUser = item;
-                //            console.log(lastDlyRptCrtdByUser)
-                //            window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                //        });
-                //    }
-                //});
-
-                //begin axios add post
-                //axios.post('/dailyReport/AddDailyReport', {
-                //    jobID: addItem1,
-                //    date: addItem2,
-                //    subJobID: addItem3,
-                //    startTime: addItem4,
-                //    endTime: addItem5,
-                //    lunchHours: addItem6,
-                //    equipment: addItem7,
-                //    dailyReportAuthor: addItem8,
-                //    dailyRptTeamArr: addItem9
-                //})
-                //    .then(function (response) {
-                //        console.log(response);
-                //        //begin get last daily report created by user name
-                //        $.ajax({
-                //            url: 'DataService.asmx/GetLastDlyRptCrtdByUserName',
-                //            method: 'post',
-                //            dataType: 'json',
-                //            data: { dailyReportAuthor: dailyRptAuthor },
-                //            success: function (data) {
-
-                //                $(data).each(function (index, item) {
-                //                    lastDlyRptCrtdByUser = item;
-                //                    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                //                });
-                //            }
-                //        });
-                //    })
-                //    .catch(function (error) {
-                //        console.log(error);
-                //    });
+            $("#disableSelect2").click(function () {//when the add button is clicked...
+                fn_disableSelect2()
             });
 
         });//end document read jquery statements
@@ -740,6 +685,8 @@
                     Johnny Watkins|JW
                 </div>
             </div>
+            <button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
+            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>
         </div>
     </div>
 </div>
@@ -797,7 +744,7 @@
 
                 <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>               
             </div>
         </div>
         @*END NEW WORK DESCRIPTION TEMPLATE*@

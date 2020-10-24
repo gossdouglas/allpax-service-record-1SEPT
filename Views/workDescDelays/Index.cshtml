@@ -249,16 +249,25 @@
                             //end suck in variables
 
                             //clone an invisible template, adjust it's ID and append it
-                            $("#workDescDelaysTeam_").clone(true).prop("id", "workDescDelaysTeamLine_" + slctd_timeEntryID + temp_userName.toString()).appendTo("#teamWorkDescDelaysLine_" + slctd_timeEntryID);
+                            //$("#workDescDelaysTeam_").clone(true).prop("id", "workDescDelaysTeamLine_" + slctd_timeEntryID + temp_userName.toString()).appendTo("#teamWorkDescDelaysLine_" + slctd_timeEntryID);
                             //$("#workDescDelaysTeam_").clone(true).prop("id", "workDescDelaysTeamLine_" + slctd_timeEntryID + temp_userName.toString()).appendTo("#teamWorkDescDelaysLine_");
+                            $("#workDescDelaysTeam_").clone(true).prop("id", "workDescDelaysTeamLine_" + slctd_timeEntryID +"_"+ temp_userName.toString()).appendTo("#teamWorkDescDelaysLine_" + slctd_timeEntryID);
+
                             //ammend the class property of this newly created element
-                            $("#workDescDelaysTeamLine_" + slctd_timeEntryID + temp_userName.toString()).prop("class", "workDescTeamLineUserName_")
+                            //$("#workDescDelaysTeamLine_" + slctd_timeEntryID + temp_userName.toString()).prop("class", "workDescTeamLineUserName_")
+                            $("#workDescDelaysTeamLine_" + slctd_timeEntryID + "_" + temp_userName.toString()).prop("class", "workDescTeamLineUserName_")
+
                             //ammend the text property of this newly created element
-                            $("#workDescDelaysTeamLine_" + slctd_timeEntryID + temp_userName.toString()).text(temp_shortName);
+                            //$("#workDescDelaysTeamLine_" + slctd_timeEntryID + temp_userName.toString()).text(temp_shortName);
+                            $("#workDescDelaysTeamLine_" + slctd_timeEntryID + "_" + temp_userName.toString()).text(temp_shortName);
+
                             //ammend the text color of this newly created element to red to indicate it is in edit mode
-                            $("#workDescDelaysTeamLine_" + slctd_timeEntryID + temp_userName).css('color', 'red');
+                            //$("#workDescDelaysTeamLine_" + slctd_timeEntryID + temp_userName).css('color', 'red');
+                            $("#workDescDelaysTeamLine_" + slctd_timeEntryID + "_" + temp_userName).css('color', 'red');
+
                             //un-hide this newly created element
-                            $("#workDescDelaysTeamLine_" + slctd_timeEntryID + temp_userName.toString()).removeAttr('hidden');
+                            //$("#workDescDelaysTeamLine_" + slctd_timeEntryID + temp_userName.toString()).removeAttr('hidden');
+                            $("#workDescDelaysTeamLine_" + slctd_timeEntryID + "_" + temp_userName.toString()).removeAttr('hidden');
 
                             //begin axios add post
                             axios.post('/workDescDelays/AddTeamMember', {
@@ -507,7 +516,7 @@
                     @for (var i = 0; i < (temp_userNames.Count); i++)
                     {
 
-                        <span class="workDescDelaysTeamLineUserName_" id="workDescDelaysTeamLineUserName_@temp_timeEntryID@temp_userNames[@i]" style="pointer-events:none">@temp_userShortNames[@i]</span>
+                        <span class="workDescDelaysTeamLineUserName_" id="workDescDelaysTeamLineUserName_@(temp_timeEntryID +"_"+@temp_userNames[@i])" style="pointer-events:none">@temp_userShortNames[@i]</span>
                     }
                 </div>
                 <div class="col-2" style="padding:5px">

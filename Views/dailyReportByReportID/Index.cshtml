@@ -19,6 +19,9 @@
 
             $("#contnrDailyLog :input").prop("disabled", true);//disable the daily log section
 
+            var dailyRptTeamArr = [];
+            var dailyRptTeamUserIDArr = [];
+
             //begin fill the team names dropdown
             var team_dpdwn = $('#team_dpdwn');
             var addWorkDescBtn = $('#addWorkDescBtn');
@@ -60,8 +63,15 @@
                         $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
                         $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
                         $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+
+                        dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
+                        dailyRptTeamUserIDArr.push(temp_userName);
+
+                        $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
+                        $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
+                            //enable_disableSave();//determine if the save button needs to be enabled or disabled
                     });
-                    $.fn.updateSectionDpdwns();
+                    //$.fn.updateSectionDpdwns();
                 }
             });
             //end load team members on page load
@@ -92,7 +102,7 @@
                                 userName: temp_userName,
                             })
                                 .then(function (response) {
-                                    $.fn.updateSectionDpdwns();
+                                    //$.fn.updateSectionDpdwns();
                                 })
                                 .catch(function (error) {
                                     console.log(error);
@@ -108,24 +118,39 @@
 
             //begin when a team member class is clicked...
             $(".team_").on('click', function () {
-                var tempTeamMemberUserID = this.id.substr(5);
+                //var tempTeamMemberUserID = this.id.substr(5);
 
-                //begin DeleteTeamMember
-                //begin axios delete post
-                axios.post('/dailyReportByReportID/DeleteTeamMember', {
+                ////begin DeleteTeamMember
+                ////begin axios delete post
+                //axios.post('/dailyReportByReportID/DeleteTeamMember', {
 
-                    dailyReportID: dailyReportID,
-                    userName: tempTeamMemberUserID,
-                })
-                    .then(function (response) {
-                        console.log(response);
-                        $.fn.updateSectionDpdwns();
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                //end axios delete post
+                //    dailyReportID: dailyReportID,
+                //    userName: tempTeamMemberUserID,
+                //})
+                //    .then(function (response) {
+                //        console.log(response);
+                //        $.fn.updateSectionDpdwns();
+                //    })
+                //    .catch(function (error) {
+                //        console.log(error);
+                //    });
+                ////end axios delete post
+                //$("#" + $(this).attr("id")).remove();
+
+                var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
+                for (var row = 0; row < dailyRptTeamArr.length; row++) {
+                    if (dailyRptTeamArr[row][0] == tempTeamMemberUserID) {
+                        dailyRptTeamArr.splice(row, 1);
+                        dailyRptTeamUserIDArr.splice(row, 1);
+                    }
+                }
+
+                $("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
+                $(".Team_dpdwn option[value='" + tempTeamMemberUserID + "']").remove();
                 $("#" + $(this).attr("id")).remove();
+                //enable_disableSave();//determine if the save button needs to be enabled or disabled
+
+
             });
             //end when a team member class is clicked...
             //end when a record class is clicked...
@@ -182,6 +207,28 @@
                 });
                 //end load work description dropdown with possible team members
             }
+
+            //enable the select2 add-on
+            function fn_enableSelect2() {
+                $('.Team_dpdwn').select2({
+                    width: "100%",
+                    placeholder: "Select Team",
+                    closeOnSelect: "false"
+                })
+            }
+
+            //disable the select2 add-on
+            function fn_disableSelect2() {
+                $('.Team_dpdwn').select2('destroy')
+            }
+
+            $("#enableSelect2").click(function () {//when the add button is clicked...
+                fn_enableSelect2()
+            });
+
+            $("#disableSelect2").click(function () {//when the add button is clicked...
+                fn_disableSelect2()
+            });
 
         });//end document read jquery statements
     </script>
@@ -320,6 +367,8 @@
                     Johnny Watkins|JW
                 </div>
             </div>
+            <button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
+            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>
         </div>
     </div>
 </div>
