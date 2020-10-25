@@ -10,6 +10,8 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
+    
     <style>
         .container {
             border: 2px solid black;
@@ -282,6 +284,7 @@
 
             $(".Btn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
+                var temp_selectedItemArr = [];
 
                 $(this).hide();
                 $(currentRow).find(".Btn_save").removeAttr("hidden");
@@ -359,13 +362,19 @@
                 fn_disableSelect2()
             });
 
+            //let a = ['a', 'b', 'c'];
+            //let b = ['c', 'a', 'd'];
+            //let c = ['f', 'g', 'h'];
+            ////console.log(a, b, a.some(v => b.includes(v)));
+            //console.log(a.some(v => b.includes(v)));
+            ////console.log(a, c, a.some(v => c.includes(v)));
+            //console.log(a.some(v => c.includes(v)));
+
             let a = ['a', 'b', 'c'];
             let b = ['c', 'a', 'd'];
-            let c = ['f', 'g', 'h'];
-            //console.log(a, b, a.some(v => b.includes(v)));
-            console.log(a.some(v => b.includes(v)));
-            //console.log(a, c, a.some(v => c.includes(v)));
-            console.log(a.some(v => c.includes(v)));
+            var results = _.intersection(a, b)
+            console.log($(results).length)//doesn't work
+            console.log(results)
 
             //END ONE SHOT LOGIC
 
@@ -533,30 +542,30 @@
     </div>
 
     @*BEGIN RETURNED RECORDS*@
-<div class=" row workDescriptionLine_template_row_active workDescLine" id="workDescLine_timeEntryID" style="border: 1px solid black; color: black;">
-    <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
+    <div class=" row workDescriptionLine_template_row_active workDescLine" id="workDescLine_timeEntryID" style="border: 1px solid black; color: black;">
+        <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
 
-    <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
-        <select class="Team_dpdwn workDescTeam_dpdwn" id="" multiple="" tabindex="0" aria-hidden="false">
-            <option value="abundy" selected>AB</option>
-            <option value="dbanner" selected>DB</option>
-            <option value="jwatkins" selected>JW</option>
-        </select>
+        <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
+            <select class="Team_dpdwn workDescTeam_dpdwn" id="" multiple="" tabindex="0" aria-hidden="false">
+                <option value="abundy" selected>AB</option>
+                <option value="dbanner" selected>DB</option>
+                <option value="jwatkins" selected>JW</option>
+            </select>
+        </div>
+
+        <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+            AB|
+        </div>
+
+        <div class="col-2 button_div workDescTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+            @*<button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
+            @*<button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
+
+            <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+            <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+            <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+        </div>
     </div>
-
-    <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
-        AB|
-    </div>
-
-    <div class="col-2 button_div workDescTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
-        @*<button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
-        @*<button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
-
-        <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-    </div>
-</div>
     @*END RETURNED RECORDS*@
 
     @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
