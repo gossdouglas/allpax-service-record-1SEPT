@@ -35,12 +35,24 @@
 
             //begin added for new one shot work
             fn_enableSelect2();//enable the select2 add-on on page load
+
             var workDescNarrArr = [];
             var workDescHoursArr = [];
             var workDescUserNamesArr = [];
             var workDescArrPreJson = [];
             var indexWorkDescEntries = 0;//keep track of the number of work description entries
 
+            var delaysNarrArr = [];
+            var delaysHoursArr = [];
+            var delaysUserNamesArr = [];
+            var delaysArrPreJson = [];
+            var indexDelaysEntries = 0;//keep track of the number of delays entries
+
+            var wntyDelaysNarrArr = [];
+            var wntyDelaysHoursArr = [];
+            var wntyDelaysUserNamesArr = [];
+            var wntyDelaysArrPreJson = [];
+            var indexWntyDelaysEntries = 0;//keep track of the number of warranty delays entries
             //end added for new one shot work
 
             //begin fill the team names dropdown
@@ -265,6 +277,8 @@
                     $(".delaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries).appendTo("#delaysLine_template");
                     $("#delaysLine_" + indexDelaysEntries).prop("class", " row delaysLine_template_row_active delaysLine");
+                    $("#delaysLine_" + indexDelaysEntries).find(".newRecord").removeAttr("hidden");
+                    $("#delaysLine_" + indexDelaysEntries).find(".delaysTeam_hours_div").attr("contenteditable", "false");
 
                     $(".delaysLine_template_row_hidden").clone(true).prop("class", "row delaysLine_template_row_active").appendTo("#delaysLine_template");
                     $(".delaysLine_template_row_hidden").attr("hidden", "true");
@@ -275,6 +289,8 @@
                     $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries).appendTo("#wntyDelaysLine_template");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".newRecord").removeAttr("hidden");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
 
                     $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
                     $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
@@ -293,6 +309,7 @@
                 $(currentRow).find(".Btn_save").show();
 
                 $(currentRow).find(".narr_div").attr("contenteditable", "true");
+                $(currentRow).find(".hours_div ").attr("contenteditable", "true");
                 $(currentRow).find(".dpdwn_parsed_div").hide();
                 $(currentRow).find(".dpdwn_div").show();
                 $(currentRow).css("color", "red");
@@ -306,6 +323,7 @@
                 $(currentRow).find(".Btn_edit").show();
 
                 $(currentRow).find(".narr_div").attr("contenteditable", "false");
+                $(currentRow).find(".hours_div ").attr("contenteditable", "false");
                 $(currentRow).find(".dpdwn_parsed_div").show();
                 $(currentRow).find(".dpdwn_div").hide();
                 $(currentRow).css("color", "black");
@@ -693,30 +711,31 @@
         </div>
     </div>
     @*BEGIN RETURNED RECORDS*@
-    <div class=" row delaysLine_template_row_active delaysLine" id="delaysLine_timeEntryID" style="border: 1px solid black; color: black;">
-        <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
+<div class=" row delaysLine_template_row_active delaysLine" id="delaysLine_timeEntryID" style="border: 1px solid black; color: black;">
+    <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
 
-        <div class="col-4 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
-            <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
-                <option value="abundy" selected>AB</option>
-                <option value="dbanner" selected>DB</option>
-                <option value="jblow" selected>JB</option>
-            </select>
-        </div>
+    <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
+        <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+            <option value="abundy" selected>AB</option>
+            @*<option value="dbanner" selected>DB</option>
+                <option value="jblow" selected>JB</option>*@
+        </select>
+    </div>
+    <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+        AB
+    </div>
+    <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="padding:5px; border:1px solid black;">
+        1
+    </div>
+    <div class="col-2 button_div delaysTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+        @*<button id="" class="btn btn-light btn-sm Btn_add newdelaysBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
+        @*<button id="" class="btn btn-light btn-sm Btn_clear newdelaysBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
 
-        <div class="col-4 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
-            AB|DB|JB
-        </div>
-
-        <div class="col-2 button_div delaysTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
-            @*<button id="" class="btn btn-light btn-sm Btn_add newdelaysBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
-            @*<button id="" class="btn btn-light btn-sm Btn_clear newdelaysBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
-
-            <button id="" class="btn btn-light btn-sm Btn_edit linedelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-            <button class="btn btn-light btn-sm Btn_save linedelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-            <button class="btn btn-light btn-sm Btn_delete linedelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-        </div>
-    </div>  
+        <button id="" class="btn btn-light btn-sm Btn_edit linedelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_save linedelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_delete linedelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+    </div>
+</div>  
     @*END RETURNED RECORDS*@
 
     @*BEGIN NEW DELAYS TEMPLATE*@
@@ -726,7 +745,7 @@
 
             </div>
             <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
-                <select class="Team_dpdwn delaysTeam_dpdwn" id="" multiple="multiple">
+                <select class="Team_dpdwn team_dpdwn_new delaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
             <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
@@ -751,7 +770,7 @@
 
             </div>
             <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
-                <select class="Team_dpdwn delaysTeam_dpdwn" id="" multiple="multiple">
+                <select class="Team_dpdwn team_dpdwn_new delaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
             <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
