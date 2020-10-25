@@ -40,6 +40,7 @@
             var workDescUserNamesArr = [];
             var workDescArrPreJson = [];
             var indexWorkDescEntries = 0;//keep track of the number of work description entries
+            
             //end added for new one shot work
 
             //begin fill the team names dropdown
@@ -85,6 +86,7 @@
                         $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
                         //enable_disableSave();//determine if the save button needs to be enabled or disabled
                     });
+                    fn_loadTeamNamesRtndRecs();
                     //$.fn.updateSectionDpdwns();
                 }
             });
@@ -361,20 +363,54 @@
             $("#disableSelect2").click(function () {//when the add button is clicked...
                 fn_disableSelect2()
             });
+           
+            function fn_loadTeamNamesRtndRecs() {
 
-            //let a = ['a', 'b', 'c'];
-            //let b = ['c', 'a', 'd'];
-            //let c = ['f', 'g', 'h'];
-            ////console.log(a, b, a.some(v => b.includes(v)));
-            //console.log(a.some(v => b.includes(v)));
-            ////console.log(a, c, a.some(v => c.includes(v)));
-            //console.log(a.some(v => c.includes(v)));
+                var rtndRecordSelects = $(".RtndRecs");//stores the select contents as they come from the server
+                var tmpRtndRecUserIDs = [];//stores which users are part of a returned record
+                var tmpUserIDsToBeAdded = [];
 
-            let a = ['a', 'b', 'c'];
-            let b = ['c', 'a', 'd'];
-            var results = _.intersection(a, b)
-            console.log($(results).length)//doesn't work
-            console.log(results)
+                //console.log(rtndRecordSelects);//print the object
+                //console.log("There are " + $(rtndRecordSelects).length + " .RtndRecs");
+                //console.log("*********************************")
+
+                $(rtndRecordSelects).each(function (indexRtdRcrdSlcts, item) {
+                    //console.log("Content of .RtndRecs " + (indexRtdRcrdSlcts + 1) + " is " + $(item).val())
+                    //console.log("There are " + $(item).find("option").length + " options in this .RtndRecs")
+                    //console.log("The first value is " + $(item[0]).val())
+
+                    $($(item)).find('option').each(function () {
+                        //console.log($(this).val());
+                        tmpRtndRecUserIDs.push($(this).val());
+                    });
+
+                    //console.log("UserIDs in this record is " + tmpRtndRecUserIDs);
+                    //console.log("UserIDs in the report is " + dailyRptTeamUserIDArr);
+                    ////console.log("User data in the report is " + dailyRptTeamArr);
+
+                    tmpUserIDsToBeAdded = _.difference(dailyRptTeamUserIDArr, tmpRtndRecUserIDs);
+                    //console.log("Users to be added to this dropdown: " + tmpUserIDsToBeAdded)
+
+                    //console.log("Daily report user info:");
+                    $(dailyRptTeamArr).each(function (index, item) {
+
+                        //console.log(item);
+                        //console.log(item[0] + " " + item[1] + " " + item[2]);
+
+                        //if a user's info is not in tmpUserIDsToBeAdded, then it needs to be appended to this loop's rtndRecordSelects
+                        if (($.inArray(item[0], tmpUserIDsToBeAdded)) !== -1) {
+
+                            //console.log("To be appended: " + item[0] + " " + item[2]);
+                            $("<option value=" + item[0] + ">" + item[2] + "</option>").appendTo(rtndRecordSelects[indexRtdRcrdSlcts]);
+                        }
+
+                    })
+                    //console.log("*********************************")
+
+                    tmpRtndRecUserIDs = [];//empty for the next loop
+                    tmpUserIDsToBeAdded = [];//empty for the next loop
+                })              
+            };
 
             //END ONE SHOT LOGIC
 
@@ -546,15 +582,39 @@
         <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
 
         <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
-            <select class="Team_dpdwn workDescTeam_dpdwn" id="" multiple="" tabindex="0" aria-hidden="false">
+            <select class="Team_dpdwn workDescTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
                 <option value="abundy" selected>AB</option>
                 <option value="dbanner" selected>DB</option>
-                <option value="jwatkins" selected>JW</option>
+                <option value="jblow" selected>JB</option>
             </select>
         </div>
 
         <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
-            AB|
+            AB|DB|JB
+        </div>
+
+        <div class="col-2 button_div workDescTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+            @*<button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
+            @*<button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
+
+            <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+            <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+            <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+        </div>
+    </div>
+
+    <div class=" row workDescriptionLine_template_row_active workDescLine" id="workDescLine_timeEntryID" style="border: 1px solid black; color: black;">
+        <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
+
+        <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
+            <select class="Team_dpdwn workDescTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                <option value="abundy" selected>AB</option>
+                <option value="dbanner" selected>DB</option>
+            </select>
+        </div>
+
+        <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+            AB|DB
         </div>
 
         <div class="col-2 button_div workDescTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
