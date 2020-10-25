@@ -571,7 +571,7 @@
     </script>
 </head>
 
-<div class="container">
+<div class="container" id="contnrDailyLog">
     <h3 style="text-align:center">CREATE A NEW FIELD SERVICE RECORD</h3>
     <div class="row">
         <div class="col-2" style="padding:5px">
@@ -580,13 +580,14 @@
         <div class="col-2" style="padding:5px">
             <div>
                 <span><strong>Record No</strong></span>
-                <span class="recordNo">new</span>
+                <span id="txt_dailyReportID" value="">New</span>
             </div>
         </div>
         <div class="col-3" style="padding:5px">
             <div>
                 <span><strong>Author</strong></span>
                 <span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>
+                @*<span class="" id="dailyRptAuthor">@Model.First().dailyReportAuthor</span>*@
             </div>
         </div>
     </div>
@@ -604,7 +605,7 @@
             <strong>Date:</strong>
         </div>
         <div class="md-col-2" style="padding:5px">
-            <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value="@DateTime.Today.ToString("yyyy-MM-dd")">
+            <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value=@DateTime.Today.ToString("yyyy-MM-dd")>
         </div>
     </div>
     <div class="row">
@@ -634,7 +635,11 @@
         <div class="col-2" style="padding:5px">
             <strong>Customer Contact:</strong>
         </div>
-        <div class="col-10" style="padding:5px" id="output_customerContact"></div>
+        <div class="col-4" style="padding:5px" id="output_customerContact"></div>
+        <div class="col-2" style="padding:5px">
+            <strong>Correspondents:</strong>
+        </div>
+
     </div>
     <div class="row">
         <div class="col-2" style="padding:5px">
@@ -643,19 +648,19 @@
         <div class="col-10" style="padding:5px">
             <input type="text" value="" id="input_equipment" name="" style="width:100%">
         </div>
-    </div>
+    </div> 
     <div class="row">
         <div class="col-2" style="padding:5px">
             <strong>Start Time:</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <input type="time" class="form-control form-control-sm" id="input_startTime">
+            <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="">
         </div>
         <div class="col-2" style="padding:5px">
             <strong>End Time:</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <input type="time" class="form-control form-control-sm" id="input_endTime">
+            <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="">
         </div>
         <div class="col-2" style="padding:5px">
             <strong>Lunch (hr)</strong>
@@ -684,14 +689,13 @@
                     Johnny Watkins|JW
                 </div>
             </div>
-            <button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
-            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>
+            @*<button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
+              <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>*@
         </div>
     </div>
 </div>
 @*END ALLPAX TEAM*@
-<hr style="margin:1px; opacity:0">
-
+<hr style="margin:1px; opacity:0" />
 @*BEGIN WORK DESCRIPTION SECTION*@
 <div class="container" id="workDesc_container">
     <div class="row">
