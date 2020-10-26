@@ -13,8 +13,18 @@
     <script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
 
     <style>
-        .container {
-            border: 2px solid black;
+
+        .container, .narr_div,
+        .dpdwn_div,
+        .dpdwn_parsed_div,
+        .hours_div,
+        .button_div {
+            border: 1px solid black;
+        }
+
+        .row {
+            border: none;
+            padding: 3px;
         }
     </style>
 
@@ -590,7 +600,7 @@
         </div>
     </div>
     @*BEGIN RETURNED RECORDS*@
-    <div class=" row workDescriptionLine_template_row_active workDescLine" id="workDescLine_timeEntryID" style="border: 1px solid black; color: black;">
+    <div class=" row workDescriptionLine_template_row_active workDescLine" id="workDescLine_timeEntryID" style="">
         <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
 
         <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
@@ -615,7 +625,7 @@
         </div>
     </div>
 
-    <div class=" row workDescriptionLine_template_row_active workDescLine" id="workDescLine_timeEntryID" style="border: 1px solid black; color: black;">
+    <div class=" row workDescriptionLine_template_row_active workDescLine" id="workDescLine_timeEntryID" style="">
         <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
 
         <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
@@ -642,7 +652,7 @@
 
     @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
     <div class="" id="workDescriptionLine_template">
-        <div class="row workDescriptionLine_template_row_active" id="" style="border:1px solid black;">
+        <div class="row workDescriptionLine_template_row_active" id="" style="">
             <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
 
             </div>
@@ -664,7 +674,7 @@
             </div>
         </div>
 
-        <div class="row workDescriptionLine_template_row_hidden" id="" style="border:1px solid black;" hidden>
+        <div class="row workDescriptionLine_template_row_hidden" id="" style="" hidden>
             <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
 
             </div>
@@ -711,20 +721,20 @@
         </div>
     </div>
     @*BEGIN RETURNED RECORDS*@
-    <div class=" row delaysLine_template_row_active delaysLine" id="delaysLine_timeEntryID" style="border: 1px solid black; color: black;">
-        <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
+    <div class=" row delaysLine_template_row_active delaysLine" id="delaysLine_timeEntryID" style="">
+        <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="padding: 5px;">kjkjk</div>
 
-        <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
+        <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="display:none">
             <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
                 <option value="abundy" selected>AB</option>
                 @*<option value="dbanner" selected>DB</option>
                     <option value="jblow" selected>JB</option>*@
             </select>
         </div>
-        <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+        <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px;">
             AB
         </div>
-        <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="padding:5px; border:1px solid black;">
+        <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="">
             1
         </div>
         <div class="col-2 button_div delaysTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
@@ -740,7 +750,7 @@
 
     @*BEGIN NEW DELAYS TEMPLATE*@
     <div class="" id="delaysLine_template">
-        <div class="row delaysLine_template_row_active" id="" style="border:1px solid black;">
+        <div class="row delaysLine_template_row_active" id="" style="">
             <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
 
             </div>
@@ -765,7 +775,7 @@
             </div>
         </div>
 
-        <div class="row delaysLine_template_row_hidden" id="" style="border:1px solid black;" hidden>
+        <div class="row delaysLine_template_row_hidden" id="" style="" hidden>
             <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
 
             </div>
@@ -816,8 +826,8 @@
         </div>
     </div>
     @*BEGIN RETURNED RECORDS*@
-    <div class=" row wntyDelaysLine_template_row_active wntyDelaysLine" id="wntyDelaysLine_timeEntryID" style="border: 1px solid black; color: black;">
-        <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
+    <div class=" row wntyDelaysLine_template_row_active wntyDelaysLine" id="wntyDelaysLine_timeEntryID" style="border:none; color: black; padding:3px">
+        <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border:1px solid black">kjkjk</div>
 
         <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding: 0px; display:none">
             <select class="Team_dpdwn wntyDelaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
@@ -826,13 +836,13 @@
                     <option value="jblow" selected>JB</option>*@
             </select>
         </div>
-        <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+        <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border:1px solid black">
             AB
         </div>
         <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="false" style="padding:5px; border:1px solid black;">
             1
         </div>
-        <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+        <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding: 0px; border:1px solid black;">
             @*<button id="" class="btn btn-light btn-sm Btn_add newwntyDelaysBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
             @*<button id="" class="btn btn-light btn-sm Btn_clear newwntyDelaysBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
 
@@ -844,8 +854,8 @@
     @*END RETURNED RECORDS*@
 
     @*BEGIN NEW WARRANTY DELAYS  TEMPLATE*@
-    <div class="" id="wntyDelaysLine_template">
-        <div class="row wntyDelaysLine_template_row_active" id="" style="border:1px solid black;">
+    <div class="" id="wntyDelaysLine_template" style="">
+        <div class="row wntyDelaysLine_template_row_active" id="" style="border:none;">
             <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
 
             </div>
@@ -870,7 +880,7 @@
             </div>
         </div>
 
-        <div class="row wntyDelaysLine_template_row_hidden" id="" style="border:1px solid black;" hidden>
+        <div class="row wntyDelaysLine_template_row_hidden" id="" style="border:none;" hidden>
             <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
 
             </div>
