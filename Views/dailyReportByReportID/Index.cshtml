@@ -711,31 +711,31 @@
         </div>
     </div>
     @*BEGIN RETURNED RECORDS*@
-<div class=" row delaysLine_template_row_active delaysLine" id="delaysLine_timeEntryID" style="border: 1px solid black; color: black;">
-    <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
+    <div class=" row delaysLine_template_row_active delaysLine" id="delaysLine_timeEntryID" style="border: 1px solid black; color: black;">
+        <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
 
-    <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
-        <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
-            <option value="abundy" selected>AB</option>
-            @*<option value="dbanner" selected>DB</option>
-                <option value="jblow" selected>JB</option>*@
-        </select>
-    </div>
-    <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
-        AB
-    </div>
-    <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="padding:5px; border:1px solid black;">
-        1
-    </div>
-    <div class="col-2 button_div delaysTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
-        @*<button id="" class="btn btn-light btn-sm Btn_add newdelaysBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
-        @*<button id="" class="btn btn-light btn-sm Btn_clear newdelaysBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
+        <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
+            <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                <option value="abundy" selected>AB</option>
+                @*<option value="dbanner" selected>DB</option>
+                    <option value="jblow" selected>JB</option>*@
+            </select>
+        </div>
+        <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+            AB
+        </div>
+        <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="padding:5px; border:1px solid black;">
+            1
+        </div>
+        <div class="col-2 button_div delaysTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+            @*<button id="" class="btn btn-light btn-sm Btn_add newdelaysBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
+            @*<button id="" class="btn btn-light btn-sm Btn_clear newdelaysBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
 
-        <button id="" class="btn btn-light btn-sm Btn_edit linedelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save linedelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete linedelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+            <button id="" class="btn btn-light btn-sm Btn_edit linedelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+            <button class="btn btn-light btn-sm Btn_save linedelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+            <button class="btn btn-light btn-sm Btn_delete linedelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+        </div>
     </div>
-</div>  
     @*END RETURNED RECORDS*@
 
     @*BEGIN NEW DELAYS TEMPLATE*@
@@ -793,19 +793,127 @@
     @*END DELAYS TEMPLATE*@
 </div>
 @*END DELAYS SECTION*@
-<hr style="margin:1px; opacity:0" />
+
 @*<div class="container" id="">*@
 @*@{Html.RenderAction("Index", "workDescWntyDelays", new { dailyReportID = ViewBag.reportID });
     }*@
 @*</div>*@
+@*BEGIN WARRANTY DELAYS  SECTION*@
 <hr style="margin:1px; opacity:0" />
-<div class="container" id="">
+<div class="container" id="wntyDelays_container">
     <div class="row">
-        <div class="col-12" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%">E-mail Daily Report</button>
+        <div class="col-6" style="padding:5px">
+            <strong>Delays</strong>
+        </div>
+        <div class="col-3" style="padding:5px">
+            <strong>Team</strong>
+        </div>
+        <div class="col-1" style="padding:5px">
+            <strong>Hours</strong>
+        </div>
+        <div class="col-2" style="padding:5px">
+            <strong>Action</strong>
+        </div>
+    </div>
+    @*BEGIN RETURNED RECORDS*@
+    <div class=" row wntyDelaysLine_template_row_active wntyDelaysLine" id="wntyDelaysLine_timeEntryID" style="border: 1px solid black; color: black;">
+        <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">kjkjk</div>
+
+        <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding: 0px; display:none">
+            <select class="Team_dpdwn wntyDelaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                <option value="abundy" selected>AB</option>
+                @*<option value="dbanner" selected>DB</option>
+                    <option value="jblow" selected>JB</option>*@
+            </select>
+        </div>
+        <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="padding: 5px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+            AB
+        </div>
+        <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="false" style="padding:5px; border:1px solid black;">
+            1
+        </div>
+        <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding: 0px; border-width: 1px; border-style: solid solid none; border-color: black; border-image: initial;">
+            @*<button id="" class="btn btn-light btn-sm Btn_add newwntyDelaysBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
+            @*<button id="" class="btn btn-light btn-sm Btn_clear newwntyDelaysBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
+
+            <button id="" class="btn btn-light btn-sm Btn_edit linewntyDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+            <button class="btn btn-light btn-sm Btn_save linewntyDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+            <button class="btn btn-light btn-sm Btn_delete linewntyDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+        </div>
+    </div>
+    @*END RETURNED RECORDS*@
+
+    @*BEGIN NEW WARRANTY DELAYS  TEMPLATE*@
+    <div class="" id="wntyDelaysLine_template">
+        <div class="row wntyDelaysLine_template_row_active" id="" style="border:1px solid black;">
+            <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
+                <select class="Team_dpdwn team_dpdwn_new wntyDelaysTeam_dpdwn" id="" multiple="multiple">
+                </select>
+            </div>
+            <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding:0px; border:1px solid black">
+                <button id="" class="btn btn-light btn-sm Btn_add newwntyDelaysBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_clear newwntyDelaysBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+
+                <button id="" class="btn btn-light btn-sm Btn_edit linewntyDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save linewntyDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete linewntyDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <span class="newRecord" hidden>NEW</span>
+            </div>
+        </div>
+
+        <div class="row wntyDelaysLine_template_row_hidden" id="" style="border:1px solid black;" hidden>
+            <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
+                <select class="Team_dpdwn team_dpdwn_new wntyDelaysTeam_dpdwn" id="" multiple="multiple">
+                </select>
+            </div>
+            <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
+
+            </div>
+            <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding:0px; border:1px solid black">
+                <button id="" class="btn btn-light btn-sm Btn_add newWntyDelaysBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_clear newWntyDelaysBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+
+                <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save lineWntyDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineWntyDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <span class="newRecord" hidden>NEW</span>
+            </div>
+        </div>
+    </div>
+    @*END WARRANTY DELAYS TEMPLATE*@
+</div>
+@*END WARRANTY DELAYS  SECTION*@
+@*BEGIN FINAL PAGE ACTIONS*@
+<hr style="margin:1px; opacity:0">
+<div class="container" id="_container">
+    <div class="row">
+        <div class="col-4" style="padding:5px">
+            <button type="button" class="btn btn-primary btn-sm" id="addButton" style="width: 100%">Save & Exit</button>
+        </div>
+        <div class="col-4" style="padding:5px">
+            <button type="button" class="btn btn-primary btn-sm" id="submitButton" style="width: 100%">Save & Submit</button>
+        </div>
+        <div class="col-4" style="padding:5px">
+            <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%">E-mail Daily Report Test</button>
         </div>
     </div>
 </div>
+@*END FINAL PAGE ACTIONS*@
 
 
 
