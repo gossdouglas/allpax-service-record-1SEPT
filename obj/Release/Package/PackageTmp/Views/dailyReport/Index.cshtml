@@ -231,6 +231,7 @@
                     $(".delaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries).appendTo("#delaysLine_template");
                     $("#delaysLine_" + indexDelaysEntries).prop("class", " row delaysLine_template_row_active delaysLine");
+                    $("#delaysLine_" + indexDelaysEntries).find(".delaysTeam_hours_div").attr("contenteditable", "false");
 
                     $(".delaysLine_template_row_hidden").clone(true).prop("class", "row delaysLine_template_row_active").appendTo("#delaysLine_template");
                     $(".delaysLine_template_row_hidden").attr("hidden", "true");
@@ -241,6 +242,7 @@
                     $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries).appendTo("#wntyDelaysLine_template");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
 
                     $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
                     $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
@@ -258,6 +260,7 @@
                 $(currentRow).find(".Btn_save").show();
 
                 $(currentRow).find(".narr_div").attr("contenteditable", "true");
+                $(currentRow).find(".hours_div ").attr("contenteditable", "true");
                 $(currentRow).find(".dpdwn_parsed_div").hide();
                 $(currentRow).find(".dpdwn_div").show();
                 $(currentRow).css("color", "red");
@@ -271,6 +274,7 @@
                 $(currentRow).find(".Btn_edit").show();
 
                 $(currentRow).find(".narr_div").attr("contenteditable", "false");
+                $(currentRow).find(".hours_div ").attr("contenteditable", "false");
                 $(currentRow).find(".dpdwn_parsed_div").show();
                 $(currentRow).find(".dpdwn_div").hide();
                 $(currentRow).css("color", "black");
@@ -571,7 +575,7 @@
     </script>
 </head>
 
-<div class="container">
+<div class="container" id="contnrDailyLog">
     <h3 style="text-align:center">CREATE A NEW FIELD SERVICE RECORD</h3>
     <div class="row">
         <div class="col-2" style="padding:5px">
@@ -580,13 +584,14 @@
         <div class="col-2" style="padding:5px">
             <div>
                 <span><strong>Record No</strong></span>
-                <span class="recordNo">new</span>
+                <span id="txt_dailyReportID" value="">New</span>
             </div>
         </div>
         <div class="col-3" style="padding:5px">
             <div>
                 <span><strong>Author</strong></span>
                 <span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>
+                @*<span class="" id="dailyRptAuthor">@Model.First().dailyReportAuthor</span>*@
             </div>
         </div>
     </div>
@@ -604,7 +609,7 @@
             <strong>Date:</strong>
         </div>
         <div class="md-col-2" style="padding:5px">
-            <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value="@DateTime.Today.ToString("yyyy-MM-dd")">
+            <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value=@DateTime.Today.ToString("yyyy-MM-dd")>
         </div>
     </div>
     <div class="row">
@@ -634,7 +639,11 @@
         <div class="col-2" style="padding:5px">
             <strong>Customer Contact:</strong>
         </div>
-        <div class="col-10" style="padding:5px" id="output_customerContact"></div>
+        <div class="col-4" style="padding:5px" id="output_customerContact"></div>
+        <div class="col-2" style="padding:5px">
+            <strong>Correspondents:</strong>
+        </div>
+
     </div>
     <div class="row">
         <div class="col-2" style="padding:5px">
@@ -643,19 +652,19 @@
         <div class="col-10" style="padding:5px">
             <input type="text" value="" id="input_equipment" name="" style="width:100%">
         </div>
-    </div>
+    </div> 
     <div class="row">
         <div class="col-2" style="padding:5px">
             <strong>Start Time:</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <input type="time" class="form-control form-control-sm" id="input_startTime">
+            <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="">
         </div>
         <div class="col-2" style="padding:5px">
             <strong>End Time:</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <input type="time" class="form-control form-control-sm" id="input_endTime">
+            <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="">
         </div>
         <div class="col-2" style="padding:5px">
             <strong>Lunch (hr)</strong>
@@ -684,14 +693,13 @@
                     Johnny Watkins|JW
                 </div>
             </div>
-            <button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
-            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>
+            @*<button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
+              <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>*@
         </div>
     </div>
 </div>
 @*END ALLPAX TEAM*@
-<hr style="margin:1px; opacity:0">
-
+<hr style="margin:1px; opacity:0" />
 @*BEGIN WORK DESCRIPTION SECTION*@
 <div class="container" id="workDesc_container">
     <div class="row">
@@ -706,13 +714,13 @@
         </div>
     </div>
     @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
-    <div class="col-12" id="workDescriptionLine_template">
+    <div class="" id="workDescriptionLine_template">
         <div class="row workDescriptionLine_template_row_active" id="" style="border:1px solid black;">
             <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
 
             </div>
             <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
-                <select class="Team_dpdwn workDescTeam_dpdwn" id="" multiple="multiple">
+                <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
             <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
@@ -725,6 +733,7 @@
                 <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
                 <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <span class="newRecord" hidden>NEW</span>
             </div>
         </div>
 
@@ -733,7 +742,7 @@
 
             </div>
             <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
-                <select class="Team_dpdwn workDescTeam_dpdwn" id="" multiple="multiple">
+                <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
             <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="padding:5px; border:1px solid black;">
@@ -746,13 +755,13 @@
                 <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
                 <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <span class="newRecord" hidden>NEW</span>
             </div>
         </div>
-        @*END NEW WORK DESCRIPTION TEMPLATE*@
     </div>
+    @*END NEW WORK DESCRIPTION TEMPLATE*@
 </div>
 @*END WORK DESCRIPTION SECTION*@
-
 <hr style="margin:1px; opacity:0">
 @*BEGIN DELAYS*@
 <div class="container" id="delays_container">
@@ -771,7 +780,7 @@
         </div>
     </div>
     @*BEGIN NEW DELAYS TEMPLATE*@
-    <div class="col-12" id="delaysLine_template">
+    <div class="" id="delaysLine_template">
         <div class="row delaysLine_template_row_active" id="" style="border:1px solid black;">
             <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
 
@@ -842,7 +851,7 @@
         </div>
     </div>
     @*BEGIN WARRANTY DELAYS TEMPLATE*@
-    <div class="col-12" id="wntyDelaysLine_template">
+    <div class="" id="wntyDelaysLine_template">
         <div class="row wntyDelaysLine_template_row_active" id="" style="border:1px solid black;">
             <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style="padding:5px; border:1px solid black;">
 
