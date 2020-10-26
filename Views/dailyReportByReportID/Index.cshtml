@@ -28,6 +28,7 @@
 
         .narr_div, .dpdwn_div, .dpdwn_parsed_div, .hours_div, .button_div {
             border-bottom-style: none;
+            padding: 5px;
         } 
         
         .row {
@@ -36,7 +37,7 @@
             padding-right: 5px;
         }
 
-        .entryRow .narr_div, .entryRow .dpdwn_div, .entryRow .button_div {
+        .entryRow .narr_div, .entryRow .dpdwn_div, .entryRow .hours_div, .entryRow .button_div {
             border-bottom: 1px solid black;
         }
 
@@ -294,10 +295,10 @@
 
                     $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
-                    $("#workDescLine_" + indexWorkDescEntries).prop("class", " row workDescriptionLine_template_row_active workDescLine");
+                    $("#workDescLine_" + indexWorkDescEntries).prop("class", " row entryRow workDescriptionLine_template_row_active workDescLine");
                     $("#workDescLine_" + indexWorkDescEntries).find(".newRecord").removeAttr("hidden");
 
-                    $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
+                    $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row entryRow workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
                     $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
                 }
                 else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
@@ -305,11 +306,11 @@
 
                     $(".delaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries).appendTo("#delaysLine_template");
-                    $("#delaysLine_" + indexDelaysEntries).prop("class", " row delaysLine_template_row_active delaysLine");
+                    $("#delaysLine_" + indexDelaysEntries).prop("class", " row entryRow delaysLine_template_row_active delaysLine");
                     $("#delaysLine_" + indexDelaysEntries).find(".newRecord").removeAttr("hidden");
                     $("#delaysLine_" + indexDelaysEntries).find(".delaysTeam_hours_div").attr("contenteditable", "false");
 
-                    $(".delaysLine_template_row_hidden").clone(true).prop("class", "row delaysLine_template_row_active").appendTo("#delaysLine_template");
+                    $(".delaysLine_template_row_hidden").clone(true).prop("class", "row entryRow delaysLine_template_row_active").appendTo("#delaysLine_template");
                     $(".delaysLine_template_row_hidden").attr("hidden", "true");
                 }
                 else if (/newWntyDelaysBtn_add/i.test($(this).attr("class"))) {
@@ -317,11 +318,11 @@
 
                     $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries).appendTo("#wntyDelaysLine_template");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row entryRow wntyDelaysLine_template_row_active wntyDelaysLine");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".newRecord").removeAttr("hidden");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
 
-                    $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
+                    $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row entryRow wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
                     $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
                 }
 
