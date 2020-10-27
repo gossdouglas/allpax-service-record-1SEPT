@@ -864,32 +864,7 @@
             <strong>Action</strong>
         </div>
     </div>
-    @*BEGIN RETURNED RECORDS*@
-    <!--<div class=" row workDescriptionLine_template_row_active workDescLine" id="" style="">
-        <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">kjkjk</div>
-
-        <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
-            <select class="Team_dpdwn workDescTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
-                <option value="abundy" selected>AB</option>
-                <option value="dbanner" selected>DB</option>
-                <option value="jblow" selected>JB</option>
-            </select>
-        </div>
-
-        <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
-            AB|DB|JB
-        </div>
-
-        <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">-->
-    @*<button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
-    @*<button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
-
-    <!--<button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-            <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-            <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-        </div>
-    </div>-->
-
+    @*BEGIN RETURNED RECORDS*@  
     @foreach (var item in Model)
     {
         for (var i = 0; i < (item.workDescArr.Count); i++)
@@ -924,16 +899,12 @@
                     </div>
 
                 <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
-                    @*<button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
-                    @*<button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
-
                     <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                     <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
                     <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                 </div>
             </div>
         }
-
     }
 
     @*END RETURNED RECORDS*@
@@ -1006,31 +977,73 @@
         </div>
     </div>
     @*BEGIN RETURNED RECORDS*@
-    <div class=" row delaysLine_template_row_active delaysLine" id="" style="">
+    <!--<div class=" row delaysLine_template_row_active delaysLine" id="" style="">
         <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="">kjkjk</div>
 
         <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
             <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
-                <option value="abundy" selected>AB</option>
-                @*<option value="dbanner" selected>DB</option>
-                    <option value="jblow" selected>JB</option>*@
-            </select>
-        </div>
-        <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
-            AB
-        </div>
-        <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="">
-            1
-        </div>
-        <div class="col-2 button_div delaysTeam_button_div" style="padding: 0px;">
-            @*<button id="" class="btn btn-light btn-sm Btn_add newdelaysBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
-            @*<button id="" class="btn btn-light btn-sm Btn_clear newdelaysBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
+                <option value="abundy" selected>AB</option>-->
+    @*<option value="dbanner" selected>DB</option>
+        <option value="jblow" selected>JB</option>*@
+    <!--</select>
+    </div>
+    <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+        AB
+    </div>
+    <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="">
+        1
+    </div>
+    <div class="col-2 button_div delaysTeam_button_div" style="padding: 0px;">-->
+    @*<button id="" class="btn btn-light btn-sm Btn_add newdelaysBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
+    @*<button id="" class="btn btn-light btn-sm Btn_clear newdelaysBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
 
-            <button id="" class="btn btn-light btn-sm Btn_edit linedelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+    <!--<button id="" class="btn btn-light btn-sm Btn_edit linedelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
             <button class="btn btn-light btn-sm Btn_save linedelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
             <button class="btn btn-light btn-sm Btn_delete linedelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
         </div>
-    </div>
+    </div>-->
+
+    @foreach (var item in Model)
+    {
+        for (var i = 0; i < (item.delaysArr.Count); i++)
+        {
+            //BEGIN TEMPORARY LOOP VARIABLES
+            int temp_timeEntryID = item.delaysArr[i].timeEntryID;
+            List<string> temp_userNames = item.delaysArr[i].userNames;
+            List<string> temp_userShortNames = item.delaysArr[i].userShortNames;
+            string temp_workDescription = item.delaysArr[i].workDescription;
+            //END TEMPORARY LOOP VARIABLES
+
+            <div class=" row returnedRecords delaysLine" id="delaysLine_@temp_timeEntryID" style="">
+                <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">
+                    @temp_workDescription
+                </div>
+
+                <div class="col-4 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
+                    <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                        @for (var j = 0; j < (@temp_userNames.Count); j++)
+                        {
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-4 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+                    @*AB|DB|JB*@
+                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
+                    {
+                        @(temp_userShortNames[k] + "|");
+                    }
+                </div>
+
+                <div class="col-2 button_div delaysTeam_button_div" style="padding:0px;">
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_save lineDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_delete lineDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                </div>
+            </div>
+        }
+    }
     @*END RETURNED RECORDS*@
 
     @*BEGIN NEW DELAYS TEMPLATE*@
