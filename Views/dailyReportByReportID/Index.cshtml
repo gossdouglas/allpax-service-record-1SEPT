@@ -53,10 +53,7 @@
         $(document).ready(function () {//begin document read jquery statements
 
             $("#contnrDailyLog :input").prop("disabled", true);//disable the daily log section
-
-            var dailyRptTeamArr = [];
-            var dailyRptTeamUserIDArr = [];
-
+          
             var team_dpdwn = $('#team_dpdwn');
             ///var addWorkDescBtn = $('#addWorkDescBtn');
             var dailyReportID = $("#txt_dailyReportID").html();
@@ -64,8 +61,18 @@
             var workDescDelaysTeam_dpdwn = $('.workDescDelaysTeam_dpdwn');
             var workDescWntyDelaysTeam_dpdwn = $('.workDescWntyDelaysTeam_dpdwn');
 
+            //var dailyReportID = $("#txt_dailyReportID").attr("value");
+            var jobs_dpdown = $('#jobs_dpdown');
+            var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+            var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
+            dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
+            var lastDlyRptCrtdByUser;
+
             //begin added for new one shot work
             fn_enableSelect2();//enable the select2 add-on on page load
+
+            var dailyRptTeamArr = [];
+            var dailyRptTeamUserIDArr = [];
 
             var workDescNarrArr = [];
             var workDescHoursArr = [];
@@ -273,7 +280,6 @@
             }
 
             //BEGIN ONE SHOT LOGIC
-
             $(".Btn_add").click(function () {
 
                 fn_produceParsedShortNames($(this));
@@ -391,28 +397,6 @@
                 currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
             }
 
-            //enable the select2 add-on
-            function fn_enableSelect2() {
-                $('.Team_dpdwn').select2({
-                    width: "100%",
-                    placeholder: "Select Team",
-                    closeOnSelect: "false"
-                })
-            }
-
-            //disable the select2 add-on
-            function fn_disableSelect2() {
-                $('.Team_dpdwn').select2('destroy')
-            }
-
-            $("#enableSelect2").click(function () {//when the add button is clicked...
-                fn_enableSelect2()
-            });
-
-            $("#disableSelect2").click(function () {//when the add button is clicked...
-                fn_disableSelect2()
-            });
-
             function fn_loadTeamNamesRtndRecs() {
 
                 var rtndRecordSelects = $(".RtndRecs");//stores the select contents as they come from the server
@@ -460,6 +444,261 @@
                     tmpUserIDsToBeAdded = [];//empty for the next loop
                 })
             };
+
+            //BEGIN VALIDATION BEFORE SAVING SECTION
+            var fields = "#slct_date, #input_jobs_dpdown, #input_equipment, #input_startTime, #input_endTime, #input_lunch, #subJobTypes_dpdwn";
+
+            //when one of the basic fields changes...
+            $(fields).on('change', function () {
+                //enable_disableSave();//determine if the save button needs to be enabled or disabled
+            });
+
+            //determine if the save button needs to be enabled or disabled
+            function allFilled() {
+                var filled = true;
+                $(fields).each(function () {
+                    if ($(this).val() == '') {
+                        filled = false;
+                    }
+                });
+                if (dailyRptTeamArr.length == 0) {
+                    filled = false;
+                }
+                return filled;
+            }
+
+            //enable or disable the save button
+            function enable_disableSave() {
+                if (allFilled()) {
+                    $('#addButton').removeAttr('disabled');
+                } else {
+                    $('#addButton').attr('disabled', 'disabled');
+                }
+            }
+            //END VALIDATION BEFORE SAVING SECTION
+
+            //BEGIN SECTION TO ENABLE/DISABLE SELECT2
+            $("#enableSelect2").click(function () {//when the add button is clicked...
+                fn_enableSelect2()
+            });
+
+            $("#disableSelect2").click(function () {//when the add button is clicked...
+                fn_disableSelect2()
+            });
+
+            //enable the select2 add-on
+            function fn_enableSelect2() {
+                $('.Team_dpdwn').select2({
+                    width: "100%",
+                    placeholder: "Select Team",
+                    closeOnSelect: "false"
+                })
+            }
+
+            //disable the select2 add-on
+            function fn_disableSelect2() {
+                $('.Team_dpdwn').select2('destroy')
+            }
+            //END SECTION TO ENABLE/DISABLE SELECT2
+
+            //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
+            $("#addButton").click(function () {//when the add button is clicked...
+
+                fn_loadTimeEntries();
+
+                var addItem1 = $("#jobs_dpdown").val();
+                var addItem2 = $("#slct_date").val();
+                var addItem3 = $("#subJobTypes_dpdwn").val();
+                var addItem4 = $("#input_startTime").val();
+                var addItem5 = $("#input_endTime").val();
+                var addItem6 = $("#input_lunch").val();
+                var addItem7 = $("#input_equipment").val();
+                var addItem7 = $("#input_equipment").val();
+                var addItem8 = dailyRptAuthor;
+                var addItem9 = [];
+                addItem9 = dailyRptTeamUserIDArr;
+
+                var data = {
+                    dailyReportID: dailyReportID,
+                    jobID: addItem1,
+                    date: addItem2,
+                    subJobID: addItem3,
+                    startTime: addItem4,
+                    endTime: addItem5,
+                    lunchHours: addItem6,
+                    equipment: addItem7,
+                    dailyReportAuthor: addItem8,
+                    dailyRptTeamArr: addItem9,
+                    workDescArr: workDescArrPreJson,
+                    delaysArr: delaysArrPreJson,
+                    wntyDelaysArr: wntyDelaysArrPreJson 
+                };
+
+                $.ajax({
+                    url: '/dailyReport/AddDailyReport',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function () {
+                        //$(data).each(function (index, item) {
+                        //    lastDlyRptCrtdByUser = item;
+                        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                        //});
+                    }
+                });
+
+                fn_printArrays();
+            });
+
+            function fn_loadTimeEntries() {
+                var workDescTeam_narr_div_Content = $("#workDescriptionLine_template").find(".workDescLine").find(".workDescTeam_narr_div");
+                var workDescTeam_dpdwn_Content;
+
+                var delaysTeam_narr_div_Content = $("#delaysLine_template").find(".delaysLine").find(".delaysTeam_narr_div");
+                var delaysTeam_hours_div_Content;
+                var delaysTeam_dpdwn_Content;
+
+                var wntyDelaysTeam_narr_div_Content = $("#wntyDelaysLine_template").find(".wntyDelaysLine").find(".wntyDelaysTeam_narr_div");
+                var wntyDelaysTeam_hours_div_Content;
+                var wntyDelaysTeam_dpdwn_Content;
+
+                var currentDropdownLine;//generic
+
+                $(workDescTeam_narr_div_Content).each(function (index1) {
+
+                    var workDescUserNamesArrTemp = [];
+
+                    //workDescNarrArr.push([$(workDescTeam_narr_div_Content[index1]).html()]);
+                    workDescNarrArr.push($(workDescTeam_narr_div_Content[index1]).html());
+
+                    currentDropdownLine = $(this).parent().attr("id");
+                    workDescHoursArr.push(0);
+                    workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+
+                    $(workDescTeam_dpdwn_Content).each(function (index2) {
+
+                        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var temp_workDescTeam_dpdwn_ID_object = tempworkDescTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_workDescTeam_dpdwn_ID_object[0];
+
+                        workDescUserNamesArrTemp.push(temp_UserID);
+                    });
+                    workDescUserNamesArr.push(workDescUserNamesArrTemp);
+                });
+
+                $(delaysTeam_narr_div_Content).each(function (index1) {
+
+                    var delaysUserNamesArrTemp = [];
+
+                    //delaysNarrArr.push([$(delaysTeam_narr_div_Content[index1]).html()]);
+                    delaysNarrArr.push($(delaysTeam_narr_div_Content[index1]).html());
+
+                    currentDropdownLine = $(this).parent().attr("id");
+                    delaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".delaysTeam_hours_div").html());
+                    //delaysHoursArr.push([delaysTeam_hours_div_Content]);
+                    delaysHoursArr.push(delaysTeam_hours_div_Content);
+                    delaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+
+                    $(delaysTeam_dpdwn_Content).each(function (index2) {
+
+                        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var temp_delaysTeam_dpdwn_ID_object = tempDelaysTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_delaysTeam_dpdwn_ID_object[0];
+
+                        delaysUserNamesArrTemp.push(temp_UserID);
+                    });
+                    delaysUserNamesArr.push(delaysUserNamesArrTemp);
+                });
+
+                $(wntyDelaysTeam_narr_div_Content).each(function (index1) {
+
+                    var wntyDelaysUserNamesArrTemp = [];
+
+                    //wntyDelaysNarrArr.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
+                    wntyDelaysNarrArr.push($(wntyDelaysTeam_narr_div_Content[index1]).html());
+
+                    currentDropdownLine = $(this).parent().attr("id");
+                    wntyDelaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".wntyDelaysTeam_hours_div").html());
+                    //console.log(wntyDelaysTeam_hours_div_Content);
+                    //wntyDelaysHoursArr.push([wntyDelaysTeam_hours_div_Content]);
+                    wntyDelaysHoursArr.push(wntyDelaysTeam_hours_div_Content);
+                    wntyDelaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+
+                    $(wntyDelaysTeam_dpdwn_Content).each(function (index2) {
+
+                        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var temp_wntyDelaysTeam_dpdwn_ID_object = tempWntyDelaysTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_wntyDelaysTeam_dpdwn_ID_object[0];
+
+                        wntyDelaysUserNamesArrTemp.push(temp_UserID);
+                    });
+                    wntyDelaysUserNamesArr.push(wntyDelaysUserNamesArrTemp);
+                });
+
+                fn_buildPreJsonObjects();
+            }
+
+            function fn_buildPreJsonObjects() {
+                //BEGIN BUILD THE WORK DESCRIPTION PRE-JSON OBJECT
+                for (var i = 0; i < workDescNarrArr.length; i++) {
+                    workDescArrPreJson[i] = {
+                        workDescription: workDescNarrArr[i],
+                        workDescriptionCategory: "1",
+                        hours: workDescHoursArr[i],
+                        userNames: workDescUserNamesArr[i]
+                    };
+                }
+                //END BUILD THE DELAYS PRE-JSON OBJECT
+
+                //BEGIN BUILD THE WORK DESCRIPTION PRE-JSON OBJECT
+                for (var i = 0; i < delaysNarrArr.length; i++) {
+                    delaysArrPreJson[i] = {
+                        workDescription: delaysNarrArr[i],
+                        workDescriptionCategory: "2",
+                        hours: delaysHoursArr[i],
+                        userNames: delaysUserNamesArr[i]
+                    };
+                }
+                //END BUILD THE DELAYS PRE-JSON OBJECT
+
+                //BEGIN BUILD THE WNTY DELAYS PRE-JSON OBJECT
+                for (var i = 0; i < wntyDelaysNarrArr.length; i++) {
+                    wntyDelaysArrPreJson[i] = {
+                        workDescription: wntyDelaysNarrArr[i],
+                        workDescriptionCategory: "3",
+                        hours: wntyDelaysHoursArr[i],
+                        userNames: wntyDelaysUserNamesArr[i]
+                    };
+                }
+                //END BUILD THE WNTY DELAYS PRE-JSON OBJECT
+            }
+            //END SECTION TO PACK UP NEW RECORDS
+
+            function fn_printArrays() {
+                console.log("work description section follows:");
+                console.log(workDescNarrArr);
+                console.log(delaysHoursArr);
+                console.log(workDescUserNamesArr);
+                console.log(workDescArrPreJson);
+
+
+                console.log("delays section follows:");
+                console.log(delaysNarrArr);
+                console.log(delaysHoursArr);
+                console.log(delaysUserNamesArr);
+                console.log(delaysArrPreJson);
+
+                console.log("warranty delays section follows:");
+                console.log(wntyDelaysNarrArr);
+                console.log(wntyDelaysHoursArr);
+                console.log(wntyDelaysUserNamesArr);
+                console.log(wntyDelaysArrPreJson);
+            }
 
             //END ONE SHOT LOGIC
 
@@ -583,8 +822,9 @@
         </div>
     </div>
 </div>
-<hr class="sectionSeparator">
+
 @*BEGIN ALLPAX TEAM*@
+<hr class="sectionSeparator">
 <div class="container" id="">
     <div class="row">
         <div class="col-2" style="padding:5px">
@@ -606,8 +846,9 @@
     </div>
 </div>
 @*END ALLPAX TEAM*@
-<hr class="sectionSeparator">
+
 @*BEGIN WORK DESCRIPTION SECTION*@
+<hr class="sectionSeparator">
 <div class="container" id="workDesc_container">
     <div class="row">
         <div class="col-6" style="padding:5px">
@@ -697,12 +938,9 @@
     @*END NEW WORK DESCRIPTION TEMPLATE*@
 </div>
 @*END WORK DESCRIPTION SECTION*@
-<hr class="sectionSeparator">
-@*<div class="container" id="">*@
-@*@{Html.RenderAction("Index", "workDescDelays", new { dailyReportID = ViewBag.reportID });
-    }*@
-@*</div>*@
+
 @*BEGIN DELAYS SECTION*@
+<hr class="sectionSeparator">
 <div class="container" id="delays_container">
     <div class="row">
         <div class="col-6" style="padding:5px">
@@ -802,10 +1040,6 @@
 </div>
 @*END DELAYS SECTION*@
 
-@*<div class="container" id="">*@
-@*@{Html.RenderAction("Index", "workDescWntyDelays", new { dailyReportID = ViewBag.reportID });
-    }*@
-@*</div>*@
 @*BEGIN WARRANTY DELAYS  SECTION*@
 <hr class="sectionSeparator">
 <div class="container" id="wntyDelays_container">
@@ -906,6 +1140,7 @@
     @*END WARRANTY DELAYS TEMPLATE*@
 </div>
 @*END WARRANTY DELAYS  SECTION*@
+
 @*BEGIN FINAL PAGE ACTIONS*@
 <hr class="sectionSeparator">
 <div class="container" id="_container">

@@ -36,141 +36,145 @@ namespace allpax_service_record.Controllers
 
             string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
 
-            int new_dailyRptID = new int();
+            int passedDailyRptID = dailyReportAdd.dailyReportID;
 
-            using (SqlConnection con = new SqlConnection(cs))
+            if (dailyReportAdd.dailyReportID == 0)
             {
-                con.Open();
+                System.Diagnostics.Debug.WriteLine("new daily report.");
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    con.Open();
 
-                SqlCommand cmd = new SqlCommand("spGetLastDlyRptCrtdByUserName", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                SqlParameter param = new SqlParameter()
+                    SqlCommand cmd = new SqlCommand("spGetLastDlyRptCrtdByUserName", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    SqlParameter param = new SqlParameter()
+                    {
+                        ParameterName = "@dailyReportAuthor",
+                        Value = dailyReportAdd.dailyReportAuthor
+                    };
+                    cmd.Parameters.Add(param);
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        passedDailyRptID = (int)rdr["dailyReportID"];
+                    }
+                }
+
+                foreach (string item in dailyReportAdd.dailyRptTeamArr)
                 {
-                    ParameterName = "@dailyReportAuthor",
-                    Value = dailyReportAdd.dailyReportAuthor
-                };
-                cmd.Parameters.Add(param);
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
+                    db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
+                    passedDailyRptID, item);
+                }
+            }
+                                 
+            if (dailyReportAdd.workDescArr.Count >= 1)
+            {
+                //System.Diagnostics.Debug.WriteLine("size of workDescArr is " + dailyReportAdd.workDescArr.Count);
+                foreach (vm_workDesc item in dailyReportAdd.workDescArr)
                 {
-                    new_dailyRptID = (int)rdr["dailyReportID"];
+                    db.Database.ExecuteSqlCommand(
+
+                    "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
+
+                    passedDailyRptID, item.workDescription, item.workDescriptionCategory, item.hours);
+
+                    //System.Diagnostics.Debug.WriteLine(item.workDescription);
+
+                    foreach (string userNames in item.userNames)
+                    {
+                        //System.Diagnostics.Debug.WriteLine(userNames);
+                        db.Database.ExecuteSqlCommand(
+
+                    "DECLARE @timeEntryID INT " +
+
+                    "SET @timeEntryID = " +
+                        "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
+                        "FROM tbl_dailyReportTimeEntry " +
+                        "WHERE " +
+
+                        "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
+                        "AND " +
+                        "workDescription = {1} " +
+                        "AND " +
+                        "workDescriptionCategory = {3}) " +
+
+                    "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
+
+                    //191, item.workDescription, userNames, item.workDescriptionCategory);
+                    passedDailyRptID, item.workDescription, userNames, item.workDescriptionCategory);
+                    }
                 }
             }
 
-            foreach (string item in dailyReportAdd.dailyRptTeamArr)
+            if (dailyReportAdd.delaysArr.Count >= 1)
             {
-                db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-                new_dailyRptID, item);
-            }
-
-            foreach (vm_workDesc item in dailyReportAdd.workDescArr)
-            {
-
-                db.Database.ExecuteSqlCommand(
-
-                "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
-
-                //191, item.workDescription, item.workDescriptionCategory, item.hours);
-                new_dailyRptID, item.workDescription, item.workDescriptionCategory, item.hours);
-
-                //System.Diagnostics.Debug.WriteLine(item.workDescription);
-
-                foreach (string userNames in item.userNames)
+                //System.Diagnostics.Debug.WriteLine("size of delaysArr is " + dailyReportAdd.delaysArr.Count);
+                foreach (vm_delays item in dailyReportAdd.delaysArr)
                 {
-                    //System.Diagnostics.Debug.WriteLine(userNames);
                     db.Database.ExecuteSqlCommand(
 
-                "DECLARE @timeEntryID INT " +
+                    "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
 
-                "SET @timeEntryID = " +
-                    "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
-                    "FROM tbl_dailyReportTimeEntry " +
-                    "WHERE " +
+                    passedDailyRptID, item.workDescription, item.workDescriptionCategory, item.hours);
 
-                    "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
-                    "AND " +
-                    "workDescription = {1} " +
-                    "AND " +
-                    "workDescriptionCategory = {3}) " +
+                    foreach (string userNames in item.userNames)
+                    {
+                        //System.Diagnostics.Debug.WriteLine(userNames);
+                        db.Database.ExecuteSqlCommand(
 
-                "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
+                    "DECLARE @timeEntryID INT " +
 
-                //191, item.workDescription, userNames, item.workDescriptionCategory);
-                new_dailyRptID, item.workDescription, userNames, item.workDescriptionCategory);
+                    "SET @timeEntryID = " +
+                        "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
+                        "FROM tbl_dailyReportTimeEntry " +
+                        "WHERE " +
+
+                        "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
+                        "AND " +
+                        "workDescription = {1} " +
+                        "AND " +
+                        "workDescriptionCategory = {3}) " +
+
+                    "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
+
+                    passedDailyRptID, item.workDescription, userNames, item.workDescriptionCategory);
+                    }
                 }
             }
 
-            foreach (vm_delays item in dailyReportAdd.delaysArr)
+            if (dailyReportAdd.wntyDelaysArr.Count >= 1)
             {
-
-                db.Database.ExecuteSqlCommand(
-
-                "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
-
-                //191, item.workDescription, item.workDescriptionCategory, item.hours);
-                new_dailyRptID, item.workDescription, item.workDescriptionCategory, item.hours);
-
-                //System.Diagnostics.Debug.WriteLine(item.workDescription);
-
-                foreach (string userNames in item.userNames)
+                //System.Diagnostics.Debug.WriteLine("size of wntyDelaysArr is " + dailyReportAdd.wntyDelaysArr.Count);
+                foreach (vm_wntyDelays item in dailyReportAdd.wntyDelaysArr)
                 {
-                    //System.Diagnostics.Debug.WriteLine(userNames);
                     db.Database.ExecuteSqlCommand(
 
-                "DECLARE @timeEntryID INT " +
+                    "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
 
-                "SET @timeEntryID = " +
-                    "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
-                    "FROM tbl_dailyReportTimeEntry " +
-                    "WHERE " +
+                    passedDailyRptID, item.workDescription, item.workDescriptionCategory, item.hours);
 
-                    "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
-                    "AND " +
-                    "workDescription = {1} " +
-                    "AND " +
-                    "workDescriptionCategory = {3}) " +
+                    foreach (string userNames in item.userNames)
+                    {
+                        //System.Diagnostics.Debug.WriteLine(userNames);
+                        db.Database.ExecuteSqlCommand(
 
-                "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
+                    "DECLARE @timeEntryID INT " +
 
-                //191, item.workDescription, userNames, item.workDescriptionCategory);
-                new_dailyRptID, item.workDescription, userNames, item.workDescriptionCategory);
-                }
-            }
+                    "SET @timeEntryID = " +
+                        "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
+                        "FROM tbl_dailyReportTimeEntry " +
+                        "WHERE " +
 
-            foreach (vm_wntyDelays item in dailyReportAdd.wntyDelaysArr)
-            {
+                        "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
+                        "AND " +
+                        "workDescription = {1} " +
+                        "AND " +
+                        "workDescriptionCategory = {3}) " +
 
-                db.Database.ExecuteSqlCommand(
+                    "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
 
-                "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
-
-                //191, item.workDescription, item.workDescriptionCategory, item.hours);
-                new_dailyRptID, item.workDescription, item.workDescriptionCategory, item.hours);
-
-                //System.Diagnostics.Debug.WriteLine(item.workDescription);
-
-                foreach (string userNames in item.userNames)
-                {
-                    //System.Diagnostics.Debug.WriteLine(userNames);
-                    db.Database.ExecuteSqlCommand(
-
-                "DECLARE @timeEntryID INT " +
-
-                "SET @timeEntryID = " +
-                    "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
-                    "FROM tbl_dailyReportTimeEntry " +
-                    "WHERE " +
-
-                    "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
-                    "AND " +
-                    "workDescription = {1} " +
-                    "AND " +
-                    "workDescriptionCategory = {3}) " +
-
-                "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
-
-                //191, item.workDescription, userNames, item.workDescriptionCategory);
-                new_dailyRptID, item.workDescription, userNames, item.workDescriptionCategory);
+                    passedDailyRptID, item.workDescription, userNames, item.workDescriptionCategory);
+                    }
                 }
             }
 

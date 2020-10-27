@@ -17,26 +17,28 @@
         #workDesc_container, #delays_container, #wntyDelays_container {
             padding-bottom: 5px;
         }
-        .container, .narr_div, .dpdwn_div, .dpdwn_parsed_div, .hours_div, .button_div {
+
+        .container {
             border: 1px solid black;
         }
 
-        .dpdwn_div, .dpdwn_parsed_div {
-            border-left-style: none;
-            border-right-style: none;
+        .narr_div, .dpdwn_div, .dpdwn_parsed_div, .hours_div, .button_div {
+            border-top: 1px solid black;
+            border-left: 1px solid black;
+            padding: 5px;
         }
 
-        .narr_div, .dpdwn_div, .dpdwn_parsed_div, .hours_div, .button_div {
-            border-bottom-style: none;
-        } 
-        
+        .button_div {
+            border-right: 1px solid black;
+        }
+
         .row {
             border: none;
             padding-left: 5px;
             padding-right: 5px;
         }
 
-        .entryRow .narr_div, .entryRow .dpdwn_div, .entryRow .button_div {
+        .entryRow .narr_div, .entryRow .dpdwn_div, .entryRow .hours_div, .entryRow .button_div {
             border-bottom: 1px solid black;
         }
 
@@ -297,7 +299,7 @@
                     $("#workDescLine_" + indexWorkDescEntries).prop("class", " row workDescriptionLine_template_row_active workDescLine");
                     $("#workDescLine_" + indexWorkDescEntries).find(".newRecord").removeAttr("hidden");
 
-                    $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
+                    $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row entryRow workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
                     $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
                 }
                 else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
@@ -309,7 +311,7 @@
                     $("#delaysLine_" + indexDelaysEntries).find(".newRecord").removeAttr("hidden");
                     $("#delaysLine_" + indexDelaysEntries).find(".delaysTeam_hours_div").attr("contenteditable", "false");
 
-                    $(".delaysLine_template_row_hidden").clone(true).prop("class", "row delaysLine_template_row_active").appendTo("#delaysLine_template");
+                    $(".delaysLine_template_row_hidden").clone(true).prop("class", "row entryRow delaysLine_template_row_active").appendTo("#delaysLine_template");
                     $(".delaysLine_template_row_hidden").attr("hidden", "true");
                 }
                 else if (/newWntyDelaysBtn_add/i.test($(this).attr("class"))) {
@@ -321,7 +323,7 @@
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".newRecord").removeAttr("hidden");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
 
-                    $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
+                    $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row entryRow wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
                     $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
                 }
 
@@ -720,7 +722,7 @@
     <div class=" row delaysLine_template_row_active delaysLine" id="" style="">
         <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="">kjkjk</div>
 
-        <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="display:none">
+        <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
             <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
                 <option value="abundy" selected>AB</option>
                 @*<option value="dbanner" selected>DB</option>
