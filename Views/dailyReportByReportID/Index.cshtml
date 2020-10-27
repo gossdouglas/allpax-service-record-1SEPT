@@ -302,7 +302,8 @@
 
                     $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
-                    $("#workDescLine_" + indexWorkDescEntries).prop("class", " row workDescriptionLine_template_row_active workDescLine");
+                    //$("#workDescLine_" + indexWorkDescEntries).prop("class", " row workDescriptionLine_template_row_active workDescLine");
+                    $("#workDescLine_" + indexWorkDescEntries).prop("class", " row addRecord workDescLine");
                     $("#workDescLine_" + indexWorkDescEntries).find(".newRecord").removeAttr("hidden");
 
                     $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row entryRow workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
@@ -313,7 +314,8 @@
 
                     $(".delaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries).appendTo("#delaysLine_template");
-                    $("#delaysLine_" + indexDelaysEntries).prop("class", " row delaysLine_template_row_active delaysLine");
+                    //$("#delaysLine_" + indexDelaysEntries).prop("class", " row delaysLine_template_row_active delaysLine");
+                    $("#delaysLine_" + indexDelaysEntries).prop("class", " row addRecord delaysLine");
                     $("#delaysLine_" + indexDelaysEntries).find(".newRecord").removeAttr("hidden");
                     $("#delaysLine_" + indexDelaysEntries).find(".delaysTeam_hours_div").attr("contenteditable", "false");
 
@@ -325,7 +327,8 @@
 
                     $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries).appendTo("#wntyDelaysLine_template");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
+                    //$("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row addRecord wntyDelaysLine");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".newRecord").removeAttr("hidden");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
 
@@ -549,7 +552,7 @@
                     }
                 });
 
-                fn_printArrays();
+                //fn_printArrays();
             });
 
             function fn_loadTimeEntries() {
@@ -862,7 +865,7 @@
         </div>
     </div>
     @*BEGIN RETURNED RECORDS*@
-    <div class=" row workDescriptionLine_template_row_active workDescLine" id="" style="">
+    <!--<div class=" row workDescriptionLine_template_row_active workDescLine" id="" style="">
         <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">kjkjk</div>
 
         <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
@@ -877,64 +880,110 @@
             AB|DB|JB
         </div>
 
-        <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
-            @*<button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
-            @*<button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
+        <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">-->
+    @*<button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
+    @*<button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
 
-            <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+    <!--<button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
             <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
             <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
         </div>
-    </div>
-  
+    </div>-->
+
+    @foreach (var item in Model)
+    {
+        for (var i = 0; i < (item.workDescArr.Count); i++)
+        {
+            //BEGIN TEMPORARY LOOP VARIABLES
+            int temp_timeEntryID = item.workDescArr[i].timeEntryID;
+            List<string> temp_userNames = item.workDescArr[i].userNames;
+            List<string> temp_userShortNames = item.workDescArr[i].userShortNames;
+            string temp_workDescription = item.workDescArr[i].workDescription;
+            //END TEMPORARY LOOP VARIABLES
+
+            <div class=" row returnedRecords workDescLine" id="workDescLine_@temp_timeEntryID" style="">
+                <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">
+                @temp_workDescription
+                </div>
+
+                <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
+                    <select class="Team_dpdwn workDescTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                        @for (var j = 0; j < (@temp_userNames.Count); j++)
+                        {
+                        <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+                    @*AB|DB|JB*@
+                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
+                    {
+                        @(temp_userShortNames[k] + "|");
+                    }
+                    </div>
+
+                <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
+                    @*<button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add" style="display: none;"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
+                    @*<button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden="" style="display: none;"><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>*@
+
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                </div>
+            </div>
+        }
+
+    }
+
     @*END RETURNED RECORDS*@
 
     @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
-<div class="" id="workDescriptionLine_template" style="">
-    <div class="row entryRow workDescriptionLine_template_row_active" id="" style="">
-        <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="">
+    <div class="" id="workDescriptionLine_template" style="">
+        <div class="row entryRow workDescriptionLine_template_row_active" id="" style="">
+            <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="">
 
-        </div>
-        <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
-            <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
-            </select>
-        </div>
-        <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
+            </div>
+            <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
+                <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
+                </select>
+            </div>
+            <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
-        </div>
-        <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
-            <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-            <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+            </div>
+            <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
+                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
 
-            <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-            <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-            <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-            <span class="newRecord" hidden>NEW</span>
+                <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <span class="newRecord" hidden>NEW</span>
+            </div>
+        </div>
+
+        <div class="row entryRow workDescriptionLine_template_row_hidden" id="" style="" hidden>
+            <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="">
+
+            </div>
+            <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
+                <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
+                </select>
+            </div>
+            <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
+
+            </div>
+            <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
+                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
+
+                <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <span class="newRecord" hidden>NEW</span>
+            </div>
         </div>
     </div>
-
-    <div class="row entryRow workDescriptionLine_template_row_hidden" id="" style="" hidden>
-        <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="">
-
-        </div>
-        <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
-            <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
-            </select>
-        </div>
-        <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
-
-        </div>
-        <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
-            <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-            <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
-
-            <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-            <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-            <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-            <span class="newRecord" hidden>NEW</span>
-        </div>
-    </div>
-</div>
     @*END NEW WORK DESCRIPTION TEMPLATE*@
 </div>
 @*END WORK DESCRIPTION SECTION*@

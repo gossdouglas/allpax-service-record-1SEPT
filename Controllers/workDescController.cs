@@ -124,94 +124,105 @@ namespace allpax_service_record.Controllers
             return View(workDescs);
         }
 
-        //ADD A NARRATIVE TO A NEW DELAYS RECORD
-        [HttpPost]
-        public ActionResult AddWorkDescNarr(vm_workDesc workDescAdd)
-         {
-            //--IF THE DAILY REPORT DOESN'T ALREADY EXIST...
-            db.Database.ExecuteSqlCommand(
 
-                "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
 
-                workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.workDescriptionCategory, workDescAdd.hours);
 
-                return new EmptyResult();
-        }
 
-        //ADD A TEAM MEMBER TO A NEW DELAYS RECORD
-        [HttpPost]
-        public ActionResult AddWorkDescTeam(vm_workDesc workDescAdd)
-        {
-            //--IF THE DAILY REPORT DOES ALREADY EXIST...
-            db.Database.ExecuteSqlCommand(
 
-            "DECLARE @timeEntryID INT " +
 
-                    "SET @timeEntryID = " +
-                        "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
-                        "FROM tbl_dailyReportTimeEntry " +
-                        "WHERE " +
 
-                        "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
-                        "AND " +
-                        "workDescription = {1} " +
-                        "AND " +
-                        "workDescriptionCategory = {3}) " +
 
-                    "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
 
-                workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.userName, workDescAdd.workDescriptionCategory);
 
-            return new EmptyResult();
-        }
 
-        //ADD A TEAM MEMBER TO A TIME ENTRY
-        [HttpPost]
-        public ActionResult AddTeamMember(vm_workDesc teamMemberAdd)
-        {
-            db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportTimeEntryUsers Values({0},{1})",
-                teamMemberAdd.timeEntryID, teamMemberAdd.userName);
+        ////ADD A NARRATIVE TO A NEW DELAYS RECORD
+        //[HttpPost]
+        //public ActionResult AddWorkDescNarr(vm_workDesc workDescAdd)
+        // {
+        //    //--IF THE DAILY REPORT DOESN'T ALREADY EXIST...
+        //    db.Database.ExecuteSqlCommand(
 
-            return new EmptyResult();
-        }
+        //        "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
 
-        //DELETE A TIME ENTRY
-        public ActionResult DeleteWorkDesc(vm_workDesc workDescDelete)
-        {
-            db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReportTimeEntry WHERE timeEntryID=({0})", workDescDelete.timeEntryID);
+        //        workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.workDescriptionCategory, workDescAdd.hours);
 
-            return new EmptyResult();
-        }
+        //        return new EmptyResult();
+        //}
 
-        //DELETE A TEAM MEMBER FROM A TIME ENTRY
-        [HttpPost]
-        public ActionResult DeleteTeamMember(vm_workDesc teamMemberDelete)
-        {
-            db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReportTimeEntryUsers " +
-                "WHERE " +
-                "timeEntryID=({0})" +
-                "AND userName = ({1})", teamMemberDelete.timeEntryID, teamMemberDelete.userName);
+        ////ADD A TEAM MEMBER TO A NEW DELAYS RECORD
+        //[HttpPost]
+        //public ActionResult AddWorkDescTeam(vm_workDesc workDescAdd)
+        //{
+        //    //--IF THE DAILY REPORT DOES ALREADY EXIST...
+        //    db.Database.ExecuteSqlCommand(
 
-            //return RedirectToAction("Index");
-            return new EmptyResult();
-        }
+        //    "DECLARE @timeEntryID INT " +
 
-        //UPDATE A TIME ENTRY
-        public ActionResult UpdateWorkDesc(vm_workDesc workDescUpdate)
-        {
-            db.Database.ExecuteSqlCommand("UPDATE tbl_dailyReportTimeEntry SET workDescription={1} WHERE timeEntryID={0}",
-                  workDescUpdate.timeEntryID, workDescUpdate.workDescription);
+        //            "SET @timeEntryID = " +
+        //                "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
+        //                "FROM tbl_dailyReportTimeEntry " +
+        //                "WHERE " +
 
-            return new EmptyResult();
-        }
+        //                "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
+        //                "AND " +
+        //                "workDescription = {1} " +
+        //                "AND " +
+        //                "workDescriptionCategory = {3}) " +
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //            "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
+
+        //        workDescAdd.dailyReportID, workDescAdd.workDescription, workDescAdd.userName, workDescAdd.workDescriptionCategory);
+
+        //    return new EmptyResult();
+        //}
+
+        ////ADD A TEAM MEMBER TO A TIME ENTRY
+        //[HttpPost]
+        //public ActionResult AddTeamMember(vm_workDesc teamMemberAdd)
+        //{
+        //    db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportTimeEntryUsers Values({0},{1})",
+        //        teamMemberAdd.timeEntryID, teamMemberAdd.userName);
+
+        //    return new EmptyResult();
+        //}
+
+        ////DELETE A TIME ENTRY
+        //public ActionResult DeleteWorkDesc(vm_workDesc workDescDelete)
+        //{
+        //    db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReportTimeEntry WHERE timeEntryID=({0})", workDescDelete.timeEntryID);
+
+        //    return new EmptyResult();
+        //}
+
+        ////DELETE A TEAM MEMBER FROM A TIME ENTRY
+        //[HttpPost]
+        //public ActionResult DeleteTeamMember(vm_workDesc teamMemberDelete)
+        //{
+        //    db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReportTimeEntryUsers " +
+        //        "WHERE " +
+        //        "timeEntryID=({0})" +
+        //        "AND userName = ({1})", teamMemberDelete.timeEntryID, teamMemberDelete.userName);
+
+        //    //return RedirectToAction("Index");
+        //    return new EmptyResult();
+        //}
+
+        ////UPDATE A TIME ENTRY
+        //public ActionResult UpdateWorkDesc(vm_workDesc workDescUpdate)
+        //{
+        //    db.Database.ExecuteSqlCommand("UPDATE tbl_dailyReportTimeEntry SET workDescription={1} WHERE timeEntryID={0}",
+        //          workDescUpdate.timeEntryID, workDescUpdate.workDescription);
+
+        //    return new EmptyResult();
+        //}
+
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }

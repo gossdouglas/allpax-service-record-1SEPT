@@ -72,18 +72,29 @@ namespace allpax_service_record.Controllers
                 vm_dailyReportByReportID.endTime = dr1[9].ToString();
                 vm_dailyReportByReportID.lunchHours = (int)dr1[10];
                 vm_dailyReportByReportID.customerCode = dr1[11].ToString();
+                //GET JOB CORRESPONDENT NAME RECORDS FOR THE DAILY REPORT
                 vm_dailyReportByReportID.jobCorrespondentName = jobCrspdtNameByJobID(vm_dailyReportByReportID.jobID);
+                //GET JOB CORRESPONDENT EMAIL ADDRESS RECORDS FOR THE DAILY REPORT
                 vm_dailyReportByReportID.jobCorrespondentEmail = jobCrspdtEmailByJobID(vm_dailyReportByReportID.jobID);
+                //
                 vm_dailyReportByReportID.dailyReportAuthor = dr1[12].ToString();
 
-                dailyReportByID.Add(vm_dailyReportByReportID);
+                //GET WORK DESCRIPTION RECORDS FOR THE DAILY REPORT
+                vm_dailyReportByReportID.workDescArr = getWorkDescRecords(vm_dailyReportByReportID.dailyReportID);
+                //GET DELAYS RECORDS FOR THE DAILY REPORT
+                vm_dailyReportByReportID.delaysArr = getDelaysRecords(vm_dailyReportByReportID.dailyReportID);
+                //GET WARRANTY DELAYS RECORDS FOR THE DAILY REPORT
+                vm_dailyReportByReportID.wntyDelaysArr = getWntyDelaysRecords(vm_dailyReportByReportID.dailyReportID);
+
+                dailyReportByID.Add(vm_dailyReportByReportID);//add all of the revelevant data objects to dailyReportByID...
             }
 
             sqlconn.Close();
             //end query
-            return View(dailyReportByID);
+            return View(dailyReportByID);//...to be passed to the view
         }
-        
+
+        //GET JOB CORRESPONDENT NAME RECORDS FOR THE DAILY REPORT
         public List<string> jobCrspdtNameByJobID(string jobID)
         {
             List<string> jobCrspdtNames = new List<string>();
@@ -110,6 +121,7 @@ namespace allpax_service_record.Controllers
             return jobCrspdtNames;
         }
 
+        //GET JOB CORRESPONDENT EMAIL ADDRESS RECORDS FOR THE DAILY REPORT
         public List<string> jobCrspdtEmailByJobID(string jobID)
         {
             List<string> jobCrspdtEmails = new List<string>();
@@ -136,47 +148,238 @@ namespace allpax_service_record.Controllers
             return jobCrspdtEmails;
         }
 
-        //begin CMPS 411 controller code
-        [HttpPost]
-        public ActionResult AddDailyReport(tbl_dailyReport dailyReportAdd)
+        //GET WORK DESCRIPTION RECORDS FOR THE DAILY REPORT
+        public List<vm_workDesc> getWorkDescRecords(int dailyReportID)
         {
+            List<vm_workDesc> workDescs = new List<vm_workDesc>();
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
 
-             db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6})",
-                dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime, dailyReportAdd.lunchHours, dailyReportAdd.equipment); 
-            return new EmptyResult();
-            //return RedirectToAction("Home", "Index");
-            //return Redirect("/Home");
-        }
+            sqlconn.Open();
 
-        [HttpPost]
-        public ActionResult AddTeamMember(tbl_dailyReportUsers teamMemberAdd)
-        {
-            db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-                teamMemberAdd.dailyReportID, teamMemberAdd.userName);
+            //begin
+            string sqlquery1 =
+                "SELECT tbl_dailyReportTimeEntry.dailyReportID, tbl_dailyReportTimeEntry.workDescription, " +
+                "tbl_dailyReportTimeEntry.timeEntryID " +
 
-            return new EmptyResult(); 
-            //return RedirectToAction("SalesLanding", "Index");
-        }
-
-        [HttpPost]
-        public ActionResult DeleteTeamMember(tbl_dailyReportUsers teamMemberDelete)
-        {
-            db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReportUsers " +
+                "FROM tbl_dailyReportTimeEntry " +
                 "WHERE " +
-                "dailyReportID=({0})" +
-                "AND userName = ({1})", teamMemberDelete.dailyReportID, teamMemberDelete.userName);
+                "tbl_dailyReportTimeEntry.dailyReportID = @dailyReportID " +
+                "AND " +
+                "tbl_dailyReportTimeEntry.workDescriptionCategory = '1'";
 
-            //return RedirectToAction("Index");
-            return new EmptyResult();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.AddWithValue("@dailyReportID", dailyReportID);
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
             {
-                db.Dispose();
+                vm_workDesc workDesc = new vm_workDesc();
+
+                workDesc.dailyReportID = (int)dr1[0];
+                workDesc.workDescription = dr1[1].ToString();
+                workDesc.timeEntryID = (int)dr1[2];
+
+                workDesc.userNames = usersByTimeEntryID(workDesc.timeEntryID);
+                workDesc.userShortNames = userShortNamesByTimeEntryID(workDesc.timeEntryID);
+
+                workDescs.Add(workDesc);
             }
-            base.Dispose(disposing);
+            //sqlconn.Close();
+            //end
+            return workDescs;
         }
+
+        //GET DELAYS RECORDS FOR THE DAILY REPORT
+        public List<vm_delays> getDelaysRecords(int dailyReportID)
+        {
+            List<vm_delays> workDescs = new List<vm_delays>();
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            sqlconn.Open();
+
+            string sqlquery1 =
+                "SELECT tbl_dailyReportTimeEntry.dailyReportID, tbl_dailyReportTimeEntry.workDescription, " +
+                "tbl_dailyReportTimeEntry.hours, tbl_dailyReportTimeEntry.timeEntryID " +
+
+                "FROM tbl_dailyReportTimeEntry " +
+                "WHERE " +
+                "tbl_dailyReportTimeEntry.dailyReportID = @dailyReportID " +
+                "AND " +
+                "tbl_dailyReportTimeEntry.workDescriptionCategory = '2'";
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.AddWithValue("@dailyReportID", dailyReportID);
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                vm_delays workDesc = new vm_delays();
+
+                workDesc.dailyReportID = (int)dr1[0];
+                workDesc.workDescription = dr1[1].ToString();
+                workDesc.hours = (int)dr1[2];
+                workDesc.timeEntryID = (int)dr1[3];
+
+                workDesc.userNames = usersByTimeEntryID(workDesc.timeEntryID);
+                workDesc.userShortNames = userShortNamesByTimeEntryID(workDesc.timeEntryID);
+
+                workDescs.Add(workDesc);
+            }
+
+            return workDescs;
+        }
+
+        //GET WARRANTY DELAYS RECORDS FOR THE DAILY REPORT
+        public List<vm_wntyDelays> getWntyDelaysRecords(int dailyReportID)
+        {
+            List<vm_wntyDelays> workDescs = new List<vm_wntyDelays>();
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            sqlconn.Open();
+
+            string sqlquery1 =
+                "SELECT tbl_dailyReportTimeEntry.dailyReportID, tbl_dailyReportTimeEntry.workDescription, " +
+                "tbl_dailyReportTimeEntry.hours, tbl_dailyReportTimeEntry.timeEntryID " +
+
+                "FROM tbl_dailyReportTimeEntry " +
+                "WHERE " +
+                "tbl_dailyReportTimeEntry.dailyReportID = @dailyReportID " +
+                "AND " +
+                "tbl_dailyReportTimeEntry.workDescriptionCategory = '3'";
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.AddWithValue("@dailyReportID", dailyReportID);
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                vm_wntyDelays workDesc = new vm_wntyDelays();
+
+                workDesc.dailyReportID = (int)dr1[0];
+                workDesc.workDescription = dr1[1].ToString();
+                workDesc.hours = (int)dr1[2];
+                workDesc.timeEntryID = (int)dr1[3];
+
+                workDesc.userNames =usersByTimeEntryID(workDesc.timeEntryID);
+                workDesc.userShortNames = userShortNamesByTimeEntryID(workDesc.timeEntryID);
+
+                workDescs.Add(workDesc);
+            }
+            return workDescs;
+        }
+
+        //GET THE USER NAMES ATTACHED TO A TIME ENTRY
+        public List<string> usersByTimeEntryID(int timeEntryID)
+        {
+            List<string> userNames = new List<string>();
+
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            //begin query for kits available but not installed by machine
+            string sqlquery1 = "SELECT tbl_dailyReportTimeEntryUsers.userName " +
+
+            "FROM " +
+            "tbl_dailyReportTimeEntryUsers " +
+            "WHERE " +
+            "tbl_dailyReportTimeEntryUsers.timeEntryID = @timeEntryID";
+            //end query for kits available but not installed by machine
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.Add(new SqlParameter("timeEntryID", timeEntryID));
+            SqlDataAdapter sda3 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda3.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                userNames.Add(dr1[0].ToString());
+            }
+            return userNames;
+        }
+
+        //GET THE USER SHORT NAMES ATTACHED TO A TIME ENTRY
+        public List<string> userShortNamesByTimeEntryID(int timeEntryID)
+        {
+            List<string> userShortNames = new List<string>();
+
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            //begin query for kits available but not installed by machine
+            string sqlquery1 = "SELECT tbl_Users.shortName " +
+
+            "FROM " +
+            "tbl_Users " +
+
+            "INNER JOIN " +
+            "tbl_dailyReportTimeEntryUsers ON " +
+            "tbl_Users.userName = tbl_dailyReportTimeEntryUsers.userName " +
+
+            "WHERE " +
+            "tbl_dailyReportTimeEntryUsers.timeEntryID = @timeEntryID";
+            //end query for kits available but not installed by machine
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.Add(new SqlParameter("timeEntryID", timeEntryID));
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                userShortNames.Add(dr1[0].ToString());
+            }
+            return userShortNames;
+        }
+
+
+
+        ////begin CMPS 411 controller code
+        //[HttpPost]
+        //public ActionResult AddDailyReport(tbl_dailyReport dailyReportAdd)
+        //{
+
+        //     db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6})",
+        //        dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime, dailyReportAdd.lunchHours, dailyReportAdd.equipment); 
+        //    return new EmptyResult();
+        //    //return RedirectToAction("Home", "Index");
+        //    //return Redirect("/Home");
+        //}
+
+        //[HttpPost]
+        //public ActionResult AddTeamMember(tbl_dailyReportUsers teamMemberAdd)
+        //{
+        //    db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
+        //        teamMemberAdd.dailyReportID, teamMemberAdd.userName);
+
+        //    return new EmptyResult(); 
+        //    //return RedirectToAction("SalesLanding", "Index");
+        //}
+
+        //[HttpPost]
+        //public ActionResult DeleteTeamMember(tbl_dailyReportUsers teamMemberDelete)
+        //{
+        //    db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReportUsers " +
+        //        "WHERE " +
+        //        "dailyReportID=({0})" +
+        //        "AND userName = ({1})", teamMemberDelete.dailyReportID, teamMemberDelete.userName);
+
+        //    //return RedirectToAction("Index");
+        //    return new EmptyResult();
+        //}
+
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }
