@@ -208,7 +208,7 @@
 
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
-                            //enable_disableSave();//determine if the save button needs to be enabled or disabled
+                            enable_disableSave();//determine if the save button needs to be enabled or disabled
                         });
                         //end AddTeamMember
                     }
@@ -356,7 +356,7 @@
 
             //when one of the basic fields changes...
             $(fields).on('change', function () {
-                //enable_disableSave();//determine if the save button needs to be enabled or disabled
+                enable_disableSave();//determine if the save button needs to be enabled or disabled
             });
 
             //determine if the save button needs to be enabled or disabled
@@ -448,12 +448,30 @@
                     data: JSON.stringify(data),
                     traditional: true,
                     success: function () {
-                        //$(data).each(function (index, item) {
-                        //    lastDlyRptCrtdByUser = item;
-                        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                        //});
                     }
+                   
                 });
+
+                //$.ajax({
+                //    url: '/DataService.asmx/GetLastDlyRptCrtdByUserName',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { dailyReportAuthor: dailyRptAuthor },
+                //    //data: { dailyReportAuthor: 'user1' },
+                //    success: function (data) {
+                //        console.log("author is: " + dailyRptAuthor);
+                //        $(data).each(function (index, item) {
+                //            lastDlyRptCrtdByUser = item;
+                //            console.log(lastDlyRptCrtdByUser);
+                //            window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                //        });
+                //    }
+                //})
+                //    .catch(function (error) {
+                //        console.log(error);
+                //    })
+
+                window.location = '/dailyReportAll';
             });
 
             function fn_loadTimeEntries() {
@@ -945,10 +963,10 @@
 <div class="container" id="_container">
     <div class="row">
         <div class="col-6" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="addButton" style="width: 100%">Save & Exit</button>
+            <button type="button" class="btn btn-primary btn-sm" id="addButton" style="width: 100%" disabled>Save & Exit</button>
         </div>
         <div class="col-6" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="submitButton" style="width: 100%">Save & Submit</button>
+            <button type="button" class="btn btn-primary btn-sm" id="submitButton" style="width: 100%" disabled>Save & Submit</button>
         </div>
         @*<div class="col-4" style="padding:5px">
             <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%">E-mail Daily Report Test</button>

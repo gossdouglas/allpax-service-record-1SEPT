@@ -92,6 +92,8 @@ namespace allpax_service_record.Controllers
             sqlconn.Close();
             //end query
             return View(dailyReportByID);//...to be passed to the view
+
+            //return RedirectToAction("Index", "dailyReportAll");//redirects, and the daily report does kick out the records to its view
         }
 
         //GET JOB CORRESPONDENT NAME RECORDS FOR THE DAILY REPORT

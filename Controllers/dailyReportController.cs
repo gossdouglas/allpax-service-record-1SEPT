@@ -27,7 +27,6 @@ namespace allpax_service_record.Controllers
             return View(sql.ToList()); 
         }
 
-        [HttpPost]
         public ActionResult AddDailyReport(vm_dailyReport dailyReportAdd)
         {
             db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6},{7})",
@@ -66,7 +65,7 @@ namespace allpax_service_record.Controllers
                     passedDailyRptID, item);
                 }
             }
-                                 
+
             if (dailyReportAdd.workDescArr.Count >= 1)
             {
                 //System.Diagnostics.Debug.WriteLine("size of workDescArr is " + dailyReportAdd.workDescArr.Count);
@@ -181,6 +180,9 @@ namespace allpax_service_record.Controllers
             //db.Database.ExecuteSqlCommand("spCopyDailyRpt @p0, @p1", dailyReportAdd.dailyReportID, new_dailyRptID[0]);
 
             return new EmptyResult();
+
+            //return RedirectToAction("Index", "dailyReportAll");//redirects, but the daily report all page doesn't kick out the records to its view
+            //return RedirectToAction("Filtered", "dailyReportAll");//kinda works.  need parameters passed, but the re-direct does occur
         }
       
         public ActionResult copyDailyReport(string jobID, string description, string subJobID, string customerName, 
