@@ -414,6 +414,15 @@
 
                 var addItem1 = $("#jobs_dpdown").val();
                 var addItem2 = $("#slct_date").val();
+
+                //BEGIN CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
+                addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
+                addItem2 = addItem2.replace(/^[ \t]+|[ \t]+$/, "");//wipe out leading white space characters
+                addItem2 = addItem2.replace(/&amp;/, "");//wipe out
+                addItem2 = addItem2.replace(/nbsp;/, "");//nbsp
+                addItem2 = addItem2.replace(/<br>/, "");//nbsp
+                //END CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
+
                 var addItem3 = $("#subJobTypes_dpdwn").val();
                 var addItem4 = $("#input_startTime").val();
                 var addItem5 = $("#input_endTime").val();
