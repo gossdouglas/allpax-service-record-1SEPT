@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@model List<allpax_service_record.Models.View_Models.vm_dailyReportByReportID>
+@using Microsoft.AspNet.Identity
 
 @{
     ViewBag.Title = "Index";
@@ -45,14 +46,13 @@
             margin: 1px;
             opacity: 0;
         }
-
     </style>
 
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
             //$("#contnrDailyLog :input").prop("disabled", true);//disable the daily log section
-          
+
             var team_dpdwn = $('#team_dpdwn');
             ///var addWorkDescBtn = $('#addWorkDescBtn');
             var dailyReportID = $("#txt_dailyReportID").html();
@@ -533,7 +533,7 @@
                     dailyRptTeamArr: addItem9,
                     workDescArr: workDescArrPreJson,
                     delaysArr: delaysArrPreJson,
-                    wntyDelaysArr: wntyDelaysArrPreJson 
+                    wntyDelaysArr: wntyDelaysArrPreJson
                 };
 
                 $.ajax({
@@ -863,7 +863,7 @@
             <strong>Action</strong>
         </div>
     </div>
-    @*BEGIN RETURNED RECORDS*@  
+    @*BEGIN RETURNED RECORDS*@
     @foreach (var item in Model)
     {
         for (var i = 0; i < (item.workDescArr.Count); i++)
@@ -877,14 +877,14 @@
 
             <div class=" row returnedRecords workDescLine" id="workDescLine_@temp_timeEntryID" style="">
                 <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">
-                @temp_workDescription
+                    @temp_workDescription
                 </div>
 
                 <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
                     <select class="Team_dpdwn workDescTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
                         @for (var j = 0; j < (@temp_userNames.Count); j++)
                         {
-                        <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
                         }
                     </select>
                 </div>
@@ -895,7 +895,7 @@
                     {
                         @(temp_userShortNames[k] + "|");
                     }
-                    </div>
+                </div>
 
                 <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
                     <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
@@ -988,38 +988,38 @@
             string temp_workDescription = item.delaysArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
-<div class=" row returnedRecords delaysLine" id="delaysLine_@temp_timeEntryID" style="">
-    <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">
-        @temp_workDescription
-    </div>
+            <div class=" row returnedRecords delaysLine" id="delaysLine_@temp_timeEntryID" style="">
+                <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">
+                    @temp_workDescription
+                </div>
 
-    <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
-        <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
-            @for (var j = 0; j < (@temp_userNames.Count); j++)
-            {
-                <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
-            }
-        </select>
-    </div>
+                <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
+                    <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                        @for (var j = 0; j < (@temp_userNames.Count); j++)
+                        {
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                        }
+                    </select>
+                </div>
 
-    <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
-        @*AB|DB|JB*@
-        @for (var k = 0; k < (temp_userShortNames.Count); k++)
-        {
-            @(temp_userShortNames[k] + "|");
-        }
-    </div>
+                <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+                    @*AB|DB|JB*@
+                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
+                    {
+                        @(temp_userShortNames[k] + "|");
+                    }
+                </div>
 
-    <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="">
-        @temp_hours
-    </div>
+                <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="">
+                    @temp_hours
+                </div>
 
-    <div class="col-2 button_div delaysTeam_button_div" style="padding:0px;">
-        <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save lineDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete lineDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-    </div>
-</div>
+                <div class="col-2 button_div delaysTeam_button_div" style="padding:0px;">
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_save lineDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_delete lineDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                </div>
+            </div>
         }
     }
     @*END RETURNED RECORDS*@
@@ -1110,38 +1110,38 @@
             string temp_workDescription = item.wntyDelaysArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
-<div class=" row returnedRecords wntyDelaysLine" id="wntyDelaysLine_@temp_timeEntryID" style="">
-    <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="false" style="">
-        @temp_workDescription
-    </div>
+            <div class=" row returnedRecords wntyDelaysLine" id="wntyDelaysLine_@temp_timeEntryID" style="">
+                <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="false" style="">
+                    @temp_workDescription
+                </div>
 
-    <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding: 0px; display:none">
-        <select class="Team_dpdwn wntyDelaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
-            @for (var j = 0; j < (@temp_userNames.Count); j++)
-            {
-                <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
-            }
-        </select>
-    </div>
+                <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding: 0px; display:none">
+                    <select class="Team_dpdwn wntyDelaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                        @for (var j = 0; j < (@temp_userNames.Count); j++)
+                        {
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                        }
+                    </select>
+                </div>
 
-    <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
-        @*AB|DB|JB*@
-        @for (var k = 0; k < (temp_userShortNames.Count); k++)
-        {
-            @(temp_userShortNames[k] + "|");
-        }
-    </div>
+                <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+                    @*AB|DB|JB*@
+                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
+                    {
+                        @(temp_userShortNames[k] + "|");
+                    }
+                </div>
 
-    <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="false" style="">
-        @temp_hours
-    </div>
+                <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="false" style="">
+                    @temp_hours
+                </div>
 
-    <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
-        <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save lineWntyDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete lineWntyDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-    </div>
-</div>
+                <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_save lineWntyDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_delete lineWntyDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                </div>
+            </div>
         }
     }
     @*END RETURNED RECORDS*@
