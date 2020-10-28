@@ -554,34 +554,37 @@
                 //fn_printArrays();
             });
 
-            function fn_loadTimeEntries() {
-                var workDescTeam_narr_div_Content = $("#workDescriptionLine_template").find(".workDescLine").find(".workDescTeam_narr_div");
-                var workDescTeam_dpdwn_Content;
+            function fn_loadTimeEntries_Add () {
+                //var workDescTeam_narr_div_Content_Add = $("#workDescriptionLine_template").find(".workDescLine").find(".workDescTeam_narr_div");
+                var workDescTeam_narr_div_Content_Add = $(".addRecord").find(".workDescTeam_narr_div");
+                var workDescTeam_dpdwn_Content_Add;
 
-                var delaysTeam_narr_div_Content = $("#delaysLine_template").find(".delaysLine").find(".delaysTeam_narr_div");
-                var delaysTeam_hours_div_Content;
-                var delaysTeam_dpdwn_Content;
+                //var delaysTeam_narr_div_Content_Add = $("#delaysLine_template").find(".delaysLine").find(".delaysTeam_narr_div");
+                var delaysTeam_narr_div_Content_Add = $(".addRecord").find(".delaysTeam_narr_div");
+                var delaysTeam_hours_div_Content_Add;
+                var delaysTeam_dpdwn_Content_Add;
 
-                var wntyDelaysTeam_narr_div_Content = $("#wntyDelaysLine_template").find(".wntyDelaysLine").find(".wntyDelaysTeam_narr_div");
-                var wntyDelaysTeam_hours_div_Content;
-                var wntyDelaysTeam_dpdwn_Content;
+                //var wntyDelaysTeam_narr_div_Content_Add = $("#wntyDelaysLine_template").find(".wntyDelaysLine").find(".wntyDelaysTeam_narr_div");
+                var wntyDelaysTeam_narr_div_Content_Add = $(".addRecord").find(".wntyDelaysTeam_narr_div");
+                var wntyDelaysTeam_hours_div_Content_Add;
+                var wntyDelaysTeam_dpdwn_Content_Add;
 
-                var currentDropdownLine;//generic
+                var currentDropdownLine_Add;//generic
 
-                $(workDescTeam_narr_div_Content).each(function (index1) {
+                $(workDescTeam_narr_div_Content_Add).each(function (index1) {
 
                     var workDescUserNamesArrTemp = [];
 
                     //workDescNarrArr.push([$(workDescTeam_narr_div_Content[index1]).html()]);
-                    workDescNarrArr.push($(workDescTeam_narr_div_Content[index1]).html());
+                    workDescNarrArr.push($(workDescTeam_narr_div_Content_Add[index1]).html());
 
-                    currentDropdownLine = $(this).parent().attr("id");
+                    currentDropdownLine_Add = $(this).parent().attr("id");
                     workDescHoursArr.push(0);
-                    workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+                    workDescTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
-                    $(workDescTeam_dpdwn_Content).each(function (index2) {
+                    $(workDescTeam_dpdwn_Content_Add).each(function (index2) {
 
-                        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content[index2]).attr("id");
+                        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content_Add[index2]).attr("id");
                         var regex = /\w+$/;
                         var temp_workDescTeam_dpdwn_ID_object = tempworkDescTeam_dpdwn_ID.match(regex);
                         var temp_UserID = temp_workDescTeam_dpdwn_ID_object[0];
@@ -591,22 +594,22 @@
                     workDescUserNamesArr.push(workDescUserNamesArrTemp);
                 });
 
-                $(delaysTeam_narr_div_Content).each(function (index1) {
+                $(delaysTeam_narr_div_Content_Add).each(function (index1) {
 
                     var delaysUserNamesArrTemp = [];
 
                     //delaysNarrArr.push([$(delaysTeam_narr_div_Content[index1]).html()]);
-                    delaysNarrArr.push($(delaysTeam_narr_div_Content[index1]).html());
+                    delaysNarrArr.push($(delaysTeam_narr_div_Content_Add[index1]).html());
 
-                    currentDropdownLine = $(this).parent().attr("id");
-                    delaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".delaysTeam_hours_div").html());
+                    currentDropdownLine_Add = $(this).parent().attr("id");
+                    delaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".delaysTeam_hours_div").html());
                     //delaysHoursArr.push([delaysTeam_hours_div_Content]);
-                    delaysHoursArr.push(delaysTeam_hours_div_Content);
-                    delaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+                    delaysHoursArr.push(delaysTeam_hours_div_Content_Add);
+                    delaysTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
-                    $(delaysTeam_dpdwn_Content).each(function (index2) {
+                    $(delaysTeam_dpdwn_Content_Add).each(function (index2) {
 
-                        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content[index2]).attr("id");
+                        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content_Add[index2]).attr("id");
                         var regex = /\w+$/;
                         var temp_delaysTeam_dpdwn_ID_object = tempDelaysTeam_dpdwn_ID.match(regex);
                         var temp_UserID = temp_delaysTeam_dpdwn_ID_object[0];
@@ -616,23 +619,23 @@
                     delaysUserNamesArr.push(delaysUserNamesArrTemp);
                 });
 
-                $(wntyDelaysTeam_narr_div_Content).each(function (index1) {
+                $(wntyDelaysTeam_narr_div_Content_Add).each(function (index1) {
 
                     var wntyDelaysUserNamesArrTemp = [];
 
                     //wntyDelaysNarrArr.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
-                    wntyDelaysNarrArr.push($(wntyDelaysTeam_narr_div_Content[index1]).html());
+                    wntyDelaysNarrArr.push($(wntyDelaysTeam_narr_div_Content_Add[index1]).html());
 
-                    currentDropdownLine = $(this).parent().attr("id");
-                    wntyDelaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".wntyDelaysTeam_hours_div").html());
+                    currentDropdownLine_Add = $(this).parent().attr("id");
+                    wntyDelaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".wntyDelaysTeam_hours_div").html());
                     //console.log(wntyDelaysTeam_hours_div_Content);
                     //wntyDelaysHoursArr.push([wntyDelaysTeam_hours_div_Content]);
-                    wntyDelaysHoursArr.push(wntyDelaysTeam_hours_div_Content);
-                    wntyDelaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+                    wntyDelaysHoursArr.push(wntyDelaysTeam_hours_div_Content_Add);
+                    wntyDelaysTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
-                    $(wntyDelaysTeam_dpdwn_Content).each(function (index2) {
+                    $(wntyDelaysTeam_dpdwn_Content_Add).each(function (index2) {
 
-                        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content[index2]).attr("id");
+                        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content_Add[index2]).attr("id");
                         var regex = /\w+$/;
                         var temp_wntyDelaysTeam_dpdwn_ID_object = tempWntyDelaysTeam_dpdwn_ID.match(regex);
                         var temp_UserID = temp_wntyDelaysTeam_dpdwn_ID_object[0];
@@ -642,7 +645,7 @@
                     wntyDelaysUserNamesArr.push(wntyDelaysUserNamesArrTemp);
                 });
 
-                fn_buildPreJsonObjects();
+                //fn_buildPreJsonObjects();
             }
 
             function fn_buildPreJsonObjects() {
