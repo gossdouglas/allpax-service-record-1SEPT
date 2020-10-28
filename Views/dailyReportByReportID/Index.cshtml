@@ -76,20 +76,23 @@
             var workDescNarrArr = [];
             var workDescHoursArr = [];
             var workDescUserNamesArr = [];
-            var workDescArrPreJson = [];
-            var indexWorkDescEntries = 0;//keep track of the number of work description entries
+            var workDescNarrArr_Add = [];
+            var workDescHoursArr_Add = [];
+            var workDescUserNamesArr_Add = [];
+            var workDescArrJson_Add = [];
+            var indexWorkDescEntries_Add = 0;//keep track of the number of work description entries
 
-            var delaysNarrArr = [];
-            var delaysHoursArr = [];
-            var delaysUserNamesArr = [];
-            var delaysArrPreJson = [];
-            var indexDelaysEntries = 0;//keep track of the number of delays entries
+            var delaysNarrArr_Add = [];
+            var delaysHoursArr_Add = [];
+            var delaysUserNamesArr_Add = [];
+            var delaysArrJson_Add = [];
+            var indexDelaysEntries_Add = 0;//keep track of the number of delays entries
 
-            var wntyDelaysNarrArr = [];
-            var wntyDelaysHoursArr = [];
-            var wntyDelaysUserNamesArr = [];
-            var wntyDelaysArrPreJson = [];
-            var indexWntyDelaysEntries = 0;//keep track of the number of warranty delays entries
+            var wntyDelaysNarrArr_Add = [];
+            var wntyDelaysHoursArr_Add = [];
+            var wntyDelaysUserNamesArr_Add = [];
+            var wntyDelaysArrJson_Add = [];
+            var indexWntyDelaysEntries_Add = 0;//keep track of the number of warranty delays entries
             //end added for new one shot work
 
             //begin fill the team names dropdown
@@ -297,39 +300,40 @@
                 $(this).parent().parent().find(".button_div").css('border-bottom-style', 'none');
 
                 if (/newWorkDescBtn_add/i.test($(this).attr("class"))) {
-                    indexWorkDescEntries = indexWorkDescEntries + 1;
+                    indexWorkDescEntries_Add = indexWorkDescEntries_Add + 1;
 
                     $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
-                    //$("#workDescLine_" + indexWorkDescEntries).prop("class", " row workDescriptionLine_template_row_active workDescLine");
-                    $("#workDescLine_" + indexWorkDescEntries).prop("class", " row addRecord workDescLine");
-                    $("#workDescLine_" + indexWorkDescEntries).find(".newRecord").removeAttr("hidden");
+                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries_Add).appendTo("#workDescriptionLine_template");
+                    //$("#workDescLine_" + indexWorkDescEntries_Add).prop("class", " row workDescriptionLine_template_row_active workDescLine");
+                    $("#workDescLine_" + indexWorkDescEntries_Add).prop("class", " row addRecord workDescLine");
+                    $("#workDescLine_" + indexWorkDescEntries_Add).find(".newRecord").removeAttr("hidden");
+                    $("#workDescLine_" + indexWorkDescEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
                     $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row entryRow workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
                     $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
                 }
                 else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
-                    indexDelaysEntries = indexDelaysEntries + 1;
+                    indexDelaysEntries_Add = indexDelaysEntries_Add + 1;
 
                     $(".delaysLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries).appendTo("#delaysLine_template");
-                    //$("#delaysLine_" + indexDelaysEntries).prop("class", " row delaysLine_template_row_active delaysLine");
-                    $("#delaysLine_" + indexDelaysEntries).prop("class", " row addRecord delaysLine");
-                    $("#delaysLine_" + indexDelaysEntries).find(".newRecord").removeAttr("hidden");
-                    $("#delaysLine_" + indexDelaysEntries).find(".delaysTeam_hours_div").attr("contenteditable", "false");
+                    $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries_Add).appendTo("#delaysLine_template");
+                    //$("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row delaysLine_template_row_active delaysLine");
+                    $("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row addRecord delaysLine");
+                    $("#delaysLine_" + indexDelaysEntries_Add).find(".newRecord").removeAttr("hidden");
+                    $("#delaysLine_" + indexDelaysEntries_Add).find(".delaysTeam_hours_div").attr("contenteditable", "false");
 
                     $(".delaysLine_template_row_hidden").clone(true).prop("class", "row entryRow delaysLine_template_row_active").appendTo("#delaysLine_template");
                     $(".delaysLine_template_row_hidden").attr("hidden", "true");
                 }
                 else if (/newWntyDelaysBtn_add/i.test($(this).attr("class"))) {
-                    indexWntyDelaysEntries = indexWntyDelaysEntries + 1;
+                    indexWntyDelaysEntries_Add = indexWntyDelaysEntries_Add + 1;
 
                     $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries).appendTo("#wntyDelaysLine_template");
-                    //$("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row addRecord wntyDelaysLine");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".newRecord").removeAttr("hidden");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
+                    $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries_Add).appendTo("#wntyDelaysLine_template");
+                    //$("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row addRecord wntyDelaysLine");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".newRecord").removeAttr("hidden");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
 
                     $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row entryRow wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
                     $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
@@ -506,7 +510,8 @@
             //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
             $("#addButton").click(function () {//when the add button is clicked...
 
-                fn_loadTimeEntries();
+                fn_loadTimeEntries_Add();
+                fn_buildPreJsonObjects();
 
                 var addItem1 = $("#jobs_dpdown").val();
                 var addItem2 = $("#slct_date").val();
@@ -531,9 +536,9 @@
                     equipment: addItem7,
                     dailyReportAuthor: addItem8,
                     dailyRptTeamArr: addItem9,
-                    workDescArr: workDescArrPreJson,
-                    delaysArr: delaysArrPreJson,
-                    wntyDelaysArr: wntyDelaysArrPreJson
+                    workDescArr: workDescArrJson_Add,
+                    delaysArr: delaysArrJson_Add,
+                    wntyDelaysArr: wntyDelaysArrJson_Add
                 };
 
                 $.ajax({
@@ -575,11 +580,11 @@
 
                     var workDescUserNamesArrTemp = [];
 
-                    //workDescNarrArr.push([$(workDescTeam_narr_div_Content[index1]).html()]);
-                    workDescNarrArr.push($(workDescTeam_narr_div_Content_Add[index1]).html());
+                    //workDescNarrArr_Add.push([$(workDescTeam_narr_div_Content[index1]).html()]);
+                    workDescNarrArr_Add.push($(workDescTeam_narr_div_Content_Add[index1]).html());
 
                     currentDropdownLine_Add = $(this).parent().attr("id");
-                    workDescHoursArr.push(0);
+                    workDescHoursArr_Add.push(0);
                     workDescTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
                     $(workDescTeam_dpdwn_Content_Add).each(function (index2) {
@@ -591,20 +596,20 @@
 
                         workDescUserNamesArrTemp.push(temp_UserID);
                     });
-                    workDescUserNamesArr.push(workDescUserNamesArrTemp);
+                    workDescUserNamesArr_Add.push(workDescUserNamesArrTemp);
                 });
 
                 $(delaysTeam_narr_div_Content_Add).each(function (index1) {
 
                     var delaysUserNamesArrTemp = [];
 
-                    //delaysNarrArr.push([$(delaysTeam_narr_div_Content[index1]).html()]);
-                    delaysNarrArr.push($(delaysTeam_narr_div_Content_Add[index1]).html());
+                    //delaysNarrArr_Add.push([$(delaysTeam_narr_div_Content[index1]).html()]);
+                    delaysNarrArr_Add.push($(delaysTeam_narr_div_Content_Add[index1]).html());
 
                     currentDropdownLine_Add = $(this).parent().attr("id");
                     delaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".delaysTeam_hours_div").html());
-                    //delaysHoursArr.push([delaysTeam_hours_div_Content]);
-                    delaysHoursArr.push(delaysTeam_hours_div_Content_Add);
+                    //delaysHoursArr_Add.push([delaysTeam_hours_div_Content]);
+                    delaysHoursArr_Add.push(delaysTeam_hours_div_Content_Add);
                     delaysTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
                     $(delaysTeam_dpdwn_Content_Add).each(function (index2) {
@@ -616,21 +621,21 @@
 
                         delaysUserNamesArrTemp.push(temp_UserID);
                     });
-                    delaysUserNamesArr.push(delaysUserNamesArrTemp);
+                    delaysUserNamesArr_Add.push(delaysUserNamesArrTemp);
                 });
 
                 $(wntyDelaysTeam_narr_div_Content_Add).each(function (index1) {
 
                     var wntyDelaysUserNamesArrTemp = [];
 
-                    //wntyDelaysNarrArr.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
-                    wntyDelaysNarrArr.push($(wntyDelaysTeam_narr_div_Content_Add[index1]).html());
+                    //wntyDelaysNarrArr_Add.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
+                    wntyDelaysNarrArr_Add.push($(wntyDelaysTeam_narr_div_Content_Add[index1]).html());
 
                     currentDropdownLine_Add = $(this).parent().attr("id");
                     wntyDelaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".wntyDelaysTeam_hours_div").html());
                     //console.log(wntyDelaysTeam_hours_div_Content);
-                    //wntyDelaysHoursArr.push([wntyDelaysTeam_hours_div_Content]);
-                    wntyDelaysHoursArr.push(wntyDelaysTeam_hours_div_Content_Add);
+                    //wntyDelaysHoursArr_Add.push([wntyDelaysTeam_hours_div_Content]);
+                    wntyDelaysHoursArr_Add.push(wntyDelaysTeam_hours_div_Content_Add);
                     wntyDelaysTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
                     $(wntyDelaysTeam_dpdwn_Content_Add).each(function (index2) {
@@ -642,7 +647,7 @@
 
                         wntyDelaysUserNamesArrTemp.push(temp_UserID);
                     });
-                    wntyDelaysUserNamesArr.push(wntyDelaysUserNamesArrTemp);
+                    wntyDelaysUserNamesArr_Add.push(wntyDelaysUserNamesArrTemp);
                 });
 
                 //fn_buildPreJsonObjects();
@@ -650,34 +655,34 @@
 
             function fn_buildPreJsonObjects() {
                 //BEGIN BUILD THE WORK DESCRIPTION PRE-JSON OBJECT
-                for (var i = 0; i < workDescNarrArr.length; i++) {
-                    workDescArrPreJson[i] = {
-                        workDescription: workDescNarrArr[i],
+                for (var i = 0; i < workDescNarrArr_Add.length; i++) {
+                    workDescArrJson_Add[i] = {
+                        workDescription: workDescNarrArr_Add[i],
                         workDescriptionCategory: "1",
-                        hours: workDescHoursArr[i],
-                        userNames: workDescUserNamesArr[i]
+                        hours: workDescHoursArr_Add[i],
+                        userNames: workDescUserNamesArr_Add[i]
                     };
                 }
                 //END BUILD THE DELAYS PRE-JSON OBJECT
 
                 //BEGIN BUILD THE WORK DESCRIPTION PRE-JSON OBJECT
-                for (var i = 0; i < delaysNarrArr.length; i++) {
-                    delaysArrPreJson[i] = {
-                        workDescription: delaysNarrArr[i],
+                for (var i = 0; i < delaysNarrArr_Add.length; i++) {
+                    delaysArrJson_Add[i] = {
+                        workDescription: delaysNarrArr_Add[i],
                         workDescriptionCategory: "2",
-                        hours: delaysHoursArr[i],
-                        userNames: delaysUserNamesArr[i]
+                        hours: delaysHoursArr_Add[i],
+                        userNames: delaysUserNamesArr_Add[i]
                     };
                 }
                 //END BUILD THE DELAYS PRE-JSON OBJECT
 
                 //BEGIN BUILD THE WNTY DELAYS PRE-JSON OBJECT
-                for (var i = 0; i < wntyDelaysNarrArr.length; i++) {
-                    wntyDelaysArrPreJson[i] = {
-                        workDescription: wntyDelaysNarrArr[i],
+                for (var i = 0; i < wntyDelaysNarrArr_Add.length; i++) {
+                    wntyDelaysArrJson_Add[i] = {
+                        workDescription: wntyDelaysNarrArr_Add[i],
                         workDescriptionCategory: "3",
-                        hours: wntyDelaysHoursArr[i],
-                        userNames: wntyDelaysUserNamesArr[i]
+                        hours: wntyDelaysHoursArr_Add[i],
+                        userNames: wntyDelaysUserNamesArr_Add[i]
                     };
                 }
                 //END BUILD THE WNTY DELAYS PRE-JSON OBJECT
@@ -686,24 +691,31 @@
 
             function fn_printArrays() {
                 console.log("work description section follows:");
-                console.log(workDescNarrArr);
-                console.log(delaysHoursArr);
-                console.log(workDescUserNamesArr);
-                console.log(workDescArrPreJson);
+                console.log(workDescNarrArr_Add);
+                console.log(delaysHoursArr_Add);
+                console.log(workDescUserNamesArr_Add);
+                console.log(workDescArrJson_Add);
 
 
                 console.log("delays section follows:");
-                console.log(delaysNarrArr);
-                console.log(delaysHoursArr);
-                console.log(delaysUserNamesArr);
-                console.log(delaysArrPreJson);
+                console.log(delaysNarrArr_Add);
+                console.log(delaysHoursArr_Add);
+                console.log(delaysUserNamesArr_Add);
+                console.log(delaysArrJson_Add);
 
                 console.log("warranty delays section follows:");
-                console.log(wntyDelaysNarrArr);
-                console.log(wntyDelaysHoursArr);
-                console.log(wntyDelaysUserNamesArr);
-                console.log(wntyDelaysArrPreJson);
+                console.log(wntyDelaysNarrArr_Add);
+                console.log(wntyDelaysHoursArr_Add);
+                console.log(wntyDelaysUserNamesArr_Add);
+                console.log(wntyDelaysArrJson_Add);
             }
+
+            $(".returnedRecords").on("change keypress", function () {
+                //used to change the class of a returned record to an edited record for later processing with an update operation
+                $($(this)).prop("class", "row editedRecords workDescLine");
+                $($(this)).find(".Btn_rtndRecord").attr("hidden", "true");
+                $($(this)).find(".Btn_editedRecord").removeAttr("hidden");
+            });
 
             //END ONE SHOT LOGIC
 
@@ -904,6 +916,10 @@
                     <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                     <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
                     <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+
+                    <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x" style="color: red;"></i></button>
+                    <button id="" class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x" style="color:red;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x" style="color: red;"></i></button>
                 </div>
             </div>
         }
@@ -926,12 +942,11 @@
             </div>
             <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
 
                 <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
                 <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                <span class="newRecord" hidden>NEW</span>
+                <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x" style="color:red;"></i></button>
             </div>
         </div>
 
@@ -948,12 +963,12 @@
             </div>
             <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
 
                 <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
                 <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                <span class="newRecord" hidden>NEW</span>
+                <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x" style="color:red;"></i></button>
+
             </div>
         </div>
     </div>
@@ -1049,8 +1064,7 @@
 
                 <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm Btn_delete lineDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                <span class="newRecord" hidden>NEW</span>
+                <button class='btn btn-light btn-sm Btn_delete lineDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>              
             </div>
         </div>
 
@@ -1075,7 +1089,7 @@
                 <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
                 <button class='btn btn-light btn-sm Btn_delete lineDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                <span class="newRecord" hidden>NEW</span>
+                
             </div>
         </div>
     </div>
@@ -1172,7 +1186,7 @@
                 <button id="" class="btn btn-light btn-sm Btn_edit linewntyDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save linewntyDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
                 <button class='btn btn-light btn-sm Btn_delete linewntyDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                <span class="newRecord" hidden>NEW</span>
+                
             </div>
         </div>
 
@@ -1197,7 +1211,7 @@
                 <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineWntyDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
                 <button class='btn btn-light btn-sm Btn_delete lineWntyDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                <span class="newRecord" hidden>NEW</span>
+                
             </div>
         </div>
     </div>
