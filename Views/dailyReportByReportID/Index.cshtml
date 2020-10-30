@@ -388,18 +388,24 @@
 
             $(".Btn_delete").click(function () {
                 var currentRow = $(this).parent().parent();
+                console.log($(currentRow).attr("data-time-entry-id"));
+                //temp_LineClass = $(this).prop("class");
+                temp_LineClass = $(currentRow).prop("class");
+                console.log(temp_LineClass);
 
-                $.confirm({
-                    title: 'Delete Entry?',
-                    content: '',
-                    buttons: {
-                        confirm: function () {
-                            $(currentRow).remove();
-                        },
-                        cancel: function () {
-                        }
-                    }
-                });
+                //used to change the class of a returned record to an edited record for later processing with an update operation
+                if (temp_LineClass.includes("workDescLine")) {
+                    $($(currentRow)).prop("class", "row deletedRecords workDescLine");
+                }
+                if (temp_LineClass.includes("delaysLine")) {
+                    $($(currentRow)).prop("class", "row deletedRecords delaysLine");
+                }
+                if (temp_LineClass.includes("wntyDelaysLine")) {
+                    $($(currentRow)).prop("class", "row deletedRecords wntyDelaysLine");
+                }
+
+                $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
             });
 
             function fn_produceParsedShortNames(button) {
@@ -979,8 +985,20 @@
             }
 
             $(".returnedRecords").on("change keypress", function () {
+                
+                temp_LineClass = $(this).prop("class");
+
                 //used to change the class of a returned record to an edited record for later processing with an update operation
-                $($(this)).prop("class", "row editedRecords workDescLine");
+                if (temp_LineClass.includes("workDescLine")) {
+                    $($(this)).prop("class", "row editedRecords workDescLine");
+                }
+                if (temp_LineClass.includes("delaysLine")) {
+                    $($(this)).prop("class", "row editedRecords delaysLine");
+                }
+                if (temp_LineClass.includes("wntyDelaysLine")) {
+                    $($(this)).prop("class", "row editedRecords wntyDelaysLine");
+                }
+                
                 $($(this)).find(".Btn_rtndRecord").attr("hidden", "true");
                 $($(this)).find(".Btn_editedRecord").removeAttr("hidden");
             });
@@ -1143,7 +1161,7 @@
             <strong>Team</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <strong>Action/Record Status</strong>
+            <strong>Action/Pending Op.</strong>
         </div>
     </div>
     @*BEGIN RETURNED RECORDS*@
@@ -1158,7 +1176,7 @@
             string temp_workDescription = item.workDescArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
-            <div class=" row returnedRecords workDescLine" id="workDescLine_@temp_timeEntryID" style="">
+            <div class=" row returnedRecords workDescLine" id="workDescLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
                 <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
                 <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
@@ -1267,7 +1285,7 @@
             string temp_workDescription = item.delaysArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
-            <div class=" row returnedRecords delaysLine" id="delaysLine_@temp_timeEntryID" style="">
+            <div class=" row returnedRecords delaysLine" id="delaysLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
                 <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
                 <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
@@ -1386,7 +1404,7 @@
             string temp_workDescription = item.wntyDelaysArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
-            <div class=" row returnedRecords wntyDelaysLine" id="wntyDelaysLine_@temp_timeEntryID" style="">
+            <div class=" row returnedRecords wntyDelaysLine" id="wntyDelaysLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
                 <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
                 <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding: 0px; display:none">
