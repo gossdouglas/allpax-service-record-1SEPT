@@ -588,20 +588,20 @@
                     wntyDelaysArr: wntyDelaysArrJson_Add
                 };
 
-                //$.ajax({
-                //    url: '/dailyReportByReportID/AddDailyReport',
-                //    method: 'post',
-                //    contentType: 'application/json',
-                //    dataType: 'json',
-                //    data: JSON.stringify(data),
-                //    traditional: true,
-                //    success: function () {
-                //        //$(data).each(function (index, item) {
-                //        //    lastDlyRptCrtdByUser = item;
-                //        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                //        //});
-                //    }
-                //});
+                $.ajax({
+                    url: '/dailyReportByReportID/AddDailyReport',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function () {
+                        //$(data).each(function (index, item) {
+                        //    lastDlyRptCrtdByUser = item;
+                        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                        //});
+                    }
+                });
                 //END ADD RECORDS TO A DAILY REPORT
 
                 //BEGIN DELETE RECORDS FROM A DAILY REPORT
