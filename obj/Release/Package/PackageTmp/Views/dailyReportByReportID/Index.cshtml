@@ -72,6 +72,7 @@
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
+            var dailyLogInfoChngd = false;
 
             var recordsToAddStatus = 0;
             var workDescNarrArr_Add = [];
@@ -132,9 +133,9 @@
                 });
 
                 //begin fill sub jobs dropdown
-                $('#subJobTypes_dpdwn').removeAttr("disabled");
+                //$('#subJobTypes_dpdwn').removeAttr("disabled");
                 $('#subJobTypes_dpdwn').empty();//clear the dropdown
-                $('#input_jobs_dpdown').val('1');//
+                //$('#input_jobs_dpdown').val('1');//
 
                 $.ajax({
                     url: 'DataService.asmx/GetSubJobTypesByJobID',
@@ -142,7 +143,7 @@
                     dataType: 'json',
                     data: { jobID: jobs_dpdown.val() },
                     success: function (data) {
-                        subJobTypes_dpdwn.append($('<option/>', { value: '', text: 'Select a Job Sub-Type' }));
+                        //subJobTypes_dpdwn.append($('<option/>', { value: '', text: 'Select a Job Sub-Type' }));
 
                         $(data).each(function (index, item) {
                             subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
@@ -500,7 +501,7 @@
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
 
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
-                            enable_disableSave();//determine if the save button needs to be enabled or disabled
+                            //enable_disableSave();//determine if the save button needs to be enabled or disabled
                         });
                         fn_loadTeamNamesRtndRecs();
                         //$.fn.updateSectionDpdwns();
@@ -571,24 +572,39 @@
             };
 
             //BEGIN VALIDATION BEFORE SAVING SECTION
-            var fields = "#slct_date, #input_jobs_dpdown, #input_equipment, #input_startTime, #input_endTime, #input_lunch, #subJobTypes_dpdwn";
-
-            //when one of the basic fields changes...
-            $(fields).on('change', function () {
-                //enable_disableSave();//determine if the save button needs to be enabled or disabled
-            });
 
             //determine if the save button needs to be enabled or disabled
             function allFilled() {
                 var filled = true;
-                $(fields).each(function () {
-                    if ($(this).val() == '') {
-                        filled = false;
-                    }
-                });
-                if (dailyRptTeamArr.length == 0) {
+                console.clear();
+
+                if ($("#slct_date").val() == '') {
+                    console.log($("#slct_date").val())
+                    console.log("#slct_date is empty")
                     filled = false;
                 }
+
+                if ($("#input_equipment").val() == '') {
+                    console.log($("#input_equipment").val())
+                    console.log("input_equipment is empty")
+                    filled = false;
+                }
+
+                if ($("#input_startTime").val() == '') {
+                    console.log("input_startTime is empty")
+                    filled = false;
+                }
+
+                if ($("#input_endTime").val() == '') {
+                    console.log("input_endTime is empty")
+                    filled = false;
+                }
+
+                if ($("#input_lunch").val() == '') {
+                    console.log("input_lunch is empty")
+                    filled = false;
+                }
+             
                 return filled;
             }
 
@@ -647,6 +663,41 @@
                 var addItem9 = [];
                 addItem9 = dailyRptTeamUserIDArr;
 
+                //BEGIN EDIT DAILY LOG SECTION OF A DAILY REPORT
+                if (dailyLogInfoChngd == 1) {//if the daily log information section has been changed...
+                    var data = {
+                        dailyReportID: dailyReportID,
+                        jobID: addItem1,
+                        date: addItem2,
+                        subJobID: addItem3,
+                        startTime: addItem4,
+                        endTime: addItem5,
+                        lunchHours: addItem6,
+                        equipment: addItem7,
+                        dailyReportAuthor: addItem8,
+                        //dailyRptTeamArr: addItem9,
+                        //workDescArr: workDescArrJson_Add,
+                        //delaysArr: delaysArrJson_Add,
+                        //wntyDelaysArr: wntyDelaysArrJson_Add
+                    };
+
+                    $.ajax({
+                        url: '/dailyReportByReportID/UpdateDailyReportLogInfo',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        success: function () {
+                            //$(data).each(function (index, item) {
+                            //    lastDlyRptCrtdByUser = item;
+                            //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                            //});
+                        }
+                    });
+                }
+                //END EDIT DAILY LOG SECTION OF A DAILY REPORT
+
                 //BEGIN ADD RECORDS TO A DAILY REPORT
                 if (recordsToAddStatus == 1) {//if there are records to add...
                     var data = {
@@ -683,7 +734,7 @@
                 //END ADD RECORDS TO A DAILY REPORT
 
                 //BEGIN DELETE RECORDS FROM A DAILY REPORT
-                if (timeEntryDeleteArr.length > 0) {//if there are records to add...
+                if (timeEntryDeleteArr.length > 0) {//if there are records to delete...
                     var data = {
                         timeEntryDeleteArr: timeEntryDeleteArr
                     };
@@ -1061,27 +1112,9 @@
             });
 
             $("#contnrDailyLog").on("change keypress", function () {
-
-                console.log("change detected in the daily log section.")
-                //var currentRow = $(this);
-                //temp_LineClass = $(this).prop("class");
-
-                ////used to change the class of a returned record to an edited record for later processing with an update operation
-                //if (temp_LineClass.includes("workDescLine")) {
-                //    $($(currentRow)).prop("class", "row editedRecords workDescLine");
-                //}
-                //if (temp_LineClass.includes("delaysLine")) {
-                //    $($(currentRow)).prop("class", "row editedRecords delaysLine");
-                //}
-                //if (temp_LineClass.includes("wntyDelaysLine")) {
-                //    $($(currentRow)).prop("class", "row editedRecords wntyDelaysLine");
-                //}
-
-                //$($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
-                //$($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
-
-                //$($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
-                //$($(currentRow)).find(".Btn_editedRecord").removeAttr("hidden");
+                dailyLogInfoChngd = true;
+                enable_disableSave();
+                //console.log("change detected in the daily log section.")
             });
             //END ONE SHOT LOGIC
 
@@ -1178,8 +1211,8 @@
         <div class="col-2" style="padding:5px">
             <strong>Equipment:</strong>
         </div>
-        <div class="col-10" style="padding:5px">
-            <input type="text" value="@Model.First().equipment" id="input_equipment" name="" style="width:100%">
+        <div class="col-10" style="padding:5px" contenteditable>
+        <input type="text" value="@Model.First().equipment" id="input_equipment" name="" style="width:100%">
         </div>
     </div>
     <div class="row">
@@ -1586,10 +1619,10 @@
             <button type="button" class="btn btn-primary btn-sm" id="addButton" style="width: 100%">Save & Exit</button>
         </div>
         <div class="col-4" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="submitButton" style="width: 100%">Save & Submit</button>
+            <button type="button" class="btn btn-primary btn-sm" id="submitButton" style="width: 100%" disabled>Save & Submit</button>
         </div>
         <div class="col-4" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%">E-mail Daily Report Test</button>
+            <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%" disabled>E-mail Daily Report Test</button>
         </div>
     </div>
 </div>
