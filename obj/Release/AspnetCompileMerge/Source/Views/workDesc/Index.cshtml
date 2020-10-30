@@ -9,10 +9,6 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script>
-        $(document).ready(function () {//begin document jquery statements
-
-            var standardElementHeight = $("#newWorkDescBtn_save").height();//get the height of the save button...
-            $(".standardInput").height(standardElementHeight);//...and assign its height to all other buttons with a class of standardInput
 
             //fn_enableSelect2();//enable the select2 add-on on page load
 
@@ -72,9 +68,11 @@
                 //begin suck in variables for eventual axios post
                 var addItem1 = $("#txt_dailyReportID").html();
                 var addItem2 = $("#input_workDesc").html();
-                //addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
-                //addItem2 = addItem2.replace(/&amp;/, " ");//wipe out leading white space characters
-                //addItem2 = addItem2.replace(/nbsp;/, " ");//and amp and nbsp
+                addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
+                addItem2 = addItem2.replace(/^[ \t]+|[ \t]+$/, "");//wipe out leading white space characters
+                addItem2 = addItem2.replace(/&amp;/, "");//wipe out
+                addItem2 = addItem2.replace(/nbsp;/, "");//nbsp
+                addItem2 = addItem2.replace(/<br>/, "");//nbsp
                 //end suck in variables for eventual axios post
 
                 //begin AddTeamMember

@@ -46,14 +46,13 @@
             margin: 1px;
             opacity: 0;
         }
-
     </style>
 
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            $("#contnrDailyLog :input").prop("disabled", true);//disable the daily log section
-          
+            //$("#contnrDailyLog :input").prop("disabled", true);//disable the daily log section
+
             var team_dpdwn = $('#team_dpdwn');
             ///var addWorkDescBtn = $('#addWorkDescBtn');
             var dailyReportID = $("#txt_dailyReportID").html();
@@ -74,73 +73,85 @@
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
 
-            var workDescNarrArr = [];
-            var workDescHoursArr = [];
-            var workDescUserNamesArr = [];
-            var workDescArrPreJson = [];
-            var indexWorkDescEntries = 0;//keep track of the number of work description entries
+            var recordsToAddStatus = 0;
+            var workDescNarrArr_Add = [];
+            var workDescHoursArr_Add = [];
+            var workDescUserNamesArr_Add = [];
+            var workDescArrJson_Add = [];
+            var indexWorkDescEntries_Add = 0;//keep track of the number of work description entries added
 
-            var delaysNarrArr = [];
-            var delaysHoursArr = [];
-            var delaysUserNamesArr = [];
-            var delaysArrPreJson = [];
-            var indexDelaysEntries = 0;//keep track of the number of delays entries
+            var delaysNarrArr_Add = [];
+            var delaysHoursArr_Add = [];
+            var delaysUserNamesArr_Add = [];
+            var delaysArrJson_Add = [];
+            var indexDelaysEntries_Add = 0;//keep track of the number of delays entries added
 
-            var wntyDelaysNarrArr = [];
-            var wntyDelaysHoursArr = [];
-            var wntyDelaysUserNamesArr = [];
-            var wntyDelaysArrPreJson = [];
-            var indexWntyDelaysEntries = 0;//keep track of the number of warranty delays entries
+            var wntyDelaysNarrArr_Add = [];
+            var wntyDelaysHoursArr_Add = [];
+            var wntyDelaysUserNamesArr_Add = [];
+            var wntyDelaysArrJson_Add = [];
+            var indexWntyDelaysEntries_Add = 0;//keep track of the number of warranty delays entries added
+
+            var workDescNarrArr_Edit = [];
+            var workDescHoursArr_Edit = [];
+            var workDescUserNamesArr_Edit = [];
+            var workDescArrJson_Edit = [];
+
+            var delaysNarrArr_Edit = [];
+            var delaysHoursArr_Edit = [];
+            var delaysUserNamesArr_Edit = [];
+            var delaysArrJson_Edit = [];
+
+            var wntyDelaysNarrArr_Edit = [];
+            var wntyDelaysHoursArr_Edit = [];
+            var wntyDelaysUserNamesArr_Edit = [];
+            var wntyDelaysArrJson_Edit = [];
+
+            var timeEntryDeleteArr = [];//stores the time entry ids that are to be deleted
             //end added for new one shot work
 
-            //begin fill the team names dropdown
-            $.ajax({
-                url: 'DataService.asmx/GetAllTeamNames',
-                method: 'post',
-                dataType: 'json',
-                data: { userName: '%' },
-                success: function (data) {
+            fn_loadDropDowns();
+                 
+            //begin jobs id dropdown change
+            jobs_dpdown.change(function () {
 
-                    team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+                $.ajax({
+                    url: 'DataService.asmx/GetCustomerInfoByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
 
-                    $(data).each(function (index, item) {
-                        team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
-                    });
-                }
+                        $(data).each(function (index, item) {
+                            $("#output_customerName").html(item.customerName.toString());
+                            $("#output_location").html(item.address.toString());
+                            $("#output_customerCode").html(item.customerCode.toString());
+                            $("#output_customerContact").html(item.customerContact.toString());
+                        });
+                    }
+                });
+
+                //begin fill sub jobs dropdown
+                $('#subJobTypes_dpdwn').removeAttr("disabled");
+                $('#subJobTypes_dpdwn').empty();//clear the dropdown
+                $('#input_jobs_dpdown').val('1');//
+
+                $.ajax({
+                    url: 'DataService.asmx/GetSubJobTypesByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
+                        subJobTypes_dpdwn.append($('<option/>', { value: '', text: 'Select a Job Sub-Type' }));
+
+                        $(data).each(function (index, item) {
+                            subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
+                        });
+                    }
+                });
+                //end fill sub jobs dropdown
             });
-            //end fill the team names dropdown
-
-            //begin load team members on page load
-            $.ajax({
-                url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                method: 'post',
-                dataType: 'json',
-                data: { userName: '%', dailyReportID: dailyReportID },
-                success: function (data) {
-
-                    $(data).each(function (index, item) {
-                        var temp_userName = item.userName;
-                        var temp_name = item.name;
-                        var temp_shortName = item.shortName;
-
-                        $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                        $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                        $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
-
-                        dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
-                        dailyRptTeamUserIDArr.push(temp_userName);
-
-                        $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-
-                        //$("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
-                        $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
-                        //enable_disableSave();//determine if the save button needs to be enabled or disabled
-                    });
-                    fn_loadTeamNamesRtndRecs();
-                    //$.fn.updateSectionDpdwns();
-                }
-            });
-            //end load team members on page load
+            //end jobs id dropdown change
 
             //begin add team member on drop down change
             team_dpdwn.change(function () {
@@ -190,7 +201,7 @@
             //begin when a team member class is clicked...
             $(".team_").on('click', function () {
                 var tempTeamMemberUserID = this.id.substr(5);
-                alert("delete member")
+                //alert("delete member")
                 ////begin DeleteTeamMember
                 ////begin axios delete post
                 axios.post('/dailyReportByReportID/DeleteTeamMember', {
@@ -298,39 +309,42 @@
                 $(this).parent().parent().find(".button_div").css('border-bottom-style', 'none');
 
                 if (/newWorkDescBtn_add/i.test($(this).attr("class"))) {
-                    indexWorkDescEntries = indexWorkDescEntries + 1;
+                    indexWorkDescEntries_Add = indexWorkDescEntries_Add + 1;
 
                     $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries).appendTo("#workDescriptionLine_template");
-                    //$("#workDescLine_" + indexWorkDescEntries).prop("class", " row workDescriptionLine_template_row_active workDescLine");
-                    $("#workDescLine_" + indexWorkDescEntries).prop("class", " row addRecord workDescLine");
-                    $("#workDescLine_" + indexWorkDescEntries).find(".newRecord").removeAttr("hidden");
+                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries_Add).appendTo("#workDescriptionLine_template");
+                    //$("#workDescLine_" + indexWorkDescEntries_Add).prop("class", " row workDescriptionLine_template_row_active workDescLine");
+                    $("#workDescLine_" + indexWorkDescEntries_Add).prop("class", " row addRecord workDescLine");
+                    //$("#workDescLine_" + indexWorkDescEntries_Add).find(".newRecord").removeAttr("hidden");
+                    $("#workDescLine_" + indexWorkDescEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
                     $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row entryRow workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
                     $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
                 }
                 else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
-                    indexDelaysEntries = indexDelaysEntries + 1;
+                    indexDelaysEntries_Add = indexDelaysEntries_Add + 1;
 
                     $(".delaysLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries).appendTo("#delaysLine_template");
-                    //$("#delaysLine_" + indexDelaysEntries).prop("class", " row delaysLine_template_row_active delaysLine");
-                    $("#delaysLine_" + indexDelaysEntries).prop("class", " row addRecord delaysLine");
-                    $("#delaysLine_" + indexDelaysEntries).find(".newRecord").removeAttr("hidden");
-                    $("#delaysLine_" + indexDelaysEntries).find(".delaysTeam_hours_div").attr("contenteditable", "false");
+                    $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries_Add).appendTo("#delaysLine_template");
+                    //$("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row delaysLine_template_row_active delaysLine");
+                    $("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row addRecord delaysLine");
+                    //$("#delaysLine_" + indexDelaysEntries_Add).find(".newRecord").removeAttr("hidden");
+                    $("#delaysLine_" + indexDelaysEntries_Add).find(".delaysTeam_hours_div").attr("contenteditable", "false");
+                    $("#delaysLine_" + indexDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
                     $(".delaysLine_template_row_hidden").clone(true).prop("class", "row entryRow delaysLine_template_row_active").appendTo("#delaysLine_template");
                     $(".delaysLine_template_row_hidden").attr("hidden", "true");
                 }
                 else if (/newWntyDelaysBtn_add/i.test($(this).attr("class"))) {
-                    indexWntyDelaysEntries = indexWntyDelaysEntries + 1;
+                    indexWntyDelaysEntries_Add = indexWntyDelaysEntries_Add + 1;
 
                     $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries).appendTo("#wntyDelaysLine_template");
-                    //$("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).prop("class", " row addRecord wntyDelaysLine");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".newRecord").removeAttr("hidden");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
+                    $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries_Add).appendTo("#wntyDelaysLine_template");
+                    //$("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row addRecord wntyDelaysLine");
+                    //$("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".newRecord").removeAttr("hidden");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
                     $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row entryRow wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
                     $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
@@ -373,19 +387,127 @@
 
             $(".Btn_delete").click(function () {
                 var currentRow = $(this).parent().parent();
+                //console.log($(currentRow).attr("data-time-entry-id"));
+                temp_LineClass = $(currentRow).prop("class");
+                //console.log(temp_LineClass);
 
-                $.confirm({
-                    title: 'Delete Entry?',
-                    content: '',
-                    buttons: {
-                        confirm: function () {
-                            $(currentRow).remove();
-                        },
-                        cancel: function () {
-                        }
+                //if this line is a new record, simply remove it
+                if (temp_LineClass.includes("addRecord")) {
+                    //$.confirm({
+                    //    title: 'Delete Entry?',
+                    //    content: '',
+                    //    buttons: {
+                    //        confirm: function () {
+                                $(currentRow).remove();
+                    //        },
+                    //        cancel: function () {
+                    //        }
+                    //    }
+                    //});
+                }
+
+                //if this line is a returned record, set its class to deletedRecords
+                if (temp_LineClass.includes("returnedRecords")) {
+                    //used to change the class of a returned record to deleted record for later processing with a delete operation
+                    if (temp_LineClass.includes("workDescLine")) {
+                        $($(currentRow)).prop("class", "row deletedRecords workDescLine");
+                    }
+                    if (temp_LineClass.includes("delaysLine")) {
+                        $($(currentRow)).prop("class", "row deletedRecords delaysLine");
+                    }
+                    if (temp_LineClass.includes("wntyDelaysLine")) {
+                        $($(currentRow)).prop("class", "row deletedRecords wntyDelaysLine");
+                    }
+
+                    $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
+                    $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+
+                    $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                    $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
+                }
+            });
+
+            function fn_loadDropDowns() {
+
+                //begin fill the jobs dropdown
+                $.ajax({
+                    url: 'DataService.asmx/GetAllJobNos',
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        $(data).each(function (index, item) {
+                            if (item.jobID !== jobs_dpdown.val()) {
+                                jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                            }
+                        });
                     }
                 });
-            });
+                //end fill the jobs dropdown
+
+                //begin fill sub jobs dropdown
+                $.ajax({
+                    url: 'DataService.asmx/GetSubJobTypesByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
+                        $(data).each(function (index, item) {
+                            if (item.subJobID !== subJobTypes_dpdwn.val()) {
+                                //jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                                subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
+                            }
+                        });
+                    }
+                });
+                //end fill sub jobs dropdown
+
+                //begin fill the team names dropdown
+                $.ajax({
+                    url: 'DataService.asmx/GetAllTeamNames',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { userName: '%' },
+                    success: function (data) {
+                        team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+
+                        $(data).each(function (index, item) {
+                            team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+                        });
+                    }
+                });
+                //end fill the team names dropdown
+
+                //begin load team members on page load
+                $.ajax({
+                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { userName: '%', dailyReportID: dailyReportID },
+                    success: function (data) {
+
+                        $(data).each(function (index, item) {
+                            var temp_userName = item.userName;
+                            var temp_name = item.name;
+                            var temp_shortName = item.shortName;
+
+                            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
+                            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
+                            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+
+                            dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
+                            dailyRptTeamUserIDArr.push(temp_userName);
+
+                            $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
+
+                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
+                            enable_disableSave();//determine if the save button needs to be enabled or disabled
+                        });
+                        fn_loadTeamNamesRtndRecs();
+                        //$.fn.updateSectionDpdwns();
+                    }
+                });
+                //end load team members on page load
+            }
 
             function fn_produceParsedShortNames(button) {
                 var currentWorkDescTeamShortNamesParsed = "";
@@ -507,7 +629,11 @@
             //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
             $("#addButton").click(function () {//when the add button is clicked...
 
-                fn_loadTimeEntries();
+                fn_loadTimeEntries_Add();
+                fn_loadTimeEntries_Edit();
+                fn_loadTimeEntries_Delete();
+
+                fn_buildJsonObjects();
 
                 var addItem1 = $("#jobs_dpdown").val();
                 var addItem2 = $("#slct_date").val();
@@ -521,188 +647,442 @@
                 var addItem9 = [];
                 addItem9 = dailyRptTeamUserIDArr;
 
-                var data = {
-                    dailyReportID: dailyReportID,
-                    jobID: addItem1,
-                    date: addItem2,
-                    subJobID: addItem3,
-                    startTime: addItem4,
-                    endTime: addItem5,
-                    lunchHours: addItem6,
-                    equipment: addItem7,
-                    dailyReportAuthor: addItem8,
-                    dailyRptTeamArr: addItem9,
-                    workDescArr: workDescArrPreJson,
-                    delaysArr: delaysArrPreJson,
-                    wntyDelaysArr: wntyDelaysArrPreJson 
-                };
+                //BEGIN ADD RECORDS TO A DAILY REPORT
+                if (recordsToAddStatus == 1) {//if there are records to add...
+                    var data = {
+                        dailyReportID: dailyReportID,
+                        jobID: addItem1,
+                        date: addItem2,
+                        subJobID: addItem3,
+                        startTime: addItem4,
+                        endTime: addItem5,
+                        lunchHours: addItem6,
+                        equipment: addItem7,
+                        dailyReportAuthor: addItem8,
+                        dailyRptTeamArr: addItem9,
+                        workDescArr: workDescArrJson_Add,
+                        delaysArr: delaysArrJson_Add,
+                        wntyDelaysArr: wntyDelaysArrJson_Add
+                    };
 
-                $.ajax({
-                    url: '/dailyReport/AddDailyReport',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function () {
-                        //$(data).each(function (index, item) {
-                        //    lastDlyRptCrtdByUser = item;
-                        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                        //});
-                    }
-                });
+                    $.ajax({
+                        url: '/dailyReportByReportID/AddDailyReport',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        success: function () {
+                            //$(data).each(function (index, item) {
+                            //    lastDlyRptCrtdByUser = item;
+                            //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                            //});
+                        }
+                    });
+                }
+                //END ADD RECORDS TO A DAILY REPORT
 
-                //fn_printArrays();
+                //BEGIN DELETE RECORDS FROM A DAILY REPORT
+                if (timeEntryDeleteArr.length > 0) {//if there are records to add...
+                    var data = {
+                        timeEntryDeleteArr: timeEntryDeleteArr
+                    };
+
+                    $.ajax({
+                        url: '/dailyReportByReportID/DeleteTimeEntry',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        success: function () {
+                            //$(data).each(function (index, item) {
+                            //    lastDlyRptCrtdByUser = item;
+                            //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                            //});
+                        }
+                    });
+                }
+                //END DELETE RECORDS FROM A DAILY REPORT
+
+                fn_printArrays();
             });
 
-            function fn_loadTimeEntries() {
-                var workDescTeam_narr_div_Content = $("#workDescriptionLine_template").find(".workDescLine").find(".workDescTeam_narr_div");
-                var workDescTeam_dpdwn_Content;
+            function fn_loadTimeEntries_Add () {
 
-                var delaysTeam_narr_div_Content = $("#delaysLine_template").find(".delaysLine").find(".delaysTeam_narr_div");
-                var delaysTeam_hours_div_Content;
-                var delaysTeam_dpdwn_Content;
+                var workDescTeam_narr_div_Content_Add = $(".addRecord").find(".workDescTeam_narr_div");
+                var workDescTeam_dpdwn_Content_Add;
 
-                var wntyDelaysTeam_narr_div_Content = $("#wntyDelaysLine_template").find(".wntyDelaysLine").find(".wntyDelaysTeam_narr_div");
-                var wntyDelaysTeam_hours_div_Content;
-                var wntyDelaysTeam_dpdwn_Content;
+                var delaysTeam_narr_div_Content_Add = $(".addRecord").find(".delaysTeam_narr_div");
+                var delaysTeam_hours_div_Content_Add;
+                var delaysTeam_dpdwn_Content_Add;
 
-                var currentDropdownLine;//generic
+                var wntyDelaysTeam_narr_div_Content_Add = $(".addRecord").find(".wntyDelaysTeam_narr_div");
+                var wntyDelaysTeam_hours_div_Content_Add;
+                var wntyDelaysTeam_dpdwn_Content_Add;
 
-                $(workDescTeam_narr_div_Content).each(function (index1) {
+                var currentDropdownLine_Add;//generic
+
+                $(workDescTeam_narr_div_Content_Add).each(function (index1) {
 
                     var workDescUserNamesArrTemp = [];
 
-                    //workDescNarrArr.push([$(workDescTeam_narr_div_Content[index1]).html()]);
-                    workDescNarrArr.push($(workDescTeam_narr_div_Content[index1]).html());
+                    //workDescNarrArr_Add.push([$(workDescTeam_narr_div_Content[index1]).html()]);
+                    workDescNarrArr_Add.push($(workDescTeam_narr_div_Content_Add[index1]).html());
 
-                    currentDropdownLine = $(this).parent().attr("id");
-                    workDescHoursArr.push(0);
-                    workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+                    currentDropdownLine_Add = $(this).parent().attr("id");
+                    workDescHoursArr_Add.push(0);
+                    workDescTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
-                    $(workDescTeam_dpdwn_Content).each(function (index2) {
+                    $(workDescTeam_dpdwn_Content_Add).each(function (index2) {
 
-                        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content[index2]).attr("id");
+                        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content_Add[index2]).attr("id");
                         var regex = /\w+$/;
                         var temp_workDescTeam_dpdwn_ID_object = tempworkDescTeam_dpdwn_ID.match(regex);
                         var temp_UserID = temp_workDescTeam_dpdwn_ID_object[0];
 
                         workDescUserNamesArrTemp.push(temp_UserID);
                     });
-                    workDescUserNamesArr.push(workDescUserNamesArrTemp);
+                    workDescUserNamesArr_Add.push(workDescUserNamesArrTemp);
+
+                    if (recordsToAddStatus == 0) {
+                        recordsToAddStatus = 1;
+                    }
                 });
 
-                $(delaysTeam_narr_div_Content).each(function (index1) {
+                $(delaysTeam_narr_div_Content_Add).each(function (index1) {
 
                     var delaysUserNamesArrTemp = [];
 
-                    //delaysNarrArr.push([$(delaysTeam_narr_div_Content[index1]).html()]);
-                    delaysNarrArr.push($(delaysTeam_narr_div_Content[index1]).html());
+                    //delaysNarrArr_Add.push([$(delaysTeam_narr_div_Content[index1]).html()]);
+                    delaysNarrArr_Add.push($(delaysTeam_narr_div_Content_Add[index1]).html());
 
-                    currentDropdownLine = $(this).parent().attr("id");
-                    delaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".delaysTeam_hours_div").html());
-                    //delaysHoursArr.push([delaysTeam_hours_div_Content]);
-                    delaysHoursArr.push(delaysTeam_hours_div_Content);
-                    delaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+                    currentDropdownLine_Add = $(this).parent().attr("id");
+                    delaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".delaysTeam_hours_div").html());
+                    //delaysHoursArr_Add.push([delaysTeam_hours_div_Content]);
+                    delaysHoursArr_Add.push(delaysTeam_hours_div_Content_Add);
+                    delaysTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
-                    $(delaysTeam_dpdwn_Content).each(function (index2) {
+                    $(delaysTeam_dpdwn_Content_Add).each(function (index2) {
 
-                        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content[index2]).attr("id");
+                        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content_Add[index2]).attr("id");
                         var regex = /\w+$/;
                         var temp_delaysTeam_dpdwn_ID_object = tempDelaysTeam_dpdwn_ID.match(regex);
                         var temp_UserID = temp_delaysTeam_dpdwn_ID_object[0];
 
                         delaysUserNamesArrTemp.push(temp_UserID);
                     });
-                    delaysUserNamesArr.push(delaysUserNamesArrTemp);
+                    delaysUserNamesArr_Add.push(delaysUserNamesArrTemp);
+
+                    if (recordsToAddStatus == 0) {
+                        recordsToAddStatus = 1;
+                    }
                 });
 
-                $(wntyDelaysTeam_narr_div_Content).each(function (index1) {
+                $(wntyDelaysTeam_narr_div_Content_Add).each(function (index1) {
 
                     var wntyDelaysUserNamesArrTemp = [];
 
-                    //wntyDelaysNarrArr.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
-                    wntyDelaysNarrArr.push($(wntyDelaysTeam_narr_div_Content[index1]).html());
+                    //wntyDelaysNarrArr_Add.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
+                    wntyDelaysNarrArr_Add.push($(wntyDelaysTeam_narr_div_Content_Add[index1]).html());
 
-                    currentDropdownLine = $(this).parent().attr("id");
-                    wntyDelaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".wntyDelaysTeam_hours_div").html());
+                    currentDropdownLine_Add = $(this).parent().attr("id");
+                    wntyDelaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".wntyDelaysTeam_hours_div").html());
                     //console.log(wntyDelaysTeam_hours_div_Content);
-                    //wntyDelaysHoursArr.push([wntyDelaysTeam_hours_div_Content]);
-                    wntyDelaysHoursArr.push(wntyDelaysTeam_hours_div_Content);
-                    wntyDelaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+                    //wntyDelaysHoursArr_Add.push([wntyDelaysTeam_hours_div_Content]);
+                    wntyDelaysHoursArr_Add.push(wntyDelaysTeam_hours_div_Content_Add);
+                    wntyDelaysTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
-                    $(wntyDelaysTeam_dpdwn_Content).each(function (index2) {
+                    $(wntyDelaysTeam_dpdwn_Content_Add).each(function (index2) {
 
-                        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content[index2]).attr("id");
+                        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content_Add[index2]).attr("id");
                         var regex = /\w+$/;
                         var temp_wntyDelaysTeam_dpdwn_ID_object = tempWntyDelaysTeam_dpdwn_ID.match(regex);
                         var temp_UserID = temp_wntyDelaysTeam_dpdwn_ID_object[0];
 
                         wntyDelaysUserNamesArrTemp.push(temp_UserID);
                     });
-                    wntyDelaysUserNamesArr.push(wntyDelaysUserNamesArrTemp);
+                    wntyDelaysUserNamesArr_Add.push(wntyDelaysUserNamesArrTemp);
+
+                    if (recordsToAddStatus == 0) {
+                        recordsToAddStatus = 1;
+                    }
                 });
 
-                fn_buildPreJsonObjects();
+                //fn_buildPreJsonObjects();
             }
 
-            function fn_buildPreJsonObjects() {
-                //BEGIN BUILD THE WORK DESCRIPTION PRE-JSON OBJECT
-                for (var i = 0; i < workDescNarrArr.length; i++) {
-                    workDescArrPreJson[i] = {
-                        workDescription: workDescNarrArr[i],
+            function fn_loadTimeEntries_Edit() {
+
+                var workDescTeam_narr_div_Content_Edit = $(".editedRecords").find(".workDescTeam_narr_div");
+                var workDescTeam_dpdwn_Content_Edit;
+
+                var delaysTeam_narr_div_Content_Edit = $(".editedRecords").find(".delaysTeam_narr_div");
+                var delaysTeam_hours_div_Content_Edit;
+                var delaysTeam_dpdwn_Content_Edit;
+
+                var wntyDelaysTeam_narr_div_Content_Edit = $(".editedRecords").find(".wntyDelaysTeam_narr_div");
+                var wntyDelaysTeam_hours_div_Content_Edit;
+                var wntyDelaysTeam_dpdwn_Content_Edit;
+
+                var currentDropdownLine_Edit;//generic
+
+                $(workDescTeam_narr_div_Content_Edit).each(function (index1) {
+
+                    var workDescUserNamesArrTemp = [];
+
+                    //workDescNarrArr_Edit.push([$(workDescTeam_narr_div_Content[index1]).html()]);
+                    workDescNarrArr_Edit.push($(workDescTeam_narr_div_Content_Edit[index1]).html());
+
+                    currentDropdownLine_Edit = $(this).parent().attr("id");
+                    workDescHoursArr_Edit.push(0);
+                    workDescTeam_dpdwn_Content_Edit = $("#" + currentDropdownLine_Edit).find(".select2-selection__choice__display");
+
+                    $(workDescTeam_dpdwn_Content_Edit).each(function (index2) {
+
+                        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content_Edit[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var temp_workDescTeam_dpdwn_ID_object = tempworkDescTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_workDescTeam_dpdwn_ID_object[0];
+
+                        workDescUserNamesArrTemp.push(temp_UserID);
+                    });
+                    workDescUserNamesArr_Edit.push(workDescUserNamesArrTemp);
+                });
+
+                $(delaysTeam_narr_div_Content_Edit).each(function (index1) {
+
+                    var delaysUserNamesArrTemp = [];
+
+                    //delaysNarrArr_Edit.push([$(delaysTeam_narr_div_Content[index1]).html()]);
+                    delaysNarrArr_Edit.push($(delaysTeam_narr_div_Content_Edit[index1]).html());
+
+                    currentDropdownLine_Edit = $(this).parent().attr("id");
+                    delaysTeam_hours_div_Content_Edit = parseFloat($("#" + currentDropdownLine_Edit).find(".delaysTeam_hours_div").html());
+                    //delaysHoursArr_Edit.push([delaysTeam_hours_div_Content]);
+                    delaysHoursArr_Edit.push(delaysTeam_hours_div_Content_Edit);
+                    delaysTeam_dpdwn_Content_Edit = $("#" + currentDropdownLine_Edit).find(".select2-selection__choice__display");
+
+                    $(delaysTeam_dpdwn_Content_Edit).each(function (index2) {
+
+                        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content_Edit[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var temp_delaysTeam_dpdwn_ID_object = tempDelaysTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_delaysTeam_dpdwn_ID_object[0];
+
+                        delaysUserNamesArrTemp.push(temp_UserID);
+                    });
+                    delaysUserNamesArr_Edit.push(delaysUserNamesArrTemp);
+                });
+
+                $(wntyDelaysTeam_narr_div_Content_Edit).each(function (index1) {
+
+                    var wntyDelaysUserNamesArrTemp = [];
+
+                    //wntyDelaysNarrArr_Edit.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
+                    wntyDelaysNarrArr_Edit.push($(wntyDelaysTeam_narr_div_Content_Edit[index1]).html());
+
+                    currentDropdownLine_Edit = $(this).parent().attr("id");
+                    wntyDelaysTeam_hours_div_Content_Edit = parseFloat($("#" + currentDropdownLine_Edit).find(".wntyDelaysTeam_hours_div").html());
+                    //console.log(wntyDelaysTeam_hours_div_Content);
+                    //wntyDelaysHoursArr_Edit.push([wntyDelaysTeam_hours_div_Content]);
+                    wntyDelaysHoursArr_Edit.push(wntyDelaysTeam_hours_div_Content_Edit);
+                    wntyDelaysTeam_dpdwn_Content_Edit = $("#" + currentDropdownLine_Edit).find(".select2-selection__choice__display");
+
+                    $(wntyDelaysTeam_dpdwn_Content_Edit).each(function (index2) {
+
+                        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content_Edit[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var temp_wntyDelaysTeam_dpdwn_ID_object = tempWntyDelaysTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_wntyDelaysTeam_dpdwn_ID_object[0];
+
+                        wntyDelaysUserNamesArrTemp.push(temp_UserID);
+                    });
+                    wntyDelaysUserNamesArr_Edit.push(wntyDelaysUserNamesArrTemp);
+                });
+
+                //fn_buildPreJsonObjects();
+            }
+
+            function fn_loadTimeEntries_Delete() {
+
+                var timeEntriesToDelete = $(".deletedRecords");
+
+                $(timeEntriesToDelete).each(function (index) {
+
+                    timeEntryDeleteArr.push($(this).attr("data-time-entry-id"));
+                    //console.log("to delete: " + $(this).attr("data-time-entry-id"));
+                });
+            }
+
+            function fn_buildJsonObjects() {
+                //BEGIN BUILD THE WORK DESCRIPTION JSON OBJECT
+                for (var i = 0; i < workDescNarrArr_Add.length; i++) {
+                    workDescArrJson_Add[i] = {
+                        workDescription: workDescNarrArr_Add[i],
                         workDescriptionCategory: "1",
-                        hours: workDescHoursArr[i],
-                        userNames: workDescUserNamesArr[i]
+                        hours: workDescHoursArr_Add[i],
+                        userNames: workDescUserNamesArr_Add[i]
                     };
                 }
-                //END BUILD THE DELAYS PRE-JSON OBJECT
 
-                //BEGIN BUILD THE WORK DESCRIPTION PRE-JSON OBJECT
-                for (var i = 0; i < delaysNarrArr.length; i++) {
-                    delaysArrPreJson[i] = {
-                        workDescription: delaysNarrArr[i],
+                for (var i = 0; i < workDescNarrArr_Edit.length; i++) {
+                    workDescArrJson_Edit[i] = {
+                        workDescription: workDescNarrArr_Edit[i],
+                        workDescriptionCategory: "1",
+                        hours: workDescHoursArr_Edit[i],
+                        userNames: workDescUserNamesArr_Edit[i]
+                    };
+                }
+
+                //if there are no work description time entries to add, set the json object to null
+                if (workDescNarrArr_Add.length < 1) {
+                    workDescArrJson_Add = null
+                }
+                //END BUILD THE WORK DESCRIPTION JSON OBJECT
+
+                //BEGIN BUILD THE WORK DESCRIPTION SON OBJECT
+                for (var i = 0; i < delaysNarrArr_Add.length; i++) {
+                    delaysArrJson_Add[i] = {
+                        workDescription: delaysNarrArr_Add[i],
                         workDescriptionCategory: "2",
-                        hours: delaysHoursArr[i],
-                        userNames: delaysUserNamesArr[i]
+                        hours: delaysHoursArr_Add[i],
+                        userNames: delaysUserNamesArr_Add[i]
                     };
                 }
-                //END BUILD THE DELAYS PRE-JSON OBJECT
 
-                //BEGIN BUILD THE WNTY DELAYS PRE-JSON OBJECT
-                for (var i = 0; i < wntyDelaysNarrArr.length; i++) {
-                    wntyDelaysArrPreJson[i] = {
-                        workDescription: wntyDelaysNarrArr[i],
-                        workDescriptionCategory: "3",
-                        hours: wntyDelaysHoursArr[i],
-                        userNames: wntyDelaysUserNamesArr[i]
+                for (var i = 0; i < delaysNarrArr_Edit.length; i++) {
+                    delaysArrJson_Edit[i] = {
+                        workDescription: delaysNarrArr_Edit[i],
+                        workDescriptionCategory: "2",
+                        hours: delaysHoursArr_Edit[i],
+                        userNames: delaysUserNamesArr_Edit[i]
                     };
                 }
-                //END BUILD THE WNTY DELAYS PRE-JSON OBJECT
+
+                //if there are no delay time entries to add, set the json object to null
+                if (delaysNarrArr_Add.length < 1) {
+                    delaysArrJson_Add = null
+                }
+                //END BUILD THE DELAYS JSON OBJECT
+
+                //BEGIN BUILD THE WNTY DELAYS JSON OBJECT
+                for (var i = 0; i < wntyDelaysNarrArr_Add.length; i++) {
+                    wntyDelaysArrJson_Add[i] = {
+                        workDescription: wntyDelaysNarrArr_Add[i],
+                        workDescriptionCategory: "3",
+                        hours: wntyDelaysHoursArr_Add[i],
+                        userNames: wntyDelaysUserNamesArr_Add[i]
+                    };
+                }
+
+                for (var i = 0; i < wntyDelaysNarrArr_Edit.length; i++) {
+                    wntyDelaysArrJson_Edit[i] = {
+                        workDescription: wntyDelaysNarrArr_Edit[i],
+                        workDescriptionCategory: "3",
+                        hours: wntyDelaysHoursArr_Edit[i],
+                        userNames: wntyDelaysUserNamesArr_Edit[i]
+                    };
+                }
+
+                //if there are no warranty delay time entries to add, set the json object to null
+                if (wntyDelaysNarrArr_Edit.length < 1) {
+                    wntyDelaysArrJson_Edit = null
+                }
+                //END BUILD THE WNTY DELAYS JSON OBJECT
             }
             //END SECTION TO PACK UP NEW RECORDS
 
             function fn_printArrays() {
+                //BEGIN ADDED ARRAYS
                 console.log("work description section follows:");
-                console.log(workDescNarrArr);
-                console.log(delaysHoursArr);
-                console.log(workDescUserNamesArr);
-                console.log(workDescArrPreJson);
-
+                console.log(workDescNarrArr_Add);
+                console.log(workDescHoursArr_Add);
+                console.log(workDescUserNamesArr_Add);
+                console.log(workDescArrJson_Add);
 
                 console.log("delays section follows:");
-                console.log(delaysNarrArr);
-                console.log(delaysHoursArr);
-                console.log(delaysUserNamesArr);
-                console.log(delaysArrPreJson);
+                console.log(delaysNarrArr_Add);
+                console.log(delaysHoursArr_Add);
+                console.log(delaysUserNamesArr_Add);
+                console.log(delaysArrJson_Add);
 
                 console.log("warranty delays section follows:");
-                console.log(wntyDelaysNarrArr);
-                console.log(wntyDelaysHoursArr);
-                console.log(wntyDelaysUserNamesArr);
-                console.log(wntyDelaysArrPreJson);
+                console.log(wntyDelaysNarrArr_Add);
+                console.log(wntyDelaysHoursArr_Add);
+                console.log(wntyDelaysUserNamesArr_Add);
+                console.log(wntyDelaysArrJson_Add);
+                //END ADDED ARRAYS
+
+                //BEGIN EDITED ARRAYS
+                console.log("work description section follows:");
+                console.log(workDescNarrArr_Edit);
+                console.log(workDescHoursArr_Edit);
+                console.log(workDescUserNamesArr_Edit);
+                console.log(workDescArrJson_Edit);
+
+                console.log("delays section follows:");
+                console.log(delaysNarrArr_Edit);
+                console.log(delaysHoursArr_Edit);
+                console.log(delaysUserNamesArr_Edit);
+                console.log(delaysArrJson_Edit);
+
+                console.log("warranty delays section follows:");
+                console.log(wntyDelaysNarrArr_Edit);
+                console.log(wntyDelaysHoursArr_Edit);
+                console.log(wntyDelaysUserNamesArr_Edit);
+                console.log(wntyDelaysArrJson_Edit);
+
+                console.log("time entry delete section follows:");
+                console.log(timeEntryDeleteArr);
+                //END EDITED ARRAYS
             }
 
+            $(".returnedRecords").on("change keypress", function () {
+                var currentRow = $(this);
+                temp_LineClass = $(this).prop("class");
+
+                //used to change the class of a returned record to an edited record for later processing with an update operation
+                if (temp_LineClass.includes("workDescLine")) {
+                    $($(currentRow)).prop("class", "row editedRecords workDescLine");
+                }
+                if (temp_LineClass.includes("delaysLine")) {
+                    $($(currentRow)).prop("class", "row editedRecords delaysLine");
+                }
+                if (temp_LineClass.includes("wntyDelaysLine")) {
+                    $($(currentRow)).prop("class", "row editedRecords wntyDelaysLine");
+                }
+
+                $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
+                $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+
+                $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                $($(currentRow)).find(".Btn_editedRecord").removeAttr("hidden");
+            });
+
+            $("#contnrDailyLog").on("change keypress", function () {
+
+                console.log("change detected in the daily log section.")
+                //var currentRow = $(this);
+                //temp_LineClass = $(this).prop("class");
+
+                ////used to change the class of a returned record to an edited record for later processing with an update operation
+                //if (temp_LineClass.includes("workDescLine")) {
+                //    $($(currentRow)).prop("class", "row editedRecords workDescLine");
+                //}
+                //if (temp_LineClass.includes("delaysLine")) {
+                //    $($(currentRow)).prop("class", "row editedRecords delaysLine");
+                //}
+                //if (temp_LineClass.includes("wntyDelaysLine")) {
+                //    $($(currentRow)).prop("class", "row editedRecords wntyDelaysLine");
+                //}
+
+                //$($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
+                //$($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+
+                //$($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                //$($(currentRow)).find(".Btn_editedRecord").removeAttr("hidden");
+            });
             //END ONE SHOT LOGIC
 
         });//end document read jquery statements
@@ -758,7 +1138,7 @@
         </div>
         <div class="col-2" style="padding:5px">
             <select name="subJobTypes_dpdwn" id="subJobTypes_dpdwn" style="width:100%" value="">
-                <option value="@Model.First().description">@Model.First().description</option>
+                <option value="@Model.First().subJobID">@Model.First().description</option>
             </select>
         </div>
     </div>
@@ -861,10 +1241,10 @@
             <strong>Team</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <strong>Action</strong>
+            <strong>Action/Pending Op.</strong>
         </div>
     </div>
-    @*BEGIN RETURNED RECORDS*@  
+    @*BEGIN RETURNED RECORDS*@
     @foreach (var item in Model)
     {
         for (var i = 0; i < (item.workDescArr.Count); i++)
@@ -876,32 +1256,33 @@
             string temp_workDescription = item.workDescArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
-            <div class=" row returnedRecords workDescLine" id="workDescLine_@temp_timeEntryID" style="">
-                <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">
-                @temp_workDescription
-                </div>
+            <div class=" row returnedRecords workDescLine" id="workDescLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
+                <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
                 <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
                     <select class="Team_dpdwn workDescTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
                         @for (var j = 0; j < (@temp_userNames.Count); j++)
                         {
-                        <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
                         }
                     </select>
                 </div>
 
                 <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
-                    @*AB|DB|JB*@
                     @for (var k = 0; k < (temp_userShortNames.Count); k++)
                     {
                         @(temp_userShortNames[k] + "|");
                     }
-                    </div>
+                </div>
 
                 <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
                     <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                     <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
                     <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+
+                    <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x" style="color: red;"></i></button>
+                    <button id="" class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x" style="color:red;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x" style="color: red;"></i></button>
                 </div>
             </div>
         }
@@ -912,9 +1293,7 @@
     @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
     <div class="" id="workDescriptionLine_template" style="">
         <div class="row entryRow workDescriptionLine_template_row_active" id="" style="">
-            <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="">
-
-            </div>
+            <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
                 <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
                 </select>
@@ -924,19 +1303,16 @@
             </div>
             <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
 
                 <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
                 <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                <span class="newRecord" hidden>NEW</span>
+                <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x" style="color:red;"></i></button>
             </div>
         </div>
 
         <div class="row entryRow workDescriptionLine_template_row_hidden" id="" style="" hidden>
-            <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style="">
-
-            </div>
+            <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
                 <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
                 </select>
@@ -946,12 +1322,12 @@
             </div>
             <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                <button id="" class="btn btn-light btn-sm Btn_clear newWorkDescBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
 
                 <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
                 <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                <span class="newRecord" hidden>NEW</span>
+                <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x" style="color:red;"></i></button>
+
             </div>
         </div>
     </div>
@@ -973,7 +1349,7 @@
             <strong>Hours</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <strong>Action</strong>
+            <strong>Action/Record Status</strong>
         </div>
     </div>
     @*BEGIN RETURNED RECORDS*@
@@ -989,38 +1365,41 @@
             string temp_workDescription = item.delaysArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
-<div class=" row returnedRecords delaysLine" id="delaysLine_@temp_timeEntryID" style="">
-    <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">
-        @temp_workDescription
-    </div>
+            <div class=" row returnedRecords delaysLine" id="delaysLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
+                <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
-    <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
-        <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
-            @for (var j = 0; j < (@temp_userNames.Count); j++)
-            {
-                <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
-            }
-        </select>
-    </div>
+                <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
+                    <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                        @for (var j = 0; j < (@temp_userNames.Count); j++)
+                        {
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                        }
+                    </select>
+                </div>
 
-    <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
-        @*AB|DB|JB*@
-        @for (var k = 0; k < (temp_userShortNames.Count); k++)
-        {
-            @(temp_userShortNames[k] + "|");
-        }
-    </div>
+                <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+                    @*AB|DB|JB*@
+                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
+                    {
+                        @(temp_userShortNames[k] + "|");
+                    }
+                </div>
 
-    <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="">
-        @temp_hours
-    </div>
+                <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="">
+                    @temp_hours
+                </div>
 
-    <div class="col-2 button_div delaysTeam_button_div" style="padding:0px;">
-        <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save lineDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete lineDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-    </div>
-</div>
+                <div class="col-2 button_div delaysTeam_button_div" style="padding:0px;">
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_save lineDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_delete lineDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+
+                    <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x" style="color: red;"></i></button>
+                    <button id="" class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x" style="color:red;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x" style="color: red;"></i></button>
+                    <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x" style="color:red;"></i></button>
+                </div>
+            </div>
         }
     }
     @*END RETURNED RECORDS*@
@@ -1028,9 +1407,7 @@
     @*BEGIN NEW DELAYS TEMPLATE*@
     <div class="" id="delaysLine_template">
         <div class="row entryRow delaysLine_template_row_active" id="" style="">
-            <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="true" style="">
-
-            </div>
+            <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
                 <select class="Team_dpdwn team_dpdwn_new delaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
@@ -1047,15 +1424,13 @@
 
                 <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm Btn_delete lineDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                <span class="newRecord" hidden>NEW</span>
+                <button class='btn btn-light btn-sm Btn_delete lineDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button> 
+                <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x" style="color:red;"></i></button>
             </div>
         </div>
 
         <div class="row entryRow delaysLine_template_row_hidden" id="" style="" hidden>
-            <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="true" style="">
-
-            </div>
+            <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
                 <select class="Team_dpdwn team_dpdwn_new delaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
@@ -1073,7 +1448,7 @@
                 <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
                 <button class='btn btn-light btn-sm Btn_delete lineDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                <span class="newRecord" hidden>NEW</span>
+                
             </div>
         </div>
     </div>
@@ -1086,7 +1461,7 @@
 <div class="container" id="wntyDelays_container">
     <div class="row">
         <div class="col-6" style="padding:5px">
-            <strong>Delays</strong>
+            <strong>Warranty Delays</strong>
         </div>
         <div class="col-3" style="padding:5px">
             <strong>Team</strong>
@@ -1095,7 +1470,7 @@
             <strong>Hours</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <strong>Action</strong>
+            <strong>Action/Record Status</strong>
         </div>
     </div>
     @*BEGIN RETURNED RECORDS*@
@@ -1111,38 +1486,40 @@
             string temp_workDescription = item.wntyDelaysArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
-<div class=" row returnedRecords wntyDelaysLine" id="wntyDelaysLine_@temp_timeEntryID" style="">
-    <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="false" style="">
-        @temp_workDescription
-    </div>
+            <div class=" row returnedRecords wntyDelaysLine" id="wntyDelaysLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
+                <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
-    <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding: 0px; display:none">
-        <select class="Team_dpdwn wntyDelaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
-            @for (var j = 0; j < (@temp_userNames.Count); j++)
-            {
-                <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
-            }
-        </select>
-    </div>
+                <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding: 0px; display:none">
+                    <select class="Team_dpdwn wntyDelaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                        @for (var j = 0; j < (@temp_userNames.Count); j++)
+                        {
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                        }
+                    </select>
+                </div>
 
-    <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
-        @*AB|DB|JB*@
-        @for (var k = 0; k < (temp_userShortNames.Count); k++)
-        {
-            @(temp_userShortNames[k] + "|");
-        }
-    </div>
+                <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+                    @*AB|DB|JB*@
+                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
+                    {
+                        @(temp_userShortNames[k] + "|");
+                    }
+                </div>
 
-    <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="false" style="">
-        @temp_hours
-    </div>
+                <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="false" style="">
+                    @temp_hours
+                </div>
 
-    <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
-        <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save lineWntyDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete lineWntyDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-    </div>
-</div>
+                <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_save lineWntyDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_delete lineWntyDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+
+                    <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x" style="color: red;"></i></button>
+                    <button id="" class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x" style="color:red;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x" style="color: red;"></i></button>
+                </div>
+            </div>
         }
     }
     @*END RETURNED RECORDS*@
@@ -1150,9 +1527,7 @@
     @*BEGIN NEW WARRANTY DELAYS  TEMPLATE*@
     <div class="" id="wntyDelaysLine_template" style="">
         <div class="row entryRow wntyDelaysLine_template_row_active" id="" style="">
-            <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style="">
-
-            </div>
+            <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
                 <select class="Team_dpdwn team_dpdwn_new wntyDelaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
@@ -1170,14 +1545,13 @@
                 <button id="" class="btn btn-light btn-sm Btn_edit linewntyDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save linewntyDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
                 <button class='btn btn-light btn-sm Btn_delete linewntyDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                <span class="newRecord" hidden>NEW</span>
+                <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x" style="color:red;"></i></button>
+
             </div>
         </div>
 
         <div class="row entryRow wntyDelaysLine_template_row_hidden" id="" style="" hidden>
-            <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style="">
-
-            </div>
+            <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
                 <select class="Team_dpdwn team_dpdwn_new wntyDelaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
@@ -1195,7 +1569,8 @@
                 <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class='btn btn-light btn-sm Btn_save lineWntyDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
                 <button class='btn btn-light btn-sm Btn_delete lineWntyDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                <span class="newRecord" hidden>NEW</span>
+                <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x" style="color:red;"></i></button>
+
             </div>
         </div>
     </div>

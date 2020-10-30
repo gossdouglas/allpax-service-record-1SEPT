@@ -480,17 +480,43 @@ namespace allpax_service_record.Controllers
             return new EmptyResult();
         }
 
-        ////begin CMPS 411 controller code
-        //[HttpPost]
-        //public ActionResult AddDailyReport(tbl_dailyReport dailyReportAdd)
-        //{
+        public ActionResult UpdateDailyReportLogInfo (tbl_dailyReport dailyReportLogInfoUpdate)
+        {
+            //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1})",
+            //    teamMemberAdd.dailyReportID, teamMemberAdd.userName);
 
-        //     db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6})",
-        //        dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime, dailyReportAdd.lunchHours, dailyReportAdd.equipment); 
-        //    return new EmptyResult();
-        //    //return RedirectToAction("Home", "Index");
-        //    //return Redirect("/Home");
-        //}
+            db.Database.ExecuteSqlCommand(
+                "UPDATE tbl_dailyReport " +
+                "SET " +
+
+                //"jobID = 'J1001', " +
+                //"date = '2020-10-31', " +
+                //"subJobID = '3', " +
+                //"startTime = '15:51:00.0000000', " +
+                //"endTime = '15:51:00.0000000', " +
+                //"lunchHours = '2', " +
+                //"equipment = 'HEY THERE HONKEY', " +
+                //"dailyReportAuthor = 'user1' " +
+
+                //"WHERE dailyReportID = '280'",
+
+                "jobID = {1}, " +
+                "date = {2}, " +
+                "subJobID = {3}, " +
+                "startTime = {4}, " +
+                "endTime = {5}, " +
+                "lunchHours = {6}, " +
+                "equipment = {7}, " +
+                "dailyReportAuthor = {8} " +
+
+                "WHERE dailyReportID = {0}",
+                dailyReportLogInfoUpdate.dailyReportID, dailyReportLogInfoUpdate.jobID, dailyReportLogInfoUpdate.date, dailyReportLogInfoUpdate.subJobID,
+                dailyReportLogInfoUpdate.startTime, dailyReportLogInfoUpdate.endTime, dailyReportLogInfoUpdate.lunchHours,
+                dailyReportLogInfoUpdate.equipment, dailyReportLogInfoUpdate.dailyReportAuthor);
+
+            return new EmptyResult();
+            //return RedirectToAction("SalesLanding", "Index");
+        }
 
         public ActionResult AddTeamMember(tbl_dailyReportUsers teamMemberAdd)
         {
