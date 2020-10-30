@@ -35,7 +35,7 @@ namespace allpax_service_record.Models.View_Models
 
         public string address { get; set; }
 
-        public int subJobID { get; set; }
+        public string subJobID { get; set; }
 
         public string team { get; set; }
         public List<string> names { get; set; }

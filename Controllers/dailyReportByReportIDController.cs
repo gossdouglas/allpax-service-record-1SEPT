@@ -30,7 +30,7 @@ namespace allpax_service_record.Controllers
             sqlconn.Open();
 
             string sqlquery1 =
-                "SELECT tbl_dailyReport.dailyReportID, tbl_dailyReport.jobID, tbl_subJobTypes.description, tbl_dailyReport.date, " +
+                "SELECT tbl_dailyReport.dailyReportID, tbl_dailyReport.jobID, tbl_dailyReport.subJobID, tbl_subJobTypes.description, tbl_dailyReport.date, " +
                 "tbl_Jobs.customerContact,tbl_customers.customerName, tbl_customers.address, tbl_dailyReport.equipment, " +
                 "tbl_dailyReport.startTime, tbl_dailyReport.endTime, tbl_dailyReport.lunchHours, tbl_customers.customerCode, tbl_dailyReport.dailyReportAuthor  " +
 
@@ -62,22 +62,23 @@ namespace allpax_service_record.Controllers
 
                 vm_dailyReportByReportID.dailyReportID = (int)dr1[0];
                 vm_dailyReportByReportID.jobID = dr1[1].ToString();
-                vm_dailyReportByReportID.description = dr1[2].ToString();
-                vm_dailyReportByReportID.date = String.Format("{0:yyyy-MM-dd}", dr1[3]);
-                vm_dailyReportByReportID.customerContact = dr1[4].ToString();
-                vm_dailyReportByReportID.customerName = dr1[5].ToString();
-                vm_dailyReportByReportID.address = dr1[6].ToString();
-                vm_dailyReportByReportID.equipment = dr1[7].ToString();
-                vm_dailyReportByReportID.startTime = dr1[8].ToString();
-                vm_dailyReportByReportID.endTime = dr1[9].ToString();
-                vm_dailyReportByReportID.lunchHours = (int)dr1[10];
-                vm_dailyReportByReportID.customerCode = dr1[11].ToString();
+                vm_dailyReportByReportID.subJobID = dr1[2].ToString();
+                vm_dailyReportByReportID.description = dr1[3].ToString();
+                vm_dailyReportByReportID.date = String.Format("{0:yyyy-MM-dd}", dr1[4]);
+                vm_dailyReportByReportID.customerContact = dr1[5].ToString();
+                vm_dailyReportByReportID.customerName = dr1[6].ToString();
+                vm_dailyReportByReportID.address = dr1[7].ToString();
+                vm_dailyReportByReportID.equipment = dr1[8].ToString();
+                vm_dailyReportByReportID.startTime = dr1[9].ToString();
+                vm_dailyReportByReportID.endTime = dr1[10].ToString();
+                vm_dailyReportByReportID.lunchHours = (int)dr1[11];
+                vm_dailyReportByReportID.customerCode = dr1[12].ToString();
                 //GET JOB CORRESPONDENT NAME RECORDS FOR THE DAILY REPORT
                 vm_dailyReportByReportID.jobCorrespondentName = jobCrspdtNameByJobID(vm_dailyReportByReportID.jobID);
                 //GET JOB CORRESPONDENT EMAIL ADDRESS RECORDS FOR THE DAILY REPORT
                 vm_dailyReportByReportID.jobCorrespondentEmail = jobCrspdtEmailByJobID(vm_dailyReportByReportID.jobID);
                 //
-                vm_dailyReportByReportID.dailyReportAuthor = dr1[12].ToString();
+                vm_dailyReportByReportID.dailyReportAuthor = dr1[13].ToString();
 
                 //GET WORK DESCRIPTION RECORDS FOR THE DAILY REPORT
                 vm_dailyReportByReportID.workDescArr = getWorkDescRecords(vm_dailyReportByReportID.dailyReportID);

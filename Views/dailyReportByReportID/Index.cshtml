@@ -94,7 +94,7 @@
 
             var workDescNarrArr_Edit = [];
             var workDescHoursArr_Edit = [];
-            var workDescUserNamesArr_Edit = []; 
+            var workDescUserNamesArr_Edit = [];
             var workDescArrJson_Edit = [];
 
             var delaysNarrArr_Edit = [];
@@ -110,54 +110,48 @@
             var timeEntryDeleteArr = [];//stores the time entry ids that are to be deleted
             //end added for new one shot work
 
-            //begin fill the team names dropdown
-            $.ajax({
-                url: 'DataService.asmx/GetAllTeamNames',
-                method: 'post',
-                dataType: 'json',
-                data: { userName: '%' },
-                success: function (data) {
+            fn_loadDropDowns();
+                 
+            //begin jobs id dropdown change
+            jobs_dpdown.change(function () {
 
-                    team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+                $.ajax({
+                    url: 'DataService.asmx/GetCustomerInfoByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
 
-                    $(data).each(function (index, item) {
-                        team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
-                    });
-                }
+                        $(data).each(function (index, item) {
+                            $("#output_customerName").html(item.customerName.toString());
+                            $("#output_location").html(item.address.toString());
+                            $("#output_customerCode").html(item.customerCode.toString());
+                            $("#output_customerContact").html(item.customerContact.toString());
+                        });
+                    }
+                });
+
+                //begin fill sub jobs dropdown
+                $('#subJobTypes_dpdwn').removeAttr("disabled");
+                $('#subJobTypes_dpdwn').empty();//clear the dropdown
+                $('#input_jobs_dpdown').val('1');//
+
+                $.ajax({
+                    url: 'DataService.asmx/GetSubJobTypesByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
+                        subJobTypes_dpdwn.append($('<option/>', { value: '', text: 'Select a Job Sub-Type' }));
+
+                        $(data).each(function (index, item) {
+                            subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
+                        });
+                    }
+                });
+                //end fill sub jobs dropdown
             });
-            //end fill the team names dropdown
-
-            //begin load team members on page load
-            $.ajax({
-                url: 'DataService.asmx/GetAllTeamNamesByReportID',
-                method: 'post',
-                dataType: 'json',
-                data: { userName: '%', dailyReportID: dailyReportID },
-                success: function (data) {
-
-                    $(data).each(function (index, item) {
-                        var temp_userName = item.userName;
-                        var temp_name = item.name;
-                        var temp_shortName = item.shortName;
-
-                        $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                        $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                        $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
-
-                        dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
-                        dailyRptTeamUserIDArr.push(temp_userName);
-
-                        $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-
-                        //$("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
-                        $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
-                        //enable_disableSave();//determine if the save button needs to be enabled or disabled
-                    });
-                    fn_loadTeamNamesRtndRecs();
-                    //$.fn.updateSectionDpdwns();
-                }
-            });
-            //end load team members on page load
+            //end jobs id dropdown change
 
             //begin add team member on drop down change
             team_dpdwn.change(function () {
@@ -430,8 +424,90 @@
 
                     $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
                     $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
-                }                
+                }
             });
+
+            function fn_loadDropDowns() {
+
+                //begin fill the jobs dropdown
+                $.ajax({
+                    url: 'DataService.asmx/GetAllJobNos',
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        $(data).each(function (index, item) {
+                            if (item.jobID !== jobs_dpdown.val()) {
+                                jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                            }
+                        });
+                    }
+                });
+                //end fill the jobs dropdown
+
+                //begin fill sub jobs dropdown
+                $.ajax({
+                    url: 'DataService.asmx/GetSubJobTypesByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
+                        $(data).each(function (index, item) {
+                            if (item.subJobID !== subJobTypes_dpdwn.val()) {
+                                //jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                                subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
+                            }
+                        });
+                    }
+                });
+                //end fill sub jobs dropdown
+
+                //begin fill the team names dropdown
+                $.ajax({
+                    url: 'DataService.asmx/GetAllTeamNames',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { userName: '%' },
+                    success: function (data) {
+                        team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+
+                        $(data).each(function (index, item) {
+                            team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+                        });
+                    }
+                });
+                //end fill the team names dropdown
+
+                //begin load team members on page load
+                $.ajax({
+                    url: 'DataService.asmx/GetAllTeamNamesByReportID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { userName: '%', dailyReportID: dailyReportID },
+                    success: function (data) {
+
+                        $(data).each(function (index, item) {
+                            var temp_userName = item.userName;
+                            var temp_name = item.name;
+                            var temp_shortName = item.shortName;
+
+                            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
+                            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
+                            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+
+                            dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
+                            dailyRptTeamUserIDArr.push(temp_userName);
+
+                            $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
+
+                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
+                            enable_disableSave();//determine if the save button needs to be enabled or disabled
+                        });
+                        fn_loadTeamNamesRtndRecs();
+                        //$.fn.updateSectionDpdwns();
+                    }
+                });
+                //end load team members on page load
+            }
 
             function fn_produceParsedShortNames(button) {
                 var currentWorkDescTeamShortNamesParsed = "";
@@ -1062,7 +1138,7 @@
         </div>
         <div class="col-2" style="padding:5px">
             <select name="subJobTypes_dpdwn" id="subJobTypes_dpdwn" style="width:100%" value="">
-                <option value="@Model.First().description">@Model.First().description</option>
+                <option value="@Model.First().subJobID">@Model.First().description</option>
             </select>
         </div>
     </div>
