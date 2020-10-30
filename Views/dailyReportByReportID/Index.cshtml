@@ -73,6 +73,7 @@
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
 
+            var recordsToAddStatus = 0;
             var workDescNarrArr_Add = [];
             var workDescHoursArr_Add = [];
             var workDescUserNamesArr_Add = [];
@@ -335,7 +336,7 @@
                     $("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row addRecord delaysLine");
                     //$("#delaysLine_" + indexDelaysEntries_Add).find(".newRecord").removeAttr("hidden");
                     $("#delaysLine_" + indexDelaysEntries_Add).find(".delaysTeam_hours_div").attr("contenteditable", "false");
-                    $("#delaysLine_" + indexWorkDescEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
+                    $("#delaysLine_" + indexDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
                     $(".delaysLine_template_row_hidden").clone(true).prop("class", "row entryRow delaysLine_template_row_active").appendTo("#delaysLine_template");
                     $(".delaysLine_template_row_hidden").attr("hidden", "true");
@@ -349,7 +350,7 @@
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row addRecord wntyDelaysLine");
                     //$("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".newRecord").removeAttr("hidden");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
-                    $("#wntyDelaysLine_" + indexWorkDescEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
+                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
                     $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row entryRow wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
                     $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
@@ -398,17 +399,17 @@
 
                 //if this line is a new record, simply remove it
                 if (temp_LineClass.includes("addRecord")) {
-                    $.confirm({
-                        title: 'Delete Entry?',
-                        content: '',
-                        buttons: {
-                            confirm: function () {
+                    //$.confirm({
+                    //    title: 'Delete Entry?',
+                    //    content: '',
+                    //    buttons: {
+                    //        confirm: function () {
                                 $(currentRow).remove();
-                            },
-                            cancel: function () {
-                            }
-                        }
-                    });
+                    //        },
+                    //        cancel: function () {
+                    //        }
+                    //    }
+                    //});
                 }
 
                 //if this line is a returned record, set its class to deletedRecords
@@ -571,58 +572,61 @@
                 addItem9 = dailyRptTeamUserIDArr;
 
                 //BEGIN ADD RECORDS TO A DAILY REPORT
+                if (recordsToAddStatus == 1) {//if there are records to add...
+                    var data = {
+                        dailyReportID: dailyReportID,
+                        jobID: addItem1,
+                        date: addItem2,
+                        subJobID: addItem3,
+                        startTime: addItem4,
+                        endTime: addItem5,
+                        lunchHours: addItem6,
+                        equipment: addItem7,
+                        dailyReportAuthor: addItem8,
+                        dailyRptTeamArr: addItem9,
+                        workDescArr: workDescArrJson_Add,
+                        delaysArr: delaysArrJson_Add,
+                        wntyDelaysArr: wntyDelaysArrJson_Add
+                    };
 
-                var data = {
-                    dailyReportID: dailyReportID,
-                    jobID: addItem1,
-                    date: addItem2,
-                    subJobID: addItem3,
-                    startTime: addItem4,
-                    endTime: addItem5,
-                    lunchHours: addItem6,
-                    equipment: addItem7,
-                    dailyReportAuthor: addItem8,
-                    dailyRptTeamArr: addItem9,
-                    workDescArr: workDescArrJson_Add,
-                    delaysArr: delaysArrJson_Add,
-                    wntyDelaysArr: wntyDelaysArrJson_Add
-                };
-
-                $.ajax({
-                    url: '/dailyReportByReportID/AddDailyReport',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function () {
-                        //$(data).each(function (index, item) {
-                        //    lastDlyRptCrtdByUser = item;
-                        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                        //});
-                    }
-                });
+                    $.ajax({
+                        url: '/dailyReportByReportID/AddDailyReport',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        success: function () {
+                            //$(data).each(function (index, item) {
+                            //    lastDlyRptCrtdByUser = item;
+                            //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                            //});
+                        }
+                    });
+                }
                 //END ADD RECORDS TO A DAILY REPORT
 
                 //BEGIN DELETE RECORDS FROM A DAILY REPORT
-                var data = {
-                    timeEntryDeleteArr: timeEntryDeleteArr
-                };
+                if (timeEntryDeleteArr.length > 0) {//if there are records to add...
+                    var data = {
+                        timeEntryDeleteArr: timeEntryDeleteArr
+                    };
 
-                $.ajax({
-                    url: '/dailyReportByReportID/DeleteTimeEntry',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function () {
-                        //$(data).each(function (index, item) {
-                        //    lastDlyRptCrtdByUser = item;
-                        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                        //});
-                    }
-                });
+                    $.ajax({
+                        url: '/dailyReportByReportID/DeleteTimeEntry',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        success: function () {
+                            //$(data).each(function (index, item) {
+                            //    lastDlyRptCrtdByUser = item;
+                            //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                            //});
+                        }
+                    });
+                }
                 //END DELETE RECORDS FROM A DAILY REPORT
 
                 fn_printArrays();
@@ -664,6 +668,10 @@
                         workDescUserNamesArrTemp.push(temp_UserID);
                     });
                     workDescUserNamesArr_Add.push(workDescUserNamesArrTemp);
+
+                    if (recordsToAddStatus == 0) {
+                        recordsToAddStatus = 1;
+                    }
                 });
 
                 $(delaysTeam_narr_div_Content_Add).each(function (index1) {
@@ -689,6 +697,10 @@
                         delaysUserNamesArrTemp.push(temp_UserID);
                     });
                     delaysUserNamesArr_Add.push(delaysUserNamesArrTemp);
+
+                    if (recordsToAddStatus == 0) {
+                        recordsToAddStatus = 1;
+                    }
                 });
 
                 $(wntyDelaysTeam_narr_div_Content_Add).each(function (index1) {
@@ -715,6 +727,10 @@
                         wntyDelaysUserNamesArrTemp.push(temp_UserID);
                     });
                     wntyDelaysUserNamesArr_Add.push(wntyDelaysUserNamesArrTemp);
+
+                    if (recordsToAddStatus == 0) {
+                        recordsToAddStatus = 1;
+                    }
                 });
 
                 //fn_buildPreJsonObjects();
@@ -842,6 +858,11 @@
                         userNames: workDescUserNamesArr_Edit[i]
                     };
                 }
+
+                //if there are no work description time entries to add, set the json object to null
+                if (workDescNarrArr_Add.length < 1) {
+                    workDescArrJson_Add = null
+                }
                 //END BUILD THE WORK DESCRIPTION JSON OBJECT
 
                 //BEGIN BUILD THE WORK DESCRIPTION SON OBJECT
@@ -862,6 +883,11 @@
                         userNames: delaysUserNamesArr_Edit[i]
                     };
                 }
+
+                //if there are no delay time entries to add, set the json object to null
+                if (delaysNarrArr_Add.length < 1) {
+                    delaysArrJson_Add = null
+                }
                 //END BUILD THE DELAYS JSON OBJECT
 
                 //BEGIN BUILD THE WNTY DELAYS JSON OBJECT
@@ -881,7 +907,13 @@
                         hours: wntyDelaysHoursArr_Edit[i],
                         userNames: wntyDelaysUserNamesArr_Edit[i]
                     };
-                } 
+                }
+
+                //if there are no warranty delay time entries to add, set the json object to null
+                if (wntyDelaysNarrArr_Edit.length < 1) {
+                    wntyDelaysArrJson_Edit = null
+                }
+                //END BUILD THE WNTY DELAYS JSON OBJECT
             }
             //END SECTION TO PACK UP NEW RECORDS
 
