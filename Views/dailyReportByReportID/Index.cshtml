@@ -77,19 +77,19 @@
             var workDescHoursArr_Add = [];
             var workDescUserNamesArr_Add = [];
             var workDescArrJson_Add = [];
-            var indexWorkDescEntries_Add = 0;//keep track of the number of work description entries
+            var indexWorkDescEntries_Add = 0;//keep track of the number of work description entries added
 
             var delaysNarrArr_Add = [];
             var delaysHoursArr_Add = [];
             var delaysUserNamesArr_Add = [];
             var delaysArrJson_Add = [];
-            var indexDelaysEntries_Add = 0;//keep track of the number of delays entries
+            var indexDelaysEntries_Add = 0;//keep track of the number of delays entries added
 
             var wntyDelaysNarrArr_Add = [];
             var wntyDelaysHoursArr_Add = [];
             var wntyDelaysUserNamesArr_Add = [];
             var wntyDelaysArrJson_Add = [];
-            var indexWntyDelaysEntries_Add = 0;//keep track of the number of warranty delays entries
+            var indexWntyDelaysEntries_Add = 0;//keep track of the number of warranty delays entries added
 
             var workDescNarrArr_Edit = [];
             var workDescHoursArr_Edit = [];
@@ -106,8 +106,7 @@
             var wntyDelaysUserNamesArr_Edit = [];
             var wntyDelaysArrJson_Edit = [];
 
-            var timeEntryDeleteArr = [];
-            var timeEntryDeleteArrJson = [];
+            var timeEntryDeleteArr = [];//stores the time entry ids that are to be deleted
             //end added for new one shot work
 
             //begin fill the team names dropdown
@@ -572,6 +571,7 @@
                 addItem9 = dailyRptTeamUserIDArr;
 
                 //BEGIN ADD RECORDS TO A DAILY REPORT
+
                 var data = {
                     dailyReportID: dailyReportID,
                     jobID: addItem1,
@@ -588,29 +588,27 @@
                     wntyDelaysArr: wntyDelaysArrJson_Add
                 };
 
-                //$.ajax({
-                //    url: '/dailyReportByReportID/AddDailyReport',
-                //    method: 'post',
-                //    contentType: 'application/json',
-                //    dataType: 'json',
-                //    data: JSON.stringify(data),
-                //    traditional: true,
-                //    success: function () {
-                //        //$(data).each(function (index, item) {
-                //        //    lastDlyRptCrtdByUser = item;
-                //        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                //        //});
-                //    }
-                //});
+                $.ajax({
+                    url: '/dailyReportByReportID/AddDailyReport',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function () {
+                        //$(data).each(function (index, item) {
+                        //    lastDlyRptCrtdByUser = item;
+                        //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
+                        //});
+                    }
+                });
                 //END ADD RECORDS TO A DAILY REPORT
 
                 //BEGIN DELETE RECORDS FROM A DAILY REPORT
                 var data = {
-                    //timeEntryDeleteArr: timeEntryDeleteArrJson
                     timeEntryDeleteArr: timeEntryDeleteArr
                 };
 
-                console.log("timeEntryDeleteArrJson: " + timeEntryDeleteArrJson);
                 $.ajax({
                     url: '/dailyReportByReportID/DeleteTimeEntry',
                     method: 'post',
@@ -823,8 +821,6 @@
                     timeEntryDeleteArr.push($(this).attr("data-time-entry-id"));
                     //console.log("to delete: " + $(this).attr("data-time-entry-id"));
                 });
-
-                //fn_buildPreJsonObjects();
             }
 
             function fn_buildJsonObjects() {
@@ -886,14 +882,6 @@
                         userNames: wntyDelaysUserNamesArr_Edit[i]
                     };
                 } 
-
-                //BEGIN BUILD THE TIME ENTRIES TO DELETE JSON OBJECT
-                //for (var i = 0; i < timeEntryDeleteArr.length; i++) {
-                //    timeEntryDeleteArrJson[i] = {
-                //        timeEntryDeleteArr: timeEntryDeleteArr[i]
-                //    };
-                //}
-                //END BUILD THE WNTY DELAYS PRE-JSON OBJECT
             }
             //END SECTION TO PACK UP NEW RECORDS
 
@@ -1342,7 +1330,7 @@
 <div class="container" id="wntyDelays_container">
     <div class="row">
         <div class="col-6" style="padding:5px">
-            <strong>Delays</strong>
+            <strong>Warranty Delays</strong>
         </div>
         <div class="col-3" style="padding:5px">
             <strong>Team</strong>
