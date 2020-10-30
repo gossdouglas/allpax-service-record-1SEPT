@@ -43,7 +43,7 @@ namespace allpax_service_record.Models.View_Models
         public List<string> jobCorrespondentEmail { get; set; }
         public List<string> jobCorrespondentName { get; set; }
 
-        public List<string> timeEntryDelete { get; set; }//list of time entries to be deleted
+        public List<string> timeEntryDeleteArr { get; set; }//list of time entries to be deleted
 
         public string workDescription { get; set; }
         public string dailyReportAuthor { get; set; }

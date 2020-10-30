@@ -37,9 +37,8 @@ namespace allpax_service_record.Controllers
 
             int passedDailyRptID = dailyReportAdd.dailyReportID;
 
-            if (dailyReportAdd.dailyReportID == 0)
-            {
-                System.Diagnostics.Debug.WriteLine("new daily report.");
+            //if (dailyReportAdd.dailyReportID == 0)
+            //{
                 using (SqlConnection con = new SqlConnection(cs))
                 {
                     con.Open();
@@ -64,7 +63,7 @@ namespace allpax_service_record.Controllers
                     db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
                     passedDailyRptID, item);
                 }
-            }
+            //}
 
             if (dailyReportAdd.workDescArr.Count >= 1)
             {
