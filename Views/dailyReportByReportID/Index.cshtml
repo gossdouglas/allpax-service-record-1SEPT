@@ -207,7 +207,7 @@
             //begin when a team member class is clicked...
             $(".team_").on('click', function () {
                 var tempTeamMemberUserID = this.id.substr(5);
-                alert("delete member")
+                //alert("delete member")
                 ////begin DeleteTeamMember
                 ////begin axios delete post
                 axios.post('/dailyReportByReportID/DeleteTeamMember', {
@@ -984,6 +984,29 @@
                 $($(currentRow)).find(".Btn_editedRecord").removeAttr("hidden");
             });
 
+            $("#contnrDailyLog").on("change keypress", function () {
+
+                console.log("change detected in the daily log section.")
+                //var currentRow = $(this);
+                //temp_LineClass = $(this).prop("class");
+
+                ////used to change the class of a returned record to an edited record for later processing with an update operation
+                //if (temp_LineClass.includes("workDescLine")) {
+                //    $($(currentRow)).prop("class", "row editedRecords workDescLine");
+                //}
+                //if (temp_LineClass.includes("delaysLine")) {
+                //    $($(currentRow)).prop("class", "row editedRecords delaysLine");
+                //}
+                //if (temp_LineClass.includes("wntyDelaysLine")) {
+                //    $($(currentRow)).prop("class", "row editedRecords wntyDelaysLine");
+                //}
+
+                //$($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
+                //$($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+
+                //$($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                //$($(currentRow)).find(".Btn_editedRecord").removeAttr("hidden");
+            });
             //END ONE SHOT LOGIC
 
         });//end document read jquery statements

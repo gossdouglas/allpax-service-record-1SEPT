@@ -90,7 +90,7 @@ namespace allpax_service_record.Controllers
             }
 
             sqlconn.Close();
-            //end query
+
             return View(dailyReportByID);//...to be passed to the view
 
             //return RedirectToAction("Index", "dailyReportAll");//redirects, and the daily report does kick out the records to its view
@@ -98,43 +98,9 @@ namespace allpax_service_record.Controllers
 
         public ActionResult AddDailyReport(vm_dailyReport dailyReportAdd)
         {
-            //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1},{2},{3},{4},{5},{6},{7})",
-            //   dailyReportAdd.jobID, dailyReportAdd.date, dailyReportAdd.subJobID, dailyReportAdd.startTime, dailyReportAdd.endTime,
-            //   dailyReportAdd.lunchHours, dailyReportAdd.equipment, dailyReportAdd.dailyReportAuthor);
-
             string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
-
             int passedDailyRptID = dailyReportAdd.dailyReportID;
-
-            //if (dailyReportAdd.dailyReportID == 0)
-            //{
-            //    System.Diagnostics.Debug.WriteLine("new daily report.");
-            //    using (SqlConnection con = new SqlConnection(cs))
-            //    {
-            //        con.Open();
-
-            //        SqlCommand cmd = new SqlCommand("spGetLastDlyRptCrtdByUserName", con);
-            //        cmd.CommandType = CommandType.StoredProcedure;
-            //        SqlParameter param = new SqlParameter()
-            //        {
-            //            ParameterName = "@dailyReportAuthor",
-            //            Value = dailyReportAdd.dailyReportAuthor
-            //        };
-            //        cmd.Parameters.Add(param);
-            //        SqlDataReader rdr = cmd.ExecuteReader();
-            //        while (rdr.Read())
-            //        {
-            //            passedDailyRptID = (int)rdr["dailyReportID"];
-            //        }
-            //    }
-
-            //    foreach (string item in dailyReportAdd.dailyRptTeamArr)
-            //    {
-            //        db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-            //        passedDailyRptID, item);
-            //    }
-            //}
-
+           
             if (dailyReportAdd.workDescArr.Count >= 1)
             {
                 //System.Diagnostics.Debug.WriteLine("size of workDescArr is " + dailyReportAdd.workDescArr.Count);
@@ -525,35 +491,33 @@ namespace allpax_service_record.Controllers
         //    //return Redirect("/Home");
         //}
 
-        //[HttpPost]
-        //public ActionResult AddTeamMember(tbl_dailyReportUsers teamMemberAdd)
-        //{
-        //    db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-        //        teamMemberAdd.dailyReportID, teamMemberAdd.userName);
+        public ActionResult AddTeamMember(tbl_dailyReportUsers teamMemberAdd)
+        {
+            db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
+                teamMemberAdd.dailyReportID, teamMemberAdd.userName);
 
-        //    return new EmptyResult(); 
-        //    //return RedirectToAction("SalesLanding", "Index");
-        //}
+            return new EmptyResult();
+            //return RedirectToAction("SalesLanding", "Index");
+        }
 
-        //[HttpPost]
-        //public ActionResult DeleteTeamMember(tbl_dailyReportUsers teamMemberDelete)
-        //{
-        //    db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReportUsers " +
-        //        "WHERE " +
-        //        "dailyReportID=({0})" +
-        //        "AND userName = ({1})", teamMemberDelete.dailyReportID, teamMemberDelete.userName);
+        public ActionResult DeleteTeamMember(tbl_dailyReportUsers teamMemberDelete)
+        {
+            db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReportUsers " +
+                "WHERE " +
+                "dailyReportID=({0})" +
+                "AND userName = ({1})", teamMemberDelete.dailyReportID, teamMemberDelete.userName);
 
-        //    //return RedirectToAction("Index");
-        //    return new EmptyResult();
-        //}
+            //return RedirectToAction("Index");
+            return new EmptyResult();
+        }
 
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
