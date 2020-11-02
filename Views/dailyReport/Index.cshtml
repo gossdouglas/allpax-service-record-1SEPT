@@ -111,25 +111,11 @@
             var wntyDelaysArrPreJson = [];
             var indexWntyDelaysEntries = 0;//keep track of the number of warranty delays entries
 
-            //fn_loadDropDowns();
+            fn_loadDropDowns();
 
             //BEGIN DAILY REPORT LOG SECTION
 
-            //begin fill the jobs dropdown
-            $.ajax({
-                url: 'DataService.asmx/GetAllJobNos',
-                method: 'post',
-                dataType: 'json',
-                success: function (data) {
-
-                    jobs_dpdown.append($('<option/>', { value: -1, text: 'Select Job' }));
-
-                    $(data).each(function (index, item) {
-                        jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
-                    });
-                }
-            });
-            //end fill the jobs dropdown
+            
 
             //begin jobs id dropdown change
             jobs_dpdown.change(function () {
@@ -172,21 +158,7 @@
             });
             //end jobs id dropdown change
 
-            //begin fill the team names dropdown
-            $.ajax({
-                url: 'DataService.asmx/GetAllTeamNames',
-                method: 'post',
-                dataType: 'json',
-                data: { userName: '%' },
-                success: function (data) {
-                    team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
-
-                    $(data).each(function (index, item) {
-                        team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
-                    });
-                }
-            });
-            //end fill the team names dropdown
+            
 
             //begin add team member on drop down change
             team_dpdwn.change(function () {
@@ -246,6 +218,8 @@
 
             //END DAILY REPORT LOG SECTION  
 
+
+            
 
 
 
@@ -356,7 +330,39 @@
                 });
             });
 
-            //END RETURNED RECORDS AND TIME ENTRY SECTION
+            function fn_loadDropDowns() {
+                //begin fill the jobs dropdown
+                $.ajax({
+                    url: 'DataService.asmx/GetAllJobNos',
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        jobs_dpdown.append($('<option/>', { value: -1, text: 'Select Job' }));
+
+                        $(data).each(function (index, item) {
+                            jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                        });
+                    }
+                });
+                //end fill the jobs dropdown
+
+                //begin fill the team names dropdown
+                $.ajax({
+                    url: 'DataService.asmx/GetAllTeamNames',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { userName: '%' },
+                    success: function (data) {
+                        team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
+
+                        $(data).each(function (index, item) {
+                            team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
+                        });
+                    }
+                });
+                //end fill the team names dropdown
+            }
 
             function fn_produceParsedShortNames(button) {
                 var currentWorkDescTeamShortNamesParsed = "";
@@ -371,6 +377,9 @@
                 currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
             }
 
+            //END RETURNED RECORDS AND TIME ENTRY SECTION
+
+
             ////BEGIN VALIDATION BEFORE SAVING SECTION
             //var fields = "#slct_date, #input_jobs_dpdown, #input_equipment, #input_startTime, #input_endTime, #input_lunch, #subJobTypes_dpdwn";
 
@@ -381,6 +390,7 @@
 
             
 
+            //--------------sections below have been checked
 
             //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
             $("#addButton").click(function () {//when the add button is clicked...

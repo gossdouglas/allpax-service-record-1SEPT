@@ -401,7 +401,6 @@
                     success: function (data) {
                         $(data).each(function (index, item) {
                             if (item.subJobID !== subJobTypes_dpdwn.val()) {
-                                //jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
                                 subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
                             }
                         });
@@ -516,7 +515,7 @@
                     tmpRtndRecUserIDs = [];//empty for the next loop
                     tmpUserIDsToBeAdded = [];//empty for the next loop
                 })
-            };
+            };//daily report by id page only
 
             $(".returnedRecords").on("change keypress", function () {
                 var currentRow = $(this);
@@ -538,7 +537,7 @@
 
                 $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
                 $($(currentRow)).find(".Btn_editedRecord").removeAttr("hidden");
-            });
+            });//daily report by id page only
 
             //END RETURNED RECORDS AND TIME ENTRY SECTION
            
