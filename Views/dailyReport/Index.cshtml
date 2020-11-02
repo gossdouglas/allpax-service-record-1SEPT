@@ -110,7 +110,11 @@
             var wntyDelaysUserNamesArr = [];
             var wntyDelaysArrPreJson = [];
             var indexWntyDelaysEntries = 0;//keep track of the number of warranty delays entries
-          
+
+            //fn_loadDropDowns();
+
+            //BEGIN DAILY REPORT LOG SECTION
+
             //begin fill the jobs dropdown
             $.ajax({
                 url: 'DataService.asmx/GetAllJobNos',
@@ -235,6 +239,20 @@
             });
             //end when a team member class is clicked...
 
+            $("#contnrDailyLog").on("change keypress", function () {
+                dailyLogInfoChngd = true;
+                enable_disableSave();
+            });
+
+            //END DAILY REPORT LOG SECTION  
+
+
+
+
+
+
+            //BEGIN RETURNED RECORDS AND TIME ENTRY SECTION
+
             $(".Btn_add").click(function () {
 
                 fn_produceParsedShortNames($(this));
@@ -338,6 +356,8 @@
                 });
             });
 
+            //END RETURNED RECORDS AND TIME ENTRY SECTION
+
             function fn_produceParsedShortNames(button) {
                 var currentWorkDescTeamShortNamesParsed = "";
                 //select the list elements that contain the short names of the team members
@@ -351,61 +371,16 @@
                 currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
             }
 
-            //BEGIN VALIDATION BEFORE SAVING SECTION
-            var fields = "#slct_date, #input_jobs_dpdown, #input_equipment, #input_startTime, #input_endTime, #input_lunch, #subJobTypes_dpdwn";
+            ////BEGIN VALIDATION BEFORE SAVING SECTION
+            //var fields = "#slct_date, #input_jobs_dpdown, #input_equipment, #input_startTime, #input_endTime, #input_lunch, #subJobTypes_dpdwn";
 
-            //when one of the basic fields changes...
-            $(fields).on('change', function () {
-                enable_disableSave();//determine if the save button needs to be enabled or disabled
-            });
+            ////when one of the basic fields changes...
+            //$(fields).on('change', function () {
+            //    enable_disableSave();//determine if the save button needs to be enabled or disabled
+            //});
 
-            //determine if the save button needs to be enabled or disabled
-            function allFilled() {
-                var filled = true;
-                $(fields).each(function () {
-                    if ($(this).val() == '') {
-                        filled = false;
-                    }
-                });
-                if (dailyRptTeamArr.length == 0) {
-                    filled = false;
-                }
-                return filled;
-            }
+            
 
-            //enable or disable the save button
-            function enable_disableSave() {
-                if (allFilled()) {
-                    $('#addButton').removeAttr('disabled');
-                } else {
-                    $('#addButton').attr('disabled', 'disabled');
-                }
-            }
-            //END VALIDATION BEFORE SAVING SECTION
-
-            //BEGIN SECTION TO ENABLE/DISABLE SELECT2
-            $("#enableSelect2").click(function () {//when the add button is clicked...
-                fn_enableSelect2()
-            });
-
-            $("#disableSelect2").click(function () {//when the add button is clicked...
-                fn_disableSelect2()
-            });
-
-            //enable the select2 add-on
-            function fn_enableSelect2() {
-                $('.Team_dpdwn').select2({
-                    width: "100%",
-                    placeholder: "Select Team",
-                    closeOnSelect: "false"
-                })
-            }
-
-            //disable the select2 add-on
-            function fn_disableSelect2() {
-                $('.Team_dpdwn').select2('destroy')
-            }
-            //END SECTION TO ENABLE/DISABLE SELECT2
 
             //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
             $("#addButton").click(function () {//when the add button is clicked...
@@ -572,6 +547,7 @@
                 });
 
                 fn_buildPreJsonObjects();
+                //fn_buildJsonObjects();
             }
 
             function fn_buildPreJsonObjects() {
@@ -610,26 +586,131 @@
             }
             //END SECTION TO PACK UP NEW RECORDS
 
+            //BEGIN MISCELLANEOUS SECTION
             function fn_printArrays() {
+                //BEGIN ADDED ARRAYS
                 console.log("work description section follows:");
-                console.log(workDescNarrArr);
-                console.log(delaysHoursArr);
-                console.log(workDescUserNamesArr);
-                console.log(workDescArrPreJson);
-
+                console.log(workDescNarrArr_Add);
+                console.log(workDescHoursArr_Add);
+                console.log(workDescUserNamesArr_Add);
+                console.log(workDescArrJson_Add);
 
                 console.log("delays section follows:");
-                console.log(delaysNarrArr);
-                console.log(delaysHoursArr);
-                console.log(delaysUserNamesArr);
-                console.log(delaysArrPreJson);
+                console.log(delaysNarrArr_Add);
+                console.log(delaysHoursArr_Add);
+                console.log(delaysUserNamesArr_Add);
+                console.log(delaysArrJson_Add);
 
                 console.log("warranty delays section follows:");
-                console.log(wntyDelaysNarrArr);
-                console.log(wntyDelaysHoursArr);
-                console.log(wntyDelaysUserNamesArr);
-                console.log(wntyDelaysArrPreJson);
+                console.log(wntyDelaysNarrArr_Add);
+                console.log(wntyDelaysHoursArr_Add);
+                console.log(wntyDelaysUserNamesArr_Add);
+                console.log(wntyDelaysArrJson_Add);
+                //END ADDED ARRAYS
+
+                //BEGIN EDITED ARRAYS
+                console.log("work description section follows:");
+                console.log(workDescNarrArr_Edit);
+                console.log(workDescHoursArr_Edit);
+                console.log(workDescUserNamesArr_Edit);
+                console.log(workDescArrJson_Edit);
+
+                console.log("delays section follows:");
+                console.log(delaysNarrArr_Edit);
+                console.log(delaysHoursArr_Edit);
+                console.log(delaysUserNamesArr_Edit);
+                console.log(delaysArrJson_Edit);
+
+                console.log("warranty delays section follows:");
+                console.log(wntyDelaysNarrArr_Edit);
+                console.log(wntyDelaysHoursArr_Edit);
+                console.log(wntyDelaysUserNamesArr_Edit);
+                console.log(wntyDelaysArrJson_Edit);
+
+                console.log("time entry delete section follows:");
+                console.log(timeEntryDeleteArr);
+                //END EDITED ARRAYS
             }
+
+            //enable the select2 add-on
+            function fn_enableSelect2() {
+                $('.Team_dpdwn').select2({
+                    width: "100%",
+                    placeholder: "Select Team",
+                    closeOnSelect: "false"
+                })
+            }
+
+            //disable the select2 add-on
+            function fn_disableSelect2() {
+                $('.Team_dpdwn').select2('destroy')
+            }
+
+            $("#printDailyReport").click(function () {//when a record's edit button is clicked...
+
+                //begin axios delete post
+                axios.post('/DailyReportByReportIDPrint', {
+
+                    reportID: dailyReportID,
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        $.alert({
+                            title: 'Confirmation',
+                            content: 'This daily report has been e-mailed.',
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                //end axios add pos
+            });
+
+            //END MISCELLANEOUS SECTION
+
+            //BEGIN VALIDATION BEFORE SAVING SECTION
+            function allFilled() {
+                var filled = true;
+                console.clear();
+
+                if ($("#slct_date").val() == '') {
+                    console.log($("#slct_date").val())
+                    console.log("#slct_date is empty")
+                    filled = false;
+                }
+
+                if ($("#input_equipment").val() == '') {
+                    console.log($("#input_equipment").val())
+                    console.log("input_equipment is empty")
+                    filled = false;
+                }
+
+                if ($("#input_startTime").val() == '') {
+                    console.log("input_startTime is empty")
+                    filled = false;
+                }
+
+                if ($("#input_endTime").val() == '') {
+                    console.log("input_endTime is empty")
+                    filled = false;
+                }
+
+                if ($("#input_lunch").val() == '') {
+                    console.log("input_lunch is empty")
+                    filled = false;
+                }
+
+                return filled;
+            }
+
+            function enable_disableSave() {
+                if (allFilled()) {
+                    $('#addButton').removeAttr('disabled');
+                } else {
+                    $('#addButton').attr('disabled', 'disabled');
+                }
+            }
+            //END VALIDATION BEFORE SAVING SECTION
 
         });//end document read jquery statements
     </script>
