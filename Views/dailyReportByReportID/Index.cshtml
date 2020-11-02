@@ -261,9 +261,7 @@
 
                     $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries_Add).appendTo("#workDescriptionLine_template");
-                    //$("#workDescLine_" + indexWorkDescEntries_Add).prop("class", " row workDescriptionLine_template_row_active workDescLine");
                     $("#workDescLine_" + indexWorkDescEntries_Add).prop("class", " row addRecord workDescLine");
-                    //$("#workDescLine_" + indexWorkDescEntries_Add).find(".newRecord").removeAttr("hidden");
                     $("#workDescLine_" + indexWorkDescEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
                     $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row entryRow workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
@@ -274,9 +272,7 @@
 
                     $(".delaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries_Add).appendTo("#delaysLine_template");
-                    //$("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row delaysLine_template_row_active delaysLine");
                     $("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row addRecord delaysLine");
-                    //$("#delaysLine_" + indexDelaysEntries_Add).find(".newRecord").removeAttr("hidden");
                     $("#delaysLine_" + indexDelaysEntries_Add).find(".delaysTeam_hours_div").attr("contenteditable", "false");
                     $("#delaysLine_" + indexDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
@@ -288,9 +284,7 @@
 
                     $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
                     $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries_Add).appendTo("#wntyDelaysLine_template");
-                    //$("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row wntyDelaysLine_template_row_active wntyDelaysLine");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row addRecord wntyDelaysLine");
-                    //$("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".newRecord").removeAttr("hidden");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
