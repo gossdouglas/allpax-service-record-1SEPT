@@ -449,6 +449,8 @@
 
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
 
+                            console.log("team member to be disabled: " + temp_userName);
+
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
                         });
                         fn_loadTeamNamesRtndRecs();
@@ -543,6 +545,8 @@
             //END RETURNED RECORDS AND TIME ENTRY SECTION
            
             //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
+
+            //differs between new daily report and an existing one
             $("#addButton").click(function () {//when the add button is clicked...
 
                 fn_loadTimeEntries_Add();

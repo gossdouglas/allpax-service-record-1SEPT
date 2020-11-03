@@ -181,7 +181,7 @@
 
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
-                            enable_disableSave();//determine if the save button needs to be enabled or disabled
+                            //enable_disableSave();//determine if the save button needs to be enabled or disabled
                         });
                         //end AddTeamMember
                     }
@@ -409,6 +409,8 @@
             //END RETURNED RECORDS AND TIME ENTRY SECTION
 
             //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
+
+            //differs between new daily report and an existing one
             $("#addButton").click(function () {//when the add button is clicked...
 
                 fn_loadTimeEntries();
