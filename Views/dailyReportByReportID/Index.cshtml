@@ -58,14 +58,11 @@
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
-            var lastDlyRptCrtdByUser;
-
-            fn_enableSelect2();//enable the select2 add-on on page load
+            var lastDlyRptCrtdByUser;            
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
             var dailyLogInfoChngd = false;
-
             var recordsToAddStatus = 0;
 
             var workDescNarrArr_Add = [];
@@ -104,6 +101,7 @@
             var timeEntryDeleteArr = [];//stores the time entry ids that are to be deleted
             //end added for new one shot work
 
+            fn_enableSelect2();//enable the select2 add-on on page load
             fn_loadDropDowns();
 
             //BEGIN DAILY REPORT LOG SECTION
@@ -657,6 +655,7 @@
                 window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
             });
 
+            //cloned to new daily report
             function fn_loadTimeEntries_Add () {
 
                 var workDescTeam_narr_div_Content_Add = $(".addRecord").find(".workDescTeam_narr_div");
@@ -757,9 +756,9 @@
                     }
                 });
 
-                //fn_buildPreJsonObjects();
             }
 
+            //only on existing records or copies
             function fn_loadTimeEntries_Edit() {
 
                 var workDescTeam_narr_div_Content_Edit = $(".editedRecords").find(".workDescTeam_narr_div");
@@ -852,6 +851,7 @@
                 //fn_buildPreJsonObjects();
             }
 
+            //only on existing records or copies
             function fn_loadTimeEntries_Delete() {
 
                 var timeEntriesToDelete = $(".deletedRecords");
@@ -863,6 +863,7 @@
                 });
             }
 
+            //only on existing records or copies
             function fn_buildJsonObjects() {
                 //BEGIN BUILD THE WORK DESCRIPTION JSON OBJECT
                 for (var i = 0; i < workDescNarrArr_Add.length; i++) {
@@ -943,6 +944,8 @@
             //END SECTION TO PACK UP NEW RECORDS
 
             //BEGIN MISCELLANEOUS SECTION
+
+            //cloned to new daily report
             function fn_printArrays() {
                 //BEGIN ADDED ARRAYS
                 console.log("work description ADDED section follows:");
@@ -991,6 +994,7 @@
             }
 
             //enable the select2 add-on
+            //cloned to new daily report
             function fn_enableSelect2() {
                 $('.Team_dpdwn').select2({
                     width: "100%",
@@ -1000,10 +1004,12 @@
             }
 
             //disable the select2 add-on
+            //cloned to new daily report
             function fn_disableSelect2() {
                 $('.Team_dpdwn').select2('destroy')
             }
 
+            //cloned to new daily report
             $("#printDailyReport").click(function () {//when a record's edit button is clicked...
 
                 //begin axios delete post
@@ -1024,6 +1030,7 @@
                 //end axios add pos
             });
 
+            //cloned to new daily report
             function fn_cleanupDataEntryFields(passedHTML) {
                 //BEGIN CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
                 passedHTML = passedHTML.replace(/(&amp;)+/g, "");//wipe out &amp;
@@ -1033,9 +1040,12 @@
                 return passedHTML;
                 //END CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
             }
+
             //END MISCELLANEOUS SECTION
 
             //BEGIN VALIDATION BEFORE SAVING SECTION
+
+            //cloned to new daily report
             function allFilled() {
                 var filled = true;
                 //console.clear();
@@ -1070,6 +1080,7 @@
                 return filled;
             }
 
+            //cloned to new daily report
             function enable_disableSave() {
                 if (allFilled()) {
                     $('#addButton').removeAttr('disabled');
@@ -1078,6 +1089,7 @@
                 }
             }
 
+            //cloned to new daily report
             function fn_rowFilled(button) {
                 var currentRow = button.parent().parent();
                 var rowFilled = true;

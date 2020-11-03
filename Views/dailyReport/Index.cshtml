@@ -85,9 +85,12 @@
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
-            var lastDlyRptCrtdByUser;
+            var lastDlyRptCrtdByUser;        
 
-            fn_enableSelect2();//enable the select2 add-on on page load
+            var dailyRptTeamArr = [];
+            var dailyRptTeamUserIDArr = [];
+            var dailyLogInfoChngd = false;
+            var recordsToAddStatus = 0;
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
@@ -110,6 +113,7 @@
             var wntyDelaysArrJson_Add = [];
             var indexWntyDelaysEntries_Add = 0;//keep track of the number of warranty delays entries
 
+            fn_enableSelect2();//enable the select2 add-on on page load
             fn_loadDropDowns();
 
             //BEGIN DAILY REPORT LOG SECTION
@@ -358,17 +362,18 @@
             //differs between new daily report and an existing one
             function fn_loadDropDowns() {
 
-                //cloned to new daily report
+                //differs between new daily report and an existing one
                 //begin fill the jobs dropdown
                 $.ajax({
                     url: 'DataService.asmx/GetAllJobNos',
                     method: 'post',
                     dataType: 'json',
                     success: function (data) {
+
+                        jobs_dpdown.append($('<option/>', { value: -1, text: 'Select Job' }));
+
                         $(data).each(function (index, item) {
-                            if (item.jobID !== jobs_dpdown.val()) {
-                                jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
-                            }
+                            jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
                         });
                     }
                 });
@@ -414,7 +419,7 @@
             $("#addButton").click(function () {//when the add button is clicked...
 
                 //differs between new daily report and an existing one
-                fn_loadTimeEntries();
+                fn_loadTimeEntries_Add();
                 fn_buildJsonObjects();
 
                 //cloned to new daily report
@@ -479,34 +484,35 @@
                 window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
             });
 
-            function fn_loadTimeEntries() {
-                var workDescTeam_narr_div_Content = $("#workDescriptionLine_template").find(".workDescLine").find(".workDescTeam_narr_div");
-                var workDescTeam_dpdwn_Content;
+            //cloned to new daily report
+            function fn_loadTimeEntries_Add () {
 
-                var delaysTeam_narr_div_Content = $("#delaysLine_template").find(".delaysLine").find(".delaysTeam_narr_div");
-                var delaysTeam_hours_div_Content;
-                var delaysTeam_dpdwn_Content;
+                var workDescTeam_narr_div_Content_Add = $(".addRecord").find(".workDescTeam_narr_div");
+                var workDescTeam_dpdwn_Content_Add;
 
-                var wntyDelaysTeam_narr_div_Content = $("#wntyDelaysLine_template").find(".wntyDelaysLine").find(".wntyDelaysTeam_narr_div");
-                var wntyDelaysTeam_hours_div_Content;
-                var wntyDelaysTeam_dpdwn_Content;
+                var delaysTeam_narr_div_Content_Add = $(".addRecord").find(".delaysTeam_narr_div");
+                var delaysTeam_hours_div_Content_Add;
+                var delaysTeam_dpdwn_Content_Add;
 
-                var currentDropdownLine;//generic
+                var wntyDelaysTeam_narr_div_Content_Add = $(".addRecord").find(".wntyDelaysTeam_narr_div");
+                var wntyDelaysTeam_hours_div_Content_Add;
+                var wntyDelaysTeam_dpdwn_Content_Add;
 
-                $(workDescTeam_narr_div_Content).each(function (index1) {
+                var currentDropdownLine_Add;//generic
+
+                $(workDescTeam_narr_div_Content_Add).each(function (index1) {
 
                     var workDescUserNamesArrTemp = [];
 
-                    //workDescNarrArr_Add.push([$(workDescTeam_narr_div_Content[index1]).html()]);
-                    workDescNarrArr_Add.push($(workDescTeam_narr_div_Content[index1]).html());
+                    workDescNarrArr_Add.push($(workDescTeam_narr_div_Content_Add[index1]).html());
 
-                    currentDropdownLine = $(this).parent().attr("id");
+                    currentDropdownLine_Add = $(this).parent().attr("id");
                     workDescHoursArr_Add.push(0);
-                    workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+                    workDescTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
-                    $(workDescTeam_dpdwn_Content).each(function (index2) {
+                    $(workDescTeam_dpdwn_Content_Add).each(function (index2) {
 
-                        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content[index2]).attr("id");
+                        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content_Add[index2]).attr("id");
                         var regex = /\w+$/;
                         var temp_workDescTeam_dpdwn_ID_object = tempworkDescTeam_dpdwn_ID.match(regex);
                         var temp_UserID = temp_workDescTeam_dpdwn_ID_object[0];
@@ -514,24 +520,28 @@
                         workDescUserNamesArrTemp.push(temp_UserID);
                     });
                     workDescUserNamesArr_Add.push(workDescUserNamesArrTemp);
+
+                    if (recordsToAddStatus == 0) {
+                        recordsToAddStatus = 1;
+                    }
                 });
 
-                $(delaysTeam_narr_div_Content).each(function (index1) {
+                $(delaysTeam_narr_div_Content_Add).each(function (index1) {
 
                     var delaysUserNamesArrTemp = [];
 
                     //delaysNarrArr_Add.push([$(delaysTeam_narr_div_Content[index1]).html()]);
-                    delaysNarrArr_Add.push($(delaysTeam_narr_div_Content[index1]).html());
+                    delaysNarrArr_Add.push($(delaysTeam_narr_div_Content_Add[index1]).html());
 
-                    currentDropdownLine = $(this).parent().attr("id");
-                    delaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".delaysTeam_hours_div").html());
+                    currentDropdownLine_Add = $(this).parent().attr("id");
+                    delaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".delaysTeam_hours_div").html());
                     //delaysHoursArr_Add.push([delaysTeam_hours_div_Content]);
-                    delaysHoursArr_Add.push(delaysTeam_hours_div_Content);
-                    delaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+                    delaysHoursArr_Add.push(delaysTeam_hours_div_Content_Add);
+                    delaysTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
-                    $(delaysTeam_dpdwn_Content).each(function (index2) {
+                    $(delaysTeam_dpdwn_Content_Add).each(function (index2) {
 
-                        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content[index2]).attr("id");
+                        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content_Add[index2]).attr("id");
                         var regex = /\w+$/;
                         var temp_delaysTeam_dpdwn_ID_object = tempDelaysTeam_dpdwn_ID.match(regex);
                         var temp_UserID = temp_delaysTeam_dpdwn_ID_object[0];
@@ -539,25 +549,29 @@
                         delaysUserNamesArrTemp.push(temp_UserID);
                     });
                     delaysUserNamesArr_Add.push(delaysUserNamesArrTemp);
+
+                    if (recordsToAddStatus == 0) {
+                        recordsToAddStatus = 1;
+                    }
                 });
 
-                $(wntyDelaysTeam_narr_div_Content).each(function (index1) {
+                $(wntyDelaysTeam_narr_div_Content_Add).each(function (index1) {
 
                     var wntyDelaysUserNamesArrTemp = [];
 
                     //wntyDelaysNarrArr_Add.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
-                    wntyDelaysNarrArr_Add.push($(wntyDelaysTeam_narr_div_Content[index1]).html());
+                    wntyDelaysNarrArr_Add.push($(wntyDelaysTeam_narr_div_Content_Add[index1]).html());
 
-                    currentDropdownLine = $(this).parent().attr("id");
-                    wntyDelaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".wntyDelaysTeam_hours_div").html());
+                    currentDropdownLine_Add = $(this).parent().attr("id");
+                    wntyDelaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".wntyDelaysTeam_hours_div").html());
                     //console.log(wntyDelaysTeam_hours_div_Content);
                     //wntyDelaysHoursArr_Add.push([wntyDelaysTeam_hours_div_Content]);
-                    wntyDelaysHoursArr_Add.push(wntyDelaysTeam_hours_div_Content);
-                    wntyDelaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+                    wntyDelaysHoursArr_Add.push(wntyDelaysTeam_hours_div_Content_Add);
+                    wntyDelaysTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
-                    $(wntyDelaysTeam_dpdwn_Content).each(function (index2) {
+                    $(wntyDelaysTeam_dpdwn_Content_Add).each(function (index2) {
 
-                        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content[index2]).attr("id");
+                        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content_Add[index2]).attr("id");
                         var regex = /\w+$/;
                         var temp_wntyDelaysTeam_dpdwn_ID_object = tempWntyDelaysTeam_dpdwn_ID.match(regex);
                         var temp_UserID = temp_wntyDelaysTeam_dpdwn_ID_object[0];
@@ -565,8 +579,97 @@
                         wntyDelaysUserNamesArrTemp.push(temp_UserID);
                     });
                     wntyDelaysUserNamesArr_Add.push(wntyDelaysUserNamesArrTemp);
-                });
 
+                    if (recordsToAddStatus == 0) {
+                        recordsToAddStatus = 1;
+                    }
+                });
+                //var workDescTeam_narr_div_Content = $("#workDescriptionLine_template").find(".workDescLine").find(".workDescTeam_narr_div");
+                //var workDescTeam_dpdwn_Content;
+
+                //var delaysTeam_narr_div_Content = $("#delaysLine_template").find(".delaysLine").find(".delaysTeam_narr_div");
+                //var delaysTeam_hours_div_Content;
+                //var delaysTeam_dpdwn_Content;
+
+                //var wntyDelaysTeam_narr_div_Content = $("#wntyDelaysLine_template").find(".wntyDelaysLine").find(".wntyDelaysTeam_narr_div");
+                //var wntyDelaysTeam_hours_div_Content;
+                //var wntyDelaysTeam_dpdwn_Content;
+
+                //var currentDropdownLine;//generic
+
+                //$(workDescTeam_narr_div_Content).each(function (index1) {
+
+                //    var workDescUserNamesArrTemp = [];
+
+                //    //workDescNarrArr_Add.push([$(workDescTeam_narr_div_Content[index1]).html()]);
+                //    workDescNarrArr_Add.push($(workDescTeam_narr_div_Content[index1]).html());
+
+                //    currentDropdownLine = $(this).parent().attr("id");
+                //    workDescHoursArr_Add.push(0);
+                //    workDescTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+
+                //    $(workDescTeam_dpdwn_Content).each(function (index2) {
+
+                //        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content[index2]).attr("id");
+                //        var regex = /\w+$/;
+                //        var temp_workDescTeam_dpdwn_ID_object = tempworkDescTeam_dpdwn_ID.match(regex);
+                //        var temp_UserID = temp_workDescTeam_dpdwn_ID_object[0];
+
+                //        workDescUserNamesArrTemp.push(temp_UserID);
+                //    });
+                //    workDescUserNamesArr_Add.push(workDescUserNamesArrTemp);
+                //});
+
+                //$(delaysTeam_narr_div_Content).each(function (index1) {
+
+                //    var delaysUserNamesArrTemp = [];
+
+                //    //delaysNarrArr_Add.push([$(delaysTeam_narr_div_Content[index1]).html()]);
+                //    delaysNarrArr_Add.push($(delaysTeam_narr_div_Content[index1]).html());
+
+                //    currentDropdownLine = $(this).parent().attr("id");
+                //    delaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".delaysTeam_hours_div").html());
+                //    //delaysHoursArr_Add.push([delaysTeam_hours_div_Content]);
+                //    delaysHoursArr_Add.push(delaysTeam_hours_div_Content);
+                //    delaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+
+                //    $(delaysTeam_dpdwn_Content).each(function (index2) {
+
+                //        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content[index2]).attr("id");
+                //        var regex = /\w+$/;
+                //        var temp_delaysTeam_dpdwn_ID_object = tempDelaysTeam_dpdwn_ID.match(regex);
+                //        var temp_UserID = temp_delaysTeam_dpdwn_ID_object[0];
+
+                //        delaysUserNamesArrTemp.push(temp_UserID);
+                //    });
+                //    delaysUserNamesArr_Add.push(delaysUserNamesArrTemp);
+                //});
+
+                //$(wntyDelaysTeam_narr_div_Content).each(function (index1) {
+
+                //    var wntyDelaysUserNamesArrTemp = [];
+
+                //    //wntyDelaysNarrArr_Add.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
+                //    wntyDelaysNarrArr_Add.push($(wntyDelaysTeam_narr_div_Content[index1]).html());
+
+                //    currentDropdownLine = $(this).parent().attr("id");
+                //    wntyDelaysTeam_hours_div_Content = parseFloat($("#" + currentDropdownLine).find(".wntyDelaysTeam_hours_div").html());
+                //    //console.log(wntyDelaysTeam_hours_div_Content);
+                //    //wntyDelaysHoursArr_Add.push([wntyDelaysTeam_hours_div_Content]);
+                //    wntyDelaysHoursArr_Add.push(wntyDelaysTeam_hours_div_Content);
+                //    wntyDelaysTeam_dpdwn_Content = $("#" + currentDropdownLine).find(".select2-selection__choice__display");
+
+                //    $(wntyDelaysTeam_dpdwn_Content).each(function (index2) {
+
+                //        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content[index2]).attr("id");
+                //        var regex = /\w+$/;
+                //        var temp_wntyDelaysTeam_dpdwn_ID_object = tempWntyDelaysTeam_dpdwn_ID.match(regex);
+                //        var temp_UserID = temp_wntyDelaysTeam_dpdwn_ID_object[0];
+
+                //        wntyDelaysUserNamesArrTemp.push(temp_UserID);
+                //    });
+                //    wntyDelaysUserNamesArr_Add.push(wntyDelaysUserNamesArrTemp);
+                //});
                 
             }
 
@@ -607,21 +710,23 @@
             //END SECTION TO PACK UP NEW RECORDS
 
             //BEGIN MISCELLANEOUS SECTION
+
+            //cloned to new daily report
             function fn_printArrays() {
                 //BEGIN ADDED ARRAYS
-                console.log("work description section follows:");
+                console.log("work description ADDED section follows:");
                 console.log(workDescNarrArr_Add);
                 console.log(workDescHoursArr_Add);
                 console.log(workDescUserNamesArr_Add);
                 console.log(workDescArrJson_Add);
 
-                console.log("delays section follows:");
+                console.log("delays section ADDED follows:");
                 console.log(delaysNarrArr_Add);
                 console.log(delaysHoursArr_Add);
                 console.log(delaysUserNamesArr_Add);
                 console.log(delaysArrJson_Add);
 
-                console.log("warranty delays section follows:");
+                console.log("warranty delays ADDED section follows:");
                 console.log(wntyDelaysNarrArr_Add);
                 console.log(wntyDelaysHoursArr_Add);
                 console.log(wntyDelaysUserNamesArr_Add);
@@ -629,30 +734,33 @@
                 //END ADDED ARRAYS
 
                 //BEGIN EDITED ARRAYS
-                console.log("work description section follows:");
+                console.log("work description EDITED section follows:");
                 console.log(workDescNarrArr_Edit);
                 console.log(workDescHoursArr_Edit);
                 console.log(workDescUserNamesArr_Edit);
                 console.log(workDescArrJson_Edit);
 
-                console.log("delays section follows:");
+                console.log("delays section EDITED follows:");
                 console.log(delaysNarrArr_Edit);
                 console.log(delaysHoursArr_Edit);
                 console.log(delaysUserNamesArr_Edit);
                 console.log(delaysArrJson_Edit);
 
-                console.log("warranty delays section follows:");
+                console.log("warranty delays EDITED section follows:");
                 console.log(wntyDelaysNarrArr_Edit);
                 console.log(wntyDelaysHoursArr_Edit);
                 console.log(wntyDelaysUserNamesArr_Edit);
                 console.log(wntyDelaysArrJson_Edit);
+                //END EDITED ARRAYS
 
+                //BEGIN DELETED ARRAYS
                 console.log("time entry delete section follows:");
                 console.log(timeEntryDeleteArr);
-                //END EDITED ARRAYS
+                //END DELETED ARRAYS
             }
 
             //enable the select2 add-on
+            //cloned to new daily report
             function fn_enableSelect2() {
                 $('.Team_dpdwn').select2({
                     width: "100%",
@@ -662,10 +770,12 @@
             }
 
             //disable the select2 add-on
+            //cloned to new daily report
             function fn_disableSelect2() {
                 $('.Team_dpdwn').select2('destroy')
             }
 
+            //cloned to new daily report
             $("#printDailyReport").click(function () {//when a record's edit button is clicked...
 
                 //begin axios delete post
@@ -686,6 +796,7 @@
                 //end axios add pos
             });
 
+            //cloned to new daily report
             function fn_cleanupDataEntryFields(passedHTML) {
                 //BEGIN CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
                 passedHTML = passedHTML.replace(/(&amp;)+/g, "");//wipe out &amp;
@@ -699,6 +810,8 @@
             //END MISCELLANEOUS SECTION
 
             //BEGIN VALIDATION BEFORE SAVING SECTION
+
+            //cloned to new daily report
             function allFilled() {
                 var filled = true;
                 //console.clear();
@@ -733,6 +846,7 @@
                 return filled;
             }
 
+            //cloned to new daily report
             function enable_disableSave() {
                 if (allFilled()) {
                     $('#addButton').removeAttr('disabled');
@@ -741,6 +855,7 @@
                 }
             }
 
+            //cloned to new daily report
             function fn_rowFilled(button) {
                 var currentRow = button.parent().parent();
                 var rowFilled = true;
