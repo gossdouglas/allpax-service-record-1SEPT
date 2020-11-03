@@ -291,7 +291,7 @@
 
                     $.alert({
                         title: 'Error!',
-                        content: 'One or more row entries missing.',
+                        content: 'One or more row entries incorrect.',
                     });
                 }
             });
@@ -313,19 +313,30 @@
 
             //cloned to new daily report
             $(".Btn_save").click(function () {
-                var currentRow = $(this).parent().parent();
 
-                $(this).hide();
-                $(currentRow).find(".Btn_edit").removeAttr("hidden");
-                $(currentRow).find(".Btn_edit").show();
+                if (fn_rowFilled($(this))) {
 
-                $(currentRow).find(".narr_div").attr("contenteditable", "false");
-                $(currentRow).find(".hours_div ").attr("contenteditable", "false");
-                $(currentRow).find(".dpdwn_parsed_div").show();
-                $(currentRow).find(".dpdwn_div").hide();
-                $(currentRow).css("color", "black");
+                    var currentRow = $(this).parent().parent();
 
-                fn_produceParsedShortNames($(this));
+                    $(this).hide();
+                    $(currentRow).find(".Btn_edit").removeAttr("hidden");
+                    $(currentRow).find(".Btn_edit").show();
+
+                    $(currentRow).find(".narr_div").attr("contenteditable", "false");
+                    $(currentRow).find(".hours_div ").attr("contenteditable", "false");
+                    $(currentRow).find(".dpdwn_parsed_div").show();
+                    $(currentRow).find(".dpdwn_div").hide();
+                    $(currentRow).css("color", "black");
+
+                    fn_produceParsedShortNames($(this));
+                }
+                else {
+
+                    $.alert({
+                        title: 'Error!',
+                        content: 'One or more row entries incorrect.',
+                    });
+                }
             });
 
             //cloned to new daily report
@@ -859,22 +870,26 @@
             function fn_rowFilled(button) {
                 var currentRow = button.parent().parent();
                 var rowFilled = true;
-                //console.clear();
+                var narrDiv = currentRow.find(".narr_div").html();
+                var teamDiv = currentRow.find(".select2-selection__rendered").html();
+                var hoursDiv = currentRow.find(".hours_div").html();
+                var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
+                console.clear();
 
-                if (currentRow.find(".narr_div").html() == "") {
+                if (narrDiv == "") {
                     //console.log("Narr div is empty.")
                     rowFilled = false;
                     return rowFilled;
                 }
 
-                if (currentRow.find(".select2-selection__rendered").html() == "") {
+                if (teamDiv == "") {
                     //console.log("dpdwn_div div is empty.")
                     rowFilled = false;
                     return rowFilled;
                 }
 
-                if (currentRow.find(".hours_div").html() == "") {
-                    //console.log("hours div is empty.")
+                if (hoursDiv == "" || !hoursDivMatch) {
+                    //console.log("Hours div is empty or the hours do match the pattern.")
                     rowFilled = false;
                     return rowFilled;
                 }
@@ -1038,6 +1053,9 @@
             <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
+
+            <div class="col-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>
+
             <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
 
@@ -1057,6 +1075,9 @@
             <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
+
+            <div class="col-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>
+
             <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
 

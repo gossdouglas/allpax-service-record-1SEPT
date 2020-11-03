@@ -304,7 +304,7 @@
 
                     $.alert({
                         title: 'Error!',
-                        content: 'One or more row entries missing.',
+                        content: 'One or more row entries incorrect.',
                     });
                 }
             });
@@ -326,19 +326,30 @@
 
             //cloned to new daily report
             $(".Btn_save").click(function () {
-                var currentRow = $(this).parent().parent();
 
-                $(this).hide();
-                $(currentRow).find(".Btn_edit").removeAttr("hidden");
-                $(currentRow).find(".Btn_edit").show();
+                if (fn_rowFilled($(this))) {
 
-                $(currentRow).find(".narr_div").attr("contenteditable", "false");
-                $(currentRow).find(".hours_div ").attr("contenteditable", "false");
-                $(currentRow).find(".dpdwn_parsed_div").show();
-                $(currentRow).find(".dpdwn_div").hide();
-                $(currentRow).css("color", "black");
+                    var currentRow = $(this).parent().parent();
 
-                fn_produceParsedShortNames($(this));
+                    $(this).hide();
+                    $(currentRow).find(".Btn_edit").removeAttr("hidden");
+                    $(currentRow).find(".Btn_edit").show();
+
+                    $(currentRow).find(".narr_div").attr("contenteditable", "false");
+                    $(currentRow).find(".hours_div ").attr("contenteditable", "false");
+                    $(currentRow).find(".dpdwn_parsed_div").show();
+                    $(currentRow).find(".dpdwn_div").hide();
+                    $(currentRow).css("color", "black");
+
+                    fn_produceParsedShortNames($(this));
+                }
+                else {
+
+                    $.alert({
+                        title: 'Error!',
+                        content: 'One or more row entries incorrect.',
+                    });
+                }
             });
 
             //cloned to new daily report
@@ -1093,35 +1104,26 @@
                 var narrDiv = currentRow.find(".narr_div").html();
                 var teamDiv = currentRow.find(".select2-selection__rendered").html();
                 var hoursDiv = currentRow.find(".hours_div").html();
-                var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);
-                //console.clear();
-                console.log("Do hours match the pattern? " + hoursDivMatch);
+                var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
+                console.clear();               
                           
-                //if (currentRow.find(".narr_div").html() == "") {
                 if (narrDiv == "") {
                     //console.log("Narr div is empty.")
                     rowFilled = false;
                     return rowFilled;
                 }
 
-                //if (currentRow.find(".select2-selection__rendered").html() == "") {
                 if (teamDiv == "") {
                     //console.log("dpdwn_div div is empty.")
                     rowFilled = false;
                     return rowFilled;
                 }
 
-                //if (currentRow.find(".hours_div").html() == "") {
-                if (hoursDiv == "") {
-                    //console.log("hours div is empty.")
+                if (hoursDiv == "" || !hoursDivMatch) {
+                    //console.log("Hours div is empty or the hours do match the pattern.")
                     rowFilled = false;
-                    //return rowFilled;
+                    return rowFilled;
                 }
-
-                if (hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g)) {
-                    console.log("hours match pattern.")
-                }
-
 
                 return rowFilled;
             }
@@ -1299,35 +1301,37 @@
             string temp_workDescription = item.workDescArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
-            <div class=" row returnedRecords workDescLine" id="workDescLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
-                <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
+<div class=" row returnedRecords workDescLine" id="workDescLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
+    <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
-                <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
-                    <select class="Team_dpdwn workDescTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
-                        @for (var j = 0; j < (@temp_userNames.Count); j++)
-                        {
-                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
-                        }
-                    </select>
-                </div>
+    <div class="col-4 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
+        <select class="Team_dpdwn workDescTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+            @for (var j = 0; j < (@temp_userNames.Count); j++)
+            {
+                <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+            }
+        </select>
+    </div>
 
-                <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
-                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
-                    {
-                        @(temp_userShortNames[k] + "|");
-                    }
-                </div>
+    <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+        @for (var k = 0; k < (temp_userShortNames.Count); k++)
+        {
+            @(temp_userShortNames[k] + "|");
+        }
+    </div>
 
-                <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
-                    <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                    <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-                    <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+    <div class="col-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>
 
-                    <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x" style="color: red;"></i></button>
-                    <button id="" class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x" style="color:red;"></i></button>
-                    <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x" style="color: red;"></i></button>
-                </div>
-            </div>
+    <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
+        <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+
+        <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x" style="color: red;"></i></button>
+        <button id="" class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x" style="color:red;"></i></button>
+        <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x" style="color: red;"></i></button>
+    </div>
+</div>
         }
     }
 
@@ -1344,6 +1348,9 @@
             <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
+
+            <div class="col-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>
+
             <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
 
@@ -1363,6 +1370,9 @@
             <div class="col-4 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
+
+            <div class="col-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>
+
             <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
 
