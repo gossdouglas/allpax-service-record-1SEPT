@@ -446,9 +446,6 @@
                             dailyRptTeamUserIDArr.push(temp_userName);
 
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-
-                            console.log("team member to be disabled: " + temp_userName);
-
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
                         });
                         fn_loadTeamNamesRtndRecs();
@@ -1093,25 +1090,38 @@
             function fn_rowFilled(button) {
                 var currentRow = button.parent().parent();
                 var rowFilled = true;
+                var narrDiv = currentRow.find(".narr_div").html();
+                var teamDiv = currentRow.find(".select2-selection__rendered").html();
+                var hoursDiv = currentRow.find(".hours_div").html();
+                var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);
                 //console.clear();
+                console.log("Do hours match the pattern? " + hoursDivMatch);
                           
-                if (currentRow.find(".narr_div").html() == "") {
+                //if (currentRow.find(".narr_div").html() == "") {
+                if (narrDiv == "") {
                     //console.log("Narr div is empty.")
                     rowFilled = false;
                     return rowFilled;
                 }
 
-                if (currentRow.find(".select2-selection__rendered").html() == "") {
+                //if (currentRow.find(".select2-selection__rendered").html() == "") {
+                if (teamDiv == "") {
                     //console.log("dpdwn_div div is empty.")
                     rowFilled = false;
                     return rowFilled;
                 }
 
-                if (currentRow.find(".hours_div").html() == "") {
+                //if (currentRow.find(".hours_div").html() == "") {
+                if (hoursDiv == "") {
                     //console.log("hours div is empty.")
                     rowFilled = false;
-                    return rowFilled;
+                    //return rowFilled;
                 }
+
+                if (hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g)) {
+                    console.log("hours match pattern.")
+                }
+
 
                 return rowFilled;
             }
