@@ -62,8 +62,9 @@
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
-            var dailyLogInfoChngd = false;
+            var dailyLogInfoChngd = 0;
             var recordsToAddStatus = 0;
+            var recordsToEditStatus = 0;
 
             var workDescNarrArr_Add = [];
             var workDescHoursArr_Add = [];
@@ -528,6 +529,7 @@
             //only on existing records or copies
             $(".returnedRecords").on("change keypress", function () {
                 var currentRow = $(this);
+                recordsToEditStatus = 1;
                 temp_LineClass = $(this).prop("class");
 
                 //used to change the class of a returned record to an edited record for later processing with an update operation
@@ -546,7 +548,7 @@
 
                 $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
                 $($(currentRow)).find(".Btn_editedRecord").removeAttr("hidden");
-            });//daily report by id page only
+            });
 
             //END RETURNED RECORDS AND TIME ENTRY SECTION
            
@@ -660,7 +662,7 @@
                 //END DELETE RECORDS FROM A DAILY REPORT
 
                 fn_printArrays();
-                window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
+                //window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
             });
 
             //cloned to new daily report
