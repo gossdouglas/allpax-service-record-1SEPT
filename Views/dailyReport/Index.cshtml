@@ -115,6 +115,7 @@
             //BEGIN DAILY REPORT LOG SECTION
 
             //begin jobs id dropdown change
+            //differs between new daily report and an existing one
             jobs_dpdown.change(function () {
 
                 $.ajax({
@@ -156,6 +157,7 @@
             //end jobs id dropdown change
 
             //begin add team member on drop down change
+            //differs between new daily report and an existing one
             team_dpdwn.change(function () {
 
                 $.ajax({
@@ -188,7 +190,8 @@
             });
             //end add team member on drop down change
 
-            //begin when a team member class is clicked...
+            //begin when a team member class is clicked for deletion...
+            //differs between new daily report and an existing one
             $(".team_").on('click', function () {
 
                 var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
@@ -204,8 +207,9 @@
                 $("#" + $(this).attr("id")).remove();
                 enable_disableSave();//determine if the save button needs to be enabled or disabled
             });
-            //end when a team member class is clicked...
+            //end when a team member class is clicked for deletion...
 
+            //cloned to new daily report
             $("#contnrDailyLog").on("change keypress", function () {
                 dailyLogInfoChngd = true;
                 enable_disableSave();
@@ -351,23 +355,26 @@
                 }
             });
 
+            //differs between new daily report and an existing one
             function fn_loadDropDowns() {
+
+                //cloned to new daily report
                 //begin fill the jobs dropdown
                 $.ajax({
                     url: 'DataService.asmx/GetAllJobNos',
                     method: 'post',
                     dataType: 'json',
                     success: function (data) {
-
-                        jobs_dpdown.append($('<option/>', { value: -1, text: 'Select Job' }));
-
                         $(data).each(function (index, item) {
-                            jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                            if (item.jobID !== jobs_dpdown.val()) {
+                                jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                            }
                         });
                     }
                 });
                 //end fill the jobs dropdown
 
+                //cloned to new daily report
                 //begin fill the team names dropdown
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNames',

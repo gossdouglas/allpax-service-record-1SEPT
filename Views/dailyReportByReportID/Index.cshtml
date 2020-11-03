@@ -109,6 +109,7 @@
             //BEGIN DAILY REPORT LOG SECTION
 
             //begin jobs id dropdown change
+            //differs between new daily report and an existing one
             jobs_dpdown.change(function () {
 
                 $.ajax({
@@ -146,6 +147,7 @@
             //end jobs id dropdown change
 
             //begin add team member on drop down change
+            //differs between new daily report and an existing one
             team_dpdwn.change(function () {
 
                 $.ajax({
@@ -168,6 +170,8 @@
                             dailyRptTeamUserIDArr.push(temp_userName);
 
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
+                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
+                            enable_disableSave();//determine if the save button needs to be enabled or disabled
 
                             //begin AddTeamMember
                             //begin axios add post
@@ -189,9 +193,23 @@
             });
             //end add team member on drop down change
 
-            //begin when a team member class is clicked...
+            //begin when a team member class is clicked for deletion...
+            //differs between new daily report and an existing one
             $(".team_").on('click', function () {
-                var tempTeamMemberUserID = this.id.substr(5);
+                var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
+                
+                for (var row = 0; row < dailyRptTeamArr.length; row++) {
+                    if (dailyRptTeamArr[row][0] == tempTeamMemberUserID) {
+                        dailyRptTeamArr.splice(row, 1);
+                        dailyRptTeamUserIDArr.splice(row, 1);
+                    }
+                }
+
+                $("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
+                $(".Team_dpdwn option[value='" + tempTeamMemberUserID + "']").remove();
+                $("#" + $(this).attr("id")).remove();
+                enable_disableSave();//determine if the save button needs to be enabled or disabled
+
                 //begin DeleteTeamMember
                 //begin axios delete post
                 axios.post('/dailyReportByReportID/DeleteTeamMember', {
@@ -207,22 +225,10 @@
                         console.log(error);
                     });
                 ////end axios delete post
-
-                var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
-                for (var row = 0; row < dailyRptTeamArr.length; row++) {
-                    if (dailyRptTeamArr[row][0] == tempTeamMemberUserID) {
-                        dailyRptTeamArr.splice(row, 1);
-                        dailyRptTeamUserIDArr.splice(row, 1);
-                    }
-                }
-
-                $("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
-                $(".Team_dpdwn option[value='" + tempTeamMemberUserID + "']").remove();
-                $("#" + $(this).attr("id")).remove();
-                enable_disableSave();//determine if the save button needs to be enabled or disabled
             });
-            //end when a team member class is clicked...
+            //end when a team member class is clicked for deletion...
 
+            //cloned to new daily report
             $("#contnrDailyLog").on("change keypress", function () {
                 dailyLogInfoChngd = true;
                 enable_disableSave();
@@ -367,9 +373,11 @@
                     $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
                 }
             });
-            
+
+            //differs between new daily report and an existing one
             function fn_loadDropDowns() {
 
+                //cloned to new daily report
                 //begin fill the jobs dropdown
                 $.ajax({
                     url: 'DataService.asmx/GetAllJobNos',
@@ -385,6 +393,7 @@
                 });
                 //end fill the jobs dropdown
 
+                //differs between new daily report and an existing one
                 //begin fill sub jobs dropdown
                 $.ajax({
                     url: 'DataService.asmx/GetSubJobTypesByJobID',
@@ -401,6 +410,7 @@
                 });
                 //end fill sub jobs dropdown
 
+                //cloned to new daily report
                 //begin fill the team names dropdown
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNames',
@@ -461,6 +471,7 @@
                 currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
             }
 
+            //only on existing records or copies
             function fn_loadTeamNamesRtndRecs() {
 
                 var rtndRecordSelects = $(".RtndRecs");//stores the select contents as they come from the server
@@ -506,6 +517,7 @@
                 })
             };//daily report by id page only
 
+            //only on existing records or copies
             $(".returnedRecords").on("change keypress", function () {
                 var currentRow = $(this);
                 temp_LineClass = $(this).prop("class");
