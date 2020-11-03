@@ -62,14 +62,28 @@
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
-            var dailyLogInfoChngd = false;
+            var dailyLogInfoChngd = 0;
             var recordsToAddStatus = 0;
+            var recordsToEditStatus = 0;
+            var recordsToDeleteStatus = 0;
 
             var workDescNarrArr_Add = [];
             var workDescHoursArr_Add = [];
             var workDescUserNamesArr_Add = [];
             var workDescArrJson_Add = [];
             var indexWorkDescEntries_Add = 0;//keep track of the number of work description entries added
+
+            var workDescNarrArr_RtndRecs = [];
+            var workDescHoursArr_RtndRecs = [];
+            var workDescUserNamesArr_RtndRecs = [];
+
+            var delaysNarrArr_RtndRecs = [];
+            var delaysHoursArr_RtndRecs = [];
+            var delaysUserNamesArr_RtndRecs = [];
+
+            var wntyDelaysNarrArr_RtndRecs = [];
+            var wntyDelaysHoursArr_RtndRecs = [];
+            var wntyDelaysUserNamesArr_RtndRecs = [];
 
             var delaysNarrArr_Add = [];
             var delaysHoursArr_Add = [];
@@ -103,6 +117,7 @@
 
             fn_enableSelect2();//enable the select2 add-on on page load
             fn_loadDropDowns();
+            fn_loadTimeEntries_RtndRecs();//record the values of the returned records for comparison to the _Edit arrays
 
             //BEGIN DAILY REPORT LOG SECTION
 
@@ -355,6 +370,7 @@
             //cloned to new daily report
             $(".Btn_delete").click(function () {
                 var currentRow = $(this).parent().parent();
+                recordsToDeleteStatus = 1;
                 temp_LineClass = $(currentRow).prop("class");
 
                 //if this line is a new record, simply remove it
@@ -528,6 +544,7 @@
             //only on existing records or copies
             $(".returnedRecords").on("change keypress", function () {
                 var currentRow = $(this);
+                recordsToEditStatus = 1;
                 temp_LineClass = $(this).prop("class");
 
                 //used to change the class of a returned record to an edited record for later processing with an update operation
@@ -546,7 +563,7 @@
 
                 $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
                 $($(currentRow)).find(".Btn_editedRecord").removeAttr("hidden");
-            });//daily report by id page only
+            });
 
             //END RETURNED RECORDS AND TIME ENTRY SECTION
            
@@ -555,7 +572,7 @@
             //differs between new daily report and an existing one
             $("#addButton").click(function () {//when the add button is clicked...
 
-                //differs between new daily report and an existing one
+                //differs between new daily report and an existing one                
                 fn_loadTimeEntries_Add();
                 fn_loadTimeEntries_Edit();
                 fn_loadTimeEntries_Delete();
@@ -640,7 +657,7 @@
 
                 //BEGIN DELETE RECORDS FROM A DAILY REPORT
                 //only on existing records or copies
-                if (timeEntryDeleteArr.length > 0) {//if there are records to delete...
+                if (recordsToDeleteStatus == 1) {//if there are records to delete...
                     var data = {
                         timeEntryDeleteArr: timeEntryDeleteArr
                     };
@@ -660,8 +677,99 @@
                 //END DELETE RECORDS FROM A DAILY REPORT
 
                 fn_printArrays();
-                window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
+                //window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
             });
+
+            //only on existing records or copies
+            function fn_loadTimeEntries_RtndRecs() {
+
+                var workDescTeam_narr_div_Content_RtndRecs = $(".returnedRecords").find(".workDescTeam_narr_div");
+                var workDescTeam_dpdwn_Content_RtndRecs;
+
+                var delaysTeam_narr_div_Content_RtndRecs = $(".returnedRecords").find(".delaysTeam_narr_div");
+                var delaysTeam_hours_div_Content_RtndRecs;
+                var delaysTeam_dpdwn_Content_RtndRecs;
+
+                var wntyDelaysTeam_narr_div_Content_RtndRecs = $(".returnedRecords").find(".wntyDelaysTeam_narr_div");
+                var wntyDelaysTeam_hours_div_Content_RtndRecs;
+                var wntyDelaysTeam_dpdwn_Content_RtndRecs;
+
+                var currentDropdownLine_RtndRecs;//generic
+
+                $(workDescTeam_narr_div_Content_RtndRecs).each(function (index1) {
+
+                    var workDescUserNamesArrTemp = [];
+
+                    //workDescNarrArr_RtndRecs.push([$(workDescTeam_narr_div_Content[index1]).html()]);
+                    workDescNarrArr_RtndRecs.push($(workDescTeam_narr_div_Content_RtndRecs[index1]).html());
+
+                    currentDropdownLine_RtndRecs = $(this).parent().attr("id");
+                    workDescHoursArr_RtndRecs.push(0);
+                    workDescTeam_dpdwn_Content_RtndRecs = $("#" + currentDropdownLine_RtndRecs).find(".select2-selection__choice__display");
+
+                    $(workDescTeam_dpdwn_Content_RtndRecs).each(function (index2) {
+
+                        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content_RtndRecs[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var temp_workDescTeam_dpdwn_ID_object = tempworkDescTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_workDescTeam_dpdwn_ID_object[0];
+
+                        workDescUserNamesArrTemp.push(temp_UserID);
+                    });
+                    workDescUserNamesArr_RtndRecs.push(workDescUserNamesArrTemp);
+                });
+
+                $(delaysTeam_narr_div_Content_RtndRecs).each(function (index1) {
+
+                    var delaysUserNamesArrTemp = [];
+
+                    //delaysNarrArr_RtndRecs.push([$(delaysTeam_narr_div_Content[index1]).html()]);
+                    delaysNarrArr_RtndRecs.push($(delaysTeam_narr_div_Content_RtndRecs[index1]).html());
+
+                    currentDropdownLine_RtndRecs = $(this).parent().attr("id");
+                    delaysTeam_hours_div_Content_RtndRecs = parseFloat($("#" + currentDropdownLine_RtndRecs).find(".delaysTeam_hours_div").html());
+                    //delaysHoursArr_RtndRecs.push([delaysTeam_hours_div_Content]);
+                    delaysHoursArr_RtndRecs.push(delaysTeam_hours_div_Content_RtndRecs);
+                    delaysTeam_dpdwn_Content_RtndRecs = $("#" + currentDropdownLine_RtndRecs).find(".select2-selection__choice__display");
+
+                    $(delaysTeam_dpdwn_Content_RtndRecs).each(function (index2) {
+
+                        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content_RtndRecs[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var temp_delaysTeam_dpdwn_ID_object = tempDelaysTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_delaysTeam_dpdwn_ID_object[0];
+
+                        delaysUserNamesArrTemp.push(temp_UserID);
+                    });
+                    delaysUserNamesArr_RtndRecs.push(delaysUserNamesArrTemp);
+                });
+
+                $(wntyDelaysTeam_narr_div_Content_RtndRecs).each(function (index1) {
+
+                    var wntyDelaysUserNamesArrTemp = [];
+
+                    //wntyDelaysNarrArr_RtndRecs.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
+                    wntyDelaysNarrArr_RtndRecs.push($(wntyDelaysTeam_narr_div_Content_RtndRecs[index1]).html());
+
+                    currentDropdownLine_RtndRecs = $(this).parent().attr("id");
+                    wntyDelaysTeam_hours_div_Content_RtndRecs = parseFloat($("#" + currentDropdownLine_RtndRecs).find(".wntyDelaysTeam_hours_div").html());
+                    //console.log(wntyDelaysTeam_hours_div_Content);
+                    //wntyDelaysHoursArr_RtndRecs.push([wntyDelaysTeam_hours_div_Content]);
+                    wntyDelaysHoursArr_RtndRecs.push(wntyDelaysTeam_hours_div_Content_RtndRecs);
+                    wntyDelaysTeam_dpdwn_Content_RtndRecs = $("#" + currentDropdownLine_RtndRecs).find(".select2-selection__choice__display");
+
+                    $(wntyDelaysTeam_dpdwn_Content_RtndRecs).each(function (index2) {
+
+                        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content_RtndRecs[index2]).attr("id");
+                        var regex = /\w+$/;
+                        var temp_wntyDelaysTeam_dpdwn_ID_object = tempWntyDelaysTeam_dpdwn_ID.match(regex);
+                        var temp_UserID = temp_wntyDelaysTeam_dpdwn_ID_object[0];
+
+                        wntyDelaysUserNamesArrTemp.push(temp_UserID);
+                    });
+                    wntyDelaysUserNamesArr_RtndRecs.push(wntyDelaysUserNamesArrTemp);
+                });
+            }
 
             //cloned to new daily report
             function fn_loadTimeEntries_Add () {
@@ -955,49 +1063,105 @@
 
             //cloned to new daily report
             function fn_printArrays() {
+
+                console.clear();
+                //BEGIN RETURNED RECORDS ARRAYS
+                console.log("*****************")
+                console.log("work description RETURNED RECORDS section follows:");
+                console.log(workDescNarrArr_RtndRecs);
+                console.log(workDescHoursArr_RtndRecs);
+                console.log(workDescUserNamesArr_RtndRecs);
+
+                console.log("delays section RETURNED RECORDS follows:");
+                console.log(delaysNarrArr_RtndRecs);
+                console.log(delaysHoursArr_RtndRecs);
+                console.log(delaysUserNamesArr_RtndRecs);
+
+                console.log("warranty delays RETURNED RECORDS section follows:");
+                console.log(wntyDelaysNarrArr_RtndRecs);
+                console.log(wntyDelaysHoursArr_RtndRecs);
+                console.log(wntyDelaysUserNamesArr_RtndRecs);
+                console.log("*****************")
+                //END RETURNED RECORDS ARRAYS
+
                 //BEGIN ADDED ARRAYS
-                console.log("work description ADDED section follows:");
-                console.log(workDescNarrArr_Add);
-                console.log(workDescHoursArr_Add);
-                console.log(workDescUserNamesArr_Add);
-                console.log(workDescArrJson_Add);
+                if (recordsToAddStatus == 1) {
+                    console.log("*****************")
+                    console.log("work description ADDED section follows:");
+                    console.log(workDescNarrArr_Add);
+                    console.log(workDescHoursArr_Add);
+                    console.log(workDescUserNamesArr_Add);
+                    console.log(workDescArrJson_Add);
 
-                console.log("delays section ADDED follows:");
-                console.log(delaysNarrArr_Add);
-                console.log(delaysHoursArr_Add);
-                console.log(delaysUserNamesArr_Add);
-                console.log(delaysArrJson_Add);
+                    console.log("delays section ADDED follows:");
+                    console.log(delaysNarrArr_Add);
+                    console.log(delaysHoursArr_Add);
+                    console.log(delaysUserNamesArr_Add);
+                    console.log(delaysArrJson_Add);
 
-                console.log("warranty delays ADDED section follows:");
-                console.log(wntyDelaysNarrArr_Add);
-                console.log(wntyDelaysHoursArr_Add);
-                console.log(wntyDelaysUserNamesArr_Add);
-                console.log(wntyDelaysArrJson_Add);
+                    console.log("warranty delays ADDED section follows:");
+                    console.log(wntyDelaysNarrArr_Add);
+                    console.log(wntyDelaysHoursArr_Add);
+                    console.log(wntyDelaysUserNamesArr_Add);
+                    console.log(wntyDelaysArrJson_Add);
+                    console.log("*****************")
+                }
                 //END ADDED ARRAYS
 
                 //BEGIN EDITED ARRAYS
-                console.log("work description EDITED section follows:");
-                console.log(workDescNarrArr_Edit);
-                console.log(workDescHoursArr_Edit);
-                console.log(workDescUserNamesArr_Edit);
-                console.log(workDescArrJson_Edit);
+                if (recordsToEditStatus == 1) {
+                    console.log("*****************")
+                    console.log("work description EDITED section follows:");
+                    console.log(workDescNarrArr_Edit);
+                    console.log(workDescHoursArr_Edit);
+                    console.log(workDescUserNamesArr_Edit);
+                    console.log(workDescArrJson_Edit);
 
-                console.log("delays section EDITED follows:");
-                console.log(delaysNarrArr_Edit);
-                console.log(delaysHoursArr_Edit);
-                console.log(delaysUserNamesArr_Edit);
-                console.log(delaysArrJson_Edit);
+                    console.log("-----------------")
+                    console.log("team members to be added to this record:");;
+                    console.log(_.difference(workDescUserNamesArr_Edit[0], workDescUserNamesArr_RtndRecs[0]));
+                    console.log("team members to be deleted from this record:");
+                    console.log(_.difference(workDescUserNamesArr_RtndRecs[0], workDescUserNamesArr_Edit[0]));
+                    console.log("-----------------")
+                    console.log("*****************")
 
-                console.log("warranty delays EDITED section follows:");
-                console.log(wntyDelaysNarrArr_Edit);
-                console.log(wntyDelaysHoursArr_Edit);
-                console.log(wntyDelaysUserNamesArr_Edit);
-                console.log(wntyDelaysArrJson_Edit);
+                    console.log("delays section EDITED follows:");
+                    console.log(delaysNarrArr_Edit);
+                    console.log(delaysHoursArr_Edit);
+                    console.log(delaysUserNamesArr_Edit);
+                    console.log(delaysArrJson_Edit);
+
+                    console.log("-----------------")
+                    console.log("team members to be added to this record:");;
+                    console.log(_.difference(delaysUserNamesArr_Edit[0], delaysUserNamesArr_RtndRecs[0]));
+                    console.log("team members to be deleted from this record:");
+                    console.log(_.difference(delaysUserNamesArr_RtndRecs[0], delaysUserNamesArr_Edit[0]));
+                    console.log("-----------------")
+                    console.log("*****************")
+
+                    console.log("warranty delays EDITED section follows:");
+                    console.log(wntyDelaysNarrArr_Edit);
+                    console.log(wntyDelaysHoursArr_Edit);
+                    console.log(wntyDelaysUserNamesArr_Edit);
+                    console.log(wntyDelaysArrJson_Edit);
+
+                    console.log("-----------------")                    
+                    console.log("team members to be added to this record:");;
+                    console.log(_.difference(wntyDelaysUserNamesArr_Edit[0], wntyDelaysUserNamesArr_RtndRecs[0]));
+                    console.log("team members to be deleted from this record:");
+                    console.log(_.difference(wntyDelaysUserNamesArr_RtndRecs[0], wntyDelaysUserNamesArr_Edit[0]));
+                    console.log("-----------------")
+                    console.log("*****************")
+                }
                 //END EDITED ARRAYS
 
                 //BEGIN DELETED ARRAYS
-                console.log("time entry delete section follows:");
-                console.log(timeEntryDeleteArr);
+                if (recordsToDeleteStatus == 1) {
+                    console.log("*****************")
+                    console.log("time entry delete section follows:");
+                    console.log(timeEntryDeleteArr);
+                    console.log("*****************")
+                }
                 //END DELETED ARRAYS
             }
 
