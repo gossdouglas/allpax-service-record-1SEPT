@@ -51,23 +51,15 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            //$("#contnrDailyLog :input").prop("disabled", true);//disable the daily log section
-
             var team_dpdwn = $('#team_dpdwn');
-            ///var addWorkDescBtn = $('#addWorkDescBtn');
             var dailyReportID = $("#txt_dailyReportID").html();
-            var workDescTeam_dpdwn = $(".workDescTeam_dpdwn");
-            var workDescDelaysTeam_dpdwn = $('.workDescDelaysTeam_dpdwn');
-            var workDescWntyDelaysTeam_dpdwn = $('.workDescWntyDelaysTeam_dpdwn');
 
-            //var dailyReportID = $("#txt_dailyReportID").attr("value");
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
             var lastDlyRptCrtdByUser;
 
-            //begin added for new one shot work
             fn_enableSelect2();//enable the select2 add-on on page load
 
             var dailyRptTeamArr = [];
@@ -75,6 +67,7 @@
             var dailyLogInfoChngd = false;
 
             var recordsToAddStatus = 0;
+
             var workDescNarrArr_Add = [];
             var workDescHoursArr_Add = [];
             var workDescUserNamesArr_Add = [];
@@ -241,26 +234,33 @@
 
             $(".Btn_add").click(function () {
 
+                if (fn_rowFilled($(this))) {
+               
                 fn_produceParsedShortNames($(this));
                 fn_disableSelect2();
+                var currentRow = $(this).parent().parent();
 
-                $(this).parent().parent().find(".narr_div").attr("contenteditable", "false");//lock the narrative for edits
-                $(this).parent().parent().find(".dpdwn_div").hide();//hide the team dropdown
-                $(this).parent().parent().find(".dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
-                $(this).parent().parent().find(".dpdwn_parsed_div").show();//show the parsed version of the team dropdown
-                $(this).parent().parent().find(".Btn_add").hide();//remove the add button, only needed for new work descriptions
-                $(this).parent().parent().find(".Btn_clear").hide();//remove the clear button, only needed for new work descriptions
-                $(this).parent().parent().find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
-                $(this).parent().parent().find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
-                $(this).parent().parent().last().find(".narr_div").css('border-bottom-style', 'none');
-                $(this).parent().parent().find(".dpdwn_parsed_div").css('border-bottom-style', 'none');
-                $(this).parent().parent().find(".button_div").css('border-bottom-style', 'none');
+                //console.log("HTML of the NARR DIV before processing is " + currentRow.find(".narr_div").html());
+                var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
+                currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html              
+
+                currentRow.find(".narr_div").attr("contenteditable", "false");//lock the narrative for edits
+                currentRow.find(".dpdwn_div").hide();//hide the team dropdown
+                currentRow.find(".dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
+                currentRow.find(".dpdwn_parsed_div").show();//show the parsed version of the team dropdown
+                currentRow.find(".Btn_add").hide();//remove the add button, only needed for new work descriptions
+                currentRow.find(".Btn_clear").hide();//remove the clear button, only needed for new work descriptions
+                currentRow.find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
+                currentRow.find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
+                currentRow.last().find(".narr_div").css('border-bottom-style', 'none');
+                currentRow.find(".dpdwn_parsed_div").css('border-bottom-style', 'none');
+                currentRow.find(".button_div").css('border-bottom-style', 'none');
 
                 if (/newWorkDescBtn_add/i.test($(this).attr("class"))) {
                     indexWorkDescEntries_Add = indexWorkDescEntries_Add + 1;
 
                     $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "workDescLine_" + indexWorkDescEntries_Add).appendTo("#workDescriptionLine_template");
+                    currentRow.prop("id", "workDescLine_" + indexWorkDescEntries_Add).appendTo("#workDescriptionLine_template");
                     $("#workDescLine_" + indexWorkDescEntries_Add).prop("class", " row addRecord workDescLine");
                     $("#workDescLine_" + indexWorkDescEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
@@ -271,7 +271,7 @@
                     indexDelaysEntries_Add = indexDelaysEntries_Add + 1;
 
                     $(".delaysLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "delaysLine_" + indexDelaysEntries_Add).appendTo("#delaysLine_template");
+                    currentRow.prop("id", "delaysLine_" + indexDelaysEntries_Add).appendTo("#delaysLine_template");
                     $("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row addRecord delaysLine");
                     $("#delaysLine_" + indexDelaysEntries_Add).find(".delaysTeam_hours_div").attr("contenteditable", "false");
                     $("#delaysLine_" + indexDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
@@ -283,7 +283,7 @@
                     indexWntyDelaysEntries_Add = indexWntyDelaysEntries_Add + 1;
 
                     $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
-                    $(this).parent().parent().prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries_Add).appendTo("#wntyDelaysLine_template");
+                    currentRow.prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries_Add).appendTo("#wntyDelaysLine_template");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row addRecord wntyDelaysLine");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
                     $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
@@ -293,12 +293,19 @@
                 }
 
                 fn_enableSelect2();
-                //fn_loadTimeEntries();
+                }
+
+                else {
+
+                    $.alert({
+                        title: 'Error!',
+                        content: 'One or more row entries missing.',
+                    });
+                }
             });
 
             $(".Btn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
-                var temp_selectedItemArr = [];
 
                 $(this).hide();
                 $(currentRow).find(".Btn_save").removeAttr("hidden");
@@ -329,23 +336,11 @@
 
             $(".Btn_delete").click(function () {
                 var currentRow = $(this).parent().parent();
-                //console.log($(currentRow).attr("data-time-entry-id"));
                 temp_LineClass = $(currentRow).prop("class");
-                //console.log(temp_LineClass);
 
                 //if this line is a new record, simply remove it
                 if (temp_LineClass.includes("addRecord")) {
-                    //$.confirm({
-                    //    title: 'Delete Entry?',
-                    //    content: '',
-                    //    buttons: {
-                    //        confirm: function () {
                     $(currentRow).remove();
-                    //        },
-                    //        cancel: function () {
-                    //        }
-                    //    }
-                    //});
                 }
 
                 //if this line is a returned record, set its class to deletedRecords
@@ -441,10 +436,8 @@
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
 
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
-                            //enable_disableSave();//determine if the save button needs to be enabled or disabled
                         });
                         fn_loadTeamNamesRtndRecs();
-                        //$.fn.updateSectionDpdwns();
                     }
                 });
                 //end load team members on page load
@@ -492,9 +485,6 @@
 
                     //console.log("Daily report user info:");
                     $(dailyRptTeamArr).each(function (index, item) {
-
-                        //console.log(item);
-                        //console.log(item[0] + " " + item[1] + " " + item[2]);
 
                         //if a user's info is not in tmpUserIDsToBeAdded, then it needs to be appended to this loop's rtndRecordSelects
                         if (($.inArray(item[0], tmpUserIDsToBeAdded)) !== -1) {
@@ -553,8 +543,7 @@
                 var addItem7 = $("#input_equipment").val();
                 var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
-                var addItem9 = [];
-                addItem9 = dailyRptTeamUserIDArr;
+                var addItem9 = dailyRptTeamUserIDArr;
 
                 //BEGIN EDIT DAILY LOG SECTION OF A DAILY REPORT
                 if (dailyLogInfoChngd == 1) {//if the daily log information section has been changed...
@@ -568,10 +557,6 @@
                         lunchHours: addItem6,
                         equipment: addItem7,
                         dailyReportAuthor: addItem8,
-                        //dailyRptTeamArr: addItem9,
-                        //workDescArr: workDescArrJson_Add,
-                        //delaysArr: delaysArrJson_Add,
-                        //wntyDelaysArr: wntyDelaysArrJson_Add
                     };
 
                     $.ajax({
@@ -671,7 +656,6 @@
 
                     var workDescUserNamesArrTemp = [];
 
-                    //workDescNarrArr_Add.push([$(workDescTeam_narr_div_Content[index1]).html()]);
                     workDescNarrArr_Add.push($(workDescTeam_narr_div_Content_Add[index1]).html());
 
                     currentDropdownLine_Add = $(this).parent().attr("id");
@@ -935,24 +919,25 @@
                 }
                 //END BUILD THE WNTY DELAYS JSON OBJECT
             }
+
             //END SECTION TO PACK UP NEW RECORDS
 
             //BEGIN MISCELLANEOUS SECTION
             function fn_printArrays() {
                 //BEGIN ADDED ARRAYS
-                console.log("work description section follows:");
+                console.log("work description ADDED section follows:");
                 console.log(workDescNarrArr_Add);
                 console.log(workDescHoursArr_Add);
                 console.log(workDescUserNamesArr_Add);
                 console.log(workDescArrJson_Add);
 
-                console.log("delays section follows:");
+                console.log("delays section ADDED follows:");
                 console.log(delaysNarrArr_Add);
                 console.log(delaysHoursArr_Add);
                 console.log(delaysUserNamesArr_Add);
                 console.log(delaysArrJson_Add);
 
-                console.log("warranty delays section follows:");
+                console.log("warranty delays ADDED section follows:");
                 console.log(wntyDelaysNarrArr_Add);
                 console.log(wntyDelaysHoursArr_Add);
                 console.log(wntyDelaysUserNamesArr_Add);
@@ -960,27 +945,29 @@
                 //END ADDED ARRAYS
 
                 //BEGIN EDITED ARRAYS
-                console.log("work description section follows:");
+                console.log("work description EDITED section follows:");
                 console.log(workDescNarrArr_Edit);
                 console.log(workDescHoursArr_Edit);
                 console.log(workDescUserNamesArr_Edit);
                 console.log(workDescArrJson_Edit);
 
-                console.log("delays section follows:");
+                console.log("delays section EDITED follows:");
                 console.log(delaysNarrArr_Edit);
                 console.log(delaysHoursArr_Edit);
                 console.log(delaysUserNamesArr_Edit);
                 console.log(delaysArrJson_Edit);
 
-                console.log("warranty delays section follows:");
+                console.log("warranty delays EDITED section follows:");
                 console.log(wntyDelaysNarrArr_Edit);
                 console.log(wntyDelaysHoursArr_Edit);
                 console.log(wntyDelaysUserNamesArr_Edit);
                 console.log(wntyDelaysArrJson_Edit);
+                //END EDITED ARRAYS
 
+                //BEGIN DELETED ARRAYS
                 console.log("time entry delete section follows:");
                 console.log(timeEntryDeleteArr);
-                //END EDITED ARRAYS
+                //END DELETED ARRAYS
             }
 
             //enable the select2 add-on
@@ -1017,12 +1004,21 @@
                 //end axios add pos
             });
 
+            function fn_cleanupDataEntryFields(passedHTML) {
+                //BEGIN CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
+                passedHTML = passedHTML.replace(/(&amp;)+/g, "");//wipe out &amp;
+                passedHTML = passedHTML.replace(/(&nbsp;)+/g, "");//wipe out nbsp
+                passedHTML = passedHTML.replace(/(<\w*>)+/g, "");//wipe out any html tags  
+
+                return passedHTML;
+                //END CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
+            }
             //END MISCELLANEOUS SECTION
 
             //BEGIN VALIDATION BEFORE SAVING SECTION
             function allFilled() {
                 var filled = true;
-                console.clear();
+                //console.clear();
 
                 if ($("#slct_date").val() == '') {
                     console.log($("#slct_date").val())
@@ -1061,6 +1057,33 @@
                     $('#addButton').attr('disabled', 'disabled');
                 }
             }
+
+            function fn_rowFilled(button) {
+                var currentRow = button.parent().parent();
+                var rowFilled = true;
+                //console.clear();
+                          
+                if (currentRow.find(".narr_div").html() == "") {
+                    //console.log("Narr div is empty.")
+                    rowFilled = false;
+                    return rowFilled;
+                }
+
+                if (currentRow.find(".select2-selection__rendered").html() == "") {
+                    //console.log("dpdwn_div div is empty.")
+                    rowFilled = false;
+                    return rowFilled;
+                }
+
+                if (currentRow.find(".hours_div").html() == "") {
+                    //console.log("hours div is empty.")
+                    rowFilled = false;
+                    return rowFilled;
+                }
+
+                return rowFilled;
+            }
+
             //END VALIDATION BEFORE SAVING SECTION
            
         });//end document read jquery statements
@@ -1363,9 +1386,7 @@
                     }
                 </div>
 
-                <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="">
-                    @temp_hours
-                </div>
+                <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="">@temp_hours</div>
 
                 <div class="col-2 button_div delaysTeam_button_div" style="padding:0px;">
                     <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
@@ -1393,9 +1414,7 @@
             <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
-            <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="true" style="">
-
-            </div>
+            <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="true" style=""></div>
             <div class="col-2 button_div delaysTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newDelaysBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
                 <button id="" class="btn btn-light btn-sm Btn_clear newDelaysBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
@@ -1416,9 +1435,7 @@
             <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
-            <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="true" style="">
-
-            </div>
+            <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="true" style=""></div>
             <div class="col-2 button_div delaysTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newDelaysBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
                 <button id="" class="btn btn-light btn-sm Btn_clear newDelaysBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
@@ -1484,9 +1501,7 @@
                     }
                 </div>
 
-                <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="false" style="">
-                    @temp_hours
-                </div>
+                <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="false" style="">@temp_hours</div>
 
                 <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
                     <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
@@ -1513,9 +1528,7 @@
             <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
-            <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style="">
-
-            </div>
+            <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style=""></div>
             <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newwntyDelaysBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
                 <button id="" class="btn btn-light btn-sm Btn_clear newwntyDelaysBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
@@ -1537,9 +1550,7 @@
             <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
-            <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style="">
-
-            </div>
+            <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style=""></div>
             <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newWntyDelaysBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
                 <button id="" class="btn btn-light btn-sm Btn_clear newWntyDelaysBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
