@@ -413,20 +413,13 @@
             //differs between new daily report and an existing one
             $("#addButton").click(function () {//when the add button is clicked...
 
+                //differs between new daily report and an existing one
                 fn_loadTimeEntries();
                 fn_buildJsonObjects();
 
+                //cloned to new daily report
                 var addItem1 = $("#jobs_dpdown").val();
                 var addItem2 = $("#slct_date").val();
-
-                //BEGIN CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
-                addItem2 = addItem2.replace(/^[\s]+ /, "");//clean up the work description section
-                addItem2 = addItem2.replace(/^[ \t]+|[ \t]+$/, "");//wipe out leading white space characters
-                addItem2 = addItem2.replace(/&amp;/, "");//wipe out
-                addItem2 = addItem2.replace(/nbsp;/, "");//nbsp
-                addItem2 = addItem2.replace(/<br>/, "");//nbsp
-                //END CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
-
                 var addItem3 = $("#subJobTypes_dpdwn").val();
                 var addItem4 = $("#input_startTime").val();
                 var addItem5 = $("#input_endTime").val();
@@ -483,7 +476,7 @@
                 //        console.log(error);
                 //    })
 
-                window.location = '/dailyReportAll';
+                window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
             });
 
             function fn_loadTimeEntries() {

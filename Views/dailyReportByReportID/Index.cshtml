@@ -549,12 +549,13 @@
             //differs between new daily report and an existing one
             $("#addButton").click(function () {//when the add button is clicked...
 
+                //differs between new daily report and an existing one
                 fn_loadTimeEntries_Add();
                 fn_loadTimeEntries_Edit();
                 fn_loadTimeEntries_Delete();
-
                 fn_buildJsonObjects();
 
+                //cloned to new daily report
                 var addItem1 = $("#jobs_dpdown").val();
                 var addItem2 = $("#slct_date").val();
                 var addItem3 = $("#subJobTypes_dpdwn").val();
@@ -567,6 +568,7 @@
                 var addItem9 = dailyRptTeamUserIDArr;
 
                 //BEGIN EDIT DAILY LOG SECTION OF A DAILY REPORT
+                //only on existing records or copies
                 if (dailyLogInfoChngd == 1) {//if the daily log information section has been changed...
                     var data = {
                         dailyReportID: dailyReportID,
@@ -598,6 +600,7 @@
                 //END EDIT DAILY LOG SECTION OF A DAILY REPORT
 
                 //BEGIN ADD RECORDS TO A DAILY REPORT
+                //only on existing records or copies
                 if (recordsToAddStatus == 1) {//if there are records to add...
                     var data = {
                         dailyReportID: dailyReportID,
@@ -623,16 +626,14 @@
                         data: JSON.stringify(data),
                         traditional: true,
                         success: function () {
-                            //$(data).each(function (index, item) {
-                            //    lastDlyRptCrtdByUser = item;
-                            //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                            //});
+
                         }
                     });
                 }
                 //END ADD RECORDS TO A DAILY REPORT
 
                 //BEGIN DELETE RECORDS FROM A DAILY REPORT
+                //only on existing records or copies
                 if (timeEntryDeleteArr.length > 0) {//if there are records to delete...
                     var data = {
                         timeEntryDeleteArr: timeEntryDeleteArr
@@ -646,16 +647,14 @@
                         data: JSON.stringify(data),
                         traditional: true,
                         success: function () {
-                            //$(data).each(function (index, item) {
-                            //    lastDlyRptCrtdByUser = item;
-                            //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                            //});
+
                         }
                     });
                 }
                 //END DELETE RECORDS FROM A DAILY REPORT
 
                 fn_printArrays();
+                window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
             });
 
             function fn_loadTimeEntries_Add () {
