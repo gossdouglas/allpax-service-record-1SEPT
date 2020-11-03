@@ -215,67 +215,68 @@
 
             //BEGIN RETURNED RECORDS AND TIME ENTRY SECTION
 
+            //cloned to new daily report
             $(".Btn_add").click(function () {
-               
+
                 if (fn_rowFilled($(this))) {
-               
-                fn_produceParsedShortNames($(this));
-                fn_disableSelect2();
-                var currentRow = $(this).parent().parent();
 
-                //console.log("HTML of the NARR DIV before processing is " + currentRow.find(".narr_div").html());
-                var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
-                currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html              
+                    fn_produceParsedShortNames($(this));
+                    fn_disableSelect2();
+                    var currentRow = $(this).parent().parent();
 
-                currentRow.find(".narr_div").attr("contenteditable", "false");//lock the narrative for edits
-                currentRow.find(".dpdwn_div").hide();//hide the team dropdown
-                currentRow.find(".dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
-                currentRow.find(".dpdwn_parsed_div").show();//show the parsed version of the team dropdown
-                currentRow.find(".Btn_add").hide();//remove the add button, only needed for new work descriptions
-                currentRow.find(".Btn_clear").hide();//remove the clear button, only needed for new work descriptions
-                currentRow.find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
-                currentRow.find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
-                currentRow.last().find(".narr_div").css('border-bottom-style', 'none');
-                currentRow.find(".dpdwn_parsed_div").css('border-bottom-style', 'none');
-                currentRow.find(".button_div").css('border-bottom-style', 'none');
+                    //console.log("HTML of the NARR DIV before processing is " + currentRow.find(".narr_div").html());
+                    var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
+                    currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html              
 
-                if (/newWorkDescBtn_add/i.test($(this).attr("class"))) {
-                    indexWorkDescEntries_Add = indexWorkDescEntries_Add + 1;
+                    currentRow.find(".narr_div").attr("contenteditable", "false");//lock the narrative for edits
+                    currentRow.find(".dpdwn_div").hide();//hide the team dropdown
+                    currentRow.find(".dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
+                    currentRow.find(".dpdwn_parsed_div").show();//show the parsed version of the team dropdown
+                    currentRow.find(".Btn_add").hide();//remove the add button, only needed for new work descriptions
+                    currentRow.find(".Btn_clear").hide();//remove the clear button, only needed for new work descriptions
+                    currentRow.find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
+                    currentRow.find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
+                    currentRow.last().find(".narr_div").css('border-bottom-style', 'none');
+                    currentRow.find(".dpdwn_parsed_div").css('border-bottom-style', 'none');
+                    currentRow.find(".button_div").css('border-bottom-style', 'none');
 
-                    $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
-                    currentRow.prop("id", "workDescLine_" + indexWorkDescEntries_Add).appendTo("#workDescriptionLine_template");
-                    $("#workDescLine_" + indexWorkDescEntries_Add).prop("class", " row addRecord workDescLine");
-                    $("#workDescLine_" + indexWorkDescEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
+                    if (/newWorkDescBtn_add/i.test($(this).attr("class"))) {
+                        indexWorkDescEntries_Add = indexWorkDescEntries_Add + 1;
 
-                    $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row entryRow workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
-                    $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
-                }
-                else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
-                    indexDelaysEntries_Add = indexDelaysEntries_Add + 1;
+                        $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
+                        currentRow.prop("id", "workDescLine_" + indexWorkDescEntries_Add).appendTo("#workDescriptionLine_template");
+                        $("#workDescLine_" + indexWorkDescEntries_Add).prop("class", " row addRecord workDescLine");
+                        $("#workDescLine_" + indexWorkDescEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
-                    $(".delaysLine_template_row_hidden").removeAttr("hidden");
-                    currentRow.prop("id", "delaysLine_" + indexDelaysEntries_Add).appendTo("#delaysLine_template");
-                    $("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row addRecord delaysLine");
-                    $("#delaysLine_" + indexDelaysEntries_Add).find(".delaysTeam_hours_div").attr("contenteditable", "false");
-                    $("#delaysLine_" + indexDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
+                        $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row entryRow workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
+                        $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
+                    }
+                    else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
+                        indexDelaysEntries_Add = indexDelaysEntries_Add + 1;
 
-                    $(".delaysLine_template_row_hidden").clone(true).prop("class", "row entryRow delaysLine_template_row_active").appendTo("#delaysLine_template");
-                    $(".delaysLine_template_row_hidden").attr("hidden", "true");
-                }
-                else if (/newWntyDelaysBtn_add/i.test($(this).attr("class"))) {
-                    indexWntyDelaysEntries_Add = indexWntyDelaysEntries_Add + 1;
+                        $(".delaysLine_template_row_hidden").removeAttr("hidden");
+                        currentRow.prop("id", "delaysLine_" + indexDelaysEntries_Add).appendTo("#delaysLine_template");
+                        $("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row addRecord delaysLine");
+                        $("#delaysLine_" + indexDelaysEntries_Add).find(".delaysTeam_hours_div").attr("contenteditable", "false");
+                        $("#delaysLine_" + indexDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
-                    $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
-                    currentRow.prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries_Add).appendTo("#wntyDelaysLine_template");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row addRecord wntyDelaysLine");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
+                        $(".delaysLine_template_row_hidden").clone(true).prop("class", "row entryRow delaysLine_template_row_active").appendTo("#delaysLine_template");
+                        $(".delaysLine_template_row_hidden").attr("hidden", "true");
+                    }
+                    else if (/newWntyDelaysBtn_add/i.test($(this).attr("class"))) {
+                        indexWntyDelaysEntries_Add = indexWntyDelaysEntries_Add + 1;
 
-                    $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row entryRow wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
-                    $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
-                }
+                        $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
+                        currentRow.prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries_Add).appendTo("#wntyDelaysLine_template");
+                        $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row addRecord wntyDelaysLine");
+                        $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
+                        $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
-                fn_enableSelect2();
+                        $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row entryRow wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
+                        $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
+                    }
+
+                    fn_enableSelect2();
                 }
 
                 else {
@@ -287,6 +288,7 @@
                 }
             });
 
+            //cloned to new daily report
             $(".Btn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
 
@@ -301,6 +303,7 @@
                 $(currentRow).css("color", "red");
             });
 
+            //cloned to new daily report
             $(".Btn_save").click(function () {
                 var currentRow = $(this).parent().parent();
 
@@ -317,6 +320,7 @@
                 fn_produceParsedShortNames($(this));
             });
 
+            //cloned to new daily report
             $(".Btn_delete").click(function () {
                 var currentRow = $(this).parent().parent();
                 temp_LineClass = $(currentRow).prop("class");

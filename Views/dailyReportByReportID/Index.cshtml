@@ -232,6 +232,7 @@
 
             //BEGIN RETURNED RECORDS AND TIME ENTRY SECTION
 
+            //cloned to new daily report
             $(".Btn_add").click(function () {
 
                 if (fn_rowFilled($(this))) {
@@ -304,6 +305,7 @@
                 }
             });
 
+            //cloned to new daily report
             $(".Btn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
 
@@ -318,6 +320,7 @@
                 $(currentRow).css("color", "red");
             });
 
+            //cloned to new daily report
             $(".Btn_save").click(function () {
                 var currentRow = $(this).parent().parent();
 
@@ -334,6 +337,7 @@
                 fn_produceParsedShortNames($(this));
             });
 
+            //cloned to new daily report
             $(".Btn_delete").click(function () {
                 var currentRow = $(this).parent().parent();
                 temp_LineClass = $(currentRow).prop("class");
