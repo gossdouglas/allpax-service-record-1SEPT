@@ -685,38 +685,56 @@
             }
 
             function fn_buildJsonObjects() {
-                //BEGIN BUILD THE WORK DESCRIPTION PRE-JSON OBJECT
-                for (var i = 0; i < workDescNarrArr_Add.length; i++) {
-                    workDescArrJson_Add[i] = {
-                        workDescription: workDescNarrArr_Add[i],
-                        workDescriptionCategory: "1",
-                        hours: workDescHoursArr_Add[i],
-                        userNames: workDescUserNamesArr_Add[i]
-                    };
+                //BEGIN BUILD THE WORK DESCRIPTION JSON OBJECT
+                //if there are no work description time entries to add, set the json object to null
+                if (workDescNarrArr_Add.length < 1) {
+                    workDescArrJson_Add = null
                 }
-                //END BUILD THE DELAYS PRE-JSON OBJECT
+                else {
+                    for (var i = 0; i < workDescNarrArr_Add.length; i++) {
+                        workDescArrJson_Add[i] = {
+                            workDescription: workDescNarrArr_Add[i],
+                            workDescriptionCategory: "1",
+                            hours: workDescHoursArr_Add[i],
+                            userNames: workDescUserNamesArr_Add[i]
+                        };
+                    }
+                }
+                //END BUILD THE WORK DESCRIPTION JSON OBJECT
 
-                //BEGIN BUILD THE WORK DESCRIPTION PRE-JSON OBJECT
-                for (var i = 0; i < delaysNarrArr_Add.length; i++) {
-                    delaysArrJson_Add[i] = {
-                        workDescription: delaysNarrArr_Add[i],
-                        workDescriptionCategory: "2",
-                        hours: delaysHoursArr_Add[i],
-                        userNames: delaysUserNamesArr_Add[i]
-                    };
+                //BEGIN BUILD THE DELAYS JSON OBJECT
+                //if there are no delay time entries to add, set the json object to null
+                if (delaysNarrArr_Add.length < 1) {
+                    delaysArrJson_Add = null
                 }
-                //END BUILD THE DELAYS PRE-JSON OBJECT
+                else {
+                    for (var i = 0; i < delaysNarrArr_Add.length; i++) {
+                        delaysArrJson_Add[i] = {
+                            workDescription: delaysNarrArr_Add[i],
+                            workDescriptionCategory: "2",
+                            hours: delaysHoursArr_Add[i],
+                            userNames: delaysUserNamesArr_Add[i]
+                        };
+                    }                    
+                }
+                //END BUILD THE DELAYS JSON OBJECT
 
-                //BEGIN BUILD THE WNTY DELAYS PRE-JSON OBJECT
-                for (var i = 0; i < wntyDelaysNarrArr_Add.length; i++) {
-                    wntyDelaysArrJson_Add[i] = {
-                        workDescription: wntyDelaysNarrArr_Add[i],
-                        workDescriptionCategory: "3",
-                        hours: wntyDelaysHoursArr_Add[i],
-                        userNames: wntyDelaysUserNamesArr_Add[i]
-                    };
+                //BEGIN BUILD THE WNTY DELAYS JSON OBJECT
+                //if there are no warranty delay time entries to add, set the json object to null
+                if (wntyDelaysNarrArr_Add.length < 1) {
+                    wntyDelaysArrJson_Edit = null
                 }
-                //END BUILD THE WNTY DELAYS PRE-JSON OBJECT
+                else {
+                    for (var i = 0; i < wntyDelaysNarrArr_Add.length; i++) {
+                        wntyDelaysArrJson_Add[i] = {
+                            workDescription: wntyDelaysNarrArr_Add[i],
+                            workDescriptionCategory: "3",
+                            hours: wntyDelaysHoursArr_Add[i],
+                            userNames: wntyDelaysUserNamesArr_Add[i]
+                        };
+                    }                    
+                }
+                //END BUILD THE WNTY DELAYS JSON OBJECT
             }
             //END SECTION TO PACK UP NEW RECORDS
 

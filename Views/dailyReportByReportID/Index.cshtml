@@ -982,31 +982,37 @@
             //only on existing records or copies
             function fn_buildJsonObjects() {
                 //BEGIN BUILD THE WORK DESCRIPTION JSON OBJECT
-                for (var i = 0; i < workDescNarrArr_Add.length; i++) {
-                    workDescArrJson_Add[i] = {
-                        workDescription: workDescNarrArr_Add[i],
-                        workDescriptionCategory: "1",
-                        hours: workDescHoursArr_Add[i],
-                        userNames: workDescUserNamesArr_Add[i]
-                    };
-                }
-
-                for (var i = 0; i < workDescNarrArr_Edit.length; i++) {
-                    workDescArrJson_Edit[i] = {
-                        workDescription: workDescNarrArr_Edit[i],
-                        workDescriptionCategory: "1",
-                        hours: workDescHoursArr_Edit[i],
-                        userNames: workDescUserNamesArr_Edit[i]
-                    };
-                }
-
                 //if there are no work description time entries to add, set the json object to null
                 if (workDescNarrArr_Add.length < 1) {
                     workDescArrJson_Add = null
                 }
+                else {
+                    for (var i = 0; i < workDescNarrArr_Add.length; i++) {
+                        workDescArrJson_Add[i] = {
+                            workDescription: workDescNarrArr_Add[i],
+                            workDescriptionCategory: "1",
+                            hours: workDescHoursArr_Add[i],
+                            userNames: workDescUserNamesArr_Add[i]
+                        };
+                    }
+
+                    for (var i = 0; i < workDescNarrArr_Edit.length; i++) {
+                        workDescArrJson_Edit[i] = {
+                            workDescription: workDescNarrArr_Edit[i],
+                            workDescriptionCategory: "1",
+                            hours: workDescHoursArr_Edit[i],
+                            userNames: workDescUserNamesArr_Edit[i]
+                        };
+                    }
+                }               
                 //END BUILD THE WORK DESCRIPTION JSON OBJECT
 
-                //BEGIN BUILD THE WORK DESCRIPTION SON OBJECT
+                //BEGIN BUILD THE DELAYS JSON OBJECT
+                //if there are no delay time entries to add, set the json object to null
+                if (delaysNarrArr_Add.length < 1) {
+                    delaysArrJson_Add = null
+                }
+                else {
                 for (var i = 0; i < delaysNarrArr_Add.length; i++) {
                     delaysArrJson_Add[i] = {
                         workDescription: delaysNarrArr_Add[i],
@@ -1023,15 +1029,16 @@
                         hours: delaysHoursArr_Edit[i],
                         userNames: delaysUserNamesArr_Edit[i]
                     };
-                }
-
-                //if there are no delay time entries to add, set the json object to null
-                if (delaysNarrArr_Add.length < 1) {
-                    delaysArrJson_Add = null
-                }
+                    }
+                }                
                 //END BUILD THE DELAYS JSON OBJECT
 
                 //BEGIN BUILD THE WNTY DELAYS JSON OBJECT
+                //if there are no warranty delay time entries to add, set the json object to null
+                if (wntyDelaysNarrArr_Add.length < 1) {
+                    wntyDelaysArrJson_Edit = null
+                }
+                else {
                 for (var i = 0; i < wntyDelaysNarrArr_Add.length; i++) {
                     wntyDelaysArrJson_Add[i] = {
                         workDescription: wntyDelaysNarrArr_Add[i],
@@ -1048,12 +1055,8 @@
                         hours: wntyDelaysHoursArr_Edit[i],
                         userNames: wntyDelaysUserNamesArr_Edit[i]
                     };
-                }
-
-                //if there are no warranty delay time entries to add, set the json object to null
-                if (wntyDelaysNarrArr_Edit.length < 1) {
-                    wntyDelaysArrJson_Edit = null
-                }
+                    }
+                }                
                 //END BUILD THE WNTY DELAYS JSON OBJECT
             }
 
@@ -1064,7 +1067,7 @@
             //cloned to new daily report
             function fn_printArrays() {
 
-                console.clear();
+                //console.clear();
                 //BEGIN RETURNED RECORDS ARRAYS
                 console.log("*****************")
                 console.log("work description RETURNED RECORDS section follows:");
