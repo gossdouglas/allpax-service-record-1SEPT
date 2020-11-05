@@ -742,49 +742,122 @@
 
             //cloned to new daily report
             function fn_printArrays() {
+                //console.clear();
+                //BEGIN RETURNED RECORDS ARRAYS
+                console.log("*****************")
+                //console.log("work description RETURNED RECORDS section follows:");
+                //console.log(workDescNarrArr_RtndRecs);
+                //console.log(workDescHoursArr_RtndRecs);
+                //console.log(workDescUserNamesArr_RtndRecs);
+                console.log("work description combined array RETURNED RECORDS section follows:");
+                console.log(workDesc_RtndRecs);
+
+                //console.log("delays section RETURNED RECORDS follows:");
+                //console.log(delaysNarrArr_RtndRecs);
+                //console.log(delaysHoursArr_RtndRecs);
+                //console.log(delaysUserNamesArr_RtndRecs);
+                console.log("delays combined array RETURNED RECORDS section follows:");
+                console.log(delays_RtndRecs);
+
+                //console.log("warranty delays RETURNED RECORDS section follows:");
+                //console.log(wntyDelaysNarrArr_RtndRecs);
+                //console.log(wntyDelaysHoursArr_RtndRecs);
+                //console.log(wntyDelaysUserNamesArr_RtndRecs);
+                console.log("warranty delays combined array RETURNED RECORDS section follows:");
+                console.log(wntyDelays_RtndRecs);
+                console.log("*****************")
+                //END RETURNED RECORDS ARRAYS
+
                 //BEGIN ADDED ARRAYS
-                console.log("work description ADDED section follows:");
-                console.log(workDescNarrArr_Add);
-                console.log(workDescHoursArr_Add);
-                console.log(workDescUserNamesArr_Add);
-                console.log(workDescArrJson_Add);
+                if (recordsToAddStatus == 1) {
+                    console.log("*****************")
+                    //console.log("work description ADDED section follows:");
+                    //console.log(workDescNarrArr_Add);
+                    //console.log(workDescHoursArr_Add);
+                    //console.log(workDescUserNamesArr_Add);                    
+                    console.log("work description combined array ADDED RECORDS section follows:");
+                    console.log(workDesc_Add);
+                    console.log(workDescArrJson_Add);
 
-                console.log("delays section ADDED follows:");
-                console.log(delaysNarrArr_Add);
-                console.log(delaysHoursArr_Add);
-                console.log(delaysUserNamesArr_Add);
-                console.log(delaysArrJson_Add);
+                    //console.log("delays section ADDED follows:");
+                    //console.log(delaysNarrArr_Add);
+                    //console.log(delaysHoursArr_Add);
+                    //console.log(delaysUserNamesArr_Add);                    
+                    console.log("delays combined array ADDED RECORDS section follows:");
+                    console.log(delays_Add);
+                    console.log(delaysArrJson_Add);
 
-                console.log("warranty delays ADDED section follows:");
-                console.log(wntyDelaysNarrArr_Add);
-                console.log(wntyDelaysHoursArr_Add);
-                console.log(wntyDelaysUserNamesArr_Add);
-                console.log(wntyDelaysArrJson_Add);
+                    //console.log("warranty delays ADDED section follows:");
+                    //console.log(wntyDelaysNarrArr_Add);
+                    //console.log(wntyDelaysHoursArr_Add);
+                    //console.log(wntyDelaysUserNamesArr_Add);
+                    console.log("warranty delays combined array ADDED RECORDS section follows:");
+                    console.log(wntyDelays_Add);
+                    console.log(wntyDelaysArrJson_Add);
+                    console.log("*****************")
+                }
                 //END ADDED ARRAYS
 
                 //BEGIN EDITED ARRAYS
-                console.log("work description EDITED section follows:");
-                console.log(workDescNarrArr_Edit);
-                console.log(workDescHoursArr_Edit);
-                console.log(workDescUserNamesArr_Edit);
-                console.log(workDescArrJson_Edit);
+                if (recordsToEditStatus == 1) {
+                    console.log("*****************")
+                    //console.log("work description EDITED section follows:");
+                    //console.log(workDescNarrArr_Edit);
+                    //console.log(workDescHoursArr_Edit);
+                    //console.log(workDescUserNamesArr_Edit);
+                    console.log("work description combined array EDITED RECORDS section follows:");
+                    //console.log(workDesc_Edit);
+                    console.log(workDescArrJson_Edit);
 
-                console.log("delays section EDITED follows:");
-                console.log(delaysNarrArr_Edit);
-                console.log(delaysHoursArr_Edit);
-                console.log(delaysUserNamesArr_Edit);
-                console.log(delaysArrJson_Edit);
+                    //console.log("-----------------")
+                    //console.log("team members to be added to this record:");;
+                    //console.log(_.difference(workDescUserNamesArr_Edit[0], workDescUserNamesArr_RtndRecs[0]));
+                    //console.log("team members to be deleted from this record:");
+                    //console.log(_.difference(workDescUserNamesArr_RtndRecs[0], workDescUserNamesArr_Edit[0]));
+                    //console.log("-----------------")
+                    console.log("*****************")
 
-                console.log("warranty delays EDITED section follows:");
-                console.log(wntyDelaysNarrArr_Edit);
-                console.log(wntyDelaysHoursArr_Edit);
-                console.log(wntyDelaysUserNamesArr_Edit);
-                console.log(wntyDelaysArrJson_Edit);
+                    //console.log("delays section EDITED follows:");
+                    //console.log(delaysNarrArr_Edit);
+                    //console.log(delaysHoursArr_Edit);
+                    //console.log(delaysUserNamesArr_Edit);
+                    console.log("delays combined array EDITED RECORDS section follows:");
+                    //console.log(delays_Edit);
+                    console.log(delaysArrJson_Edit);
+
+                    //console.log("-----------------")
+                    //console.log("team members to be added to this record:");;
+                    //console.log(_.difference(delaysUserNamesArr_Edit[0], delaysUserNamesArr_RtndRecs[0]));
+                    //console.log("team members to be deleted from this record:");
+                    //console.log(_.difference(delaysUserNamesArr_RtndRecs[0], delaysUserNamesArr_Edit[0]));
+                    //console.log("-----------------")
+                    console.log("*****************")
+
+                    //console.log("warranty delays EDITED section follows:");
+                    //console.log(wntyDelaysNarrArr_Edit);
+                    //console.log(wntyDelaysHoursArr_Edit);
+                    //console.log(wntyDelaysUserNamesArr_Edit);                   
+                    console.log("warranty delays combined array EDITED RECORDS section follows:");
+                    //console.log(wntyDelays_Edit);
+                    console.log(wntyDelaysArrJson_Edit);
+
+                    //console.log("-----------------")                    
+                    //console.log("team members to be added to this record:");;
+                    //console.log(_.difference(wntyDelaysUserNamesArr_Edit[0], wntyDelaysUserNamesArr_RtndRecs[0]));
+                    //console.log("team members to be deleted from this record:");
+                    //console.log(_.difference(wntyDelaysUserNamesArr_RtndRecs[0], wntyDelaysUserNamesArr_Edit[0]));
+                    //console.log("-----------------")
+                    console.log("*****************")
+                }
                 //END EDITED ARRAYS
 
                 //BEGIN DELETED ARRAYS
-                console.log("time entry delete section follows:");
-                console.log(timeEntryDeleteArr);
+                if (recordsToDeleteStatus == 1) {
+                    console.log("*****************")
+                    console.log("time entry delete section follows:");
+                    console.log(timeEntryDeleteArr);
+                    console.log("*****************")
+                }
                 //END DELETED ARRAYS
             }
 
