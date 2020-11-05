@@ -709,19 +709,13 @@
                 $(workDescTeam_narr_div_Content_RtndRecs).each(function (index1) {
 
                     var workDescUserNamesArrTemp = [];
-
                     currentLine_RtndRecs = $(this).parent().attr("data-time-entry-id");
-                    //workDesc_RtndRecs.push(currentLine_RtndRecs);//push the time entry id
 
-                    //workDescNarrArr_RtndRecs.push([$(workDescTeam_narr_div_Content[index1]).html()]);
                     workDescNarrArr_RtndRecs.push($(workDescTeam_narr_div_Content_RtndRecs[index1]).html());
-
-                    //workDesc_RtndRecs.push($(workDescTeam_narr_div_Content_RtndRecs[index1]).html());//push the narrative
 
                     currentDropdownLine_RtndRecs = $(this).parent().attr("id");
 
                     workDescHoursArr_RtndRecs.push(0);
-                    //workDesc_RtndRecs.push(0);//push the hours
 
                     workDescTeam_dpdwn_Content_RtndRecs = $("#" + currentDropdownLine_RtndRecs).find(".select2-selection__choice__display");
 
@@ -734,11 +728,8 @@
 
                         workDescUserNamesArrTemp.push(temp_UserID);
                     });
-                    //workDesc_RtndRecs.push(workDescUserNamesArrTemp);//push the team names to the end of the array
                     workDescUserNamesArr_RtndRecs.push(workDescUserNamesArrTemp);
-                    //workDesc_RtndRecs.push([workDesc_RtndRecs.push(currentLine_RtndRecs), $(workDescTeam_narr_div_Content_RtndRecs[index1]).html(), workDesc_RtndRecs.push(0), workDesc_RtndRecs.push(workDescUserNamesArrTemp)])
                     workDesc_RtndRecs.push([currentLine_RtndRecs, $(workDescTeam_narr_div_Content_RtndRecs[index1]).html(), 0, workDescUserNamesArrTemp]);
-                    //workDesc_RtndRecs.push(['1', '2']);//works
                 });
 
                 $(delaysTeam_narr_div_Content_RtndRecs).each(function (index1) {
@@ -746,12 +737,10 @@
                     var delaysUserNamesArrTemp = [];
                     currentLine_RtndRecs = $(this).parent().attr("data-time-entry-id");
 
-                    //delaysNarrArr_RtndRecs.push([$(delaysTeam_narr_div_Content[index1]).html()]);
                     delaysNarrArr_RtndRecs.push($(delaysTeam_narr_div_Content_RtndRecs[index1]).html());
 
                     currentDropdownLine_RtndRecs = $(this).parent().attr("id");
                     delaysTeam_hours_div_Content_RtndRecs = parseFloat($("#" + currentDropdownLine_RtndRecs).find(".delaysTeam_hours_div").html());
-                    //delaysHoursArr_RtndRecs.push([delaysTeam_hours_div_Content]);
                     delaysHoursArr_RtndRecs.push(delaysTeam_hours_div_Content_RtndRecs);
                     delaysTeam_dpdwn_Content_RtndRecs = $("#" + currentDropdownLine_RtndRecs).find(".select2-selection__choice__display");
 
@@ -774,13 +763,10 @@
                     var wntyDelaysUserNamesArrTemp = [];
                     currentLine_RtndRecs = $(this).parent().attr("data-time-entry-id");
 
-                    //wntyDelaysNarrArr_RtndRecs.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
                     wntyDelaysNarrArr_RtndRecs.push($(wntyDelaysTeam_narr_div_Content_RtndRecs[index1]).html());
 
                     currentDropdownLine_RtndRecs = $(this).parent().attr("id");
                     wntyDelaysTeam_hours_div_Content_RtndRecs = parseFloat($("#" + currentDropdownLine_RtndRecs).find(".wntyDelaysTeam_hours_div").html());
-                    //console.log(wntyDelaysTeam_hours_div_Content);
-                    //wntyDelaysHoursArr_RtndRecs.push([wntyDelaysTeam_hours_div_Content]);
                     wntyDelaysHoursArr_RtndRecs.push(wntyDelaysTeam_hours_div_Content_RtndRecs);
                     wntyDelaysTeam_dpdwn_Content_RtndRecs = $("#" + currentDropdownLine_RtndRecs).find(".select2-selection__choice__display");
 
@@ -924,7 +910,6 @@
                     var workDescUserNamesArrTemp = [];
                     currentLine_Edit = $(this).parent().attr("data-time-entry-id");
 
-                    //workDescNarrArr_Edit.push([$(workDescTeam_narr_div_Content[index1]).html()]);
                     workDescNarrArr_Edit.push($(workDescTeam_narr_div_Content_Edit[index1]).html());
 
                     currentDropdownLine_Edit = $(this).parent().attr("id");
@@ -949,12 +934,10 @@
                     var delaysUserNamesArrTemp = [];
                     currentLine_Edit = $(this).parent().attr("data-time-entry-id");
 
-                    //delaysNarrArr_Edit.push([$(delaysTeam_narr_div_Content[index1]).html()]);
                     delaysNarrArr_Edit.push($(delaysTeam_narr_div_Content_Edit[index1]).html());
 
                     currentDropdownLine_Edit = $(this).parent().attr("id");
                     delaysTeam_hours_div_Content_Edit = parseFloat($("#" + currentDropdownLine_Edit).find(".delaysTeam_hours_div").html());
-                    //delaysHoursArr_Edit.push([delaysTeam_hours_div_Content]);
                     delaysHoursArr_Edit.push(delaysTeam_hours_div_Content_Edit);
                     delaysTeam_dpdwn_Content_Edit = $("#" + currentDropdownLine_Edit).find(".select2-selection__choice__display");
 
@@ -976,13 +959,10 @@
                     var wntyDelaysUserNamesArrTemp = [];
                     currentLine_Edit = $(this).parent().attr("data-time-entry-id");
 
-                    //wntyDelaysNarrArr_Edit.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
                     wntyDelaysNarrArr_Edit.push($(wntyDelaysTeam_narr_div_Content_Edit[index1]).html());
 
                     currentDropdownLine_Edit = $(this).parent().attr("id");
                     wntyDelaysTeam_hours_div_Content_Edit = parseFloat($("#" + currentDropdownLine_Edit).find(".wntyDelaysTeam_hours_div").html());
-                    //console.log(wntyDelaysTeam_hours_div_Content);
-                    //wntyDelaysHoursArr_Edit.push([wntyDelaysTeam_hours_div_Content]);
                     wntyDelaysHoursArr_Edit.push(wntyDelaysTeam_hours_div_Content_Edit);
                     wntyDelaysTeam_dpdwn_Content_Edit = $("#" + currentDropdownLine_Edit).find(".select2-selection__choice__display");
 
@@ -998,8 +978,6 @@
                     wntyDelaysUserNamesArr_Edit.push(wntyDelaysUserNamesArrTemp);
                     wntyDelays_Edit.push([currentLine_Edit, $(wntyDelaysTeam_narr_div_Content_Edit[index1]).html(), 0, wntyDelaysUserNamesArrTemp]);
                 });
-
-                //fn_buildPreJsonObjects();
             }
 
             //only on existing records or copies
@@ -1106,23 +1084,23 @@
                 //BEGIN RETURNED RECORDS ARRAYS
                 console.log("*****************")
                 console.log("work description RETURNED RECORDS section follows:");
-                console.log(workDescNarrArr_RtndRecs);
-                console.log(workDescHoursArr_RtndRecs);
-                console.log(workDescUserNamesArr_RtndRecs);
+                //console.log(workDescNarrArr_RtndRecs);
+                //console.log(workDescHoursArr_RtndRecs);
+                //console.log(workDescUserNamesArr_RtndRecs);
                 console.log("work description combined array RETURNED RECORDS section follows:");
                 console.log(workDesc_RtndRecs);
 
                 console.log("delays section RETURNED RECORDS follows:");
-                console.log(delaysNarrArr_RtndRecs);
-                console.log(delaysHoursArr_RtndRecs);
-                console.log(delaysUserNamesArr_RtndRecs);
+                //console.log(delaysNarrArr_RtndRecs);
+                //console.log(delaysHoursArr_RtndRecs);
+                //console.log(delaysUserNamesArr_RtndRecs);
                 console.log("delays combined array RETURNED RECORDS section follows:");
                 console.log(delays_RtndRecs);
 
                 console.log("warranty delays RETURNED RECORDS section follows:");
-                console.log(wntyDelaysNarrArr_RtndRecs);
-                console.log(wntyDelaysHoursArr_RtndRecs);
-                console.log(wntyDelaysUserNamesArr_RtndRecs);
+                //console.log(wntyDelaysNarrArr_RtndRecs);
+                //console.log(wntyDelaysHoursArr_RtndRecs);
+                //console.log(wntyDelaysUserNamesArr_RtndRecs);
                 console.log("warranty delays combined array RETURNED RECORDS section follows:");
                 console.log(wntyDelays_RtndRecs);
                 console.log("*****************")
@@ -1156,10 +1134,10 @@
                 if (recordsToEditStatus == 1) {
                     console.log("*****************")
                     console.log("work description EDITED section follows:");
-                    console.log(workDescNarrArr_Edit);
-                    console.log(workDescHoursArr_Edit);
-                    console.log(workDescUserNamesArr_Edit);
-                    console.log(workDescArrJson_Edit);
+                    //console.log(workDescNarrArr_Edit);
+                    //console.log(workDescHoursArr_Edit);
+                    //console.log(workDescUserNamesArr_Edit);
+                    //console.log(workDescArrJson_Edit);
 
                     console.log("work description combined array EDITED RECORDS section follows:");
                     console.log(workDesc_Edit);
@@ -1173,10 +1151,10 @@
                     console.log("*****************")
 
                     console.log("delays section EDITED follows:");
-                    console.log(delaysNarrArr_Edit);
-                    console.log(delaysHoursArr_Edit);
-                    console.log(delaysUserNamesArr_Edit);
-                    console.log(delaysArrJson_Edit);
+                    //console.log(delaysNarrArr_Edit);
+                    //console.log(delaysHoursArr_Edit);
+                    //console.log(delaysUserNamesArr_Edit);
+                    //console.log(delaysArrJson_Edit);
 
                     console.log("delays combined array EDITED RECORDS section follows:");
                     console.log(delays_Edit);
@@ -1190,10 +1168,10 @@
                     console.log("*****************")
 
                     console.log("warranty delays EDITED section follows:");
-                    console.log(wntyDelaysNarrArr_Edit);
-                    console.log(wntyDelaysHoursArr_Edit);
-                    console.log(wntyDelaysUserNamesArr_Edit);
-                    console.log(wntyDelaysArrJson_Edit);
+                    //console.log(wntyDelaysNarrArr_Edit);
+                    //console.log(wntyDelaysHoursArr_Edit);
+                    //console.log(wntyDelaysUserNamesArr_Edit);
+                    //console.log(wntyDelaysArrJson_Edit);
 
                     console.log("warranty delays combined array EDITED RECORDS section follows:");
                     console.log(wntyDelays_Edit);
