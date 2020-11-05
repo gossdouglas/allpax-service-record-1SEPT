@@ -799,6 +799,7 @@
                 var wntyDelaysTeam_hours_div_Content_Add;
                 var wntyDelaysTeam_dpdwn_Content_Add;
 
+                var currentLine_Add;//generic
                 var currentDropdownLine_Add;//generic
 
                 $(workDescTeam_narr_div_Content_Add).each(function (index1) {
@@ -821,6 +822,7 @@
                         workDescUserNamesArrTemp.push(temp_UserID);
                     });
                     workDescUserNamesArr_Add.push(workDescUserNamesArrTemp);
+                    workDesc_Add.push([$(workDescTeam_narr_div_Content_Add[index1]).html(), 0, workDescUserNamesArrTemp]);
 
                     if (recordsToAddStatus == 0) {
                         recordsToAddStatus = 1;
@@ -850,6 +852,7 @@
                         delaysUserNamesArrTemp.push(temp_UserID);
                     });
                     delaysUserNamesArr_Add.push(delaysUserNamesArrTemp);
+                    delays_Add.push([$(delaysTeam_narr_div_Content_Add[index1]).html(), delaysTeam_hours_div_Content_Add, delaysUserNamesArrTemp]);
 
                     if (recordsToAddStatus == 0) {
                         recordsToAddStatus = 1;
@@ -880,6 +883,7 @@
                         wntyDelaysUserNamesArrTemp.push(temp_UserID);
                     });
                     wntyDelaysUserNamesArr_Add.push(wntyDelaysUserNamesArrTemp);
+                    wntyDelays_Add.push([$(wntyDelaysTeam_narr_div_Content_Add[index1]).html(), wntyDelaysTeam_hours_div_Content_Add, wntyDelaysUserNamesArrTemp]);
 
                     if (recordsToAddStatus == 0) {
                         recordsToAddStatus = 1;
@@ -1033,25 +1037,37 @@
             function fn_buildJsonObjects() {
                 //BEGIN BUILD THE WORK DESCRIPTION JSON OBJECT
                 //if there are no work description time entries to add, set the json object to null
-                if (workDescNarrArr_Add.length < 1) {
+                //if (workDescNarrArr_Add.length < 1) {
+                if (workDesc_Add.length < 1) {
                     workDescArrJson_Add = null
                 }
                 else {
-                    for (var i = 0; i < workDescNarrArr_Add.length; i++) {
+                    //for (var i = 0; i < workDescNarrArr_Add.length; i++) {
+                    for (var i = 0; i < workDesc_Add.length; i++) {
                         workDescArrJson_Add[i] = {
-                            workDescription: workDescNarrArr_Add[i],
+                            //workDescription: workDescNarrArr_Add[i],
+                            //workDescriptionCategory: "1",
+                            //hours: workDescHoursArr_Add[i],
+                            //userNames: workDescUserNamesArr_Add[i]
+                            workDescription: workDesc_Add[i][0],
                             workDescriptionCategory: "1",
-                            hours: workDescHoursArr_Add[i],
-                            userNames: workDescUserNamesArr_Add[i]
+                            hours: workDesc_Add[i][0],
+                            userNames: workDesc_Add[i][2]
                         };
                     }
 
-                    for (var i = 0; i < workDescNarrArr_Edit.length; i++) {
+                    //for (var i = 0; i < workDescNarrArr_Edit.length; i++) {
+                    for (var i = 0; i < workDesc_Edit.length; i++) {
                         workDescArrJson_Edit[i] = {
-                            workDescription: workDescNarrArr_Edit[i],
+                            //workDescription: workDescNarrArr_Edit[i],
+                            //workDescriptionCategory: "1",
+                            //hours: workDescHoursArr_Edit[i],
+                            //userNames: workDescUserNamesArr_Edit[i]
+                            timeEntry: workDesc_Edit[i][0],
+                            workDescription: workDesc_Edit[i][1],
                             workDescriptionCategory: "1",
-                            hours: workDescHoursArr_Edit[i],
-                            userNames: workDescUserNamesArr_Edit[i]
+                            hours: workDesc_Edit[i][2],
+                            userNames: workDesc_Edit[i][3]
                         };
                     }
                 }               
@@ -1146,23 +1162,29 @@
                 //BEGIN ADDED ARRAYS
                 if (recordsToAddStatus == 1) {
                     console.log("*****************")
-                    console.log("work description ADDED section follows:");
-                    console.log(workDescNarrArr_Add);
-                    console.log(workDescHoursArr_Add);
-                    console.log(workDescUserNamesArr_Add);
+                    //console.log("work description ADDED section follows:");
+                    //console.log(workDescNarrArr_Add);
+                    //console.log(workDescHoursArr_Add);
+                    //console.log(workDescUserNamesArr_Add);
                     console.log(workDescArrJson_Add);
+                    console.log("work description combined array ADDED RECORDS section follows:");
+                    console.log(workDesc_Add);
 
-                    console.log("delays section ADDED follows:");
-                    console.log(delaysNarrArr_Add);
-                    console.log(delaysHoursArr_Add);
-                    console.log(delaysUserNamesArr_Add);
-                    console.log(delaysArrJson_Add);
+                    //console.log("delays section ADDED follows:");
+                    //console.log(delaysNarrArr_Add);
+                    //console.log(delaysHoursArr_Add);
+                    //console.log(delaysUserNamesArr_Add);
+                    //console.log(delaysArrJson_Add);
+                    console.log("delays combined array ADDED RECORDS section follows:");
+                    console.log(delays_Add);
 
-                    console.log("warranty delays ADDED section follows:");
-                    console.log(wntyDelaysNarrArr_Add);
-                    console.log(wntyDelaysHoursArr_Add);
-                    console.log(wntyDelaysUserNamesArr_Add);
-                    console.log(wntyDelaysArrJson_Add);
+                    //console.log("warranty delays ADDED section follows:");
+                    //console.log(wntyDelaysNarrArr_Add);
+                    //console.log(wntyDelaysHoursArr_Add);
+                    //console.log(wntyDelaysUserNamesArr_Add);
+                    //console.log(wntyDelaysArrJson_Add);
+                    console.log("warranty delays combined array ADDED RECORDS section follows:");
+                    console.log(wntyDelays_Add);
                     console.log("*****************")
                 }
                 //END ADDED ARRAYS
