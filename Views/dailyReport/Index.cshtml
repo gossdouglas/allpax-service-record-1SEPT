@@ -317,6 +317,8 @@
                 if (fn_rowFilled($(this))) {
 
                     var currentRow = $(this).parent().parent();
+                    var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
+                    currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html 
 
                     $(this).hide();
                     $(currentRow).find(".Btn_edit").removeAttr("hidden");
@@ -902,7 +904,9 @@
             function fn_cleanupDataEntryFields(passedHTML) {
                 //BEGIN CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
                 passedHTML = passedHTML.replace(/(&amp;)+/g, "");//wipe out &amp;
+                passedHTML = passedHTML.replace(/(amp;)+/g, "");//wipe out &amp;
                 passedHTML = passedHTML.replace(/(&nbsp;)+/g, "");//wipe out nbsp
+                passedHTML = passedHTML.replace(/(nbsp;)+/g, "");//wipe out nbsp
                 passedHTML = passedHTML.replace(/(<\w*>)+/g, "");//wipe out any html tags  
 
                 return passedHTML;
@@ -1130,7 +1134,7 @@
             <strong>Team</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <strong>Action</strong>
+            <strong>Action/Pending Op.</strong>
         </div>
     </div>
     @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
@@ -1198,7 +1202,7 @@
             <strong>Hours</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <strong>Action</strong>
+            <strong>Action/Pending Op.</strong>
         </div>
     </div>
     @*BEGIN NEW DELAYS TEMPLATE*@
@@ -1263,7 +1267,7 @@
             <strong>Hours</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <strong>Action</strong>
+            <strong>Action/Pending Op.</strong>
         </div>
     </div>
     @*BEGIN NEW WARRANTY DELAYS  TEMPLATE*@

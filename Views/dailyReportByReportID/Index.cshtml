@@ -269,7 +269,6 @@
                 fn_disableSelect2();
                 var currentRow = $(this).parent().parent();
 
-                //console.log("HTML of the NARR DIV before processing is " + currentRow.find(".narr_div").html());
                 var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
                 currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html              
 
@@ -354,6 +353,8 @@
                 if (fn_rowFilled($(this))) {
 
                     var currentRow = $(this).parent().parent();
+                    var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
+                    currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html 
 
                     $(this).hide();
                     $(currentRow).find(".Btn_edit").removeAttr("hidden");
@@ -664,6 +665,39 @@
                 }
                 //END ADD RECORDS TO A DAILY REPORT
 
+                //BEGIN EDIT RECORDS ON A DAILY REPORT
+                //only on existing records or copies
+                if (recordsToEditStatus == 1) {//if there are records to add...
+                    var data = {
+                        dailyReportID: dailyReportID,
+                        //jobID: addItem1,
+                        //date: addItem2,
+                        //subJobID: addItem3,
+                        //startTime: addItem4,
+                        //endTime: addItem5,
+                        //lunchHours: addItem6,
+                        //equipment: addItem7,
+                        //dailyReportAuthor: addItem8,
+                        //dailyRptTeamArr: addItem9,
+                        workDescArr: workDescArrJson_Edit,
+                        delaysArr: delaysArrJson_Edit,
+                        wntyDelaysArr: wntyDelaysArrJson_Edit
+                    };
+
+                    $.ajax({
+                        url: '/dailyReportByReportID/UpdateDailyReportTimeEntries',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        success: function () {
+
+                        }
+                    });
+                }
+                //END EDIT RECORDS ON A DAILY REPORT
+
                 //BEGIN DELETE RECORDS FROM A DAILY REPORT
                 //only on existing records or copies
                 if (recordsToDeleteStatus == 1) {//if there are records to delete...
@@ -684,6 +718,8 @@
                     });
                 }
                 //END DELETE RECORDS FROM A DAILY REPORT
+
+                
 
                 fn_printArrays();
                 //window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
@@ -709,14 +745,9 @@
                 $(workDescTeam_narr_div_Content_RtndRecs).each(function (index1) {
 
                     var workDescUserNamesArrTemp = [];
+
                     currentLine_RtndRecs = $(this).parent().attr("data-time-entry-id");
-
-                    workDescNarrArr_RtndRecs.push($(workDescTeam_narr_div_Content_RtndRecs[index1]).html());
-
                     currentDropdownLine_RtndRecs = $(this).parent().attr("id");
-
-                    workDescHoursArr_RtndRecs.push(0);
-
                     workDescTeam_dpdwn_Content_RtndRecs = $("#" + currentDropdownLine_RtndRecs).find(".select2-selection__choice__display");
 
                     $(workDescTeam_dpdwn_Content_RtndRecs).each(function (index2) {
@@ -728,20 +759,17 @@
 
                         workDescUserNamesArrTemp.push(temp_UserID);
                     });
-                    workDescUserNamesArr_RtndRecs.push(workDescUserNamesArrTemp);
+
                     workDesc_RtndRecs.push([currentLine_RtndRecs, $(workDescTeam_narr_div_Content_RtndRecs[index1]).html(), 0, workDescUserNamesArrTemp]);
                 });
 
                 $(delaysTeam_narr_div_Content_RtndRecs).each(function (index1) {
 
                     var delaysUserNamesArrTemp = [];
+
                     currentLine_RtndRecs = $(this).parent().attr("data-time-entry-id");
-
-                    delaysNarrArr_RtndRecs.push($(delaysTeam_narr_div_Content_RtndRecs[index1]).html());
-
                     currentDropdownLine_RtndRecs = $(this).parent().attr("id");
                     delaysTeam_hours_div_Content_RtndRecs = parseFloat($("#" + currentDropdownLine_RtndRecs).find(".delaysTeam_hours_div").html());
-                    delaysHoursArr_RtndRecs.push(delaysTeam_hours_div_Content_RtndRecs);
                     delaysTeam_dpdwn_Content_RtndRecs = $("#" + currentDropdownLine_RtndRecs).find(".select2-selection__choice__display");
 
                     $(delaysTeam_dpdwn_Content_RtndRecs).each(function (index2) {
@@ -753,21 +781,17 @@
 
                         delaysUserNamesArrTemp.push(temp_UserID);
                     });
-                    delaysUserNamesArr_RtndRecs.push(delaysUserNamesArrTemp);
 
-                    delays_RtndRecs.push([currentLine_RtndRecs, $(delaysTeam_narr_div_Content_RtndRecs[index1]).html(), 0, delaysUserNamesArrTemp]);
+                    delays_RtndRecs.push([currentLine_RtndRecs, $(delaysTeam_narr_div_Content_RtndRecs[index1]).html(), delaysTeam_hours_div_Content_RtndRecs, delaysUserNamesArrTemp]);
                 });
 
                 $(wntyDelaysTeam_narr_div_Content_RtndRecs).each(function (index1) {
 
                     var wntyDelaysUserNamesArrTemp = [];
+
                     currentLine_RtndRecs = $(this).parent().attr("data-time-entry-id");
-
-                    wntyDelaysNarrArr_RtndRecs.push($(wntyDelaysTeam_narr_div_Content_RtndRecs[index1]).html());
-
                     currentDropdownLine_RtndRecs = $(this).parent().attr("id");
                     wntyDelaysTeam_hours_div_Content_RtndRecs = parseFloat($("#" + currentDropdownLine_RtndRecs).find(".wntyDelaysTeam_hours_div").html());
-                    wntyDelaysHoursArr_RtndRecs.push(wntyDelaysTeam_hours_div_Content_RtndRecs);
                     wntyDelaysTeam_dpdwn_Content_RtndRecs = $("#" + currentDropdownLine_RtndRecs).find(".select2-selection__choice__display");
 
                     $(wntyDelaysTeam_dpdwn_Content_RtndRecs).each(function (index2) {
@@ -779,9 +803,8 @@
 
                         wntyDelaysUserNamesArrTemp.push(temp_UserID);
                     });
-                    wntyDelaysUserNamesArr_RtndRecs.push(wntyDelaysUserNamesArrTemp);
 
-                    wntyDelays_RtndRecs.push([currentLine_RtndRecs, $(wntyDelaysTeam_narr_div_Content_RtndRecs[index1]).html(), 0, wntyDelaysUserNamesArrTemp]);
+                    wntyDelays_RtndRecs.push([currentLine_RtndRecs, $(wntyDelaysTeam_narr_div_Content_RtndRecs[index1]).html(), wntyDelaysTeam_hours_div_Content_RtndRecs, wntyDelaysUserNamesArrTemp]);
                 });
             }
 
@@ -799,17 +822,13 @@
                 var wntyDelaysTeam_hours_div_Content_Add;
                 var wntyDelaysTeam_dpdwn_Content_Add;
 
-                var currentLine_Add;//generic
                 var currentDropdownLine_Add;//generic
 
                 $(workDescTeam_narr_div_Content_Add).each(function (index1) {
 
                     var workDescUserNamesArrTemp = [];
 
-                    workDescNarrArr_Add.push($(workDescTeam_narr_div_Content_Add[index1]).html());
-
                     currentDropdownLine_Add = $(this).parent().attr("id");
-                    workDescHoursArr_Add.push(0);
                     workDescTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
                     $(workDescTeam_dpdwn_Content_Add).each(function (index2) {
@@ -821,7 +840,7 @@
 
                         workDescUserNamesArrTemp.push(temp_UserID);
                     });
-                    workDescUserNamesArr_Add.push(workDescUserNamesArrTemp);
+
                     workDesc_Add.push([$(workDescTeam_narr_div_Content_Add[index1]).html(), 0, workDescUserNamesArrTemp]);
 
                     if (recordsToAddStatus == 0) {
@@ -833,13 +852,8 @@
 
                     var delaysUserNamesArrTemp = [];
 
-                    //delaysNarrArr_Add.push([$(delaysTeam_narr_div_Content[index1]).html()]);
-                    delaysNarrArr_Add.push($(delaysTeam_narr_div_Content_Add[index1]).html());
-
                     currentDropdownLine_Add = $(this).parent().attr("id");
                     delaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".delaysTeam_hours_div").html());
-                    //delaysHoursArr_Add.push([delaysTeam_hours_div_Content]);
-                    delaysHoursArr_Add.push(delaysTeam_hours_div_Content_Add);
                     delaysTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
                     $(delaysTeam_dpdwn_Content_Add).each(function (index2) {
@@ -851,7 +865,7 @@
 
                         delaysUserNamesArrTemp.push(temp_UserID);
                     });
-                    delaysUserNamesArr_Add.push(delaysUserNamesArrTemp);
+
                     delays_Add.push([$(delaysTeam_narr_div_Content_Add[index1]).html(), delaysTeam_hours_div_Content_Add, delaysUserNamesArrTemp]);
 
                     if (recordsToAddStatus == 0) {
@@ -863,14 +877,8 @@
 
                     var wntyDelaysUserNamesArrTemp = [];
 
-                    //wntyDelaysNarrArr_Add.push([$(wntyDelaysTeam_narr_div_Content[index1]).html()]);
-                    wntyDelaysNarrArr_Add.push($(wntyDelaysTeam_narr_div_Content_Add[index1]).html());
-
                     currentDropdownLine_Add = $(this).parent().attr("id");
                     wntyDelaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".wntyDelaysTeam_hours_div").html());
-                    //console.log(wntyDelaysTeam_hours_div_Content);
-                    //wntyDelaysHoursArr_Add.push([wntyDelaysTeam_hours_div_Content]);
-                    wntyDelaysHoursArr_Add.push(wntyDelaysTeam_hours_div_Content_Add);
                     wntyDelaysTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
                     $(wntyDelaysTeam_dpdwn_Content_Add).each(function (index2) {
@@ -882,7 +890,6 @@
 
                         wntyDelaysUserNamesArrTemp.push(temp_UserID);
                     });
-                    wntyDelaysUserNamesArr_Add.push(wntyDelaysUserNamesArrTemp);
                     wntyDelays_Add.push([$(wntyDelaysTeam_narr_div_Content_Add[index1]).html(), wntyDelaysTeam_hours_div_Content_Add, wntyDelaysUserNamesArrTemp]);
 
                     if (recordsToAddStatus == 0) {
@@ -912,12 +919,9 @@
                 $(workDescTeam_narr_div_Content_Edit).each(function (index1) {
 
                     var workDescUserNamesArrTemp = [];
+
                     currentLine_Edit = $(this).parent().attr("data-time-entry-id");
-
-                    workDescNarrArr_Edit.push($(workDescTeam_narr_div_Content_Edit[index1]).html());
-
                     currentDropdownLine_Edit = $(this).parent().attr("id");
-                    workDescHoursArr_Edit.push(0);
                     workDescTeam_dpdwn_Content_Edit = $("#" + currentDropdownLine_Edit).find(".select2-selection__choice__display");
 
                     $(workDescTeam_dpdwn_Content_Edit).each(function (index2) {
@@ -934,27 +938,23 @@
                     for (var i = 0; i < workDesc_RtndRecs.length; i++) {
                         if (workDesc_RtndRecs[i][0] == currentLine_Edit) {
                             currentLineUserNamesRtndRec_Edit = workDesc_RtndRecs[i][3];
-                            //console.log("current time entry id " + currentLine_Edit + " found at " + i);
-                            //console.log("the user names from returned records was " + workDesc_RtndRecs[i][3]);
-                            //console.log("they will be added to workDesc_Edit at position 4");
                         }
                     };
                     //END COPY THE ORIGINAL TEAM MEMBERS FROM THE RETURNED RECORD TO THE EDITED ARRAY
 
-                    workDescUserNamesArr_Edit.push(workDescUserNamesArrTemp);
                     workDesc_Edit.push([currentLine_Edit, $(workDescTeam_narr_div_Content_Edit[index1]).html(), 0, workDescUserNamesArrTemp, currentLineUserNamesRtndRec_Edit]);
+                    if (recordsToEditStatus  == 0) {
+                        recordsToEditStatus  = 1;
+                    }
                 });
 
                 $(delaysTeam_narr_div_Content_Edit).each(function (index1) {
 
                     var delaysUserNamesArrTemp = [];
+
                     currentLine_Edit = $(this).parent().attr("data-time-entry-id");
-
-                    delaysNarrArr_Edit.push($(delaysTeam_narr_div_Content_Edit[index1]).html());
-
                     currentDropdownLine_Edit = $(this).parent().attr("id");
                     delaysTeam_hours_div_Content_Edit = parseFloat($("#" + currentDropdownLine_Edit).find(".delaysTeam_hours_div").html());
-                    delaysHoursArr_Edit.push(delaysTeam_hours_div_Content_Edit);
                     delaysTeam_dpdwn_Content_Edit = $("#" + currentDropdownLine_Edit).find(".select2-selection__choice__display");
 
                     $(delaysTeam_dpdwn_Content_Edit).each(function (index2) {
@@ -971,27 +971,23 @@
                     for (var i = 0; i < delays_RtndRecs.length; i++) {
                         if (delays_RtndRecs[i][0] == currentLine_Edit) {
                             currentLineUserNamesRtndRec_Edit = delays_RtndRecs[i][3];
-                            //console.log("current time entry id " + currentLine_Edit + " found at " + i);
-                            //console.log("the user names from returned records was " + workDesc_RtndRecs[i][3]);
-                            //console.log("they will be added to workDesc_Edit at position 4");
                         }
                     };
                     //END COPY THE ORIGINAL TEAM MEMBERS FROM THE RETURNED RECORD TO THE EDITED ARRAY
 
-                    delaysUserNamesArr_Edit.push(delaysUserNamesArrTemp);
                     delays_Edit.push([currentLine_Edit, $(delaysTeam_narr_div_Content_Edit[index1]).html(), delaysTeam_hours_div_Content_Edit, delaysUserNamesArrTemp, currentLineUserNamesRtndRec_Edit]);
+                    if (recordsToEditStatus == 0) {
+                        recordsToEditStatus = 1;
+                    }
                 });
 
                 $(wntyDelaysTeam_narr_div_Content_Edit).each(function (index1) {
 
                     var wntyDelaysUserNamesArrTemp = [];
+
                     currentLine_Edit = $(this).parent().attr("data-time-entry-id");
-
-                    wntyDelaysNarrArr_Edit.push($(wntyDelaysTeam_narr_div_Content_Edit[index1]).html());
-
                     currentDropdownLine_Edit = $(this).parent().attr("id");
                     wntyDelaysTeam_hours_div_Content_Edit = parseFloat($("#" + currentDropdownLine_Edit).find(".wntyDelaysTeam_hours_div").html());
-                    wntyDelaysHoursArr_Edit.push(wntyDelaysTeam_hours_div_Content_Edit);
                     wntyDelaysTeam_dpdwn_Content_Edit = $("#" + currentDropdownLine_Edit).find(".select2-selection__choice__display");
 
                     $(wntyDelaysTeam_dpdwn_Content_Edit).each(function (index2) {
@@ -1008,15 +1004,14 @@
                     for (var i = 0; i < delays_RtndRecs.length; i++) {
                         if (delays_RtndRecs[i][0] == currentLine_Edit) {
                             currentLineUserNamesRtndRec_Edit = delays_RtndRecs[i][3];
-                            //console.log("current time entry id " + currentLine_Edit + " found at " + i);
-                            //console.log("the user names from returned records was " + workDesc_RtndRecs[i][3]);
-                            //console.log("they will be added to workDesc_Edit at position 4");
                         }
                     };
                     //END COPY THE ORIGINAL TEAM MEMBERS FROM THE RETURNED RECORD TO THE EDITED ARRAY
 
-                    wntyDelaysUserNamesArr_Edit.push(wntyDelaysUserNamesArrTemp);
                     wntyDelays_Edit.push([currentLine_Edit, $(wntyDelaysTeam_narr_div_Content_Edit[index1]).html(), wntyDelaysTeam_hours_div_Content_Edit, wntyDelaysUserNamesArrTemp, currentLineUserNamesRtndRec_Edit]);
+                    if (recordsToEditStatus == 0) {
+                        recordsToEditStatus = 1;
+                    }
                 });
             }
 
@@ -1026,9 +1021,7 @@
                 var timeEntriesToDelete = $(".deletedRecords");
 
                 $(timeEntriesToDelete).each(function (index) {
-
                     timeEntryDeleteArr.push($(this).attr("data-time-entry-id"));
-                    //console.log("to delete: " + $(this).attr("data-time-entry-id"));
                 });
             }
 
@@ -1057,7 +1050,7 @@
                 else {
                     for (var i = 0; i < workDesc_Edit.length; i++) {
                         workDescArrJson_Edit[i] = {
-                            timeEntry: workDesc_Edit[i][0],
+                            timeEntryID: workDesc_Edit[i][0],
                             workDescription: workDesc_Edit[i][1],
                             workDescriptionCategory: "1",
                             hours: workDesc_Edit[i][2],
@@ -1091,7 +1084,7 @@
                 else {
                     for (var i = 0; i < delays_Edit.length; i++) {
                         delaysArrJson_Edit[i] = {
-                            timeEntry: delays_Edit[i][0],
+                            timeEntryID: delays_Edit[i][0],
                             workDescription: delays_Edit[i][1],
                             workDescriptionCategory: "2",
                             hours: delays_Edit[i][2],
@@ -1125,7 +1118,7 @@
                 else {
                     for (var i = 0; i < wntyDelays_Edit.length; i++) {
                         wntyDelaysArrJson_Edit[i] = {
-                            timeEntry: wntyDelays_Edit[i][0],
+                            timeEntryID: wntyDelays_Edit[i][0],
                             workDescription: wntyDelays_Edit[i][1],
                             workDescriptionCategory: "3",
                             hours: wntyDelays_Edit[i][2],
@@ -1147,24 +1140,12 @@
                 //console.clear();
                 //BEGIN RETURNED RECORDS ARRAYS
                 console.log("*****************")
-                //console.log("work description RETURNED RECORDS section follows:");
-                //console.log(workDescNarrArr_RtndRecs);
-                //console.log(workDescHoursArr_RtndRecs);
-                //console.log(workDescUserNamesArr_RtndRecs);
                 console.log("work description combined array RETURNED RECORDS section follows:");
                 console.log(workDesc_RtndRecs);
 
-                //console.log("delays section RETURNED RECORDS follows:");
-                //console.log(delaysNarrArr_RtndRecs);
-                //console.log(delaysHoursArr_RtndRecs);
-                //console.log(delaysUserNamesArr_RtndRecs);
                 console.log("delays combined array RETURNED RECORDS section follows:");
                 console.log(delays_RtndRecs);
 
-                //console.log("warranty delays RETURNED RECORDS section follows:");
-                //console.log(wntyDelaysNarrArr_RtndRecs);
-                //console.log(wntyDelaysHoursArr_RtndRecs);
-                //console.log(wntyDelaysUserNamesArr_RtndRecs);
                 console.log("warranty delays combined array RETURNED RECORDS section follows:");
                 console.log(wntyDelays_RtndRecs);
                 console.log("*****************")
@@ -1172,29 +1153,17 @@
 
                 //BEGIN ADDED ARRAYS
                 if (recordsToAddStatus == 1) {
-                    console.log("*****************")
-                    //console.log("work description ADDED section follows:");
-                    //console.log(workDescNarrArr_Add);
-                    //console.log(workDescHoursArr_Add);
-                    //console.log(workDescUserNamesArr_Add);                    
+                    console.log("*****************")                    
                     console.log("work description combined array ADDED RECORDS section follows:");
-                    console.log(workDesc_Add);
+                    //console.log(workDesc_Add);
                     console.log(workDescArrJson_Add);
-
-                    //console.log("delays section ADDED follows:");
-                    //console.log(delaysNarrArr_Add);
-                    //console.log(delaysHoursArr_Add);
-                    //console.log(delaysUserNamesArr_Add);                    
+                   
                     console.log("delays combined array ADDED RECORDS section follows:");
-                    console.log(delays_Add);
+                    //console.log(delays_Add);
                     console.log(delaysArrJson_Add);
 
-                    //console.log("warranty delays ADDED section follows:");
-                    //console.log(wntyDelaysNarrArr_Add);
-                    //console.log(wntyDelaysHoursArr_Add);
-                    //console.log(wntyDelaysUserNamesArr_Add);
                     console.log("warranty delays combined array ADDED RECORDS section follows:");
-                    console.log(wntyDelays_Add);
+                    //console.log(wntyDelays_Add);
                     console.log(wntyDelaysArrJson_Add);
                     console.log("*****************")
                 }
@@ -1203,52 +1172,17 @@
                 //BEGIN EDITED ARRAYS
                 if (recordsToEditStatus == 1) {
                     console.log("*****************")
-                    //console.log("work description EDITED section follows:");
-                    //console.log(workDescNarrArr_Edit);
-                    //console.log(workDescHoursArr_Edit);
-                    //console.log(workDescUserNamesArr_Edit);
                     console.log("work description combined array EDITED RECORDS section follows:");
                     //console.log(workDesc_Edit);
                     console.log(workDescArrJson_Edit);
 
-                    //console.log("-----------------")
-                    //console.log("team members to be added to this record:");;
-                    //console.log(_.difference(workDescUserNamesArr_Edit[0], workDescUserNamesArr_RtndRecs[0]));
-                    //console.log("team members to be deleted from this record:");
-                    //console.log(_.difference(workDescUserNamesArr_RtndRecs[0], workDescUserNamesArr_Edit[0]));
-                    //console.log("-----------------")
-                    console.log("*****************")
-
-                    //console.log("delays section EDITED follows:");
-                    //console.log(delaysNarrArr_Edit);
-                    //console.log(delaysHoursArr_Edit);
-                    //console.log(delaysUserNamesArr_Edit);
                     console.log("delays combined array EDITED RECORDS section follows:");
                     //console.log(delays_Edit);
                     console.log(delaysArrJson_Edit);
-
-                    //console.log("-----------------")
-                    //console.log("team members to be added to this record:");;
-                    //console.log(_.difference(delaysUserNamesArr_Edit[0], delaysUserNamesArr_RtndRecs[0]));
-                    //console.log("team members to be deleted from this record:");
-                    //console.log(_.difference(delaysUserNamesArr_RtndRecs[0], delaysUserNamesArr_Edit[0]));
-                    //console.log("-----------------")
-                    console.log("*****************")
-
-                    //console.log("warranty delays EDITED section follows:");
-                    //console.log(wntyDelaysNarrArr_Edit);
-                    //console.log(wntyDelaysHoursArr_Edit);
-                    //console.log(wntyDelaysUserNamesArr_Edit);                   
+                   
                     console.log("warranty delays combined array EDITED RECORDS section follows:");
                     //console.log(wntyDelays_Edit);
                     console.log(wntyDelaysArrJson_Edit);
-
-                    //console.log("-----------------")                    
-                    //console.log("team members to be added to this record:");;
-                    //console.log(_.difference(wntyDelaysUserNamesArr_Edit[0], wntyDelaysUserNamesArr_RtndRecs[0]));
-                    //console.log("team members to be deleted from this record:");
-                    //console.log(_.difference(wntyDelaysUserNamesArr_RtndRecs[0], wntyDelaysUserNamesArr_Edit[0]));
-                    //console.log("-----------------")
                     console.log("*****************")
                 }
                 //END EDITED ARRAYS
@@ -1304,7 +1238,9 @@
             function fn_cleanupDataEntryFields(passedHTML) {
                 //BEGIN CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
                 passedHTML = passedHTML.replace(/(&amp;)+/g, "");//wipe out &amp;
+                passedHTML = passedHTML.replace(/(amp;)+/g, "");//wipe out &amp;
                 passedHTML = passedHTML.replace(/(&nbsp;)+/g, "");//wipe out nbsp
+                passedHTML = passedHTML.replace(/(nbsp;)+/g, "");//wipe out nbsp
                 passedHTML = passedHTML.replace(/(<\w*>)+/g, "");//wipe out any html tags  
 
                 return passedHTML;
@@ -1664,7 +1600,7 @@
             <strong>Hours</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <strong>Action/Record Status</strong>
+            <strong>Action/Pending Op.</strong>
         </div>
     </div>
     @*BEGIN RETURNED RECORDS*@
@@ -1676,7 +1612,9 @@
             int temp_timeEntryID = item.delaysArr[i].timeEntryID;
             List<string> temp_userNames = item.delaysArr[i].userNames;
             List<string> temp_userShortNames = item.delaysArr[i].userShortNames;
-            int temp_hours = item.delaysArr[i].hours;
+            //int temp_hours = item.delaysArr[i].hours;
+            //float temp_hours = item.delaysArr[i].hours;
+            decimal temp_hours = item.delaysArr[i].hours;
             string temp_workDescription = item.delaysArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
@@ -1779,7 +1717,7 @@
             <strong>Hours</strong>
         </div>
         <div class="col-2" style="padding:5px">
-            <strong>Action/Record Status</strong>
+            <strong>Action/Pending Op.</strong>
         </div>
     </div>
     @*BEGIN RETURNED RECORDS*@
@@ -1791,7 +1729,8 @@
             int temp_timeEntryID = item.wntyDelaysArr[i].timeEntryID;
             List<string> temp_userNames = item.wntyDelaysArr[i].userNames;
             List<string> temp_userShortNames = item.wntyDelaysArr[i].userShortNames;
-            int temp_hours = item.wntyDelaysArr[i].hours;
+            //int temp_hours = item.wntyDelaysArr[i].hours;
+            decimal temp_hours = item.wntyDelaysArr[i].hours;
             string temp_workDescription = item.wntyDelaysArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 

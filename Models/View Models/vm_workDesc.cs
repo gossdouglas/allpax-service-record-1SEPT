@@ -13,15 +13,15 @@ namespace allpax_service_record.Models.View_Models
         public int timeEntryID { get; set; }
         //[Key]
         //public System.Int32 timeEntryID { get; set; }
-
         public int dailyReportID { get; set; }
-
         public string workDescription { get; set; }
         public string userName { get; set; } 
         public int workDescriptionCategory { get; set; }
         public int hours { get; set; }
         public List<string> userNames { get; set; }
         public List<string> userShortNames { get; set; }
+        public List<string> userNamesToAdd { get; set; }
+        public List<string> userNamesToDelete { get; set; }
 
     }
 }

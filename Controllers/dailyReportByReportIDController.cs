@@ -101,8 +101,9 @@ namespace allpax_service_record.Controllers
         {
             string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             int passedDailyRptID = dailyReportAdd.dailyReportID;
-           
-            if (dailyReportAdd.workDescArr.Count >= 1)
+
+            //if (dailyReportAdd.workDescArr.Count >= 1)
+            if (dailyReportAdd.workDescArr != null)
             {
                 //System.Diagnostics.Debug.WriteLine("size of workDescArr is " + dailyReportAdd.workDescArr.Count);
                 foreach (vm_workDesc item in dailyReportAdd.workDescArr)
@@ -141,7 +142,8 @@ namespace allpax_service_record.Controllers
                 }
             }
 
-            if (dailyReportAdd.delaysArr.Count >= 1)
+            //if (dailyReportAdd.delaysArr.Count >= 1)
+            if (dailyReportAdd.delaysArr != null)
             {
                 //System.Diagnostics.Debug.WriteLine("size of delaysArr is " + dailyReportAdd.delaysArr.Count);
                 foreach (vm_delays item in dailyReportAdd.delaysArr)
@@ -177,7 +179,8 @@ namespace allpax_service_record.Controllers
                 }
             }
 
-            if (dailyReportAdd.wntyDelaysArr.Count >= 1)
+            //if (dailyReportAdd.wntyDelaysArr.Count >= 1)
+            if (dailyReportAdd.wntyDelaysArr != null)
             {
                 //System.Diagnostics.Debug.WriteLine("size of wntyDelaysArr is " + dailyReportAdd.wntyDelaysArr.Count);
                 foreach (vm_wntyDelays item in dailyReportAdd.wntyDelaysArr)
@@ -348,7 +351,9 @@ namespace allpax_service_record.Controllers
 
                 workDesc.dailyReportID = (int)dr1[0];
                 workDesc.workDescription = dr1[1].ToString();
-                workDesc.hours = (int)dr1[2];
+                //workDesc.hours = (int)dr1[2];
+                //workDesc.hours = (float)dr1[2];
+                workDesc.hours = (decimal)dr1[2];
                 workDesc.timeEntryID = (int)dr1[3];
 
                 workDesc.userNames = usersByTimeEntryID(workDesc.timeEntryID);
@@ -390,7 +395,8 @@ namespace allpax_service_record.Controllers
 
                 workDesc.dailyReportID = (int)dr1[0];
                 workDesc.workDescription = dr1[1].ToString();
-                workDesc.hours = (int)dr1[2];
+                //workDesc.hours = (int)dr1[2];
+                workDesc.hours = (decimal)dr1[2];
                 workDesc.timeEntryID = (int)dr1[3];
 
                 workDesc.userNames =usersByTimeEntryID(workDesc.timeEntryID);
@@ -489,17 +495,6 @@ namespace allpax_service_record.Controllers
                 "UPDATE tbl_dailyReport " +
                 "SET " +
 
-                //"jobID = 'J1001', " +
-                //"date = '2020-10-31', " +
-                //"subJobID = '3', " +
-                //"startTime = '15:51:00.0000000', " +
-                //"endTime = '15:51:00.0000000', " +
-                //"lunchHours = '2', " +
-                //"equipment = 'HEY THERE HONKEY', " +
-                //"dailyReportAuthor = 'user1' " +
-
-                //"WHERE dailyReportID = '280'",
-
                 "jobID = {1}, " +
                 "date = {2}, " +
                 "subJobID = {3}, " +
@@ -513,6 +508,147 @@ namespace allpax_service_record.Controllers
                 dailyReportLogInfoUpdate.dailyReportID, dailyReportLogInfoUpdate.jobID, dailyReportLogInfoUpdate.date, dailyReportLogInfoUpdate.subJobID,
                 dailyReportLogInfoUpdate.startTime, dailyReportLogInfoUpdate.endTime, dailyReportLogInfoUpdate.lunchHours,
                 dailyReportLogInfoUpdate.equipment, dailyReportLogInfoUpdate.dailyReportAuthor);
+
+            return new EmptyResult();
+            //return RedirectToAction("SalesLanding", "Index");
+        }
+
+        public ActionResult UpdateDailyReportTimeEntries(vm_dailyReportByReportID dailyReportTimeEntryUpdate)
+        {
+            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            int passedDailyRptID = dailyReportTimeEntryUpdate.dailyReportID;
+
+            if (dailyReportTimeEntryUpdate.workDescArr != null)
+            {
+                foreach (vm_workDesc item in dailyReportTimeEntryUpdate.workDescArr)
+                {
+                    db.Database.ExecuteSqlCommand(
+                        "UPDATE tbl_dailyReportTimeEntry " +
+                        "SET " +
+
+                        "workDescription = {1}, " +
+                        "hours = {3} " +
+
+                        "WHERE " +
+                        "timeEntryID = {0}",
+
+                        item.timeEntryID, item.workDescription, item.workDescriptionCategory, item.hours);
+
+                    if (item.userNamesToAdd != null)
+                    { 
+                        
+                        foreach (string userNames in item.userNamesToAdd)
+                    {
+                        db.Database.ExecuteSqlCommand(
+
+                    "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES({0}, {1}) ",
+                    item.timeEntryID, userNames);
+                        }                    
+                    }
+
+                    if (item.userNamesToDelete != null)
+                    {
+                        foreach (string userNames in item.userNamesToDelete)
+                        {
+                            db.Database.ExecuteSqlCommand(
+
+                            "DELETE FROM tbl_dailyReportTimeEntryUsers " +
+                            "WHERE " +
+
+                            "timeEntryID=({0}) AND userName = ({1})",
+                            item.timeEntryID, userNames);
+                        }
+                    }
+                }
+            }
+
+            if (dailyReportTimeEntryUpdate.delaysArr != null)
+            {
+                foreach (vm_delays item in dailyReportTimeEntryUpdate.delaysArr)
+                {
+                    db.Database.ExecuteSqlCommand(
+                        "UPDATE tbl_dailyReportTimeEntry " +
+                        "SET " +
+
+                        "workDescription = {1}, " +
+                        "hours = {3} " +
+
+                        "WHERE " +
+                        "timeEntryID = {0}",
+
+                        item.timeEntryID, item.workDescription, item.workDescriptionCategory, item.hours);
+
+                    if (item.userNamesToAdd != null)
+                    {
+
+                        foreach (string userNames in item.userNamesToAdd)
+                        {
+                            db.Database.ExecuteSqlCommand(
+
+                        "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES({0}, {1}) ",
+                        item.timeEntryID, userNames);
+                        }
+                    }
+
+                    if (item.userNamesToDelete != null)
+                    {
+                        foreach (string userNames in item.userNamesToDelete)
+                        {
+                            db.Database.ExecuteSqlCommand(
+
+                            "DELETE FROM tbl_dailyReportTimeEntryUsers " +
+                            "WHERE " +
+
+                            "timeEntryID=({0}) AND userName = ({1})",
+                            item.timeEntryID, userNames);
+                        }
+                    }
+                }
+            }
+
+            if (dailyReportTimeEntryUpdate.wntyDelaysArr != null)
+            {
+                foreach (vm_wntyDelays item in dailyReportTimeEntryUpdate.wntyDelaysArr)
+                {
+                    db.Database.ExecuteSqlCommand(
+                        "UPDATE tbl_dailyReportTimeEntry " +
+                        "SET " +
+
+                        "workDescription = {1}, " +
+                        "hours = {3} " +
+
+                        "WHERE " +
+                        "timeEntryID = {0}",
+
+                        item.timeEntryID, item.workDescription, item.workDescriptionCategory, item.hours);
+
+                    if (item.userNamesToAdd != null)
+                    {
+
+                        foreach (string userNames in item.userNamesToAdd)
+                        {
+                            db.Database.ExecuteSqlCommand(
+
+                        "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES({0}, {1}) ",
+                        item.timeEntryID, userNames);
+                        }
+                    }
+
+                    if (item.userNamesToDelete != null)
+                    {
+                        foreach (string userNames in item.userNamesToDelete)
+                        {
+                            db.Database.ExecuteSqlCommand(
+
+                            "DELETE FROM tbl_dailyReportTimeEntryUsers " +
+                            "WHERE " +
+
+                            "timeEntryID=({0}) AND userName = ({1})",
+                            item.timeEntryID, userNames);
+                        }
+                    }
+                }
+            }
 
             return new EmptyResult();
             //return RedirectToAction("SalesLanding", "Index");
