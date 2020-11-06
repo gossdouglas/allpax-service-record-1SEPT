@@ -37,8 +37,6 @@ namespace allpax_service_record.Controllers
 
             int passedDailyRptID = dailyReportAdd.dailyReportID;
 
-            //if (dailyReportAdd.dailyReportID == 0)
-            //{
                 using (SqlConnection con = new SqlConnection(cs))
                 {
                     con.Open();
@@ -63,9 +61,8 @@ namespace allpax_service_record.Controllers
                     db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
                     passedDailyRptID, item);
                 }
-            //}
 
-            if (dailyReportAdd.workDescArr.Count >= 1)
+            if (dailyReportAdd.workDescArr != null)
             {
                 //System.Diagnostics.Debug.WriteLine("size of workDescArr is " + dailyReportAdd.workDescArr.Count);
                 foreach (vm_workDesc item in dailyReportAdd.workDescArr)
@@ -104,9 +101,8 @@ namespace allpax_service_record.Controllers
                 }
             }
 
-            if (dailyReportAdd.delaysArr.Count >= 1)
+            if (dailyReportAdd.delaysArr != null)
             {
-                //System.Diagnostics.Debug.WriteLine("size of delaysArr is " + dailyReportAdd.delaysArr.Count);
                 foreach (vm_delays item in dailyReportAdd.delaysArr)
                 {
                     db.Database.ExecuteSqlCommand(
@@ -140,9 +136,8 @@ namespace allpax_service_record.Controllers
                 }
             }
 
-            if (dailyReportAdd.wntyDelaysArr.Count >= 1)
+            if (dailyReportAdd.wntyDelaysArr != null)
             {
-                //System.Diagnostics.Debug.WriteLine("size of wntyDelaysArr is " + dailyReportAdd.wntyDelaysArr.Count);
                 foreach (vm_wntyDelays item in dailyReportAdd.wntyDelaysArr)
                 {
                     db.Database.ExecuteSqlCommand(
