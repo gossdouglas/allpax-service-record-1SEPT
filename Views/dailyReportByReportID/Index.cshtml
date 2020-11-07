@@ -256,6 +256,12 @@
                 enable_disableSave();
             });
 
+            $("#input_equipment").on("blur", function () {
+
+                //clean up the text entry
+                $("#input_equipment").val(fn_cleanupDataEntryFields($("#input_equipment").val()));
+            });
+
             //END DAILY REPORT LOG SECTION      
 
             //BEGIN RETURNED RECORDS AND TIME ENTRY SECTION
@@ -595,7 +601,6 @@
                 var addItem4 = $("#input_startTime").val();
                 var addItem5 = $("#input_endTime").val();
                 var addItem6 = $("#input_lunch").val();
-                var addItem7 = $("#input_equipment").val();
                 var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
                 var addItem9 = dailyRptTeamUserIDArr;
@@ -1058,7 +1063,7 @@
                             userNamesToDelete: _.difference(workDesc_Edit[i][4], workDesc_Edit[i][3])
                         };
                     }
-                }                               
+                }
                 //END BUILD THE WORK DESCRIPTION JSON OBJECT
 
                 //BEGIN BUILD THE DELAYS JSON OBJECT
@@ -1092,7 +1097,7 @@
                             userNamesToDelete: _.difference(delays_Edit[i][4], delays_Edit[i][3])
                         };
                     }
-                }                   
+                }
                 //END BUILD THE DELAYS JSON OBJECT
 
                 //BEGIN BUILD THE WNTY DELAYS JSON OBJECT
@@ -1126,10 +1131,10 @@
                             userNamesToDelete: _.difference(wntyDelays_Edit[i][4], wntyDelays_Edit[i][3])
                         };
                     }
-                }                
-                //END BUILD THE WNTY DELAYS JSON OBJECT
+                }
             }
-
+            //END BUILD THE WNTY DELAYS JSON OBJECT
+            
             //END SECTION TO PACK UP NEW RECORDS
 
             //BEGIN MISCELLANEOUS SECTION
@@ -1235,16 +1240,21 @@
             });
 
             //cloned to new daily report
-            function fn_cleanupDataEntryFields(passedHTML) {
-                //BEGIN CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
-                passedHTML = passedHTML.replace(/(&amp;)+/g, "");//wipe out &amp;
-                passedHTML = passedHTML.replace(/(amp;)+/g, "");//wipe out &amp;
-                passedHTML = passedHTML.replace(/(&nbsp;)+/g, "");//wipe out nbsp
-                passedHTML = passedHTML.replace(/(nbsp;)+/g, "");//wipe out nbsp
-                passedHTML = passedHTML.replace(/(<\w*>)+/g, "");//wipe out any html tags  
+            function fn_cleanupDataEntryFields(passedText) {
+                //BEGIN CLEAN UP TRASH FROM ENTERED TEXT
+                passedText = passedText.replace(/(&amp;)+/g, "");//wipe out &amp;
+                passedText = passedText.replace(/(amp;)+/g, "");//wipe out &amp;
+                passedText = passedText.replace(/(&nbsp;)+/g, "");//wipe out nbsp
+                passedText = passedText.replace(/(nbsp;)+/g, "");//wipe out nbsp               
+                passedText = passedText.replace(/^\s+/g, "");//wipe out any leading white spaces in input boxes
+                passedText = passedText.replace(/\s+$/g, "");//wipe out any trailing white spaces in input boxes
 
-                return passedHTML;
-                //END CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
+                passedText = passedText.replace(/(<([^>]+)>)/gi, "");//wipe out any html tags in input boxes
+                passedText = passedText.replace(/(&lt;\w*&gt;)/ig, "");//wipe out any opening html tags in a div
+                passedText = passedText.replace(/(&lt;\/\w*&gt;)/ig, "");//wipe out any closing html tags in a div
+              
+                return passedText;
+                //END CLEAN UP TRASH FROM ENTERED TEXT
             }
 
             //END MISCELLANEOUS SECTION
@@ -1257,29 +1267,34 @@
                 //console.clear();
 
                 if ($("#slct_date").val() == '') {
-                    console.log($("#slct_date").val())
-                    console.log("#slct_date is empty")
+                    //console.log($("#slct_date").val())
+                    //console.log("#slct_date is empty")
                     filled = false;
                 }
 
                 if ($("#input_equipment").val() == '') {
-                    console.log($("#input_equipment").val())
-                    console.log("input_equipment is empty")
+                    //console.log($("#input_equipment").val())
+                    //console.log("input_equipment is empty")
                     filled = false;
                 }
 
                 if ($("#input_startTime").val() == '') {
-                    console.log("input_startTime is empty")
+                    //console.log("input_startTime is empty")
                     filled = false;
                 }
 
                 if ($("#input_endTime").val() == '') {
-                    console.log("input_endTime is empty")
+                    //console.log("input_endTime is empty")
                     filled = false;
                 }
 
                 if ($("#input_lunch").val() == '') {
-                    console.log("input_lunch is empty")
+                    //console.log("input_lunch is empty")
+                    filled = false;
+                }
+
+                if ($(dailyRptTeamUserIDArr).length < 1) {
+                    //console.log("need more team members added to the daily report.")
                     filled = false;
                 }
 
