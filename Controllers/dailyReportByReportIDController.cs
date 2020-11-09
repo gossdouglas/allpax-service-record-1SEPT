@@ -204,10 +204,7 @@ namespace allpax_service_record.Controllers
                 }
             }
 
-            return new EmptyResult();
-
-            //return RedirectToAction("Index", "dailyReportAll");//redirects, but the daily report all page doesn't kick out the records to its view
-            //return RedirectToAction("Filtered", "dailyReportAll");//kinda works.  need parameters passed, but the re-direct does occur
+            return Json(Url.Action("Index", "dailyReportAll"));
         }
        
         //DELETE A TIME ENTRY
@@ -223,7 +220,8 @@ namespace allpax_service_record.Controllers
                 }
             }
 
-            return new EmptyResult();
+            //return new EmptyResult();
+            return Json(Url.Action("Index", "dailyReportAll"));
         }
 
         public ActionResult UpdateDailyReportLogInfo (tbl_dailyReport dailyReportLogInfoUpdate)
@@ -249,8 +247,9 @@ namespace allpax_service_record.Controllers
                 dailyReportLogInfoUpdate.startTime, dailyReportLogInfoUpdate.endTime, dailyReportLogInfoUpdate.lunchHours,
                 dailyReportLogInfoUpdate.equipment, dailyReportLogInfoUpdate.dailyReportAuthor);
 
-            return new EmptyResult();
-            //return RedirectToAction("SalesLanding", "Index");
+            //return new EmptyResult();
+            return Json(Url.Action("Index", "dailyReportAll"));
+            //return Json("complete");
         }
 
         public ActionResult UpdateDailyReportTimeEntries(vm_dailyReportByReportID dailyReportTimeEntryUpdate)
@@ -390,8 +389,9 @@ namespace allpax_service_record.Controllers
                 }
             }
 
-            return new EmptyResult();
+            //return new EmptyResult();
             //return RedirectToAction("SalesLanding", "Index");
+            return Json(Url.Action("Index", "dailyReportAll"));
         }
 
         public ActionResult AddTeamMember(tbl_dailyReportUsers teamMemberAdd)

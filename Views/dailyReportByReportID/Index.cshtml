@@ -68,57 +68,28 @@
             var recordsToDeleteStatus = 0;           
 
             var workDesc_RtndRecs = [];
-            var workDescNarrArr_RtndRecs = [];
-            var workDescHoursArr_RtndRecs = [];
-            var workDescUserNamesArr_RtndRecs = [];
-
             var delays_RtndRecs = [];
-            var delaysNarrArr_RtndRecs = [];
-            var delaysHoursArr_RtndRecs = [];
-            var delaysUserNamesArr_RtndRecs = [];
-
             var wntyDelays_RtndRecs = [];
-            var wntyDelaysNarrArr_RtndRecs = [];
-            var wntyDelaysHoursArr_RtndRecs = [];
-            var wntyDelaysUserNamesArr_RtndRecs = [];
 
             var workDesc_Add = [];
-            var workDescNarrArr_Add = [];
-            var workDescHoursArr_Add = [];
-            var workDescUserNamesArr_Add = [];
             var workDescArrJson_Add = [];
             var indexWorkDescEntries_Add = 0;//keep track of the number of work description entries added
 
             var delays_Add = [];
-            var delaysNarrArr_Add = [];
-            var delaysHoursArr_Add = [];
-            var delaysUserNamesArr_Add = [];
             var delaysArrJson_Add = [];
             var indexDelaysEntries_Add = 0;//keep track of the number of delays entries added
 
             var wntyDelays_Add = [];
-            var wntyDelaysNarrArr_Add = [];
-            var wntyDelaysHoursArr_Add = [];
-            var wntyDelaysUserNamesArr_Add = [];
             var wntyDelaysArrJson_Add = [];
             var indexWntyDelaysEntries_Add = 0;//keep track of the number of warranty delays entries added
 
             var workDesc_Edit = [];
-            var workDescNarrArr_Edit = [];
-            var workDescHoursArr_Edit = [];
-            var workDescUserNamesArr_Edit = [];
             var workDescArrJson_Edit = [];
 
             var delays_Edit = [];
-            var delaysNarrArr_Edit = [];
-            var delaysHoursArr_Edit = [];
-            var delaysUserNamesArr_Edit = [];
             var delaysArrJson_Edit = [];
 
             var wntyDelays_Edit = [];
-            var wntyDelaysNarrArr_Edit = [];
-            var wntyDelaysHoursArr_Edit = [];
-            var wntyDelaysUserNamesArr_Edit = [];
             var wntyDelaysArrJson_Edit = [];
 
             var timeEntryDeleteArr = [];//stores the time entry ids that are to be deleted
@@ -593,6 +564,7 @@
                 fn_loadTimeEntries_Edit();
                 fn_loadTimeEntries_Delete();
                 fn_buildJsonObjects();
+                fn_printArrays();
 
                 //cloned to new daily report
                 var addItem1 = $("#jobs_dpdown").val();
@@ -603,11 +575,16 @@
                 var addItem6 = $("#input_lunch").val();
                 var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
-                var addItem9 = dailyRptTeamUserIDArr;
+                var addItem9 = dailyRptTeamUserIDArr;  
+
+                var totalOpsToDo = dailyLogInfoChngd + recordsToAddStatus + recordsToEditStatus + recordsToDeleteStatus;
+                var serverResponseSuccess = "/dailyReportAll";
+                console.log("total operations to complete on entry is: " + totalOpsToDo);
 
                 //BEGIN EDIT DAILY LOG SECTION OF A DAILY REPORT
                 //only on existing records or copies
                 if (dailyLogInfoChngd == 1) {//if the daily log information section has been changed...
+                    console.log("editing the daily log info section.")
                     var data = {
                         dailyReportID: dailyReportID,
                         jobID: addItem1,
@@ -627,12 +604,21 @@
                         dataType: 'json',
                         data: JSON.stringify(data),
                         traditional: true,
-                        success: function () {
+                        success: function (response) {
+                            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                            console.log("edit daily log info success. total operations to complete is now: " + totalOpsToDo);
+                            serverResponseSuccess = response;
+                            console.log("response is: " + response)
+                            if (totalOpsToDo == 0) {
+                                window.location.href = serverResponseSuccess;
+                            }
+                        }
+                        //success: function () {
                             //$(data).each(function (index, item) {
                             //    lastDlyRptCrtdByUser = item;
                             //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
                             //});
-                        }
+                        //}
                     });
                 }
                 //END EDIT DAILY LOG SECTION OF A DAILY REPORT
@@ -663,8 +649,14 @@
                         dataType: 'json',
                         data: JSON.stringify(data),
                         traditional: true,
-                        success: function () {
-
+                        success: function (response) {
+                            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                            console.log("add record success. total operations to complete is now: " + totalOpsToDo);
+                            serverResponseSuccess = response;
+                            console.log("response is: " + response);
+                            if (totalOpsToDo == 0) {
+                                window.location.href = serverResponseSuccess;
+                            }
                         }
                     });
                 }
@@ -672,7 +664,7 @@
 
                 //BEGIN EDIT RECORDS ON A DAILY REPORT
                 //only on existing records or copies
-                if (recordsToEditStatus == 1) {//if there are records to add...
+                if (recordsToEditStatus == 1) {//if there are records to add...                   
                     var data = {
                         dailyReportID: dailyReportID,
                         //jobID: addItem1,
@@ -696,8 +688,14 @@
                         dataType: 'json',
                         data: JSON.stringify(data),
                         traditional: true,
-                        success: function () {
-
+                        success: function (response) {
+                            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                            console.log("edit record success. total operations to complete is now: " + totalOpsToDo);
+                            serverResponseSuccess = response;
+                            console.log("response is: " + response);
+                            if (totalOpsToDo == 0) {
+                                window.location.href = serverResponseSuccess;
+                            }
                         }
                     });
                 }
@@ -717,16 +715,28 @@
                         dataType: 'json',
                         data: JSON.stringify(data),
                         traditional: true,
-                        success: function () {
-
+                        success: function (response) {
+                            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                            console.log("delete record success. total operations to complete is now: " + totalOpsToDo);
+                            serverResponseSuccess = response;
+                            console.log("response is: " + response);
+                            if (totalOpsToDo == 0) {
+                                window.location.href = serverResponseSuccess;
+                            }
                         }
                     });
                 }
                 //END DELETE RECORDS FROM A DAILY REPORT
 
-                
+                //while (totalOpsToDo != 0) {
+                //    //console.log("there are still ops to carry out, totalOpsToDo= " + totalOpsToDo);
+                //}
 
-                fn_printArrays();
+                //console.log("at exit, totalOpsToDo= " + totalOpsToDo);
+
+                //window.location = '/dailyReportAll';//once there are no more ajax calls left to complete, navigate to the all daily reports page.
+                //window.location.href = serverResponseSuccess;
+                
                 //window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
             });
 

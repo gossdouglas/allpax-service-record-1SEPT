@@ -510,12 +510,11 @@
                     dataType: 'json',
                     data: JSON.stringify(data),
                     traditional: true,
-                    success: function () {
-                    }
-                   
-                });
-
-                window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
+                    success: function (response) {
+                        console.log("response is: " + response)
+                        window.location.href = response;
+                    }                 
+                });               
             });
 
             //cloned to new daily report
@@ -805,7 +804,7 @@
                 var teamDiv = currentRow.find(".select2-selection__rendered").html();
                 var hoursDiv = currentRow.find(".hours_div").html();
                 var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
-                console.clear();
+                //console.clear();
 
                 if (narrDiv == "") {
                     //console.log("Narr div is empty.")
