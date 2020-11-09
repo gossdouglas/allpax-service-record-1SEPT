@@ -212,6 +212,8 @@
     <Compile Include="Models\Dropdown Models\dpdwn_jobID.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MODEL TESTING\Model1.cs" />
+    <Compile Include="Models\MODEL TESTING\tbl_dailyReport.cs" />
     <Compile Include="Models\tbl_dailyReportTimeEntry.cs" />
     <Compile Include="Models\tbl_dailyReportTimeEntryUsers.cs" />
     <Compile Include="Models\tbl_dailyReportUsers.cs" />
@@ -2543,7 +2545,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\MODEL TESTING\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

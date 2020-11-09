@@ -1,6 +1,5 @@
-namespace allpax_service_record.Models
+namespace allpax_service_record.Models.MODEL_TESTING
 {
-
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -24,15 +23,16 @@ namespace allpax_service_record.Models
 
         public int lunchHours { get; set; }
 
+        [Required]
         public string equipment { get; set; }
+
+        [Required]
+        [StringLength(16)]
+        public string dailyReportAuthor { get; set; }
 
         [Key]
         public int dailyReportID { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tbl_dailyReportUsers> tbl_dailyReportUsers { get; set; }
-        [StringLength(16)]
-        public string dailyReportAuthor { get; set; }
-        public int submissionStatus { get; set; }
+        public int? submissionStatus { get; set; }
     }
 }

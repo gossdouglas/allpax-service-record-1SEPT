@@ -95,23 +95,14 @@
             var recordsToDeleteStatus = 0;
 
             var workDesc_Add = [];
-            var workDescNarrArr_Add = [];
-            var workDescHoursArr_Add = [];
-            var workDescUserNamesArr_Add = [];
             var workDescArrJson_Add = [];
             var indexWorkDescEntries_Add = 0;//keep track of the number of work description entries added
 
             var delays_Add = [];
-            var delaysNarrArr_Add = [];
-            var delaysHoursArr_Add = [];
-            var delaysUserNamesArr_Add = [];
             var delaysArrJson_Add = [];
             var indexDelaysEntries_Add = 0;//keep track of the number of delays entries added
 
             var wntyDelays_Add = [];
-            var wntyDelaysNarrArr_Add = [];
-            var wntyDelaysHoursArr_Add = [];
-            var wntyDelaysUserNamesArr_Add = [];
             var wntyDelaysArrJson_Add = [];
             var indexWntyDelaysEntries_Add = 0;//keep track of the number of warranty delays entries added
 
@@ -487,6 +478,10 @@
                 var addItem8 = dailyRptAuthor;
                 var addItem9 = dailyRptTeamUserIDArr;
 
+                var totalOpsToDo = recordsToAddStatus;//stores the total number of types of ops to carry out
+                var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
+                console.log("total operations to complete on entry is: " + totalOpsToDo);
+
                 var data =  {
                     dailyReportID: 0,
                     jobID: addItem1,
@@ -511,8 +506,13 @@
                     data: JSON.stringify(data),
                     traditional: true,
                     success: function (response) {
+                        totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                        console.log("add record success. total operations to complete is now: " + totalOpsToDo);
+                        serverResponseSuccess = response;
                         console.log("response is: " + response)
-                        window.location.href = response;
+                        if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                            window.location.href = serverResponseSuccess;
+                        }
                     }                 
                 });               
             });

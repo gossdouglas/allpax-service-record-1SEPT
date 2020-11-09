@@ -577,9 +577,9 @@
                 var addItem8 = dailyRptAuthor;
                 var addItem9 = dailyRptTeamUserIDArr;  
 
-                var totalOpsToDo = dailyLogInfoChngd + recordsToAddStatus + recordsToEditStatus + recordsToDeleteStatus;
-                var serverResponseSuccess = "/dailyReportAll";
-                console.log("total operations to complete on entry is: " + totalOpsToDo);
+                var totalOpsToDo = dailyLogInfoChngd + recordsToAddStatus + recordsToEditStatus + recordsToDeleteStatus;//stores the total number of types of ops to carry out
+                var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
+                //console.log("total operations to complete on entry is: " + totalOpsToDo);
 
                 //BEGIN EDIT DAILY LOG SECTION OF A DAILY REPORT
                 //only on existing records or copies
@@ -606,19 +606,13 @@
                         traditional: true,
                         success: function (response) {
                             totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                            console.log("edit daily log info success. total operations to complete is now: " + totalOpsToDo);
+                            //console.log("edit daily log info success. total operations to complete is now: " + totalOpsToDo);
                             serverResponseSuccess = response;
-                            console.log("response is: " + response)
-                            if (totalOpsToDo == 0) {
+                            //console.log("response is: " + response)
+                            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
                                 window.location.href = serverResponseSuccess;
                             }
                         }
-                        //success: function () {
-                            //$(data).each(function (index, item) {
-                            //    lastDlyRptCrtdByUser = item;
-                            //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                            //});
-                        //}
                     });
                 }
                 //END EDIT DAILY LOG SECTION OF A DAILY REPORT
@@ -651,10 +645,10 @@
                         traditional: true,
                         success: function (response) {
                             totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                            console.log("add record success. total operations to complete is now: " + totalOpsToDo);
+                            //console.log("add record success. total operations to complete is now: " + totalOpsToDo);
                             serverResponseSuccess = response;
-                            console.log("response is: " + response);
-                            if (totalOpsToDo == 0) {
+                            //console.log("response is: " + response);
+                            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
                                 window.location.href = serverResponseSuccess;
                             }
                         }
@@ -667,15 +661,6 @@
                 if (recordsToEditStatus == 1) {//if there are records to add...                   
                     var data = {
                         dailyReportID: dailyReportID,
-                        //jobID: addItem1,
-                        //date: addItem2,
-                        //subJobID: addItem3,
-                        //startTime: addItem4,
-                        //endTime: addItem5,
-                        //lunchHours: addItem6,
-                        //equipment: addItem7,
-                        //dailyReportAuthor: addItem8,
-                        //dailyRptTeamArr: addItem9,
                         workDescArr: workDescArrJson_Edit,
                         delaysArr: delaysArrJson_Edit,
                         wntyDelaysArr: wntyDelaysArrJson_Edit
@@ -690,10 +675,10 @@
                         traditional: true,
                         success: function (response) {
                             totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                            console.log("edit record success. total operations to complete is now: " + totalOpsToDo);
+                            //console.log("edit record success. total operations to complete is now: " + totalOpsToDo);
                             serverResponseSuccess = response;
-                            console.log("response is: " + response);
-                            if (totalOpsToDo == 0) {
+                            //console.log("response is: " + response);
+                            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
                                 window.location.href = serverResponseSuccess;
                             }
                         }
@@ -717,27 +702,16 @@
                         traditional: true,
                         success: function (response) {
                             totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                            console.log("delete record success. total operations to complete is now: " + totalOpsToDo);
+                            //console.log("delete record success. total operations to complete is now: " + totalOpsToDo);
                             serverResponseSuccess = response;
-                            console.log("response is: " + response);
-                            if (totalOpsToDo == 0) {
+                            //console.log("response is: " + response);
+                            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
                                 window.location.href = serverResponseSuccess;
                             }
                         }
                     });
                 }
                 //END DELETE RECORDS FROM A DAILY REPORT
-
-                //while (totalOpsToDo != 0) {
-                //    //console.log("there are still ops to carry out, totalOpsToDo= " + totalOpsToDo);
-                //}
-
-                //console.log("at exit, totalOpsToDo= " + totalOpsToDo);
-
-                //window.location = '/dailyReportAll';//once there are no more ajax calls left to complete, navigate to the all daily reports page.
-                //window.location.href = serverResponseSuccess;
-                
-                //window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
             });
 
             //only on existing records or copies

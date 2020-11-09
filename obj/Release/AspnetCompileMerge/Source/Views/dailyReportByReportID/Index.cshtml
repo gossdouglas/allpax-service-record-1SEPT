@@ -68,57 +68,28 @@
             var recordsToDeleteStatus = 0;           
 
             var workDesc_RtndRecs = [];
-            var workDescNarrArr_RtndRecs = [];
-            var workDescHoursArr_RtndRecs = [];
-            var workDescUserNamesArr_RtndRecs = [];
-
             var delays_RtndRecs = [];
-            var delaysNarrArr_RtndRecs = [];
-            var delaysHoursArr_RtndRecs = [];
-            var delaysUserNamesArr_RtndRecs = [];
-
             var wntyDelays_RtndRecs = [];
-            var wntyDelaysNarrArr_RtndRecs = [];
-            var wntyDelaysHoursArr_RtndRecs = [];
-            var wntyDelaysUserNamesArr_RtndRecs = [];
 
             var workDesc_Add = [];
-            var workDescNarrArr_Add = [];
-            var workDescHoursArr_Add = [];
-            var workDescUserNamesArr_Add = [];
             var workDescArrJson_Add = [];
             var indexWorkDescEntries_Add = 0;//keep track of the number of work description entries added
 
             var delays_Add = [];
-            var delaysNarrArr_Add = [];
-            var delaysHoursArr_Add = [];
-            var delaysUserNamesArr_Add = [];
             var delaysArrJson_Add = [];
             var indexDelaysEntries_Add = 0;//keep track of the number of delays entries added
 
             var wntyDelays_Add = [];
-            var wntyDelaysNarrArr_Add = [];
-            var wntyDelaysHoursArr_Add = [];
-            var wntyDelaysUserNamesArr_Add = [];
             var wntyDelaysArrJson_Add = [];
             var indexWntyDelaysEntries_Add = 0;//keep track of the number of warranty delays entries added
 
             var workDesc_Edit = [];
-            var workDescNarrArr_Edit = [];
-            var workDescHoursArr_Edit = [];
-            var workDescUserNamesArr_Edit = [];
             var workDescArrJson_Edit = [];
 
             var delays_Edit = [];
-            var delaysNarrArr_Edit = [];
-            var delaysHoursArr_Edit = [];
-            var delaysUserNamesArr_Edit = [];
             var delaysArrJson_Edit = [];
 
             var wntyDelays_Edit = [];
-            var wntyDelaysNarrArr_Edit = [];
-            var wntyDelaysHoursArr_Edit = [];
-            var wntyDelaysUserNamesArr_Edit = [];
             var wntyDelaysArrJson_Edit = [];
 
             var timeEntryDeleteArr = [];//stores the time entry ids that are to be deleted
@@ -254,6 +225,12 @@
             $("#contnrDailyLog").on("change keypress", function () {
                 dailyLogInfoChngd = true;
                 enable_disableSave();
+            });
+
+            $("#input_equipment").on("blur", function () {
+
+                //clean up the text entry
+                $("#input_equipment").val(fn_cleanupDataEntryFields($("#input_equipment").val()));
             });
 
             //END DAILY REPORT LOG SECTION      
@@ -587,6 +564,7 @@
                 fn_loadTimeEntries_Edit();
                 fn_loadTimeEntries_Delete();
                 fn_buildJsonObjects();
+                fn_printArrays();
 
                 //cloned to new daily report
                 var addItem1 = $("#jobs_dpdown").val();
@@ -596,13 +574,17 @@
                 var addItem5 = $("#input_endTime").val();
                 var addItem6 = $("#input_lunch").val();
                 var addItem7 = $("#input_equipment").val();
-                var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
-                var addItem9 = dailyRptTeamUserIDArr;
+                var addItem9 = dailyRptTeamUserIDArr;  
+
+                var totalOpsToDo = dailyLogInfoChngd + recordsToAddStatus + recordsToEditStatus + recordsToDeleteStatus;//stores the total number of types of ops to carry out
+                var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
+                //console.log("total operations to complete on entry is: " + totalOpsToDo);
 
                 //BEGIN EDIT DAILY LOG SECTION OF A DAILY REPORT
                 //only on existing records or copies
                 if (dailyLogInfoChngd == 1) {//if the daily log information section has been changed...
+                    console.log("editing the daily log info section.")
                     var data = {
                         dailyReportID: dailyReportID,
                         jobID: addItem1,
@@ -622,11 +604,14 @@
                         dataType: 'json',
                         data: JSON.stringify(data),
                         traditional: true,
-                        success: function () {
-                            //$(data).each(function (index, item) {
-                            //    lastDlyRptCrtdByUser = item;
-                            //    window.location = '/DailyReportByReportID?reportID=' + lastDlyRptCrtdByUser;
-                            //});
+                        success: function (response) {
+                            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                            //console.log("edit daily log info success. total operations to complete is now: " + totalOpsToDo);
+                            serverResponseSuccess = response;
+                            //console.log("response is: " + response)
+                            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                                window.location.href = serverResponseSuccess;
+                            }
                         }
                     });
                 }
@@ -658,8 +643,14 @@
                         dataType: 'json',
                         data: JSON.stringify(data),
                         traditional: true,
-                        success: function () {
-
+                        success: function (response) {
+                            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                            //console.log("add record success. total operations to complete is now: " + totalOpsToDo);
+                            serverResponseSuccess = response;
+                            //console.log("response is: " + response);
+                            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                                window.location.href = serverResponseSuccess;
+                            }
                         }
                     });
                 }
@@ -667,18 +658,9 @@
 
                 //BEGIN EDIT RECORDS ON A DAILY REPORT
                 //only on existing records or copies
-                if (recordsToEditStatus == 1) {//if there are records to add...
+                if (recordsToEditStatus == 1) {//if there are records to add...                   
                     var data = {
                         dailyReportID: dailyReportID,
-                        //jobID: addItem1,
-                        //date: addItem2,
-                        //subJobID: addItem3,
-                        //startTime: addItem4,
-                        //endTime: addItem5,
-                        //lunchHours: addItem6,
-                        //equipment: addItem7,
-                        //dailyReportAuthor: addItem8,
-                        //dailyRptTeamArr: addItem9,
                         workDescArr: workDescArrJson_Edit,
                         delaysArr: delaysArrJson_Edit,
                         wntyDelaysArr: wntyDelaysArrJson_Edit
@@ -691,8 +673,14 @@
                         dataType: 'json',
                         data: JSON.stringify(data),
                         traditional: true,
-                        success: function () {
-
+                        success: function (response) {
+                            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                            //console.log("edit record success. total operations to complete is now: " + totalOpsToDo);
+                            serverResponseSuccess = response;
+                            //console.log("response is: " + response);
+                            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                                window.location.href = serverResponseSuccess;
+                            }
                         }
                     });
                 }
@@ -712,17 +700,18 @@
                         dataType: 'json',
                         data: JSON.stringify(data),
                         traditional: true,
-                        success: function () {
-
+                        success: function (response) {
+                            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                            //console.log("delete record success. total operations to complete is now: " + totalOpsToDo);
+                            serverResponseSuccess = response;
+                            //console.log("response is: " + response);
+                            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                                window.location.href = serverResponseSuccess;
+                            }
                         }
                     });
                 }
                 //END DELETE RECORDS FROM A DAILY REPORT
-
-                
-
-                fn_printArrays();
-                //window.location = '/dailyReportAll';//redirects, but not in time to show the new report.  should be handled on the server side, but ran into trouble.
             });
 
             //only on existing records or copies
@@ -1058,7 +1047,7 @@
                             userNamesToDelete: _.difference(workDesc_Edit[i][4], workDesc_Edit[i][3])
                         };
                     }
-                }                               
+                }
                 //END BUILD THE WORK DESCRIPTION JSON OBJECT
 
                 //BEGIN BUILD THE DELAYS JSON OBJECT
@@ -1092,7 +1081,7 @@
                             userNamesToDelete: _.difference(delays_Edit[i][4], delays_Edit[i][3])
                         };
                     }
-                }                   
+                }
                 //END BUILD THE DELAYS JSON OBJECT
 
                 //BEGIN BUILD THE WNTY DELAYS JSON OBJECT
@@ -1126,10 +1115,10 @@
                             userNamesToDelete: _.difference(wntyDelays_Edit[i][4], wntyDelays_Edit[i][3])
                         };
                     }
-                }                
-                //END BUILD THE WNTY DELAYS JSON OBJECT
+                }
             }
-
+            //END BUILD THE WNTY DELAYS JSON OBJECT
+            
             //END SECTION TO PACK UP NEW RECORDS
 
             //BEGIN MISCELLANEOUS SECTION
@@ -1235,16 +1224,21 @@
             });
 
             //cloned to new daily report
-            function fn_cleanupDataEntryFields(passedHTML) {
-                //BEGIN CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
-                passedHTML = passedHTML.replace(/(&amp;)+/g, "");//wipe out &amp;
-                passedHTML = passedHTML.replace(/(amp;)+/g, "");//wipe out &amp;
-                passedHTML = passedHTML.replace(/(&nbsp;)+/g, "");//wipe out nbsp
-                passedHTML = passedHTML.replace(/(nbsp;)+/g, "");//wipe out nbsp
-                passedHTML = passedHTML.replace(/(<\w*>)+/g, "");//wipe out any html tags  
+            function fn_cleanupDataEntryFields(passedText) {
+                //BEGIN CLEAN UP TRASH FROM ENTERED TEXT
+                passedText = passedText.replace(/(&amp;)+/g, "");//wipe out &amp;
+                passedText = passedText.replace(/(amp;)+/g, "");//wipe out &amp;
+                passedText = passedText.replace(/(&nbsp;)+/g, "");//wipe out nbsp
+                passedText = passedText.replace(/(nbsp;)+/g, "");//wipe out nbsp               
+                passedText = passedText.replace(/^\s+/g, "");//wipe out any leading white spaces in input boxes
+                passedText = passedText.replace(/\s+$/g, "");//wipe out any trailing white spaces in input boxes
 
-                return passedHTML;
-                //END CLEAN UP INVISIBLE TRASH FROM THE WORK DESCRIPTION FIELD
+                passedText = passedText.replace(/(<([^>]+)>)/gi, "");//wipe out any html tags in input boxes
+                passedText = passedText.replace(/(&lt;\w*&gt;)/ig, "");//wipe out any opening html tags in a div
+                passedText = passedText.replace(/(&lt;\/\w*&gt;)/ig, "");//wipe out any closing html tags in a div
+              
+                return passedText;
+                //END CLEAN UP TRASH FROM ENTERED TEXT
             }
 
             //END MISCELLANEOUS SECTION
@@ -1257,29 +1251,34 @@
                 //console.clear();
 
                 if ($("#slct_date").val() == '') {
-                    console.log($("#slct_date").val())
-                    console.log("#slct_date is empty")
+                    //console.log($("#slct_date").val())
+                    //console.log("#slct_date is empty")
                     filled = false;
                 }
 
                 if ($("#input_equipment").val() == '') {
-                    console.log($("#input_equipment").val())
-                    console.log("input_equipment is empty")
+                    //console.log($("#input_equipment").val())
+                    //console.log("input_equipment is empty")
                     filled = false;
                 }
 
                 if ($("#input_startTime").val() == '') {
-                    console.log("input_startTime is empty")
+                    //console.log("input_startTime is empty")
                     filled = false;
                 }
 
                 if ($("#input_endTime").val() == '') {
-                    console.log("input_endTime is empty")
+                    //console.log("input_endTime is empty")
                     filled = false;
                 }
 
                 if ($("#input_lunch").val() == '') {
-                    console.log("input_lunch is empty")
+                    //console.log("input_lunch is empty")
+                    filled = false;
+                }
+
+                if ($(dailyRptTeamUserIDArr).length < 1) {
+                    //console.log("need more team members added to the daily report.")
                     filled = false;
                 }
 
