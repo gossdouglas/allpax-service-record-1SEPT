@@ -36,5 +36,6 @@ namespace allpax_service_record.Models.View_Models
         public List<vm_workDesc> workDescArr { get; set; }
         public List<vm_delays> delaysArr { get; set; }
         public List<vm_wntyDelays> wntyDelaysArr { get; set; }
+        public int submissionStatus { get; set; }
     }
 }

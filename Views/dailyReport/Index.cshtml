@@ -86,6 +86,7 @@
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
             var lastDlyRptCrtdByUser;
+            var submissionStatus;
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
@@ -154,38 +155,44 @@
 
             //begin add team member on drop down change
             //differs between new daily report and an existing one
-            team_dpdwn.change(function () {
+            //team_dpdwn.change(function () {
+            $(team_dpdwn).on("select2:select", function (e) {//on selecting a new team member to add...
 
-                lastSlctd = $("option:selected:last", this).val();
-
+                //var lastSlctd = e.params.data.id;
+                var tempTeamMemberUserID = e.params.data.id;
+                console.log("team member to be added: " + tempTeamMemberUserID);
+                //lastSlctd = $("option:selected:last", this).val();
+                //lastSlctd = $("#team_dpdwn option:selected").last().val();
+                //console.log("selected from the report team dropdown: " + $(this).val());
                 //console.log("clicked user name is: " + lastSlctd);
 
                 //var passed_userName = $(this).val();
                 //var passed_userName = 'abundy';
-                var str_userName = "'" + lastSlctd +"'"
+                //var str_userName = "'" + lastSlctd +"'"
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNames',
                     method: 'post',
                     dataType: 'json',
                     //data: { userName: $(this).val() },//orig
-                    data: { userName: lastSlctd },//
+                    data: { userName: tempTeamMemberUserID },//
                     success: function (data) {
 
                         $(data).each(function (index, item) {
                             var temp_userName = item.userName;
-                            console.log(temp_userName);
                             var temp_name = item.name;
                             var temp_shortName = item.shortName;
+                            //console.log(data);
 
-                            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
+                            //$("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
+                            //$("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
+                            //$("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
 
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
 
-                            $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
+                            //$("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
+                            //$("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
+                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".team_dpdwn_new");
                             enable_disableSave();//determine if the save button needs to be enabled or disabled
                         });
                         //end AddTeamMember
@@ -196,11 +203,25 @@
             });
             //end add team member on drop down change
 
+            //$("#team_dpdwn").on("select2:select", function (e) {
+            //    var lastSelectedItem = e.params.data.id;
+            //    console.log(lastSelectedItem + " has been added to the team.");
+            //});
+
+            //$("#team_dpdwn").on("select2:unselect", function (e) {
+            //    var lastSelectedItem = e.params.data.id;
+            //    console.log(lastSelectedItem + " has been removed from the team.");
+            //});
+
             //begin when a team member class is clicked for deletion...
             //differs between new daily report and an existing one
-            $(".team_").on('click', function () {
+            //$(".team_").on('click', function () {
+            $(team_dpdwn).on("select2:unselect", function (e) {//on unselecting a team member to delete...
 
-                var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
+                //var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
+                var tempTeamMemberUserID = e.params.data.id;
+                console.log("team member to be deleted: " + tempTeamMemberUserID);
+
                 for (var row = 0; row < dailyRptTeamArr.length; row++) {
                     if (dailyRptTeamArr[row][0] == tempTeamMemberUserID) {
                         dailyRptTeamArr.splice(row, 1);
@@ -208,9 +229,9 @@
                     }
                 }
 
-                $("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
+                //$("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
                 $(".Team_dpdwn option[value='" + tempTeamMemberUserID + "']").remove();
-                $("#" + $(this).attr("id")).remove();
+                //$("#" + $(this).attr("id")).remove();
 
                 enable_disableSave();//determine if the save button needs to be enabled or disabled
             });
@@ -452,7 +473,8 @@
 
                             if (item.userName == dailyRptAuthor) {
                                 $("<option value=" + temp_userName + " selected>" + temp_userName + "-" + temp_shortName + "</option>").appendTo("#team_dpdwn");
-                                $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
+                                //$("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
+                                //team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));//append to the daily report team dropdown
                                 $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".team_dpdwn_new");
                                 dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                                 dailyRptTeamUserIDArr.push(temp_userName);
@@ -490,6 +512,8 @@
             //differs between new daily report and an existing one
             $("#addButton").click(function () {//when the add button is clicked...
 
+                submissionStatus = 0;//0 indicates meant to be stored, but not flagged for review
+
                 //differs between new daily report and an existing one
                 fn_loadTimeEntries_Add();
                 fn_buildJsonObjects();
@@ -505,6 +529,7 @@
                 var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
                 var addItem9 = dailyRptTeamUserIDArr;
+                var addItem10 = submissionStatus;
 
                 var totalOpsToDo = recordsToAddStatus;//stores the total number of types of ops to carry out
                 var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
@@ -521,6 +546,7 @@
                     equipment: addItem7,
                     dailyReportAuthor: addItem8,
                     dailyRptTeamArr: addItem9,
+                    submissionStatus: addItem10,
                     workDescArr: workDescArrJson_Add,
                     delaysArr: delaysArrJson_Add,
                     wntyDelaysArr: wntyDelaysArrJson_Add
@@ -862,7 +888,7 @@
 
             $("#disableSelect2").click(function () {
                 fn_disableSelect2();
-            });
+            });        
 
         });//end document read jquery statements
     </script>
