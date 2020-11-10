@@ -425,7 +425,7 @@
                             $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
                             //$("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
                             //$("<option value='" + temp_userName + "' selected>'"+temp_userName+"'</option>'").appendTo(".Team_dpdwn");
-                            $("<option value=" + temp_userName + " selected>" + temp_userName + "-" + temp_shortName + "</option>").appendTo("#team_dpdwn");
+                            $("<option value=" + temp_userName + " selected>" + temp_userName + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".team_dpdwn_new");
                         });
                         //end AddTeamMember
@@ -469,18 +469,19 @@
                             var temp_name = item.name;
                             var temp_shortName = item.shortName;
 
-                            //team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));//append to the daily report team dropdown
+                            //team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "|" + item.shortName }));//append to the daily report team dropdown
 
                             if (item.userName == dailyRptAuthor) {
-                                $("<option value=" + temp_userName + " selected>" + temp_userName + "-" + temp_shortName + "</option>").appendTo("#team_dpdwn");
+                                //$("<option value=" + temp_userName + " selected>" + temp_userName + "-" + temp_shortName + "</option>").appendTo("#team_dpdwn");
+                                $("<option value=" + temp_userName + " selected>" + temp_userName + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
                                 //$("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-                                //team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));//append to the daily report team dropdown
+                                //team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "|" + item.shortName }));//append to the daily report team dropdown
                                 $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".team_dpdwn_new");
                                 dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                                 dailyRptTeamUserIDArr.push(temp_userName);
                             }
                             else {
-                                team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));//append to the daily report team dropdown
+                                team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "|" + item.shortName }));//append to the daily report team dropdown
                             }
                         });
                     }
