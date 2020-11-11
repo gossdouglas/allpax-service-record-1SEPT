@@ -144,13 +144,15 @@
 
             //begin add team member on drop down change
             //differs between new daily report and an existing one
-            team_dpdwn.change(function () {
+            $(team_dpdwn).on("select2:select", function (e) {//on selecting a new team member to add...
+
+                var tempTeamMemberUserID = e.params.data.id;
 
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNames',
                     method: 'post',
                     dataType: 'json',
-                    data: { userName: $(this).val() },
+                    data: { userName: tempTeamMemberUserID },//
                     success: function (data) {
 
                         $(data).each(function (index, item) {
@@ -158,41 +160,43 @@
                             var temp_name = item.name;
                             var temp_shortName = item.shortName;
 
-                            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
-
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
 
-                            $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
+                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".team_dpdwn_new");
+                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".RtndRecs");
                             enable_disableSave();//determine if the save button needs to be enabled or disabled
-
-                            //begin AddTeamMember
-                            //begin axios add post
-                            axios.post('/dailyReportByReportID/AddTeamMember', {
-                                dailyReportID: dailyReportID,
-                                userName: temp_userName,
-                            })
-                                .then(function (response) {
-                                })
-                                .catch(function (error) {
-                                    console.log(error);
-                                });
-                            //end axios add post
                         });
                         //end AddTeamMember
+
+                        //begin DeleteTeamMember
+                        //begin axios delete post
+                        axios.post('/dailyReportByReportID/AddTeamMember', {
+
+                            dailyReportID: dailyReportID,
+                            userName: tempTeamMemberUserID,
+                        })
+                            .then(function (response) {
+                                console.log("Added team member " + tempTeamMemberUserID);
+                                console.log(dailyRptTeamArr);
+                                console.log(response);
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                        //end axios delete post
                     }
                 });
-                $(team_dpdwn).val("-1");
             });
             //end add team member on drop down change
 
             //begin when a team member class is clicked for deletion...
             //differs between new daily report and an existing one
-            $(".team_").on('click', function () {
-                var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
+            //$(".team_").on('click', function () {
+            $(team_dpdwn).on("select2:unselect", function (e) {//on unselecting a team member to delete...
+
+                //var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
+                var tempTeamMemberUserID = e.params.data.id;
                 
                 for (var row = 0; row < dailyRptTeamArr.length; row++) {
                     if (dailyRptTeamArr[row][0] == tempTeamMemberUserID) {
@@ -201,11 +205,11 @@
                     }
                 }
 
-                $("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
-                $(".Team_dpdwn option[value='" + tempTeamMemberUserID + "']").remove();
-                $("#" + $(this).attr("id")).remove();
-                enable_disableSave();//determine if the save button needs to be enabled or disabled
+                $(".team_dpdwn_new option[value='" + tempTeamMemberUserID + "']").remove();
+                $(".RtndRecs option[value='" + tempTeamMemberUserID + "']").remove();
 
+                enable_disableSave();//determine if the save button needs to be enabled or disabled
+                
                 //begin DeleteTeamMember
                 //begin axios delete post
                 axios.post('/dailyReportByReportID/DeleteTeamMember', {
@@ -214,8 +218,9 @@
                     userName: tempTeamMemberUserID
                 })
                     .then(function (response) {
+                        console.log("Deleted team member " + tempTeamMemberUserID);
+                        console.log(dailyRptTeamArr);
                         console.log(response);
-                        $.fn.updateSectionDpdwns();
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -424,24 +429,7 @@
                     }
                 });
                 //end fill sub jobs dropdown
-
-                //cloned to new daily report
-                //begin fill the team names dropdown
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNames',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: '%' },
-                    success: function (data) {
-                        team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
-
-                        $(data).each(function (index, item) {
-                            team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
-                        });
-                    }
-                });
-                //end fill the team names dropdown
-
+              
                 //begin load team members on page load
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNamesByReportID',
@@ -449,26 +437,51 @@
                     dataType: 'json',
                     data: { userName: '%', dailyReportID: dailyReportID },
                     success: function (data) {
+                        //console.clear();
 
                         $(data).each(function (index, item) {
                             var temp_userName = item.userName;
                             var temp_name = item.name;
                             var temp_shortName = item.shortName;
 
-                            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
-
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
-
-                            $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
                         });
-                        fn_loadTeamNamesRtndRecs();
+                        //console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
+
+                        //cloned to new daily report
+                        //begin fill the team names dropdown
+                        $.ajax({
+                            url: 'DataService.asmx/GetAllTeamNames',
+                            method: 'post',
+                            dataType: 'json',
+                            data: { userName: '%' },
+                            success: function (data) {
+
+                                $(data).each(function (index, item) {
+
+                                    var temp_userName = item.userName;
+                                    var temp_name = item.name;
+                                    var temp_shortName = item.shortName;
+
+                                    if ($.inArray(temp_userName, dailyRptTeamUserIDArr) !== -1) {
+                                        $("<option value=" + temp_userName + " selected>" + temp_name + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
+                                        $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
+                                        //console.log(temp_userName + " is in dailyRptTeamUserIDArr");
+                                    }
+
+                                    else {
+                                        $("<option value=" + temp_userName + ">" + temp_name + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
+                                        //console.log(temp_userName + " is not in dailyRptTeamUserIDArr");
+                                    }
+                                });
+                            }
+                        });
+                        //end fill the team names dropdown
+                        fn_loadTeamNamesRtndRecs();//load team names into the records returned from the database
                     }
                 });
-                //end load team members on page load
+                //end load team members on page load                
             }
 
             //cloned to new daily report
@@ -562,15 +575,12 @@
             //cloned to new daily report
             $("#saveAndExit_btn").click(function () {//
 
-                console.log("saveAndExit_btn");
                 fn_exitSubmit(0);
             });
 
             //cloned to new daily report
             $("#saveAndSubmit_btn").click(function () {//when the add button is clicked...
-
-                console.log("saveAndSubmit_btn");
-                updateSubmissionStatus = 1;
+              
                 fn_exitSubmit(1);
             });
 
@@ -579,6 +589,11 @@
             function fn_exitSubmit(submissionState) {
 
                 submissionStatus = submissionState;//0 indicates meant to be stored, 1 indicates stored and submitted for review
+
+                if (rtndSubmissionStatus !== submissionStatus) {
+                    updateSubmissionStatus = 1;
+                    console.log("The submission state needs to be changed from " + rtndSubmissionStatus + " to " + submissionStatus);
+                }
 
                 //differs between new daily report and an existing one                
                 fn_loadTimeEntries_Add();
@@ -1069,6 +1084,7 @@
 
             //only on existing records or copies
             function fn_buildJsonObjects() {
+
                 //BEGIN BUILD THE WORK DESCRIPTION JSON OBJECT
                 //if there are no work description time entries to add, set the json object to null
                 if (workDesc_Add.length < 1) {
@@ -1169,9 +1185,9 @@
                         };
                     }
                 }
+                //END BUILD THE WNTY DELAYS JSON OBJECT
             }
-            //END BUILD THE WNTY DELAYS JSON OBJECT
-            
+                        
             //END SECTION TO PACK UP NEW RECORDS
 
             //BEGIN MISCELLANEOUS SECTION
@@ -1307,6 +1323,14 @@
                 }
             }
 
+            $("#enableSelect2").click(function () {
+                fn_enableSelect2();
+            });
+
+            $("#disableSelect2").click(function () {
+                fn_disableSelect2();
+            });
+
             //END MISCELLANEOUS SECTION
 
             //BEGIN VALIDATION BEFORE SAVING SECTION
@@ -1391,15 +1415,7 @@
                 return rowFilled;
             }
 
-            //END VALIDATION BEFORE SAVING SECTION
-
-            $("#enableSelect2").click(function () {
-                fn_enableSelect2();
-            });
-
-            $("#disableSelect2").click(function () {
-                fn_disableSelect2();
-            });  
+            //END VALIDATION BEFORE SAVING SECTION             
 
         });//end document read jquery statements
     </script>
@@ -1537,7 +1553,9 @@
         </div>
         <div class="col-10" style="padding:5px">
             <div class="row" style="margin:0px;">
-                <select name="team_dpdwn" id="team_dpdwn" style="width:100%">
+                @*<select name="team_dpdwn" id="team_dpdwn" style="width:100%">
+        </select>*@
+                <select class="Team_dpdwn" id="team_dpdwn" style="width:100%" multiple="multiple">
                 </select>
             </div>
             <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
@@ -1545,8 +1563,8 @@
                     Johnny Watkins|JW
                 </div>
             </div>
-            <button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
-            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>
+            @*<button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
+            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>*@
         </div>
     </div>
 </div>

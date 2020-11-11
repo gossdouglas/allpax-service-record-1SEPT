@@ -50,12 +50,13 @@
 
     <script>
         $(document).ready(function () {//begin document read jquery statements
-
-            var team_dpdwn = $('#team_dpdwn');
+          
             var dailyReportID = $("#txt_dailyReportID").html();
+            var rtndSubmissionStatus;
 
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+            var team_dpdwn = $('#team_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
             var lastDlyRptCrtdByUser;            
@@ -65,7 +66,8 @@
             var dailyLogInfoChngd = 0;
             var recordsToAddStatus = 0;
             var recordsToEditStatus = 0;
-            var recordsToDeleteStatus = 0;           
+            var recordsToDeleteStatus = 0;
+            var updateSubmissionStatus = 0;  
 
             var workDesc_RtndRecs = [];
             var delays_RtndRecs = [];
@@ -98,6 +100,7 @@
             fn_enableSelect2();//enable the select2 add-on on page load
             fn_loadDropDowns();
             fn_loadTimeEntries_RtndRecs();//record the values of the returned records for comparison to the _Edit arrays
+            fn_getSubmissionStatus();
 
             //BEGIN DAILY REPORT LOG SECTION
 
@@ -141,13 +144,15 @@
 
             //begin add team member on drop down change
             //differs between new daily report and an existing one
-            team_dpdwn.change(function () {
+            $(team_dpdwn).on("select2:select", function (e) {//on selecting a new team member to add...
+
+                var tempTeamMemberUserID = e.params.data.id;
 
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNames',
                     method: 'post',
                     dataType: 'json',
-                    data: { userName: $(this).val() },
+                    data: { userName: tempTeamMemberUserID },//
                     success: function (data) {
 
                         $(data).each(function (index, item) {
@@ -155,41 +160,43 @@
                             var temp_name = item.name;
                             var temp_shortName = item.shortName;
 
-                            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
-
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
 
-                            $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
+                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".team_dpdwn_new");
+                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".RtndRecs");
                             enable_disableSave();//determine if the save button needs to be enabled or disabled
-
-                            //begin AddTeamMember
-                            //begin axios add post
-                            axios.post('/dailyReportByReportID/AddTeamMember', {
-                                dailyReportID: dailyReportID,
-                                userName: temp_userName,
-                            })
-                                .then(function (response) {
-                                })
-                                .catch(function (error) {
-                                    console.log(error);
-                                });
-                            //end axios add post
                         });
                         //end AddTeamMember
+
+                        //begin DeleteTeamMember
+                        //begin axios delete post
+                        axios.post('/dailyReportByReportID/AddTeamMember', {
+
+                            dailyReportID: dailyReportID,
+                            userName: tempTeamMemberUserID,
+                        })
+                            .then(function (response) {
+                                console.log("Added team member " + tempTeamMemberUserID);
+                                console.log(dailyRptTeamArr);
+                                console.log(response);
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                        //end axios delete post
                     }
                 });
-                $(team_dpdwn).val("-1");
             });
             //end add team member on drop down change
 
             //begin when a team member class is clicked for deletion...
             //differs between new daily report and an existing one
-            $(".team_").on('click', function () {
-                var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
+            //$(".team_").on('click', function () {
+            $(team_dpdwn).on("select2:unselect", function (e) {//on unselecting a team member to delete...
+
+                //var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
+                var tempTeamMemberUserID = e.params.data.id;
                 
                 for (var row = 0; row < dailyRptTeamArr.length; row++) {
                     if (dailyRptTeamArr[row][0] == tempTeamMemberUserID) {
@@ -198,11 +205,11 @@
                     }
                 }
 
-                $("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
-                $(".Team_dpdwn option[value='" + tempTeamMemberUserID + "']").remove();
-                $("#" + $(this).attr("id")).remove();
-                enable_disableSave();//determine if the save button needs to be enabled or disabled
+                $(".team_dpdwn_new option[value='" + tempTeamMemberUserID + "']").remove();
+                $(".RtndRecs option[value='" + tempTeamMemberUserID + "']").remove();
 
+                enable_disableSave();//determine if the save button needs to be enabled or disabled
+                
                 //begin DeleteTeamMember
                 //begin axios delete post
                 axios.post('/dailyReportByReportID/DeleteTeamMember', {
@@ -211,8 +218,9 @@
                     userName: tempTeamMemberUserID
                 })
                     .then(function (response) {
+                        console.log("Deleted team member " + tempTeamMemberUserID);
+                        console.log(dailyRptTeamArr);
                         console.log(response);
-                        $.fn.updateSectionDpdwns();
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -421,24 +429,7 @@
                     }
                 });
                 //end fill sub jobs dropdown
-
-                //cloned to new daily report
-                //begin fill the team names dropdown
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNames',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: '%' },
-                    success: function (data) {
-                        team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
-
-                        $(data).each(function (index, item) {
-                            team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "-" + item.shortName }));
-                        });
-                    }
-                });
-                //end fill the team names dropdown
-
+              
                 //begin load team members on page load
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNamesByReportID',
@@ -446,26 +437,51 @@
                     dataType: 'json',
                     data: { userName: '%', dailyReportID: dailyReportID },
                     success: function (data) {
+                        //console.clear();
 
                         $(data).each(function (index, item) {
                             var temp_userName = item.userName;
                             var temp_name = item.name;
                             var temp_shortName = item.shortName;
 
-                            $("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                            $("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                            $("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
-
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
-
-                            $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
                         });
-                        fn_loadTeamNamesRtndRecs();
+                        //console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
+
+                        //cloned to new daily report
+                        //begin fill the team names dropdown
+                        $.ajax({
+                            url: 'DataService.asmx/GetAllTeamNames',
+                            method: 'post',
+                            dataType: 'json',
+                            data: { userName: '%' },
+                            success: function (data) {
+
+                                $(data).each(function (index, item) {
+
+                                    var temp_userName = item.userName;
+                                    var temp_name = item.name;
+                                    var temp_shortName = item.shortName;
+
+                                    if ($.inArray(temp_userName, dailyRptTeamUserIDArr) !== -1) {
+                                        $("<option value=" + temp_userName + " selected>" + temp_name + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
+                                        $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
+                                        //console.log(temp_userName + " is in dailyRptTeamUserIDArr");
+                                    }
+
+                                    else {
+                                        $("<option value=" + temp_userName + ">" + temp_name + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
+                                        //console.log(temp_userName + " is not in dailyRptTeamUserIDArr");
+                                    }
+                                });
+                            }
+                        });
+                        //end fill the team names dropdown
+                        fn_loadTeamNamesRtndRecs();//load team names into the records returned from the database
                     }
                 });
-                //end load team members on page load
+                //end load team members on page load                
             }
 
             //cloned to new daily report
@@ -556,8 +572,28 @@
            
             //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
 
+            //cloned to new daily report
+            $("#saveAndExit_btn").click(function () {//
+
+                fn_exitSubmit(0);
+            });
+
+            //cloned to new daily report
+            $("#saveAndSubmit_btn").click(function () {//when the add button is clicked...
+              
+                fn_exitSubmit(1);
+            });
+
             //differs between new daily report and an existing one
-            $("#addButton").click(function () {//when the add button is clicked...
+            //$("#addButton").click(function () {//when the add button is clicked...
+            function fn_exitSubmit(submissionState) {
+
+                submissionStatus = submissionState;//0 indicates meant to be stored, 1 indicates stored and submitted for review
+
+                if (rtndSubmissionStatus !== submissionStatus) {
+                    updateSubmissionStatus = 1;
+                    console.log("The submission state needs to be changed from " + rtndSubmissionStatus + " to " + submissionStatus);
+                }
 
                 //differs between new daily report and an existing one                
                 fn_loadTimeEntries_Add();
@@ -575,9 +611,10 @@
                 var addItem6 = $("#input_lunch").val();
                 var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
-                var addItem9 = dailyRptTeamUserIDArr;  
+                var addItem9 = dailyRptTeamUserIDArr;
+                var addItem10 = submissionStatus;
 
-                var totalOpsToDo = dailyLogInfoChngd + recordsToAddStatus + recordsToEditStatus + recordsToDeleteStatus;//stores the total number of types of ops to carry out
+                var totalOpsToDo = dailyLogInfoChngd + recordsToAddStatus + recordsToEditStatus + recordsToDeleteStatus + updateSubmissionStatus;//stores the total number of types of ops to carry out
                 var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
                 //console.log("total operations to complete on entry is: " + totalOpsToDo);
 
@@ -622,15 +659,15 @@
                 if (recordsToAddStatus == 1) {//if there are records to add...
                     var data = {
                         dailyReportID: dailyReportID,
-                        jobID: addItem1,
-                        date: addItem2,
-                        subJobID: addItem3,
-                        startTime: addItem4,
-                        endTime: addItem5,
-                        lunchHours: addItem6,
-                        equipment: addItem7,
-                        dailyReportAuthor: addItem8,
-                        dailyRptTeamArr: addItem9,
+                        //jobID: addItem1,
+                        //date: addItem2,
+                        //subJobID: addItem3,
+                        //startTime: addItem4,
+                        //endTime: addItem5,
+                        //lunchHours: addItem6,
+                        //equipment: addItem7,
+                        //dailyReportAuthor: addItem8,
+                        //dailyRptTeamArr: addItem9,
                         workDescArr: workDescArrJson_Add,
                         delaysArr: delaysArrJson_Add,
                         wntyDelaysArr: wntyDelaysArrJson_Add
@@ -712,7 +749,38 @@
                     });
                 }
                 //END DELETE RECORDS FROM A DAILY REPORT
-            });
+                //});
+
+                //BEGIN UPDATE RECORD SUBMISSION STATUS
+                //only on existing records or copies
+                if (updateSubmissionStatus == 1) {//if the record submission status needs to be updated...
+                    var data = {
+                        dailyReportID: dailyReportID,
+                        submissionStatus: addItem10
+                    };
+
+                    //console.log("need to update report " + dailyReportID + " submission status to: " + addItem10);
+
+                    $.ajax({
+                        url: '/dailyReportByReportID/UpdateDailyReportSubmissionStatus',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        success: function (response) {
+                            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                            //console.log("delete record success. total operations to complete is now: " + totalOpsToDo);
+                            serverResponseSuccess = response;
+                            //console.log("response is: " + response);
+                            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                                window.location.href = serverResponseSuccess;
+                            }
+                        }
+                    });
+                }
+                //END UPDATE RECORD SUBMISSION STATUS
+            }
 
             //only on existing records or copies
             function fn_loadTimeEntries_RtndRecs() {
@@ -1016,6 +1084,7 @@
 
             //only on existing records or copies
             function fn_buildJsonObjects() {
+
                 //BEGIN BUILD THE WORK DESCRIPTION JSON OBJECT
                 //if there are no work description time entries to add, set the json object to null
                 if (workDesc_Add.length < 1) {
@@ -1116,9 +1185,9 @@
                         };
                     }
                 }
+                //END BUILD THE WNTY DELAYS JSON OBJECT
             }
-            //END BUILD THE WNTY DELAYS JSON OBJECT
-            
+                        
             //END SECTION TO PACK UP NEW RECORDS
 
             //BEGIN MISCELLANEOUS SECTION
@@ -1241,6 +1310,27 @@
                 //END CLEAN UP TRASH FROM ENTERED TEXT
             }
 
+            function fn_getSubmissionStatus() {
+
+                rtndSubmissionStatus = $("#txt_rtndSubmissionStatus").attr("value");
+                //console.log("returned submission status is: " + rtndSubmissionStatus);
+
+                if (rtndSubmissionStatus == 0) {
+                    $("#txt_rtndSubmissionStatus").text("Un-submitted");
+                }
+                if (rtndSubmissionStatus == 1) {
+                    $("#txt_rtndSubmissionStatus").text("Submitted");
+                }
+            }
+
+            $("#enableSelect2").click(function () {
+                fn_enableSelect2();
+            });
+
+            $("#disableSelect2").click(function () {
+                fn_disableSelect2();
+            });
+
             //END MISCELLANEOUS SECTION
 
             //BEGIN VALIDATION BEFORE SAVING SECTION
@@ -1288,9 +1378,9 @@
             //cloned to new daily report
             function enable_disableSave() {
                 if (allFilled()) {
-                    $('#addButton').removeAttr('disabled');
+                    $('#saveAndExit_btn, #saveAndSubmit_btn').removeAttr('disabled');
                 } else {
-                    $('#addButton').attr('disabled', 'disabled');
+                    $('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
                 }
             }
 
@@ -1325,8 +1415,8 @@
                 return rowFilled;
             }
 
-            //END VALIDATION BEFORE SAVING SECTION
-           
+            //END VALIDATION BEFORE SAVING SECTION             
+
         });//end document read jquery statements
     </script>
 </head>
@@ -1341,6 +1431,12 @@
             <div>
                 <span><strong>Record No</strong></span>
                 <span id="txt_dailyReportID" value="@Model.First().dailyReportID">@Model.First().dailyReportID</span>
+            </div>
+        </div>
+        <div class="col-3" style="padding:5px">
+            <div>
+                <span><strong>Submission Status</strong></span>
+                <span id="txt_rtndSubmissionStatus" value="@Model.First().submissionStatus">un-submitted?</span>
             </div>
         </div>
         <div class="col-3" style="padding:5px">
@@ -1457,7 +1553,9 @@
         </div>
         <div class="col-10" style="padding:5px">
             <div class="row" style="margin:0px;">
-                <select name="team_dpdwn" id="team_dpdwn" style="width:100%">
+                @*<select name="team_dpdwn" id="team_dpdwn" style="width:100%">
+        </select>*@
+                <select class="Team_dpdwn" id="team_dpdwn" style="width:100%" multiple="multiple">
                 </select>
             </div>
             <div class="row" style="margin:0px;" name="txt_teamMembers" id="txt_teamMembers">
@@ -1466,7 +1564,7 @@
                 </div>
             </div>
             @*<button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
-                <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>*@
+            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>*@
         </div>
     </div>
 </div>
@@ -1824,10 +1922,10 @@
 <div class="container" id="_container">
     <div class="row">
         <div class="col-4" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="addButton" style="width: 100%">Save & Exit</button>
+            <button type="button" class="btn btn-primary btn-sm" id="saveAndExit_btn" style="width: 100%">Save & Exit</button>
         </div>
         <div class="col-4" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="submitButton" style="width: 100%" disabled>Save & Submit</button>
+            <button type="button" class="btn btn-primary btn-sm" id="saveAndSubmit_btn" style="width: 100%">Save & Submit</button>
         </div>
         <div class="col-4" style="padding:5px">
             <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%" disabled>E-mail Daily Report Test</button>

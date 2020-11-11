@@ -199,7 +199,7 @@
                     }
                 }
 
-                $(".Team_dpdwn option[value='" + tempTeamMemberUserID + "']").remove();
+                $(".team_dpdwn_new option[value='" + tempTeamMemberUserID + "']").remove();
 
                 enable_disableSave();//determine if the save button needs to be enabled or disabled
                 console.log(dailyRptTeamArr);
@@ -739,6 +739,14 @@
                 //END CLEAN UP TRASH FROM ENTERED TEXT
             }
 
+            $("#enableSelect2").click(function () {
+                fn_enableSelect2();
+            });
+
+            $("#disableSelect2").click(function () {
+                fn_disableSelect2();
+            }); 
+
             //END MISCELLANEOUS SECTION
 
             //BEGIN VALIDATION BEFORE SAVING SECTION
@@ -823,15 +831,7 @@
                 return rowFilled;
             }
             //END VALIDATION BEFORE SAVING SECTION
-
-            $("#enableSelect2").click(function () {
-                fn_enableSelect2();
-            });
-
-            $("#disableSelect2").click(function () {
-                fn_disableSelect2();
-            });        
-
+               
         });//end document read jquery statements
     </script>
 </head>
