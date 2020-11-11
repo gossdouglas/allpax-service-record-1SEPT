@@ -77,12 +77,13 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {//begin document read jquery statements
-
-            var team_dpdwn = $('#team_dpdwn');
+          
             var dailyReportID = $("#txt_dailyReportID").html();
+            var rtndSubmissionStatus;
 
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+            var team_dpdwn = $('#team_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
             var lastDlyRptCrtdByUser;
@@ -94,6 +95,7 @@
             var recordsToAddStatus = 0;
             var recordsToEditStatus = 0;
             var recordsToDeleteStatus = 0;
+            var updateSubmissionStatus = 0;  
 
             var workDesc_Add = [];
             var workDescArrJson_Add = [];
@@ -436,80 +438,23 @@
 
             //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
 
-            //
+            //cloned to new daily report
             $("#saveAndExit_btn").click(function () {//
 
                 console.log("saveAndExit_btn");
                 fn_exitSubmit(0);
-
-                //submissionStatus = 0;//0 indicates meant to be stored, but not flagged for review
-
-                ////differs between new daily report and an existing one
-                //fn_loadTimeEntries_Add();
-                //fn_buildJsonObjects();
-                //fn_printArrays();
-
-                ////cloned to new daily report
-                //var addItem1 = $("#jobs_dpdown").val();
-                //var addItem2 = $("#slct_date").val();
-                //var addItem3 = $("#subJobTypes_dpdwn").val();
-                //var addItem4 = $("#input_startTime").val();
-                //var addItem5 = $("#input_endTime").val();
-                //var addItem6 = $("#input_lunch").val();
-                //var addItem7 = $("#input_equipment").val();
-                //var addItem8 = dailyRptAuthor;
-                //var addItem9 = dailyRptTeamUserIDArr;
-                //var addItem10 = submissionStatus;
-
-                //var totalOpsToDo = recordsToAddStatus;//stores the total number of types of ops to carry out
-                //var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
-                //console.log("total operations to complete on entry is: " + totalOpsToDo);
-
-                //var data =  {
-                //    dailyReportID: 0,
-                //    jobID: addItem1,
-                //    date: addItem2,
-                //    subJobID: addItem3,
-                //    startTime: addItem4,
-                //    endTime: addItem5,
-                //    lunchHours: addItem6,
-                //    equipment: addItem7,
-                //    dailyReportAuthor: addItem8,
-                //    dailyRptTeamArr: addItem9,
-                //    submissionStatus: addItem10,
-                //    workDescArr: workDescArrJson_Add,
-                //    delaysArr: delaysArrJson_Add,
-                //    wntyDelaysArr: wntyDelaysArrJson_Add
-                //};
-
-                //$.ajax({
-                //    url: '/dailyReport/AddDailyReport',
-                //    method: 'post',
-                //    contentType: 'application/json',
-                //    dataType: 'json',
-                //    data: JSON.stringify(data),
-                //    traditional: true,
-                //    success: function (response) {
-                //        totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                //        console.log("add record success. total operations to complete is now: " + totalOpsToDo);
-                //        serverResponseSuccess = response;
-                //        console.log("response is: " + response)
-                //        if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
-                //            window.location.href = serverResponseSuccess;
-                //        }
-                //    }
-                //});
             });
 
+            //cloned to new daily report
             $("#saveAndSubmit_btn").click(function () {//when the add button is clicked...
 
                 console.log("saveAndSubmit_btn");
                 fn_exitSubmit(1);               
             });
 
+            //
             function fn_exitSubmit(state) {
-                //submissionStatus = 0;//0 indicates meant to be stored, but not flagged for review
-                submissionStatus = state;//0 indicates meant to be stored, but not flagged for review
+                submissionStatus = state;//0 indicates meant to be stored, 1 indicates stored and submitted for review
 
                 //differs between new daily report and an existing one
                 fn_loadTimeEntries_Add();

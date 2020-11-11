@@ -50,12 +50,13 @@
 
     <script>
         $(document).ready(function () {//begin document read jquery statements
-
-            var team_dpdwn = $('#team_dpdwn');
+          
             var dailyReportID = $("#txt_dailyReportID").html();
+            var rtndSubmissionStatus;
 
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
+            var team_dpdwn = $('#team_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
             var lastDlyRptCrtdByUser;            
@@ -65,7 +66,8 @@
             var dailyLogInfoChngd = 0;
             var recordsToAddStatus = 0;
             var recordsToEditStatus = 0;
-            var recordsToDeleteStatus = 0;           
+            var recordsToDeleteStatus = 0;
+            var updateSubmissionStatus = 0;  
 
             var workDesc_RtndRecs = [];
             var delays_RtndRecs = [];
@@ -98,6 +100,7 @@
             fn_enableSelect2();//enable the select2 add-on on page load
             fn_loadDropDowns();
             fn_loadTimeEntries_RtndRecs();//record the values of the returned records for comparison to the _Edit arrays
+            fn_getSubmissionStatus();
 
             //BEGIN DAILY REPORT LOG SECTION
 
@@ -556,8 +559,26 @@
            
             //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
 
+            //cloned to new daily report
+            $("#saveAndExit_btn").click(function () {//
+
+                console.log("saveAndExit_btn");
+                fn_exitSubmit(0);
+            });
+
+            //cloned to new daily report
+            $("#saveAndSubmit_btn").click(function () {//when the add button is clicked...
+
+                console.log("saveAndSubmit_btn");
+                updateSubmissionStatus = 1;
+                fn_exitSubmit(1);
+            });
+
             //differs between new daily report and an existing one
-            $("#addButton").click(function () {//when the add button is clicked...
+            //$("#addButton").click(function () {//when the add button is clicked...
+            function fn_exitSubmit(submissionState) {
+
+                submissionStatus = submissionState;//0 indicates meant to be stored, 1 indicates stored and submitted for review
 
                 //differs between new daily report and an existing one                
                 fn_loadTimeEntries_Add();
@@ -575,9 +596,10 @@
                 var addItem6 = $("#input_lunch").val();
                 var addItem7 = $("#input_equipment").val();
                 var addItem8 = dailyRptAuthor;
-                var addItem9 = dailyRptTeamUserIDArr;  
+                var addItem9 = dailyRptTeamUserIDArr;
+                var addItem10 = submissionStatus;
 
-                var totalOpsToDo = dailyLogInfoChngd + recordsToAddStatus + recordsToEditStatus + recordsToDeleteStatus;//stores the total number of types of ops to carry out
+                var totalOpsToDo = dailyLogInfoChngd + recordsToAddStatus + recordsToEditStatus + recordsToDeleteStatus + updateSubmissionStatus;//stores the total number of types of ops to carry out
                 var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
                 //console.log("total operations to complete on entry is: " + totalOpsToDo);
 
@@ -622,15 +644,15 @@
                 if (recordsToAddStatus == 1) {//if there are records to add...
                     var data = {
                         dailyReportID: dailyReportID,
-                        jobID: addItem1,
-                        date: addItem2,
-                        subJobID: addItem3,
-                        startTime: addItem4,
-                        endTime: addItem5,
-                        lunchHours: addItem6,
-                        equipment: addItem7,
-                        dailyReportAuthor: addItem8,
-                        dailyRptTeamArr: addItem9,
+                        //jobID: addItem1,
+                        //date: addItem2,
+                        //subJobID: addItem3,
+                        //startTime: addItem4,
+                        //endTime: addItem5,
+                        //lunchHours: addItem6,
+                        //equipment: addItem7,
+                        //dailyReportAuthor: addItem8,
+                        //dailyRptTeamArr: addItem9,
                         workDescArr: workDescArrJson_Add,
                         delaysArr: delaysArrJson_Add,
                         wntyDelaysArr: wntyDelaysArrJson_Add
@@ -712,7 +734,38 @@
                     });
                 }
                 //END DELETE RECORDS FROM A DAILY REPORT
-            });
+                //});
+
+                //BEGIN UPDATE RECORD SUBMISSION STATUS
+                //only on existing records or copies
+                if (updateSubmissionStatus == 1) {//if the record submission status needs to be updated...
+                    var data = {
+                        dailyReportID: dailyReportID,
+                        submissionStatus: addItem10
+                    };
+
+                    //console.log("need to update report " + dailyReportID + " submission status to: " + addItem10);
+
+                    $.ajax({
+                        url: '/dailyReportByReportID/UpdateDailyReportSubmissionStatus',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        success: function (response) {
+                            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                            //console.log("delete record success. total operations to complete is now: " + totalOpsToDo);
+                            serverResponseSuccess = response;
+                            //console.log("response is: " + response);
+                            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                                window.location.href = serverResponseSuccess;
+                            }
+                        }
+                    });
+                }
+                //END UPDATE RECORD SUBMISSION STATUS
+            }
 
             //only on existing records or copies
             function fn_loadTimeEntries_RtndRecs() {
@@ -1241,6 +1294,19 @@
                 //END CLEAN UP TRASH FROM ENTERED TEXT
             }
 
+            function fn_getSubmissionStatus() {
+
+                rtndSubmissionStatus = $("#txt_rtndSubmissionStatus").attr("value");
+                //console.log("returned submission status is: " + rtndSubmissionStatus);
+
+                if (rtndSubmissionStatus == 0) {
+                    $("#txt_rtndSubmissionStatus").text("Un-submitted");
+                }
+                if (rtndSubmissionStatus == 1) {
+                    $("#txt_rtndSubmissionStatus").text("Submitted");
+                }
+            }
+
             //END MISCELLANEOUS SECTION
 
             //BEGIN VALIDATION BEFORE SAVING SECTION
@@ -1288,9 +1354,9 @@
             //cloned to new daily report
             function enable_disableSave() {
                 if (allFilled()) {
-                    $('#addButton').removeAttr('disabled');
+                    $('#saveAndExit_btn, #saveAndSubmit_btn').removeAttr('disabled');
                 } else {
-                    $('#addButton').attr('disabled', 'disabled');
+                    $('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
                 }
             }
 
@@ -1326,7 +1392,15 @@
             }
 
             //END VALIDATION BEFORE SAVING SECTION
-           
+
+            $("#enableSelect2").click(function () {
+                fn_enableSelect2();
+            });
+
+            $("#disableSelect2").click(function () {
+                fn_disableSelect2();
+            });  
+
         });//end document read jquery statements
     </script>
 </head>
@@ -1341,6 +1415,12 @@
             <div>
                 <span><strong>Record No</strong></span>
                 <span id="txt_dailyReportID" value="@Model.First().dailyReportID">@Model.First().dailyReportID</span>
+            </div>
+        </div>
+        <div class="col-3" style="padding:5px">
+            <div>
+                <span><strong>Submission Status</strong></span>
+                <span id="txt_rtndSubmissionStatus" value="@Model.First().submissionStatus">un-submitted?</span>
             </div>
         </div>
         <div class="col-3" style="padding:5px">
@@ -1465,8 +1545,8 @@
                     Johnny Watkins|JW
                 </div>
             </div>
-            @*<button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
-                <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>*@
+            <button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
+            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>
         </div>
     </div>
 </div>
@@ -1824,10 +1904,10 @@
 <div class="container" id="_container">
     <div class="row">
         <div class="col-4" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="addButton" style="width: 100%">Save & Exit</button>
+            <button type="button" class="btn btn-primary btn-sm" id="saveAndExit_btn" style="width: 100%">Save & Exit</button>
         </div>
         <div class="col-4" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="submitButton" style="width: 100%" disabled>Save & Submit</button>
+            <button type="button" class="btn btn-primary btn-sm" id="saveAndSubmit_btn" style="width: 100%">Save & Submit</button>
         </div>
         <div class="col-4" style="padding:5px">
             <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%" disabled>E-mail Daily Report Test</button>

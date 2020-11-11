@@ -31,8 +31,8 @@ namespace allpax_service_record.Controllers
 
             string sqlquery1 =
                 "SELECT tbl_dailyReport.dailyReportID, tbl_dailyReport.jobID, tbl_dailyReport.subJobID, tbl_subJobTypes.description, tbl_dailyReport.date, " +
-                "tbl_Jobs.customerContact,tbl_customers.customerName, tbl_customers.address, tbl_dailyReport.equipment, " +
-                "tbl_dailyReport.startTime, tbl_dailyReport.endTime, tbl_dailyReport.lunchHours, tbl_customers.customerCode, tbl_dailyReport.dailyReportAuthor  " +
+                "tbl_Jobs.customerContact,tbl_customers.customerName, tbl_customers.address, tbl_dailyReport.equipment, tbl_dailyReport.startTime, " +
+                "tbl_dailyReport.endTime, tbl_dailyReport.lunchHours, tbl_customers.customerCode, tbl_dailyReport.dailyReportAuthor, tbl_dailyReport.submissionStatus " +
 
                 "FROM tbl_dailyReport " +
 
@@ -79,6 +79,7 @@ namespace allpax_service_record.Controllers
                 vm_dailyReportByReportID.jobCorrespondentEmail = jobCrspdtEmailByJobID(vm_dailyReportByReportID.jobID);
                 //
                 vm_dailyReportByReportID.dailyReportAuthor = dr1[13].ToString();
+                vm_dailyReportByReportID.submissionStatus = (int)dr1[14];
 
                 //GET WORK DESCRIPTION RECORDS FOR THE DAILY REPORT
                 vm_dailyReportByReportID.workDescArr = getWorkDescRecords(vm_dailyReportByReportID.dailyReportID);
@@ -250,6 +251,20 @@ namespace allpax_service_record.Controllers
             //return new EmptyResult();
             return Json(Url.Action("Index", "dailyReportAll"));
             //return Json("complete");
+        }
+
+        public ActionResult UpdateDailyReportSubmissionStatus(tbl_dailyReport submissionStatusUpdate)
+        {
+            db.Database.ExecuteSqlCommand(
+                "UPDATE tbl_dailyReport " +
+                "SET " +
+
+                "submissionStatus = {1} " +
+
+                "WHERE dailyReportID = {0}",
+                submissionStatusUpdate.dailyReportID, submissionStatusUpdate.submissionStatus);
+
+            return Json(Url.Action("Index", "dailyReportAll"));
         }
 
         public ActionResult UpdateDailyReportTimeEntries(vm_dailyReportByReportID dailyReportTimeEntryUpdate)
