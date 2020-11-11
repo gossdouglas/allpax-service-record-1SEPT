@@ -86,7 +86,7 @@
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
             var lastDlyRptCrtdByUser;
-            var submissionStatus;
+            //var submissionStatus;
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
@@ -155,25 +155,15 @@
 
             //begin add team member on drop down change
             //differs between new daily report and an existing one
-            //team_dpdwn.change(function () {
             $(team_dpdwn).on("select2:select", function (e) {//on selecting a new team member to add...
 
-                //var lastSlctd = e.params.data.id;
                 var tempTeamMemberUserID = e.params.data.id;
-                console.log("team member to be added: " + tempTeamMemberUserID);
-                //lastSlctd = $("option:selected:last", this).val();
-                //lastSlctd = $("#team_dpdwn option:selected").last().val();
-                //console.log("selected from the report team dropdown: " + $(this).val());
-                //console.log("clicked user name is: " + lastSlctd);
+                //console.log("team member to be added: " + tempTeamMemberUserID);
 
-                //var passed_userName = $(this).val();
-                //var passed_userName = 'abundy';
-                //var str_userName = "'" + lastSlctd +"'"
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNames',
                     method: 'post',
                     dataType: 'json',
-                    //data: { userName: $(this).val() },//orig
                     data: { userName: tempTeamMemberUserID },//
                     success: function (data) {
 
@@ -181,47 +171,24 @@
                             var temp_userName = item.userName;
                             var temp_name = item.name;
                             var temp_shortName = item.shortName;
-                            //console.log(data);
-
-                            //$("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                            //$("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                            //$("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
 
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
 
-                            //$("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-                            //$("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".team_dpdwn_new");
                             enable_disableSave();//determine if the save button needs to be enabled or disabled
-                            console.log(dailyRptTeamArr);
+                            //console.log(dailyRptTeamArr);
                         });
                         //end AddTeamMember
                     }
                 });
-
-                //$(team_dpdwn).val("-1");
             });
             //end add team member on drop down change
 
-            //$("#team_dpdwn").on("select2:select", function (e) {
-            //    var lastSelectedItem = e.params.data.id;
-            //    console.log(lastSelectedItem + " has been added to the team.");
-            //});
-
-            //$("#team_dpdwn").on("select2:unselect", function (e) {
-            //    var lastSelectedItem = e.params.data.id;
-            //    console.log(lastSelectedItem + " has been removed from the team.");
-            //});
-
-            //begin when a team member class is clicked for deletion...
-            //differs between new daily report and an existing one
-            //$(".team_").on('click', function () {
             $(team_dpdwn).on("select2:unselect", function (e) {//on unselecting a team member to delete...
 
-                //var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
                 var tempTeamMemberUserID = e.params.data.id;
-                console.log("team member to be deleted: " + tempTeamMemberUserID);
+                //console.log("team member to be deleted: " + tempTeamMemberUserID);
 
                 for (var row = 0; row < dailyRptTeamArr.length; row++) {
                     if (dailyRptTeamArr[row][0] == tempTeamMemberUserID) {
@@ -230,9 +197,7 @@
                     }
                 }
 
-                //$("#team_dpdwn option[value='" + tempTeamMemberUserID + "']").removeAttr('disabled');
                 $(".Team_dpdwn option[value='" + tempTeamMemberUserID + "']").remove();
-                //$("#" + $(this).attr("id")).remove();
 
                 enable_disableSave();//determine if the save button needs to be enabled or disabled
                 console.log(dailyRptTeamArr);
@@ -404,38 +369,6 @@
             });
 
             //differs between new daily report and an existing one
-            function fn_addCurrentUserIDToTeam() {
-                $.ajax({
-                    url: 'DataService.asmx/GetAllTeamNames',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { userName: dailyRptAuthor },
-                    success: function (data) {
-
-                        $(data).each(function (index, item) {
-                            var temp_userName = item.userName;
-                            var temp_name = item.name;
-                            var temp_shortName = item.shortName;
-
-                            //$("#team_").clone(true).prop("id", "team_" + temp_userName.toString()).appendTo("#txt_teamMembers");
-                            //$("#team_" + temp_userName.toString()).text(temp_name + "| " + temp_shortName.toString());
-                            //$("#team_" + temp_userName.toString()).removeAttr('hidden');//unhide the copy
-
-                            dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
-                            dailyRptTeamUserIDArr.push(temp_userName);
-
-                            $("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-                            //$("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
-                            //$("<option value='" + temp_userName + "' selected>'"+temp_userName+"'</option>'").appendTo(".Team_dpdwn");
-                            $("<option value=" + temp_userName + " selected>" + temp_userName + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
-                            $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".team_dpdwn_new");
-                        });
-                        //end AddTeamMember
-                    }
-                });
-            }
-
-            //differs between new daily report and an existing one
             function fn_loadDropDowns() {
 
                 //differs between new daily report and an existing one
@@ -463,7 +396,6 @@
                     dataType: 'json',
                     data: { userName: '%' },
                     success: function (data) {
-                        //team_dpdwn.append($('<option/>', { value: -1, text: 'Add Team Member' }));
 
                         $(data).each(function (index, item) {
 
@@ -471,13 +403,8 @@
                             var temp_name = item.name;
                             var temp_shortName = item.shortName;
 
-                            //team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "|" + item.shortName }));//append to the daily report team dropdown
-
                             if (item.userName == dailyRptAuthor) {
-                                //$("<option value=" + temp_userName + " selected>" + temp_userName + "-" + temp_shortName + "</option>").appendTo("#team_dpdwn");
                                 $("<option value=" + temp_userName + " selected>" + temp_userName + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
-                                //$("#team_dpdwn option[value='" + temp_userName + "']").attr('disabled', true);//lock the user from being selectable
-                                //team_dpdwn.append($('<option/>', { value: item.userName, text: item.name + "|" + item.shortName }));//append to the daily report team dropdown
                                 $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".team_dpdwn_new");
                                 dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                                 dailyRptTeamUserIDArr.push(temp_userName);
@@ -489,9 +416,6 @@
                     }
                 });
                 //end fill the team names dropdown
-
-                //add the current user to the team on page load
-                //fn_addCurrentUserIDToTeam();
             }
 
             //cloned to new daily report
@@ -512,10 +436,80 @@
 
             //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
 
-            //differs between new daily report and an existing one
-            $("#addButton").click(function () {//when the add button is clicked...
+            //
+            $("#saveAndExit_btn").click(function () {//
 
-                submissionStatus = 0;//0 indicates meant to be stored, but not flagged for review
+                console.log("saveAndExit_btn");
+                fn_exitSubmit(0);
+
+                //submissionStatus = 0;//0 indicates meant to be stored, but not flagged for review
+
+                ////differs between new daily report and an existing one
+                //fn_loadTimeEntries_Add();
+                //fn_buildJsonObjects();
+                //fn_printArrays();
+
+                ////cloned to new daily report
+                //var addItem1 = $("#jobs_dpdown").val();
+                //var addItem2 = $("#slct_date").val();
+                //var addItem3 = $("#subJobTypes_dpdwn").val();
+                //var addItem4 = $("#input_startTime").val();
+                //var addItem5 = $("#input_endTime").val();
+                //var addItem6 = $("#input_lunch").val();
+                //var addItem7 = $("#input_equipment").val();
+                //var addItem8 = dailyRptAuthor;
+                //var addItem9 = dailyRptTeamUserIDArr;
+                //var addItem10 = submissionStatus;
+
+                //var totalOpsToDo = recordsToAddStatus;//stores the total number of types of ops to carry out
+                //var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
+                //console.log("total operations to complete on entry is: " + totalOpsToDo);
+
+                //var data =  {
+                //    dailyReportID: 0,
+                //    jobID: addItem1,
+                //    date: addItem2,
+                //    subJobID: addItem3,
+                //    startTime: addItem4,
+                //    endTime: addItem5,
+                //    lunchHours: addItem6,
+                //    equipment: addItem7,
+                //    dailyReportAuthor: addItem8,
+                //    dailyRptTeamArr: addItem9,
+                //    submissionStatus: addItem10,
+                //    workDescArr: workDescArrJson_Add,
+                //    delaysArr: delaysArrJson_Add,
+                //    wntyDelaysArr: wntyDelaysArrJson_Add
+                //};
+
+                //$.ajax({
+                //    url: '/dailyReport/AddDailyReport',
+                //    method: 'post',
+                //    contentType: 'application/json',
+                //    dataType: 'json',
+                //    data: JSON.stringify(data),
+                //    traditional: true,
+                //    success: function (response) {
+                //        totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                //        console.log("add record success. total operations to complete is now: " + totalOpsToDo);
+                //        serverResponseSuccess = response;
+                //        console.log("response is: " + response)
+                //        if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                //            window.location.href = serverResponseSuccess;
+                //        }
+                //    }
+                //});
+            });
+
+            $("#saveAndSubmit_btn").click(function () {//when the add button is clicked...
+
+                console.log("saveAndSubmit_btn");
+                fn_exitSubmit(1);               
+            });
+
+            function fn_exitSubmit(state) {
+                //submissionStatus = 0;//0 indicates meant to be stored, but not flagged for review
+                submissionStatus = state;//0 indicates meant to be stored, but not flagged for review
 
                 //differs between new daily report and an existing one
                 fn_loadTimeEntries_Add();
@@ -538,7 +532,7 @@
                 var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
                 console.log("total operations to complete on entry is: " + totalOpsToDo);
 
-                var data =  {
+                var data = {
                     dailyReportID: 0,
                     jobID: addItem1,
                     date: addItem2,
@@ -572,7 +566,7 @@
                         }
                     }
                 });
-            });
+            }
 
             //cloned to new daily report
             function fn_loadTimeEntries_Add () {
@@ -847,9 +841,9 @@
             //cloned to new daily report
             function enable_disableSave() {
                 if (allFilled()) {
-                    $('#addButton').removeAttr('disabled');
+                    $('#saveAndExit_btn, #saveAndSubmit_btn').removeAttr('disabled');
                 } else {
-                    $('#addButton').attr('disabled', 'disabled');
+                    $('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
                 }
             }
 
@@ -1227,10 +1221,10 @@
 <div class="container" id="_container">
     <div class="row">
         <div class="col-6" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="addButton" style="width: 100%" disabled>Save & Exit</button>
+            <button type="button" class="btn btn-primary btn-sm" id="saveAndExit_btn" style="width: 100%" disabled>Save & Exit</button>
         </div>
         <div class="col-6" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="submitButton" style="width: 100%" disabled>Save & Submit</button>
+            <button type="button" class="btn btn-primary btn-sm" id="saveAndSubmit_btn" style="width: 100%" disabled>Save & Submit</button>
         </div>
         @*<div class="col-4" style="padding:5px">
             <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%">E-mail Daily Report Test</button>
