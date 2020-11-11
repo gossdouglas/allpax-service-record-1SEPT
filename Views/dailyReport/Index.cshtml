@@ -194,6 +194,7 @@
                             //$("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn");
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".team_dpdwn_new");
                             enable_disableSave();//determine if the save button needs to be enabled or disabled
+                            console.log(dailyRptTeamArr);
                         });
                         //end AddTeamMember
                     }
@@ -234,6 +235,7 @@
                 //$("#" + $(this).attr("id")).remove();
 
                 enable_disableSave();//determine if the save button needs to be enabled or disabled
+                console.log(dailyRptTeamArr);
             });
             //end when a team member class is clicked for deletion...
 
@@ -1016,8 +1018,8 @@
                     Johnny Watkins|JW
                 </div>
             </div>
-            <button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
-            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>
+            @*<button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
+            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>*@
         </div>
     </div>
 </div>
