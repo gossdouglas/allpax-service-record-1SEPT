@@ -87,7 +87,6 @@
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
             var lastDlyRptCrtdByUser;
-            //var submissionStatus;
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
@@ -283,6 +282,7 @@
                     }
 
                     fn_enableSelect2();
+                    enable_disableSave();
                 }
 
                 else {
@@ -347,6 +347,8 @@
                 //if this line is a new record, simply remove it
                 if (temp_LineClass.includes("addRecord")) {
                     $(currentRow).remove();
+                    indexWorkDescEntries_Add = indexWorkDescEntries_Add - 1;//only on the new daily report page
+                    enable_disableSave();
                 }
 
                 //if this line is a returned record, set its class to deletedRecords
@@ -441,14 +443,14 @@
             //cloned to new daily report
             $("#saveAndExit_btn").click(function () {//
 
-                console.log("saveAndExit_btn");
+                //console.log("Total number of indexWorkDescEntries_Add: " + indexWorkDescEntries_Add);
                 fn_exitSubmit(0);
             });
 
             //cloned to new daily report
             $("#saveAndSubmit_btn").click(function () {//when the add button is clicked...
 
-                console.log("saveAndSubmit_btn");
+                //console.log("Total number of indexWorkDescEntries_Add: " + indexWorkDescEntries_Add);
                 fn_exitSubmit(1);               
             });
 
@@ -785,6 +787,11 @@
 
                 if ($(dailyRptTeamUserIDArr).length < 1) {
                     //console.log("need more team members added to the daily report.")
+                    filled = false;
+                }
+
+                if (indexWorkDescEntries_Add < 1) {
+                    //console.log("need at least one work description added to the daily report.")
                     filled = false;
                 }
 
