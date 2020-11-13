@@ -409,6 +409,15 @@
 
             });
 
+            //cloned to new daily report
+            $(".Btn_selectAll").click(function () {
+                var currentRow = $(this).parent().parent();
+
+                //disable select2 for this particular dropdown, select all team members and then re-enable select2
+                currentRow.find(".Team_dpdwn").select2('destroy').find('option').prop('selected', 'selected');
+                fn_enableSelect2();
+            });
+
             //differs between new daily report and an existing one
             function fn_loadDropDowns() {
 
@@ -1274,7 +1283,7 @@
             //cloned to new daily report
             function fn_enableSelect2() {
                 $('.Team_dpdwn').select2({
-                    width: "100%",
+                    width: "80%",
                     placeholder: "Select Team",
                     closeOnSelect: "false"
                 })
@@ -1614,39 +1623,40 @@
             string temp_workDescription = item.workDescArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
-<div class=" row returnedRecords workDescLine" id="workDescLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
-    <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
+            <div class=" row returnedRecords workDescLine" id="workDescLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
+                <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
-    <div class="col-3 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
-        <select class="Team_dpdwn workDescTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
-            @for (var j = 0; j < (@temp_userNames.Count); j++)
-            {
-                <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
-            }
-        </select>
-    </div>
+                <div class="col-3 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
+                    <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+                    <select class="Team_dpdwn workDescTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                        @for (var j = 0; j < (@temp_userNames.Count); j++)
+                        {
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                        }
+                    </select>
+                </div>
 
-    <div class="col-3 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
-        @for (var k = 0; k < (temp_userShortNames.Count); k++)
-        {
-            @(temp_userShortNames[k] + "|");
-        }
-    </div>
+                <div class="col-3 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
+                    {
+                        @(temp_userShortNames[k] + "|");
+                    }
+                </div>
 
-    <div class="col-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>
+                <div class="col-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>
 
-    <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
-        <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-    </div>
+                <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                </div>
 
-    <div class="col-1 state_div workDescTeam_state_div" style="padding:0px;">
-        <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
-        <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
-        <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>
-    </div>
-</div>
+                <div class="col-1 state_div workDescTeam_state_div" style="padding:0px;">
+                    <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
+                    <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
+                    <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>
+                </div>
+            </div>
         }
     }
 
@@ -1657,6 +1667,7 @@
         <div class="row entryRow workDescriptionLine_template_row_active" id="" style="">
             <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-3 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
@@ -1683,6 +1694,7 @@
         <div class="row entryRow workDescriptionLine_template_row_hidden" id="" style="" hidden>
             <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-3 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
@@ -1713,10 +1725,10 @@
 <hr class="sectionSeparator">
 <div class="container" id="delays_container">
     <div class="row">
-        <div class="col-6" style="padding:5px">
+        <div class="col-5" style="padding:5px">
             <strong>Delays</strong>
         </div>
-        <div class="col-2" style="padding:5px">
+        <div class="col-3" style="padding:5px">
             <strong>Team</strong>
         </div>
         <div class="col-1" style="padding:5px">
@@ -1744,40 +1756,41 @@
             string temp_workDescription = item.delaysArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
-<div class=" row returnedRecords delaysLine" id="delaysLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
-    <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
+            <div class=" row returnedRecords delaysLine" id="delaysLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
+                <div class="col-5 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
-    <div class="col-2 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
-        <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
-            @for (var j = 0; j < (@temp_userNames.Count); j++)
-            {
-                <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
-            }
-        </select>
-    </div>
+                <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
+                    <button class="btn btn-light btn-sm Btn_selectAll lineDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+                    <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                        @for (var j = 0; j < (@temp_userNames.Count); j++)
+                        {
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                        }
+                    </select>
+                </div>
 
-    <div class="col-2 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
-        @*AB|DB|JB*@
-        @for (var k = 0; k < (temp_userShortNames.Count); k++)
-        {
-            @(temp_userShortNames[k] + "|");
-        }
-    </div>
+                <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+                    @*AB|DB|JB*@
+                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
+                    {
+                        @(temp_userShortNames[k] + "|");
+                    }
+                </div>
 
-    <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="">@temp_hours</div>
+                <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="">@temp_hours</div>
 
-    <div class="col-2 button_div delaysTeam_button_div" style="padding:0px;">
-        <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save lineDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete lineDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-    </div>
+                <div class="col-2 button_div delaysTeam_button_div" style="padding:0px;">
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_save lineDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_delete lineDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                </div>
 
-    <div class="col-1 state_div delaysDescTeam_state_div" style="padding:0px;">
-        <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
-        <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
-        <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>
-    </div>
-</div>
+                <div class="col-1 state_div delaysDescTeam_state_div" style="padding:0px;">
+                    <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
+                    <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
+                    <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>
+                </div>
+            </div>
         }
     }
     @*END RETURNED RECORDS*@
@@ -1785,12 +1798,13 @@
     @*BEGIN NEW DELAYS TEMPLATE*@
     <div class="" id="delaysLine_template">
         <div class="row entryRow delaysLine_template_row_active" id="" style="">
-            <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="true" style=""></div>
-            <div class="col-2 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
+            <div class="col-5 narr_div delaysTeam_narr_div" id="" contenteditable="true" style=""></div>
+            <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_selectAll lineDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new delaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
-            <div class="col-2 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
+            <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
             <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="true" style=""></div>
@@ -1809,12 +1823,13 @@
         </div>
 
         <div class="row entryRow delaysLine_template_row_hidden" id="" style="" hidden>
-            <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="true" style=""></div>
-            <div class="col-2 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
+            <div class="col-5 narr_div delaysTeam_narr_div" id="" contenteditable="true" style=""></div>
+            <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_selectAll lineDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new delaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
-            <div class="col-2 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
+            <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
             <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="true" style=""></div>
@@ -1838,10 +1853,10 @@
 <hr class="sectionSeparator">
 <div class="container" id="wntyDelays_container">
     <div class="row">
-        <div class="col-6" style="padding:5px">
+        <div class="col-5" style="padding:5px">
             <strong>Warranty Delays</strong>
         </div>
-        <div class="col-2" style="padding:5px">
+        <div class="col-3" style="padding:5px">
             <strong>Team</strong>
         </div>
         <div class="col-1" style="padding:5px">
@@ -1868,40 +1883,41 @@
             string temp_workDescription = item.wntyDelaysArr[i].workDescription;
             //END TEMPORARY LOOP VARIABLES
 
-<div class=" row returnedRecords wntyDelaysLine" id="wntyDelaysLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
-    <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
+            <div class=" row returnedRecords wntyDelaysLine" id="wntyDelaysLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
+                <div class="col-5 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
-    <div class="col-2 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding: 0px; display:none">
-        <select class="Team_dpdwn wntyDelaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
-            @for (var j = 0; j < (@temp_userNames.Count); j++)
-            {
-                <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
-            }
-        </select>
-    </div>
+                <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding: 0px; display:none">
+                    <button class="btn btn-light btn-sm Btn_selectAll lineWntyDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+                    <select class="Team_dpdwn wntyDelaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                        @for (var j = 0; j < (@temp_userNames.Count); j++)
+                        {
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                        }
+                    </select>
+                </div>
 
-    <div class="col-2 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
-        @*AB|DB|JB*@
-        @for (var k = 0; k < (temp_userShortNames.Count); k++)
-        {
-            @(temp_userShortNames[k] + "|");
-        }
-    </div>
+                <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+                    @*AB|DB|JB*@
+                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
+                    {
+                        @(temp_userShortNames[k] + "|");
+                    }
+                </div>
 
-    <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="false" style="">@temp_hours</div>
+                <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="false" style="">@temp_hours</div>
 
-    <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
-        <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save lineWntyDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete lineWntyDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-    </div>
+                <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_save lineWntyDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_delete lineWntyDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                </div>
 
-    <div class="col-1 state_div wntyDelaysDescTeam_state_div" style="padding:0px;">
-        <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
-        <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
-        <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>
-    </div>
-</div>
+                <div class="col-1 state_div wntyDelaysDescTeam_state_div" style="padding:0px;">
+                    <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
+                    <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
+                    <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>
+                </div>
+            </div>
         }
     }
     @*END RETURNED RECORDS*@
@@ -1909,12 +1925,13 @@
     @*BEGIN NEW WARRANTY DELAYS  TEMPLATE*@
     <div class="" id="wntyDelaysLine_template" style="">
         <div class="row entryRow wntyDelaysLine_template_row_active" id="" style="">
-            <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style=""></div>
-            <div class="col-2 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
+            <div class="col-5 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style=""></div>
+            <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_selectAll lineWntyDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new wntyDelaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
-            <div class="col-2 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
+            <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
             <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style=""></div>
@@ -1932,12 +1949,13 @@
         </div>
 
         <div class="row entryRow wntyDelaysLine_template_row_hidden" id="" style="" hidden>
-            <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style=""></div>
-            <div class="col-2 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
+            <div class="col-5 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style=""></div>
+            <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_selectAll lineWntyDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new wntyDelaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
-            <div class="col-2 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
+            <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
             <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style=""></div>
@@ -1955,7 +1973,8 @@
         </div>
     </div>
     @*END WARRANTY DELAYS TEMPLATE*@
-</div>
+    </div>
+    @*END WARRANTY DELAYS*@
 @*END WARRANTY DELAYS  SECTION*@
 
 @*BEGIN FINAL PAGE ACTIONS*@
