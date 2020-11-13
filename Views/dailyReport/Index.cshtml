@@ -288,7 +288,7 @@
 
                     $.alert({
                         title: 'Error!',
-                        content: 'One or more row entries incorrect.',
+                        content: 'One or more row entries incorrect.  Narrative section must 10 or greater, at least one team member must be added and hours must be of form H.0, H.25, H.5, or H.75.',
                     });
                 }
             });
@@ -333,7 +333,7 @@
 
                     $.alert({
                         title: 'Error!',
-                        content: 'One or more row entries incorrect.',
+                        content: 'One or more row entries incorrect.  Narrative section must 10 or greater, at least one team member must be added and hours must be of form H.0, H.25, H.5, or H.75.',
                     });
                 }
             });
@@ -369,6 +369,15 @@
                     $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
                     $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
                 }
+            });
+
+            //cloned to new daily report
+            $(".Btn_selectAll").click(function () {
+                var currentRow = $(this).parent().parent();
+
+                //disable select2 for this particular dropdown, select all team members and then re-enable select2
+                currentRow.find(".Team_dpdwn").select2('destroy').find('option').prop('selected', 'selected');
+                fn_enableSelect2();   
             });
 
             //differs between new daily report and an existing one
@@ -689,7 +698,8 @@
             //cloned to new daily report
             function fn_enableSelect2() {
                 $('.Team_dpdwn').select2({
-                    width: "100%",
+                    //width: "100%",
+                    width: "80%",
                     placeholder: "Select Team",
                     closeOnSelect: "false"
                 })
@@ -816,7 +826,7 @@
                 var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
                 //console.clear();
 
-                if (narrDiv == "") {
+                if (narrDiv.length < 10) {
                     //console.log("Narr div is empty.")
                     rowFilled = false;
                     return rowFilled;
@@ -852,6 +862,12 @@
             <div>
                 <span><strong>Record No</strong></span>
                 <span id="txt_dailyReportID" value="">New</span>
+            </div>
+        </div>
+        <div class="col-3" style="padding:5px">
+            <div>
+                <span><strong>Submission Status</strong></span>
+                <span id="txt_rtndSubmissionStatus" value="">Un-submitted</span>
             </div>
         </div>
         <div class="col-3" style="padding:5px">
@@ -992,6 +1008,7 @@
         <div class="row entryRow workDescriptionLine_template_row_active" id="" style="">
             <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-3 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
@@ -1018,6 +1035,7 @@
         <div class="row entryRow workDescriptionLine_template_row_hidden" id="" style="" hidden>
             <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-3 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
@@ -1048,10 +1066,10 @@
 <hr class="sectionSeparator">
 <div class="container" id="delays_container">
     <div class="row">
-        <div class="col-6" style="padding:5px">
+        <div class="col-5" style="padding:5px">
             <strong>Delays</strong>
         </div>
-        <div class="col-2" style="padding:5px">
+        <div class="col-3" style="padding:5px">
             <strong>Team</strong>
         </div>
         <div class="col-1" style="padding:5px">
@@ -1067,12 +1085,13 @@
     @*BEGIN NEW DELAYS TEMPLATE*@
     <div class="" id="delaysLine_template">
         <div class="row entryRow delaysLine_template_row_active" id="" style="">
-            <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="true" style=""></div>
-            <div class="col-2 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
+            <div class="col-5 narr_div delaysTeam_narr_div" id="" contenteditable="true" style=""></div>
+            <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_selectAll lineDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new delaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
-            <div class="col-2 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
+            <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
             <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="true" style=""></div>
@@ -1091,12 +1110,13 @@
         </div>
 
         <div class="row entryRow delaysLine_template_row_hidden" id="" style="" hidden>
-            <div class="col-6 narr_div delaysTeam_narr_div" id="" contenteditable="true" style=""></div>
-            <div class="col-2 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
+            <div class="col-5 narr_div delaysTeam_narr_div" id="" contenteditable="true" style=""></div>
+            <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_selectAll lineDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new delaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
-            <div class="col-2 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
+            <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
             <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="true" style=""></div>
@@ -1120,10 +1140,10 @@
 <hr class="sectionSeparator">
 <div class="container" id="wntyDelays_container">
     <div class="row">
-        <div class="col-6" style="padding:5px">
+        <div class="col-5" style="padding:5px">
             <strong>Warranty Delays</strong>
         </div>
-        <div class="col-2" style="padding:5px">
+        <div class="col-3" style="padding:5px">
             <strong>Team</strong>
         </div>
         <div class="col-1" style="padding:5px">
@@ -1139,12 +1159,13 @@
     @*BEGIN NEW WARRANTY DELAYS  TEMPLATE*@
     <div class="" id="wntyDelaysLine_template" style="">
         <div class="row entryRow wntyDelaysLine_template_row_active" id="" style="">
-            <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style=""></div>
-            <div class="col-2 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
+            <div class="col-5 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style=""></div>
+            <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_selectAll lineWntyDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new wntyDelaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
-            <div class="col-2 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
+            <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
             <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style=""></div>
@@ -1162,12 +1183,13 @@
         </div>
 
         <div class="row entryRow wntyDelaysLine_template_row_hidden" id="" style="" hidden>
-            <div class="col-6 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style=""></div>
-            <div class="col-2 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
+            <div class="col-5 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style=""></div>
+            <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_selectAll lineWntyDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new wntyDelaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
-            <div class="col-2 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
+            <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
             <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style=""></div>
