@@ -312,7 +312,7 @@
 
                     $.alert({
                         title: 'Error!',
-                        content: 'One or more row entries incorrect.',
+                        content: 'One or more row entries incorrect.  Narrative section must 10 or greater, at least one team member must be added and hours must be of form H.0, H.25, H.5, or H.75.',
                     });
                 }
             });
@@ -357,7 +357,7 @@
 
                     $.alert({
                         title: 'Error!',
-                        content: 'One or more row entries incorrect.',
+                        content: 'One or more row entries incorrect.  Narrative section must 10 or greater, at least one team member must be added and hours must be of form H.0, H.25, H.5, or H.75.',
                     });
                 }
             });
@@ -1409,7 +1409,7 @@
                 var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
                 console.clear();               
                           
-                if (narrDiv == "") {
+                if (narrDiv.length < 10) {
                     //console.log("Narr div is empty.")
                     rowFilled = false;
                     return rowFilled;
