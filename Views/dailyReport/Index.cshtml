@@ -150,6 +150,23 @@
                     }
                 });
                 //end fill sub jobs dropdown
+
+                //begin fill the job correspondents section
+                $.ajax({
+                    url: 'DataService.asmx/GetJobCrspdtInfoByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
+                        //console.clear();
+                        var temp_output_jobCrspdtInfo = "";
+                        $(data).each(function (index, item) {
+                            temp_output_jobCrspdtInfo = temp_output_jobCrspdtInfo + item.jobCrspdtName + "|";
+                        });
+                        $("#output_jobCrspdtInfo").text(temp_output_jobCrspdtInfo);
+                    }
+                });
+                //end fill the job correspondents section
             });
             //end jobs id dropdown change
 
@@ -927,11 +944,13 @@
             <strong>Customer Contact:</strong>
         </div>
         <div class="col-4" style="padding:5px" id="output_customerContact"></div>
-        <div class="col-2" style="padding:5px">
-            <strong>Correspondents:</strong>
+        <div class="col-4" style="padding:5px">
+            <div>
+                <span><strong>Correspondents:</strong></span>
+                <span class="" id="output_jobCrspdtInfo" style="pointer-events:none"></span>
+            </div>
         </div>
-
-    </div>
+        </div>
     <div class="row">
         <div class="col-2" style="padding:5px">
             <strong>Equipment:</strong>

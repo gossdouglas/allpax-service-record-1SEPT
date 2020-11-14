@@ -123,7 +123,7 @@
                         });
                     }
                 });
-
+               
                 //begin fill sub jobs dropdown
                 $('#subJobTypes_dpdwn').empty();//clear the dropdown
 
@@ -139,6 +139,23 @@
                     }
                 });
                 //end fill sub jobs dropdown
+
+                //begin fill the job correspondents section
+                $.ajax({
+                    url: 'DataService.asmx/GetJobCrspdtInfoByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
+                        //console.clear();
+                        var temp_output_jobCrspdtInfo = "";
+                        $(data).each(function (index, item) {
+                            temp_output_jobCrspdtInfo = temp_output_jobCrspdtInfo + item.jobCrspdtName + "|";
+                        });
+                        $("#output_jobCrspdtInfo").text(temp_output_jobCrspdtInfo);
+                    }
+                });
+                //end fill the job correspondents section
             });
             //end jobs id dropdown change
 
@@ -1512,54 +1529,54 @@
             <strong>Customer Contact:</strong>
         </div>
         <div class="col-4" style="padding:5px" id="output_customerContact">@Model.First().customerContact</div>
-        <div class="col-2" style="padding:5px">
-            <strong>Correspondents:</strong>
-        </div>
-        @foreach (var item in Model)
-        {
-            //BEGIN TEMPORARY LOOP VARIABLES
-            List<string> temp_jobCorrespondentName = item.jobCorrespondentName;
-            //END TEMPORARY LOOP VARIABLES
-
-            <div class="col-4" style="padding:5px" id="output_customerContact">
-                @for (var i = 0; i < (temp_jobCorrespondentName.Count); i++)
+        <div class="col-4" style="padding:5px">
+            <div>
+                <span><strong>Correspondents:</strong></span>
+                @foreach (var item in Model)
                 {
-                    <span class="" id="" style="pointer-events:none">@temp_jobCorrespondentName[@i]</span>
+                    //BEGIN TEMPORARY LOOP VARIABLES
+                    List<string> temp_jobCorrespondentName = item.jobCorrespondentName;
+                    //END TEMPORARY LOOP VARIABLES
+
+                        for (var i = 0; i < (temp_jobCorrespondentName.Count); i++)
+                        {
+                            <span class="" id="output_jobCrspdtInfo" style="pointer-events:none">@temp_jobCorrespondentName[@i]|</span>
+                        }
                 }
             </div>
-        }
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-2" style="padding:5px">
+                <strong>Equipment:</strong>
+            </div>
+            <div class="col-10" style="padding:5px" contenteditable>
+                <input type="text" value="@Model.First().equipment" id="input_equipment" name="" style="width:100%">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2" style="padding:5px">
+                <strong>Start Time:</strong>
+            </div>
+            <div class="col-2" style="padding:5px">
+                <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="@Model.First().startTime">
+            </div>
+            <div class="col-2" style="padding:5px">
+                <strong>End Time:</strong>
+            </div>
+            <div class="col-2" style="padding:5px">
+                <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="@Model.First().endTime">
+            </div>
+            <div class="col-2" style="padding:5px">
+                <strong>Lunch (hr)</strong>
+            </div>
+            <div class="col-1" style="padding:5px">
+                <input type="text" class="form-control form-control-sm" id="input_lunch" value="@Model.First().lunchHours">
+            </div>
+            <div class="col-1" style="padding:5px">
+            </div>
+        </div>
     </div>
-    <div class="row">
-        <div class="col-2" style="padding:5px">
-            <strong>Equipment:</strong>
-        </div>
-        <div class="col-10" style="padding:5px" contenteditable>
-        <input type="text" value="@Model.First().equipment" id="input_equipment" name="" style="width:100%">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-2" style="padding:5px">
-            <strong>Start Time:</strong>
-        </div>
-        <div class="col-2" style="padding:5px">
-            <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="@Model.First().startTime">
-        </div>
-        <div class="col-2" style="padding:5px">
-            <strong>End Time:</strong>
-        </div>
-        <div class="col-2" style="padding:5px">
-            <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="@Model.First().endTime">
-        </div>
-        <div class="col-2" style="padding:5px">
-            <strong>Lunch (hr)</strong>
-        </div>
-        <div class="col-1" style="padding:5px">
-            <input type="text" class="form-control form-control-sm" id="input_lunch" value="@Model.First().lunchHours">
-        </div>
-        <div class="col-1" style="padding:5px">
-        </div>
-    </div>
-</div>
 
 @*BEGIN ALLPAX TEAM*@
 <hr class="sectionSeparator">

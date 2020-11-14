@@ -80,6 +80,37 @@ namespace allpax_service_record
         }
 
         [WebMethod]
+        public void GetJobCrspdtInfoByJobID (string jobID)
+        {
+            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            List<vm_jobCrspdtInfo> jobCrspdtInfos = new List<vm_jobCrspdtInfo>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+
+                con.Open();
+
+                SqlCommand cmd = new SqlCommand("spGetJobCrspdtInfoByJobID", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter param = new SqlParameter()
+                {
+                    ParameterName = "@jobID",
+                    Value = jobID
+                };
+                cmd.Parameters.Add(param);
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    vm_jobCrspdtInfo jobCrspdtInfo = new vm_jobCrspdtInfo();
+                    jobCrspdtInfo.jobCrspdtName = rdr["name"].ToString();
+                    jobCrspdtInfo.jobCrspdtEmail = rdr["email"].ToString();
+                    jobCrspdtInfos.Add(jobCrspdtInfo);
+                }
+            }
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.Write(js.Serialize(jobCrspdtInfos));
+        }
+
+        [WebMethod]
         public void GetAllTeamNames(string userName)
         {
             string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;

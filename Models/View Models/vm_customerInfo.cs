@@ -16,6 +16,8 @@ namespace allpax_service_record.Models.View_Models
         public string address { get; set; }
 
         public string customerContact { get; set; }
+        //public string jobCrspdtName { get; set; }
+        //public string jobCrspdtEmail { get; set; }
 
     }
 }
