@@ -19,7 +19,8 @@ namespace allpax_service_record.Models.View_Models
         public string workDescription { get; set; }
         public string userName { get; set; }
         public int workDescriptionCategory { get; set; }
-        public int hours { get; set; }
+        //public int hours { get; set; }
+        public decimal hours { get; set; }
         public List<string> userNames { get; set; }
         public List<string> userShortNames { get; set; }
 

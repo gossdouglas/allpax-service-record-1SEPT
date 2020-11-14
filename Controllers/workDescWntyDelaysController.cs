@@ -111,7 +111,8 @@ namespace allpax_service_record.Controllers
 
                 workDesc.dailyReportID = (int) dr1[0];
                 workDesc.workDescription = dr1[1].ToString();
-                workDesc.hours = (int)dr1[2];
+                //workDesc.hours = (int)dr1[2];
+                workDesc.hours = (decimal)dr1[2];
                 workDesc.timeEntryID = (int)dr1[3];
 
                 workDesc.userNames = workDescUsersByTimeEntryID(workDesc.timeEntryID);
