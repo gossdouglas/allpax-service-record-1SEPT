@@ -10,14 +10,8 @@ namespace allpax_service_record.Models.View_Models
     public partial class vm_customerInfo
     {
         public string customerCode { get; set; }
-
         public string customerName { get; set; }
-
         public string address { get; set; }
-
         public string customerContact { get; set; }
-        //public string jobCrspdtName { get; set; }
-        //public string jobCrspdtEmail { get; set; }
-
     }
 }
