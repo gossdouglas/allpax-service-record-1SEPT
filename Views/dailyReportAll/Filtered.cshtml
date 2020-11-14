@@ -264,7 +264,7 @@
                     //BEGIN TEMPORARY LOOP VARIABLES
                     string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
                     List<string> temp_teamUserNames = item.teamUserNames;
-                    List<string> temp_team = item.teamNames;
+                    List<string> temp_team = item.teamShortNames;
                     List<string> temp_workDescription = item.workDescription;
                     Boolean temp_active = item.active;
                     string userLoggedIn = Regex.Replace(User.Identity.GetUserName(), "@.*", "");

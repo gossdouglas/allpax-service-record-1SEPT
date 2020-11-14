@@ -63,6 +63,7 @@ namespace allpax_service_record.Controllers
                 dailyRptViewAll.customerContact = dr1[9].ToString();
                 dailyRptViewAll.teamUserNames = TeamUserNamesByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.teamNames = TeamNamesByDailyReportID(dailyRptViewAll.dailyReportID);
+                dailyRptViewAll.teamShortNames = TeamShortNamesByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.workDescription = WorkDescsByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.dailyReportAuthor = dr1[10].ToString();
                 dailyRptViewAll.equipment = dr1[11].ToString();
@@ -123,6 +124,7 @@ namespace allpax_service_record.Controllers
                 dailyRptViewAll.customerContact = dr1[9].ToString();
                 dailyRptViewAll.teamUserNames = TeamUserNamesByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.teamNames = TeamNamesByDailyReportID(dailyRptViewAll.dailyReportID);
+                dailyRptViewAll.teamShortNames = TeamShortNamesByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.workDescription = WorkDescsByDailyReportID(dailyRptViewAll.dailyReportID);
                 dailyRptViewAll.dailyReportAuthor = dr1[10].ToString();
 
@@ -191,6 +193,32 @@ namespace allpax_service_record.Controllers
                 teamNames.Add(dr1[0].ToString());
             }
             return teamNames;
+        }
+        public List<string> TeamShortNamesByDailyReportID(int dailyReportID)
+        {
+            List<string> teamShortNames = new List<string>();
+
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            string sqlquery1 = "SELECT tbl_Users.shortName " +
+            "FROM " +
+            "tbl_Users " +
+            "INNER JOIN " +
+            "tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = tbl_Users.userName " +
+            "WHERE " +
+            "tbl_dailyReportUsers.dailyReportID = @dailyReportID";
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.Add(new SqlParameter("dailyReportID", dailyReportID));
+            SqlDataAdapter sda3 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda3.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                teamShortNames.Add(dr1[0].ToString());
+            }
+            return teamShortNames;
         }
 
         public List<string> WorkDescsByDailyReportID(int dailyReportID)

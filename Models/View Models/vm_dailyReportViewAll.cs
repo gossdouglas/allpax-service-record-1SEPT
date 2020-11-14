@@ -21,6 +21,7 @@ namespace allpax_service_record.Models.View_Models
         public string dailyReportAuthor { get; set; }
         public List<string> teamUserNames { get; set; }
         public List<string> teamNames { get; set; }
+        public List<string> teamShortNames { get; set; }
         public List<string> workDescription { get; set; }
         public string customercode { get; set; }
         public string customerContact { get; set; }
