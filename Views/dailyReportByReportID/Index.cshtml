@@ -1492,13 +1492,6 @@
             <input type="text" id="input_jobs_dpdown" name="" style="width:100%" hidden>
         </div>
         <div class="md-col-5" style="padding:5px"></div>
-        <div class="md-col-1" style="padding:5px">
-            <strong>Date:</strong>
-        </div>
-        <div class="md-col-2" style="padding:5px">
-            <input type="date" class="form-control form-control-sm" id="slct_date"
-                   placeholder="@Model.First().date" value=@Model.First().date>
-        </div>
     </div>
     <div class="row">
         <div class="col-2" style="padding:5px">
@@ -1546,36 +1539,42 @@
             </div>
         </div>
         </div>
-        <div class="row">
-            <div class="col-2" style="padding:5px">
-                <strong>Equipment:</strong>
-            </div>
-            <div class="col-10" style="padding:5px" contenteditable>
-                <input type="text" value="@Model.First().equipment" id="input_equipment" name="" style="width:100%">
-            </div>
+    <div class="row">
+        <div class="col-2" style="padding:5px">
+            <strong>Equipment:</strong>
         </div>
-        <div class="row">
-            <div class="col-2" style="padding:5px">
+        <div class="col-10" style="padding:5px" contenteditable>
+            <input type="text" value="@Model.First().equipment" id="input_equipment" name="" style="width:100%">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12" style="padding:5px; text-align:center">
+            <span class="span_inlineBlock">
+                <strong>Date:</strong>
+            </span>
+            <span class="span_inlineBlock">
+                <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="@Model.First().date" value=@Model.First().date>
+            </span>
+            <span class="span_inlineBlock">
                 <strong>Start Time:</strong>
-            </div>
-            <div class="col-2" style="padding:5px">
+            </span>
+            <span class="span_inlineBlock">
                 <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="@Model.First().startTime">
-            </div>
-            <div class="col-2" style="padding:5px">
+            </span>
+            <span class="span_inlineBlock">
                 <strong>End Time:</strong>
-            </div>
-            <div class="col-2" style="padding:5px">
+            </span>
+            <span class="span_inlineBlock">
                 <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="@Model.First().endTime">
-            </div>
-            <div class="col-2" style="padding:5px">
+            </span>
+            <span class="span_inlineBlock">
                 <strong>Lunch (hr)</strong>
-            </div>
-            <div class="col-1" style="padding:5px">
+            </span>
+            <span class="span_inlineBlock">
                 <input type="text" class="form-control form-control-sm" id="input_lunch" value="@Model.First().lunchHours">
-            </div>
-            <div class="col-1" style="padding:5px">
-            </div>
+            </span>
         </div>
+    </div>
     </div>
 
 @*BEGIN ALLPAX TEAM*@
