@@ -2544,6 +2544,7 @@
     <Content Include="Views\dailyReport\Index-before too much chosen work.cshtml" />
     <Content Include="Views\workDesc\Index-before select2 update.cshtml" />
     <Content Include="Views\dailyReport\copyDailyReport-orig.cshtml" />
+    <Content Include="Views\dailyReportByReportID\copyDailyReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
