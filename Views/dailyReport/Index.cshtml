@@ -283,14 +283,6 @@
                     fn_enableSelect2();
                     enable_disableSave();
                 }
-
-                else {
-
-                    $.alert({
-                        title: 'Error!',
-                        content: 'One or more row entries incorrect.  Narrative section must 10 or greater, at least one team member must be added and hours must be of form H.0, H.25, H.5, or H.75.',
-                    });
-                }
             });
 
             //cloned to new daily report
@@ -828,18 +820,30 @@
 
                 if (narrDiv.length < 10) {
                     //console.log("Narr div is empty.")
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Narrative must be greater than 10 characters.',
+                    });
                     rowFilled = false;
                     return rowFilled;
                 }
 
-                if (teamDiv == "") {
+                if (teamDiv.length < 1) {
                     //console.log("dpdwn_div div is empty.")
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Must have at least one team member',
+                    });
                     rowFilled = false;
                     return rowFilled;
                 }
 
                 if (hoursDiv == "" || !hoursDivMatch) {
                     //console.log("Hours div is empty or the hours do match the pattern.")
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Hours must be of form H.0, H.25, H.5, or H.75.',
+                    });
                     rowFilled = false;
                     return rowFilled;
                 }
