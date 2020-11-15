@@ -26,6 +26,7 @@ namespace allpax_service_record.Controllers
            
             return View(sql.ToList()); 
         }
+
         [HttpPost]
         public ActionResult AddDailyReport(vm_dailyReport dailyReportAdd)
         {
@@ -175,6 +176,13 @@ namespace allpax_service_record.Controllers
 
             return Json(Url.Action("Index", "dailyReportAll"));
 
+        }
+
+        public ActionResult copyDailyReport()
+        {
+            var sql = db.tbl_dailyReport.SqlQuery("SELECT * from tbl_dailyReport").ToList();
+
+            return View(sql.ToList());
         }
 
         public ActionResult copyDailyReport_old (string jobID, string description, string subJobID, string customerName, 
