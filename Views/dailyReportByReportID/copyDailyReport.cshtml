@@ -50,7 +50,7 @@
 
     <script>
         $(document).ready(function () {//begin document read jquery statements
-          
+
             var dailyReportID = $("#txt_dailyReportID").html();
             var rtndSubmissionStatus;
 
@@ -59,7 +59,7 @@
             var team_dpdwn = $('#team_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
-            var lastDlyRptCrtdByUser;            
+            var lastDlyRptCrtdByUser;
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
@@ -67,7 +67,7 @@
             var recordsToAddStatus = 0;
             var recordsToEditStatus = 0;
             var recordsToDeleteStatus = 0;
-            var updateSubmissionStatus = 0;  
+            var updateSubmissionStatus = 0;
 
             var workDesc_RtndRecs = [];
             var delays_RtndRecs = [];
@@ -75,15 +75,15 @@
 
             var workDesc_Add = [];
             var workDescArrJson_Add = [];
-            var indexWorkDescEntries_Add = 0;//keep track of the number of work description entries added
+            var indexWorkDescEntries_Add = @Model.First().workDescArr.Count;//keep track of the number of work description entries added
 
             var delays_Add = [];
             var delaysArrJson_Add = [];
-            var indexDelaysEntries_Add = 0;//keep track of the number of delays entries added
+            var indexDelaysEntries_Add = @Model.First().delaysArr.Count;//keep track of the number of delays entries added
 
             var wntyDelays_Add = [];
             var wntyDelaysArrJson_Add = [];
-            var indexWntyDelaysEntries_Add = 0;//keep track of the number of warranty delays entries added
+            var indexWntyDelaysEntries_Add = @Model.First().wntyDelaysArr.Count;//keep track of the number of warranty delays entries added
 
             var workDesc_Edit = [];
             var workDescArrJson_Edit = [];
@@ -101,6 +101,7 @@
             fn_loadDropDowns();
             fn_loadTimeEntries_RtndRecs();//record the values of the returned records for comparison to the _Edit arrays
             fn_getSubmissionStatus();
+            fn_printOnLoad();
 
             //BEGIN DAILY REPORT LOG SECTION
 
@@ -123,7 +124,7 @@
                         });
                     }
                 });
-               
+
                 //begin fill sub jobs dropdown
                 $('#subJobTypes_dpdwn').empty();//clear the dropdown
 
@@ -214,7 +215,7 @@
 
                 //var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
                 var tempTeamMemberUserID = e.params.data.id;
-                
+
                 for (var row = 0; row < dailyRptTeamArr.length; row++) {
                     if (dailyRptTeamArr[row][0] == tempTeamMemberUserID) {
                         dailyRptTeamArr.splice(row, 1);
@@ -226,7 +227,7 @@
                 $(".RtndRecs option[value='" + tempTeamMemberUserID + "']").remove();
 
                 enable_disableSave();//determine if the save button needs to be enabled or disabled
-                
+
                 //begin DeleteTeamMember
                 //begin axios delete post
                 axios.post('/dailyReportByReportID/DeleteTeamMember', {
@@ -258,7 +259,7 @@
                 $("#input_equipment").val(fn_cleanupDataEntryFields($("#input_equipment").val()));
             });
 
-            //END DAILY REPORT LOG SECTION      
+            //END DAILY REPORT LOG SECTION
 
             //BEGIN RETURNED RECORDS AND TIME ENTRY SECTION
 
@@ -349,7 +350,7 @@
 
                     var currentRow = $(this).parent().parent();
                     var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
-                    currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html 
+                    currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html
 
                     $(this).hide();
                     $(currentRow).find(".Btn_edit").removeAttr("hidden");
@@ -374,7 +375,7 @@
 
             //cloned to new daily report
             $(".Btn_delete").click(function () {
-                var currentRow = $(this).parent().parent(); 
+                var currentRow = $(this).parent().parent();
                 var currentNumValidRecs = $(".returnedRecords.workDescLine").length + indexWorkDescEntries_Add;
                 temp_LineClass = $(currentRow).prop("class");
 
@@ -388,7 +389,7 @@
                 }
 
                 //if this line is a returned record, set its class to deletedRecords
-                if (temp_LineClass.includes("returnedRecords")) {                  
+                if (temp_LineClass.includes("returnedRecords")) {
                     recordsToDeleteStatus = 1;
 
                     //used to change the class of a returned record to deleted record for later processing with a delete operation
@@ -463,7 +464,7 @@
                     }
                 });
                 //end fill sub jobs dropdown
-              
+
                 //begin load team members on page load
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNamesByReportID',
@@ -515,7 +516,7 @@
                         fn_loadTeamNamesRtndRecs();//load team names into the records returned from the database
                     }
                 });
-                //end load team members on page load                
+                //end load team members on page load
             }
 
             //cloned to new daily report
@@ -603,7 +604,7 @@
             });
 
             //END RETURNED RECORDS AND TIME ENTRY SECTION
-           
+
             //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
 
             //cloned to new daily report
@@ -614,7 +615,7 @@
 
             //cloned to new daily report
             $("#saveAndSubmit_btn").click(function () {//when the add button is clicked...
-              
+
                 fn_exitSubmit(1);
             });
 
@@ -629,7 +630,7 @@
                     console.log("The submission state needs to be changed from " + rtndSubmissionStatus + " to " + submissionStatus);
                 }
 
-                //differs between new daily report and an existing one                
+                //differs between new daily report and an existing one
                 fn_loadTimeEntries_Add();
                 fn_loadTimeEntries_Edit();
                 fn_loadTimeEntries_Delete();
@@ -720,7 +721,7 @@
 
                 //BEGIN EDIT RECORDS ON A DAILY REPORT
                 //only on existing records or copies
-                if (recordsToEditStatus == 1) {//if there are records to add...                   
+                if (recordsToEditStatus == 1) {//if there are records to add...
                     var data = {
                         dailyReportID: dailyReportID,
                         workDescArr: workDescArrJson_Edit,
@@ -809,7 +810,7 @@
 
             //only on existing records or copies
             function fn_loadTimeEntries_RtndRecs() {
-                
+
                 var workDescTeam_narr_div_Content_RtndRecs = $(".returnedRecords").find(".workDescTeam_narr_div");
                 var workDescTeam_dpdwn_Content_RtndRecs;
 
@@ -1221,10 +1222,16 @@
                 }
                 //END BUILD THE WNTY DELAYS JSON OBJECT
             }
-                        
+
             //END SECTION TO PACK UP NEW RECORDS
 
             //BEGIN MISCELLANEOUS SECTION
+
+            function fn_printOnLoad() {
+                console.log("number of work description entries from the copied report to add: " + indexWorkDescEntries_Add);
+                console.log("number of delays entries from the copied report to add: " + indexDelaysEntries_Add);
+                console.log("number of warranty delays entries from the copied report to add: " + indexWntyDelaysEntries_Add);
+            }
 
             //cloned to new daily report
             function fn_printArrays() {
@@ -1245,11 +1252,11 @@
 
                 //BEGIN ADDED ARRAYS
                 if (recordsToAddStatus == 1) {
-                    console.log("*****************")                    
+                    console.log("*****************")
                     console.log("work description combined array ADDED RECORDS section follows:");
                     //console.log(workDesc_Add);
                     console.log(workDescArrJson_Add);
-                   
+
                     console.log("delays combined array ADDED RECORDS section follows:");
                     //console.log(delays_Add);
                     console.log(delaysArrJson_Add);
@@ -1271,7 +1278,7 @@
                     console.log("delays combined array EDITED RECORDS section follows:");
                     console.log(delays_Edit);
                     console.log(delaysArrJson_Edit);
-                   
+
                     console.log("warranty delays combined array EDITED RECORDS section follows:");
                     console.log(wntyDelays_Edit);
                     console.log(wntyDelaysArrJson_Edit);
@@ -1332,14 +1339,14 @@
                 passedText = passedText.replace(/(&amp;)+/g, "");//wipe out &amp;
                 passedText = passedText.replace(/(amp;)+/g, "");//wipe out &amp;
                 passedText = passedText.replace(/(&nbsp;)+/g, "");//wipe out nbsp
-                passedText = passedText.replace(/(nbsp;)+/g, "");//wipe out nbsp               
+                passedText = passedText.replace(/(nbsp;)+/g, "");//wipe out nbsp
                 passedText = passedText.replace(/^\s+/g, "");//wipe out any leading white spaces in input boxes
                 passedText = passedText.replace(/\s+$/g, "");//wipe out any trailing white spaces in input boxes
 
                 passedText = passedText.replace(/(<([^>]+)>)/gi, "");//wipe out any html tags in input boxes
                 passedText = passedText.replace(/(&lt;\w*&gt;)/ig, "");//wipe out any opening html tags in a div
                 passedText = passedText.replace(/(&lt;\/\w*&gt;)/ig, "");//wipe out any closing html tags in a div
-              
+
                 return passedText;
                 //END CLEAN UP TRASH FROM ENTERED TEXT
             }
@@ -1426,8 +1433,8 @@
                 var teamDiv = currentRow.find(".select2-selection__rendered").html();
                 var hoursDiv = currentRow.find(".hours_div").html();
                 var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
-                console.clear();               
-                          
+                console.clear();
+
                 if (narrDiv.length < 10) {
                     //console.log("Narr div is empty.")
                     rowFilled = false;
@@ -1449,8 +1456,10 @@
                 return rowFilled;
             }
 
-            //END VALIDATION BEFORE SAVING SECTION             
+            //END VALIDATION BEFORE SAVING SECTION
 
+            
+            
         });//end document read jquery statements
     </script>
 </head>
@@ -1464,13 +1473,15 @@
         <div class="col-2" style="padding:5px">
             <div>
                 <span><strong>Record No</strong></span>
-                <span id="txt_dailyReportID" value="@Model.First().dailyReportID">@Model.First().dailyReportID</span>
+                @*<span id="txt_dailyReportID" value="@Model.First().dailyReportID">@Model.First().dailyReportID</span>*@
+                <span id="txt_dailyReportID" value="">new</span>
             </div>
         </div>
         <div class="col-3" style="padding:5px">
             <div>
                 <span><strong>Submission Status</strong></span>
-                <span id="txt_rtndSubmissionStatus" value="@Model.First().submissionStatus">un-submitted?</span>
+                @*<span id="txt_rtndSubmissionStatus" value="@Model.First().submissionStatus">un-submitted?</span>*@
+                <span id="txt_rtndSubmissionStatus" value="">Un-submitted</span>
             </div>
         </div>
         <div class="col-3" style="padding:5px">
@@ -1553,25 +1564,25 @@
                 <strong>Date:</strong>
             </span>
             <span class="span_inlineBlock">
-                <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="@Model.First().date" value=@Model.First().date>
+                <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value=@DateTime.Today.ToString("yyyy-MM-dd")>
             </span>
             <span class="span_inlineBlock">
                 <strong>Start Time:</strong>
             </span>
             <span class="span_inlineBlock">
-                <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="@Model.First().startTime">
+                <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="">
             </span>
             <span class="span_inlineBlock">
                 <strong>End Time:</strong>
             </span>
             <span class="span_inlineBlock">
-                <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="@Model.First().endTime">
+                <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="">
             </span>
             <span class="span_inlineBlock">
                 <strong>Lunch (hr)</strong>
             </span>
             <span class="span_inlineBlock">
-                <input type="text" class="form-control form-control-sm" id="input_lunch" value="@Model.First().lunchHours">
+                <input type="text" class="form-control form-control-sm" id="input_lunch" value="1">
             </span>
         </div>
     </div>
@@ -1620,6 +1631,59 @@
             <strong>State</strong>
         </div>
     </div>
+    @*BEGIN RETURNED RECORDS*@
+    @foreach (var item in Model)
+    {
+        for (var i = 0; i < (item.workDescArr.Count); i++)
+        {
+            //BEGIN TEMPORARY LOOP VARIABLES
+            int temp_timeEntryID = item.workDescArr[i].timeEntryID;
+            List<string> temp_userNames = item.workDescArr[i].userNames;
+            List<string> temp_userShortNames = item.workDescArr[i].userShortNames;
+            string temp_workDescription = item.workDescArr[i].workDescription;
+            //END TEMPORARY LOOP VARIABLES
+
+            @*<div class=" row returnedRecords workDescLine" id="workDescLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">*@
+            <div class=" row addedRecords workDescLine" id="" data-time-Entry-ID="" style="">
+
+                <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
+
+                <div class="col-3 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
+                    <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+                    <select class="Team_dpdwn workDescTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                        @for (var j = 0; j < (@temp_userNames.Count); j++)
+                        {
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-3 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
+                    {
+                        @(temp_userShortNames[k] + "|");
+                    }
+                </div>
+
+                <div class="col-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>
+
+                <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                </div>
+
+                <div class="col-1 state_div workDescTeam_state_div" style="padding:0px;">
+                    @*<button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
+        <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
+        <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>*@
+                    <button id="" class="btn btn-light btn-sm Btn_addedRecord"><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
+                </div>
+            </div>
+        }
+    }
+
+    @*END RETURNED RECORDS*@
     @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
     <div class="" id="workDescriptionLine_template" style="">
         <div class="row entryRow workDescriptionLine_template_row_active" id="" style="">
@@ -1698,7 +1762,62 @@
         <div class="col-1" style="padding:5px">
             <strong>State</strong>
         </div>
-    </div>   
+    </div>
+
+    @*BEGIN RETURNED RECORDS*@
+    @foreach (var item in Model)
+    {
+        for (var i = 0; i < (item.delaysArr.Count); i++)
+        {
+            //BEGIN TEMPORARY LOOP VARIABLES
+            int temp_timeEntryID = item.delaysArr[i].timeEntryID;
+            List<string> temp_userNames = item.delaysArr[i].userNames;
+            List<string> temp_userShortNames = item.delaysArr[i].userShortNames;
+            //int temp_hours = item.delaysArr[i].hours;
+            //float temp_hours = item.delaysArr[i].hours;
+            decimal temp_hours = item.delaysArr[i].hours;
+            string temp_workDescription = item.delaysArr[i].workDescription;
+            //END TEMPORARY LOOP VARIABLES
+
+            <div class=" row addedRecords delaysLine" id="delaysLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
+                <div class="col-5 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
+
+                <div class="col-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
+                    <button class="btn btn-light btn-sm Btn_selectAll lineDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+                    <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                        @for (var j = 0; j < (@temp_userNames.Count); j++)
+                        {
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+                    @*AB|DB|JB*@
+                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
+                    {
+                        @(temp_userShortNames[k] + "|");
+                    }
+                </div>
+
+                <div class="col-1 hours_div delaysTeam_hours_div" id="" contenteditable="false" style="">@temp_hours</div>
+
+                <div class="col-2 button_div delaysTeam_button_div" style="padding:0px;">
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_save lineDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_delete lineDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                </div>
+
+                <div class="col-1 state_div delaysDescTeam_state_div" style="padding:0px;">
+                    @*<button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
+        <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
+        <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>*@
+                    <button id="" class="btn btn-light btn-sm Btn_addedRecord"><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
+                </div>
+            </div>
+        }
+    }
+    @*END RETURNED RECORDS*@
     @*BEGIN NEW DELAYS TEMPLATE*@
     <div class="" id="delaysLine_template">
         <div class="row entryRow delaysLine_template_row_active" id="" style="">
@@ -1773,6 +1892,59 @@
             <strong>State</strong>
         </div>
     </div>
+    @*BEGIN RETURNED RECORDS*@
+    @foreach (var item in Model)
+    {
+        for (var i = 0; i < (item.wntyDelaysArr.Count); i++)
+        {
+            //BEGIN TEMPORARY LOOP VARIABLES
+            int temp_timeEntryID = item.wntyDelaysArr[i].timeEntryID;
+            List<string> temp_userNames = item.wntyDelaysArr[i].userNames;
+            List<string> temp_userShortNames = item.wntyDelaysArr[i].userShortNames;
+            //int temp_hours = item.wntyDelaysArr[i].hours;
+            decimal temp_hours = item.wntyDelaysArr[i].hours;
+            string temp_workDescription = item.wntyDelaysArr[i].workDescription;
+            //END TEMPORARY LOOP VARIABLES
+
+            <div class=" row addedRecords wntyDelaysLine" id="wntyDelaysLine_@temp_timeEntryID" data-time-Entry-ID="@temp_timeEntryID" style="">
+                <div class="col-5 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
+
+                <div class="col-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding: 0px; display:none">
+                    <button class="btn btn-light btn-sm Btn_selectAll lineWntyDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+                    <select class="Team_dpdwn wntyDelaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
+                        @for (var j = 0; j < (@temp_userNames.Count); j++)
+                        {
+                            <option value="@temp_userNames[j]" selected>@temp_userShortNames[j]</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" contenteditable="false" style="">
+                    @*AB|DB|JB*@
+                    @for (var k = 0; k < (temp_userShortNames.Count); k++)
+                    {
+                        @(temp_userShortNames[k] + "|");
+                    }
+                </div>
+
+                <div class="col-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="false" style="">@temp_hours</div>
+
+                <div class="col-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_save lineWntyDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                    <button class="btn btn-light btn-sm Btn_delete lineWntyDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                </div>
+
+                <div class="col-1 state_div wntyDelaysDescTeam_state_div" style="padding:0px;">
+                    @*<button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
+        <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
+        <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>*@
+                    <button id="" class="btn btn-light btn-sm Btn_addedRecord"><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
+                </div>
+            </div>
+        }
+    }
+    @*END RETURNED RECORDS*@
     @*BEGIN NEW WARRANTY DELAYS  TEMPLATE*@
     <div class="" id="wntyDelaysLine_template" style="">
         <div class="row entryRow wntyDelaysLine_template_row_active" id="" style="">
@@ -1824,7 +1996,7 @@
         </div>
     </div>
     @*END WARRANTY DELAYS TEMPLATE*@
-    </div>
+</div>
     @*END WARRANTY DELAYS*@
 @*END WARRANTY DELAYS  SECTION*@
 
