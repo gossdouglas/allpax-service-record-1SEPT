@@ -354,20 +354,24 @@
                 var currentNumValidRecs = indexWorkDescEntries_Add;
                 temp_LineClass = $(currentRow).prop("class");
 
-                //if this line is a new record, simply remove it
-                if (temp_LineClass.includes("addRecord")) {
+                if (temp_LineClass.includes("workDescLine")) {
                     if (currentNumValidRecs > 1) {//if there is at least one more work description entry, then go ahead and delete this entry
                         $(currentRow).remove();
                         indexWorkDescEntries_Add = indexWorkDescEntries_Add - 1;//only on the new daily report page
-                        enable_disableSave();
                     }
                     else {
                         $.alert({
                             title: 'Cannot Delete!',
                             content: 'Must have at least one copied record or added record in the work description section.',
                         });
-                    }                   
-                }              
+                    }
+                }
+                if (temp_LineClass.includes("delaysLine")) {
+                    $(currentRow).remove();
+                }
+                if (temp_LineClass.includes("wntyDelaysLine")) {
+                    $(currentRow).remove();
+                }                
             });
 
             //cloned to new daily report
