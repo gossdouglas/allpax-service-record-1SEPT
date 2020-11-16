@@ -51,16 +51,13 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
           
-            //var dailyReportID = $("#txt_dailyReportID").html();
             var dailyReportID = $("#txt_dailyReportID").attr("value");
             var rtndSubmissionStatus;
-
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
             var team_dpdwn = $('#team_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
-            dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
-            var lastDlyRptCrtdByUser;            
+            dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain         
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
@@ -653,6 +650,8 @@
                 var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
                 //console.log("total operations to complete on entry is: " + totalOpsToDo);
 
+                fn_showSpinner();
+
                 //BEGIN EDIT DAILY LOG SECTION OF A DAILY REPORT
                 //only on existing records or copies
                 if (dailyLogInfoChngd == 1) {//if the daily log information section has been changed...
@@ -1226,6 +1225,16 @@
             //END SECTION TO PACK UP NEW RECORDS
 
             //BEGIN MISCELLANEOUS SECTION
+
+            //cloned to new daily report
+            function fn_showSpinner() {
+                $.LoadingOverlay("show", {
+                    image: "",
+                    fontawesome: "fa fa-cog fa-spin"
+                });
+
+                $('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
+            }
 
             //cloned to new daily report
             function fn_printArrays() {

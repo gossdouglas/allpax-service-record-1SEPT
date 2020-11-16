@@ -51,28 +51,16 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            //var dailyReportID = $("#txt_dailyReportID").html();
             var dailyReportID = $("#txt_dailyReportID").attr("value");
-            var rtndSubmissionStatus;
-
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
             var team_dpdwn = $('#team_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
-            var lastDlyRptCrtdByUser;
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
-            var dailyLogInfoChngd = 0;
             var recordsToAddStatus = 0;
-            var recordsToEditStatus = 0;
-            var recordsToDeleteStatus = 0;
-            var updateSubmissionStatus = 0;
-
-            var workDesc_RtndRecs = [];
-            var delays_RtndRecs = [];
-            var wntyDelays_RtndRecs = [];
 
             var workDesc_Add = [];
             var workDescArrJson_Add = [];
@@ -86,22 +74,8 @@
             var wntyDelaysArrJson_Add = [];
             var indexWntyDelaysEntries_Add = @Model.First().wntyDelaysArr.Count;//keep track of the number of warranty delays entries added
 
-            var workDesc_Edit = [];
-            var workDescArrJson_Edit = [];
-
-            var delays_Edit = [];
-            var delaysArrJson_Edit = [];
-
-            var wntyDelays_Edit = [];
-            var wntyDelaysArrJson_Edit = [];
-
-            var timeEntryDeleteArr = [];//stores the time entry ids that are to be deleted
-            //end added for new one shot work
-
             fn_enableSelect2();//enable the select2 add-on on page load
             fn_loadDropDowns();
-            fn_loadTimeEntries_RtndRecs();//record the values of the returned records for comparison to the _Edit arrays
-            fn_getSubmissionStatus();
             //fn_printOnLoad();
 
             //BEGIN DAILY REPORT LOG SECTION
@@ -111,7 +85,7 @@
             jobs_dpdown.change(function () {
 
                 $.ajax({
-                    url: 'DataService.asmx/GetCustomerInfoByJobID',
+                    url: '/DataService.asmx/GetCustomerInfoByJobID',
                     method: 'post',
                     dataType: 'json',
                     data: { jobID: jobs_dpdown.val() },
@@ -130,7 +104,7 @@
                 $('#subJobTypes_dpdwn').empty();//clear the dropdown
 
                 $.ajax({
-                    url: 'DataService.asmx/GetSubJobTypesByJobID',
+                    url: '/DataService.asmx/GetSubJobTypesByJobID',
                     method: 'post',
                     dataType: 'json',
                     data: { jobID: jobs_dpdown.val() },
@@ -144,7 +118,7 @@
 
                 //begin fill the job correspondents section
                 $.ajax({
-                    url: 'DataService.asmx/GetJobCrspdtInfoByJobID',
+                    url: '/DataService.asmx/GetJobCrspdtInfoByJobID',
                     method: 'post',
                     dataType: 'json',
                     data: { jobID: jobs_dpdown.val() },
@@ -539,76 +513,6 @@
                 currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
             }
 
-            //only on existing records or copies
-            function fn_loadTeamNamesRtndRecs() {
-
-                var rtndRecordSelects = $(".RtndRecs");//stores the select contents as they come from the server
-                var tmpRtndRecUserIDs = [];//stores which users are part of a returned record
-                var tmpUserIDsToBeAdded = [];
-
-                //console.log(rtndRecordSelects);//print the object
-                //console.log("There are " + $(rtndRecordSelects).length + " .RtndRecs");
-                //console.log("*********************************")
-
-                $(rtndRecordSelects).each(function (indexRtdRcrdSlcts, item) {
-                    //console.log("Content of .RtndRecs " + (indexRtdRcrdSlcts + 1) + " is " + $(item).val())
-                    //console.log("There are " + $(item).find("option").length + " options in this .RtndRecs")
-                    //console.log("The first value is " + $(item[0]).val())
-
-                    $($(item)).find('option').each(function () {
-                        //console.log($(this).val());
-                        tmpRtndRecUserIDs.push($(this).val());
-                    });
-
-                    //console.log("UserIDs in this record is " + tmpRtndRecUserIDs);
-                    //console.log("UserIDs in the report is " + dailyRptTeamUserIDArr);
-                    ////console.log("User data in the report is " + dailyRptTeamArr);
-
-                    tmpUserIDsToBeAdded = _.difference(dailyRptTeamUserIDArr, tmpRtndRecUserIDs);
-                    //console.log("Users to be added to this dropdown: " + tmpUserIDsToBeAdded)
-
-                    //console.log("Daily report user info:");
-                    $(dailyRptTeamArr).each(function (index, item) {
-
-                        //if a user's info is not in tmpUserIDsToBeAdded, then it needs to be appended to this loop's rtndRecordSelects
-                        if (($.inArray(item[0], tmpUserIDsToBeAdded)) !== -1) {
-
-                            //console.log("To be appended: " + item[0] + " " + item[2]);
-                            $("<option value=" + item[0] + ">" + item[2] + "</option>").appendTo(rtndRecordSelects[indexRtdRcrdSlcts]);
-                        }
-
-                    })
-                    //console.log("*********************************")
-
-                    tmpRtndRecUserIDs = [];//empty for the next loop
-                    tmpUserIDsToBeAdded = [];//empty for the next loop
-                })
-            };//daily report by id page only
-
-            //only on existing records or copies
-            $(".returnedRecords").on("change keypress", function () {
-                var currentRow = $(this);
-                recordsToEditStatus = 1;
-                temp_LineClass = $(this).prop("class");
-
-                //used to change the class of a returned record to an edited record for later processing with an update operation
-                if (temp_LineClass.includes("workDescLine")) {
-                    $($(currentRow)).prop("class", "row editedRecords workDescLine");
-                }
-                if (temp_LineClass.includes("delaysLine")) {
-                    $($(currentRow)).prop("class", "row editedRecords delaysLine");
-                }
-                if (temp_LineClass.includes("wntyDelaysLine")) {
-                    $($(currentRow)).prop("class", "row editedRecords wntyDelaysLine");
-                }
-
-                $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
-                $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
-
-                $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
-                $($(currentRow)).find(".Btn_editedRecord").removeAttr("hidden");
-            });
-
             //END RETURNED RECORDS AND TIME ENTRY SECTION
 
             //BEGIN SECTION TO PACK UP AND SAVE NEW RECORDS
@@ -633,11 +537,8 @@
 
                 //differs between new daily report and an existing one
                 fn_loadTimeEntries_Add();
-                console.log("fn_loadTimeEntries_Add")
                 fn_buildJsonObjects();
-                console.log("fn_buildJsonObjects")
                 fn_printArrays();
-                console.log("fn_printArrays")
 
                 //cloned to new daily report
                 var addItem1 = $("#jobs_dpdown").val();
@@ -653,7 +554,7 @@
 
                 var totalOpsToDo = recordsToAddStatus;//stores the total number of types of ops to carry out
                 var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
-                console.log("total operations to complete on entry to fn_exitSubmit is: " + totalOpsToDo);
+                //console.log("total operations to complete on entry to fn_exitSubmit is: " + totalOpsToDo);
 
                 var data = {
                     dailyReportID: 0,
@@ -672,6 +573,8 @@
                     wntyDelaysArr: wntyDelaysArrJson_Add
                 };
 
+                fn_showSpinner();
+
                 $.ajax({
                     url: '/dailyReport/AddDailyReport',
                     method: 'post',
@@ -688,274 +591,7 @@
                             window.location.href = serverResponseSuccess;
                         }
                     }
-                });
-
-                //submissionStatus = submissionState;//0 indicates meant to be stored, 1 indicates stored and submitted for review
-
-                //if (rtndSubmissionStatus !== submissionStatus) {
-                //    updateSubmissionStatus = 1;
-                //    console.log("The submission state needs to be changed from " + rtndSubmissionStatus + " to " + submissionStatus);
-                //}
-
-                ////differs between new daily report and an existing one
-                //fn_loadTimeEntries_Add();
-                //fn_loadTimeEntries_Edit();
-                //fn_loadTimeEntries_Delete();
-                //fn_buildJsonObjects();
-                //fn_printArrays();
-
-                ////cloned to new daily report
-                //var addItem1 = $("#jobs_dpdown").val();
-                //var addItem2 = $("#slct_date").val();
-                //var addItem3 = $("#subJobTypes_dpdwn").val();
-                //var addItem4 = $("#input_startTime").val();
-                //var addItem5 = $("#input_endTime").val();
-                //var addItem6 = $("#input_lunch").val();
-                //var addItem7 = $("#input_equipment").val();
-                //var addItem8 = dailyRptAuthor;
-                //var addItem9 = dailyRptTeamUserIDArr;
-                //var addItem10 = submissionStatus;
-
-                //var totalOpsToDo = dailyLogInfoChngd + recordsToAddStatus + recordsToEditStatus + recordsToDeleteStatus + updateSubmissionStatus;//stores the total number of types of ops to carry out
-                //var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
-                ////console.log("total operations to complete on entry is: " + totalOpsToDo);
-
-                ////BEGIN EDIT DAILY LOG SECTION OF A DAILY REPORT
-                ////only on existing records or copies
-                //if (dailyLogInfoChngd == 1) {//if the daily log information section has been changed...
-                //    console.log("editing the daily log info section.")
-                //    var data = {
-                //        dailyReportID: dailyReportID,
-                //        jobID: addItem1,
-                //        date: addItem2,
-                //        subJobID: addItem3,
-                //        startTime: addItem4,
-                //        endTime: addItem5,
-                //        lunchHours: addItem6,
-                //        equipment: addItem7,
-                //        dailyReportAuthor: addItem8,
-                //    };
-
-                //    $.ajax({
-                //        url: '/dailyReportByReportID/UpdateDailyReportLogInfo',
-                //        method: 'post',
-                //        contentType: 'application/json',
-                //        dataType: 'json',
-                //        data: JSON.stringify(data),
-                //        traditional: true,
-                //        success: function (response) {
-                //            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                //            //console.log("edit daily log info success. total operations to complete is now: " + totalOpsToDo);
-                //            serverResponseSuccess = response;
-                //            //console.log("response is: " + response)
-                //            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
-                //                window.location.href = serverResponseSuccess;
-                //            }
-                //        }
-                //    });
-                //}
-                ////END EDIT DAILY LOG SECTION OF A DAILY REPORT
-
-                ////BEGIN ADD RECORDS TO A DAILY REPORT
-                ////only on existing records or copies
-                //if (recordsToAddStatus == 1) {//if there are records to add...
-                //    var data = {
-                //        dailyReportID: dailyReportID,
-                //        workDescArr: workDescArrJson_Add,
-                //        delaysArr: delaysArrJson_Add,
-                //        wntyDelaysArr: wntyDelaysArrJson_Add
-                //    };
-
-                //    $.ajax({
-                //        url: '/dailyReportByReportID/AddDailyReport',
-                //        method: 'post',
-                //        contentType: 'application/json',
-                //        dataType: 'json',
-                //        data: JSON.stringify(data),
-                //        traditional: true,
-                //        success: function (response) {
-                //            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                //            //console.log("add record success. total operations to complete is now: " + totalOpsToDo);
-                //            serverResponseSuccess = response;
-                //            //console.log("response is: " + response);
-                //            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
-                //                window.location.href = serverResponseSuccess;
-                //            }
-                //        }
-                //    });
-                //}
-                ////END ADD RECORDS TO A DAILY REPORT
-
-                ////BEGIN EDIT RECORDS ON A DAILY REPORT
-                ////only on existing records or copies
-                //if (recordsToEditStatus == 1) {//if there are records to add...
-                //    var data = {
-                //        dailyReportID: dailyReportID,
-                //        workDescArr: workDescArrJson_Edit,
-                //        delaysArr: delaysArrJson_Edit,
-                //        wntyDelaysArr: wntyDelaysArrJson_Edit
-                //    };
-
-                //    $.ajax({
-                //        url: '/dailyReportByReportID/UpdateDailyReportTimeEntries',
-                //        method: 'post',
-                //        contentType: 'application/json',
-                //        dataType: 'json',
-                //        data: JSON.stringify(data),
-                //        traditional: true,
-                //        success: function (response) {
-                //            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                //            //console.log("edit record success. total operations to complete is now: " + totalOpsToDo);
-                //            serverResponseSuccess = response;
-                //            //console.log("response is: " + response);
-                //            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
-                //                //window.location.href = serverResponseSuccess;
-                //            }
-                //        }
-                //    });
-                //}
-                ////END EDIT RECORDS ON A DAILY REPORT
-
-                ////BEGIN DELETE RECORDS FROM A DAILY REPORT
-                ////only on existing records or copies
-                //if (recordsToDeleteStatus == 1) {//if there are records to delete...
-                //    var data = {
-                //        timeEntryDeleteArr: timeEntryDeleteArr
-                //    };
-
-                //    $.ajax({
-                //        url: '/dailyReportByReportID/DeleteTimeEntry',
-                //        method: 'post',
-                //        contentType: 'application/json',
-                //        dataType: 'json',
-                //        data: JSON.stringify(data),
-                //        traditional: true,
-                //        success: function (response) {
-                //            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                //            //console.log("delete record success. total operations to complete is now: " + totalOpsToDo);
-                //            serverResponseSuccess = response;
-                //            //console.log("response is: " + response);
-                //            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
-                //                window.location.href = serverResponseSuccess;
-                //            }
-                //        }
-                //    });
-                //}
-                ////END DELETE RECORDS FROM A DAILY REPORT
-                ////});
-
-                ////BEGIN UPDATE RECORD SUBMISSION STATUS
-                ////only on existing records or copies
-                //if (updateSubmissionStatus == 1) {//if the record submission status needs to be updated...
-                //    var data = {
-                //        dailyReportID: dailyReportID,
-                //        submissionStatus: addItem10
-                //    };
-
-                //    //console.log("need to update report " + dailyReportID + " submission status to: " + addItem10);
-
-                //    $.ajax({
-                //        url: '/dailyReportByReportID/UpdateDailyReportSubmissionStatus',
-                //        method: 'post',
-                //        contentType: 'application/json',
-                //        dataType: 'json',
-                //        data: JSON.stringify(data),
-                //        traditional: true,
-                //        success: function (response) {
-                //            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                //            //console.log("delete record success. total operations to complete is now: " + totalOpsToDo);
-                //            serverResponseSuccess = response;
-                //            //console.log("response is: " + response);
-                //            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
-                //                window.location.href = serverResponseSuccess;
-                //            }
-                //        }
-                //    });
-                //}
-                ////END UPDATE RECORD SUBMISSION STATUS
-            }
-
-            //only on existing records or copies
-            function fn_loadTimeEntries_RtndRecs() {
-
-                //var workDescTeam_narr_div_Content_RtndRecs = $(".returnedRecords").find(".workDescTeam_narr_div");
-                //var workDescTeam_dpdwn_Content_RtndRecs;
-
-                //var delaysTeam_narr_div_Content_RtndRecs = $(".returnedRecords").find(".delaysTeam_narr_div");
-                //var delaysTeam_hours_div_Content_RtndRecs;
-                //var delaysTeam_dpdwn_Content_RtndRecs;
-
-                //var wntyDelaysTeam_narr_div_Content_RtndRecs = $(".returnedRecords").find(".wntyDelaysTeam_narr_div");
-                //var wntyDelaysTeam_hours_div_Content_RtndRecs;
-                //var wntyDelaysTeam_dpdwn_Content_RtndRecs;
-
-                //var currentLine_RtndRecs;//generic
-                //var currentDropdownLine_RtndRecs;//generic
-
-                //$(workDescTeam_narr_div_Content_RtndRecs).each(function (index1) {
-
-                //    var workDescUserNamesArrTemp = [];
-
-                //    currentLine_RtndRecs = $(this).parent().attr("data-time-entry-id");
-                //    currentDropdownLine_RtndRecs = $(this).parent().attr("id");
-                //    workDescTeam_dpdwn_Content_RtndRecs = $("#" + currentDropdownLine_RtndRecs).find(".select2-selection__choice__display");
-
-                //    $(workDescTeam_dpdwn_Content_RtndRecs).each(function (index2) {
-
-                //        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content_RtndRecs[index2]).attr("id");
-                //        var regex = /\w+$/;
-                //        var temp_workDescTeam_dpdwn_ID_object = tempworkDescTeam_dpdwn_ID.match(regex);
-                //        var temp_UserID = temp_workDescTeam_dpdwn_ID_object[0];
-
-                //        workDescUserNamesArrTemp.push(temp_UserID);
-                //    });
-
-                //    workDesc_RtndRecs.push([currentLine_RtndRecs, $(workDescTeam_narr_div_Content_RtndRecs[index1]).html(), 0, workDescUserNamesArrTemp]);
-                //});
-
-                //$(delaysTeam_narr_div_Content_RtndRecs).each(function (index1) {
-
-                //    var delaysUserNamesArrTemp = [];
-
-                //    currentLine_RtndRecs = $(this).parent().attr("data-time-entry-id");
-                //    currentDropdownLine_RtndRecs = $(this).parent().attr("id");
-                //    delaysTeam_hours_div_Content_RtndRecs = parseFloat($("#" + currentDropdownLine_RtndRecs).find(".delaysTeam_hours_div").html());
-                //    delaysTeam_dpdwn_Content_RtndRecs = $("#" + currentDropdownLine_RtndRecs).find(".select2-selection__choice__display");
-
-                //    $(delaysTeam_dpdwn_Content_RtndRecs).each(function (index2) {
-
-                //        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content_RtndRecs[index2]).attr("id");
-                //        var regex = /\w+$/;
-                //        var temp_delaysTeam_dpdwn_ID_object = tempDelaysTeam_dpdwn_ID.match(regex);
-                //        var temp_UserID = temp_delaysTeam_dpdwn_ID_object[0];
-
-                //        delaysUserNamesArrTemp.push(temp_UserID);
-                //    });
-
-                //    delays_RtndRecs.push([currentLine_RtndRecs, $(delaysTeam_narr_div_Content_RtndRecs[index1]).html(), delaysTeam_hours_div_Content_RtndRecs, delaysUserNamesArrTemp]);
-                //});
-
-                //$(wntyDelaysTeam_narr_div_Content_RtndRecs).each(function (index1) {
-
-                //    var wntyDelaysUserNamesArrTemp = [];
-
-                //    currentLine_RtndRecs = $(this).parent().attr("data-time-entry-id");
-                //    currentDropdownLine_RtndRecs = $(this).parent().attr("id");
-                //    wntyDelaysTeam_hours_div_Content_RtndRecs = parseFloat($("#" + currentDropdownLine_RtndRecs).find(".wntyDelaysTeam_hours_div").html());
-                //    wntyDelaysTeam_dpdwn_Content_RtndRecs = $("#" + currentDropdownLine_RtndRecs).find(".select2-selection__choice__display");
-
-                //    $(wntyDelaysTeam_dpdwn_Content_RtndRecs).each(function (index2) {
-
-                //        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content_RtndRecs[index2]).attr("id");
-                //        var regex = /\w+$/;
-                //        var temp_wntyDelaysTeam_dpdwn_ID_object = tempWntyDelaysTeam_dpdwn_ID.match(regex);
-                //        var temp_UserID = temp_wntyDelaysTeam_dpdwn_ID_object[0];
-
-                //        wntyDelaysUserNamesArrTemp.push(temp_UserID);
-                //    });
-
-                //    wntyDelays_RtndRecs.push([currentLine_RtndRecs, $(wntyDelaysTeam_narr_div_Content_RtndRecs[index1]).html(), wntyDelaysTeam_hours_div_Content_RtndRecs, wntyDelaysUserNamesArrTemp]);
-                //});
+                });                
             }
 
             //cloned to new daily report
@@ -1049,142 +685,6 @@
             }
 
             //only on existing records or copies
-            function fn_loadTimeEntries_Edit() {
-
-                //var workDescTeam_narr_div_Content_Edit = $(".editedRecords").find(".workDescTeam_narr_div");
-                //var workDescTeam_dpdwn_Content_Edit;
-
-                //var delaysTeam_narr_div_Content_Edit = $(".editedRecords").find(".delaysTeam_narr_div");
-                //var delaysTeam_hours_div_Content_Edit;
-                //var delaysTeam_dpdwn_Content_Edit;
-
-                //var wntyDelaysTeam_narr_div_Content_Edit = $(".editedRecords").find(".wntyDelaysTeam_narr_div");
-                //var wntyDelaysTeam_hours_div_Content_Edit;
-                //var wntyDelaysTeam_dpdwn_Content_Edit;
-
-                //var currentLineUserNamesRtndRec_Edit = [];//generic
-                //var currentLine_Edit;//generic
-                //var currentDropdownLine_Edit;//generic
-
-                //$(workDescTeam_narr_div_Content_Edit).each(function (index1) {
-
-                //    var workDescUserNamesArrTemp = [];
-
-                //    currentLine_Edit = $(this).parent().attr("data-time-entry-id");
-                //    currentDropdownLine_Edit = $(this).parent().attr("id");
-                //    workDescTeam_dpdwn_Content_Edit = $("#" + currentDropdownLine_Edit).find(".select2-selection__choice__display");
-
-                //    $(workDescTeam_dpdwn_Content_Edit).each(function (index2) {//for each selected team member in the dropdown...
-
-                //        var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content_Edit[index2]).attr("id");//pull out the full attribute text
-                //        var regex = /\w+$/;
-                //        var temp_workDescTeam_dpdwn_ID_object = tempworkDescTeam_dpdwn_ID.match(regex);
-                //        var temp_UserID = temp_workDescTeam_dpdwn_ID_object[0];//pull out the user id from the full attribute text
-
-                //        workDescUserNamesArrTemp.push(temp_UserID);//load which user ids are currently selected as being on the team
-                //    });
-
-                //    //BEGIN COPY THE ORIGINAL TEAM MEMBERS FROM THE RETURNED RECORD TO THE EDITED ARRAY
-                //    for (var i = 0; i < workDesc_RtndRecs.length; i++) {
-                //        if (workDesc_RtndRecs[i][0] == currentLine_Edit) {
-                //            currentLineUserNamesRtndRec_Edit = workDesc_RtndRecs[i][3];
-                //        }
-                //    };
-                //    //END COPY THE ORIGINAL TEAM MEMBERS FROM THE RETURNED RECORD TO THE EDITED ARRAY
-
-                //    //xxxUserNamesArrTemp contains which team members were returned from the database
-                //    //currentLineUserNamesRtndRec_Edit contains which team members are presently on the team
-                //    //a comparison will be done in the JSON logic to determine which user ids need to be added and which need to be deleted
-                //    workDesc_Edit.push([currentLine_Edit, $(workDescTeam_narr_div_Content_Edit[index1]).html(), 0, workDescUserNamesArrTemp, currentLineUserNamesRtndRec_Edit]);
-                //    if (recordsToEditStatus  == 0) {
-                //        recordsToEditStatus  = 1;
-                //    }
-                //});
-
-                //$(delaysTeam_narr_div_Content_Edit).each(function (index1) {
-
-                //    var delaysUserNamesArrTemp = [];
-
-                //    currentLine_Edit = $(this).parent().attr("data-time-entry-id");
-                //    currentDropdownLine_Edit = $(this).parent().attr("id");
-                //    delaysTeam_hours_div_Content_Edit = parseFloat($("#" + currentDropdownLine_Edit).find(".delaysTeam_hours_div").html());
-                //    delaysTeam_dpdwn_Content_Edit = $("#" + currentDropdownLine_Edit).find(".select2-selection__choice__display");
-
-                //    $(delaysTeam_dpdwn_Content_Edit).each(function (index2) {//for each selected team member in the dropdown...
-
-                //        var tempDelaysTeam_dpdwn_ID = $(delaysTeam_dpdwn_Content_Edit[index2]).attr("id");//pull out the full attribute text
-                //        var regex = /\w+$/;
-                //        var temp_delaysTeam_dpdwn_ID_object = tempDelaysTeam_dpdwn_ID.match(regex);
-                //        var temp_UserID = temp_delaysTeam_dpdwn_ID_object[0];//pull out the user id from the full attribute text
-
-                //        delaysUserNamesArrTemp.push(temp_UserID);//load which user ids are currently selected as being on the team
-                //    });
-
-                //    //BEGIN COPY THE ORIGINAL TEAM MEMBERS FROM THE RETURNED RECORD TO THE EDITED ARRAY
-                //    for (var i = 0; i < delays_RtndRecs.length; i++) {
-                //        if (delays_RtndRecs[i][0] == currentLine_Edit) {
-                //            currentLineUserNamesRtndRec_Edit = delays_RtndRecs[i][3];
-                //        }
-                //    };
-                //    //END COPY THE ORIGINAL TEAM MEMBERS FROM THE RETURNED RECORD TO THE EDITED ARRAY
-
-                //    //xxxUserNamesArrTemp contains which team members were returned from the database
-                //    //currentLineUserNamesRtndRec_Edit contains which team members are presently on the team
-                //    //a comparison will be done in the JSON logic to determine which user ids need to be added and which need to be deleted
-                //    delays_Edit.push([currentLine_Edit, $(delaysTeam_narr_div_Content_Edit[index1]).html(), delaysTeam_hours_div_Content_Edit, delaysUserNamesArrTemp, currentLineUserNamesRtndRec_Edit]);
-                //    if (recordsToEditStatus == 0) {
-                //        recordsToEditStatus = 1;
-                //    }
-                //});
-
-                //$(wntyDelaysTeam_narr_div_Content_Edit).each(function (index1) {
-
-                //    var wntyDelaysUserNamesArrTemp = [];
-
-                //    currentLine_Edit = $(this).parent().attr("data-time-entry-id");
-                //    currentDropdownLine_Edit = $(this).parent().attr("id");
-                //    wntyDelaysTeam_hours_div_Content_Edit = parseFloat($("#" + currentDropdownLine_Edit).find(".wntyDelaysTeam_hours_div").html());
-                //    wntyDelaysTeam_dpdwn_Content_Edit = $("#" + currentDropdownLine_Edit).find(".select2-selection__choice__display");
-
-                //    $(wntyDelaysTeam_dpdwn_Content_Edit).each(function (index2) {//for each selected team member in the dropdown...
-
-                //        var tempWntyDelaysTeam_dpdwn_ID = $(wntyDelaysTeam_dpdwn_Content_Edit[index2]).attr("id");//pull out the full attribute text
-                //        var regex = /\w+$/;
-                //        var temp_wntyDelaysTeam_dpdwn_ID_object = tempWntyDelaysTeam_dpdwn_ID.match(regex);
-                //        var temp_UserID = temp_wntyDelaysTeam_dpdwn_ID_object[0];//pull out the user id from the full attribute text
-
-                //        wntyDelaysUserNamesArrTemp.push(temp_UserID);//load which user ids are currently selected as being on the team
-                //    });
-
-                //    //BEGIN COPY THE ORIGINAL TEAM MEMBERS FROM THE RETURNED RECORD TO THE EDITED ARRAY
-                //    for (var i = 0; i < wntyDelays_RtndRecs.length; i++) {
-                //        if (wntyDelays_RtndRecs[i][0] == currentLine_Edit) {
-                //            currentLineUserNamesRtndRec_Edit = wntyDelays_RtndRecs[i][3];
-                //        }
-                //    };
-                //    //END COPY THE ORIGINAL TEAM MEMBERS FROM THE RETURNED RECORD TO THE EDITED ARRAY
-
-                //    //xxxUserNamesArrTemp contains which team members were returned from the database
-                //    //currentLineUserNamesRtndRec_Edit contains which team members are presently on the team
-                //    //a comparison will be done in the JSON logic to determine which user ids need to be added and which need to be deleted
-                //    wntyDelays_Edit.push([currentLine_Edit, $(wntyDelaysTeam_narr_div_Content_Edit[index1]).html(), wntyDelaysTeam_hours_div_Content_Edit, wntyDelaysUserNamesArrTemp, currentLineUserNamesRtndRec_Edit]);
-                //    if (recordsToEditStatus == 0) {
-                //        recordsToEditStatus = 1;
-                //    }
-                //});
-            }
-
-            //only on existing records or copies
-            function fn_loadTimeEntries_Delete() {
-
-                //var timeEntriesToDelete = $(".deletedRecords");
-
-                //$(timeEntriesToDelete).each(function (index) {
-                //    timeEntryDeleteArr.push($(this).attr("data-time-entry-id"));
-                //});
-            }
-
-            //only on existing records or copies
             function fn_buildJsonObjects() {
 
                 //BEGIN BUILD THE WORK DESCRIPTION JSON OBJECT
@@ -1199,23 +699,6 @@
                             workDescriptionCategory: "1",
                             hours: workDesc_Add[i][1],
                             userNames: workDesc_Add[i][2]
-                        };
-                    }
-                }
-
-                if (workDesc_Edit.length < 1) {
-                    workDescArrJson_Edit = null
-                }
-
-                else {
-                    for (var i = 0; i < workDesc_Edit.length; i++) {
-                        workDescArrJson_Edit[i] = {
-                            timeEntryID: workDesc_Edit[i][0],
-                            workDescription: workDesc_Edit[i][1],
-                            workDescriptionCategory: "1",
-                            hours: workDesc_Edit[i][2],
-                            userNamesToAdd: _.difference(workDesc_Edit[i][3], workDesc_Edit[i][4]),
-                            userNamesToDelete: _.difference(workDesc_Edit[i][4], workDesc_Edit[i][3])
                         };
                     }
                 }
@@ -1236,23 +719,6 @@
                         };
                     }
                 }
-
-                if (delays_Edit.length < 1) {
-                    delaysArrJson_Edit = null
-                }
-
-                else {
-                    for (var i = 0; i < delays_Edit.length; i++) {
-                        delaysArrJson_Edit[i] = {
-                            timeEntryID: delays_Edit[i][0],
-                            workDescription: delays_Edit[i][1],
-                            workDescriptionCategory: "2",
-                            hours: delays_Edit[i][2],
-                            userNamesToAdd: _.difference(delays_Edit[i][3], delays_Edit[i][4]),
-                            userNamesToDelete: _.difference(delays_Edit[i][4], delays_Edit[i][3])
-                        };
-                    }
-                }
                 //END BUILD THE DELAYS JSON OBJECT
 
                 //BEGIN BUILD THE WNTY DELAYS JSON OBJECT
@@ -1270,29 +736,22 @@
                         };
                     }
                 }
-
-                if (wntyDelays_Edit.length < 1) {
-                    wntyDelaysArrJson_Edit = null
-                }
-
-                else {
-                    for (var i = 0; i < wntyDelays_Edit.length; i++) {
-                        wntyDelaysArrJson_Edit[i] = {
-                            timeEntryID: wntyDelays_Edit[i][0],
-                            workDescription: wntyDelays_Edit[i][1],
-                            workDescriptionCategory: "3",
-                            hours: wntyDelays_Edit[i][2],
-                            userNamesToAdd: _.difference(wntyDelays_Edit[i][3], wntyDelays_Edit[i][4]),
-                            userNamesToDelete: _.difference(wntyDelays_Edit[i][4], wntyDelays_Edit[i][3])
-                        };
-                    }
-                }
                 //END BUILD THE WNTY DELAYS JSON OBJECT
             }
 
             //END SECTION TO PACK UP NEW RECORDS
 
             //BEGIN MISCELLANEOUS SECTION
+
+            //cloned to new daily report
+            function fn_showSpinner() {
+                $.LoadingOverlay("show", {
+                    image: "",
+                    fontawesome: "fa fa-cog fa-spin"
+                });
+
+                $('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
+            }
 
             function fn_printOnLoad() {
                 console.log("number of work description entries from the copied report to add: " + indexWorkDescEntries_Add);
@@ -1304,18 +763,6 @@
             function fn_printArrays() {
 
                 //console.clear();
-                //BEGIN RETURNED RECORDS ARRAYS
-                //console.log("*****************")
-                //console.log("work description combined array RETURNED RECORDS section follows:");
-                //console.log(workDesc_RtndRecs);
-
-                //console.log("delays combined array RETURNED RECORDS section follows:");
-                //console.log(delays_RtndRecs);
-
-                //console.log("warranty delays combined array RETURNED RECORDS section follows:");
-                //console.log(wntyDelays_RtndRecs);
-                //console.log("*****************")
-                //END RETURNED RECORDS ARRAYS
 
                 //BEGIN ADDED ARRAYS
                 if (recordsToAddStatus == 1) {
@@ -1334,33 +781,6 @@
                     console.log("*****************")
                 }
                 //END ADDED ARRAYS
-
-                //BEGIN EDITED ARRAYS
-                if (recordsToEditStatus == 1) {
-                    //console.log("*****************")
-                    //console.log("work description combined array EDITED RECORDS section follows:");
-                    //console.log(workDesc_Edit);
-                    //console.log(workDescArrJson_Edit);
-
-                    //console.log("delays combined array EDITED RECORDS section follows:");
-                    //console.log(delays_Edit);
-                    //console.log(delaysArrJson_Edit);
-
-                    //console.log("warranty delays combined array EDITED RECORDS section follows:");
-                    //console.log(wntyDelays_Edit);
-                    //console.log(wntyDelaysArrJson_Edit);
-                    //console.log("*****************")
-                }
-                //END EDITED ARRAYS
-
-                //BEGIN DELETED ARRAYS
-                if (recordsToDeleteStatus == 1) {
-                    console.log("*****************")
-                    console.log("time entry delete section follows:");
-                    console.log(timeEntryDeleteArr);
-                    console.log("*****************")
-                }
-                //END DELETED ARRAYS
             }
 
             //enable the select2 add-on
@@ -1416,19 +836,6 @@
 
                 return passedText;
                 //END CLEAN UP TRASH FROM ENTERED TEXT
-            }
-
-            function fn_getSubmissionStatus() {
-
-                rtndSubmissionStatus = $("#txt_rtndSubmissionStatus").attr("value");
-                //console.log("returned submission status is: " + rtndSubmissionStatus);
-
-                if (rtndSubmissionStatus == 0) {
-                    $("#txt_rtndSubmissionStatus").text("Un-submitted");
-                }
-                if (rtndSubmissionStatus == 1) {
-                    $("#txt_rtndSubmissionStatus").text("Submitted");
-                }
             }
 
             $("#enableSelect2").click(function () {
@@ -1535,9 +942,7 @@
             }
 
             //END VALIDATION BEFORE SAVING SECTION
-
-            
-            
+                       
         });//end document read jquery statements
     </script>
 </head>

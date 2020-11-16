@@ -53,27 +53,24 @@
     @*<script src="~/Scripts/chosen.jquery.js"></script>*@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+    @*BEGIN JQUERY LoadingOverlay PLUGIN*@
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    @*END JQUERY LoadingOverlay PLUGIN*@
+
     <script>
         $(document).ready(function () {//begin document read jquery statements
-          
-            //var dailyReportID = $("#txt_dailyReportID").html();
-            var dailyReportID = $("#txt_dailyReportID").attr("value");
-            var rtndSubmissionStatus;
 
+            var dailyReportID = $("#txt_dailyReportID").attr("value");
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
             var team_dpdwn = $('#team_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
-            var lastDlyRptCrtdByUser;
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
-            var dailyLogInfoChngd = 0;
             var recordsToAddStatus = 0;
-            var recordsToEditStatus = 0;
-            var recordsToDeleteStatus = 0;
-            var updateSubmissionStatus = 0;  
 
             var workDesc_Add = [];
             var workDescArrJson_Add = [];
@@ -366,7 +363,7 @@
 
                 //disable select2 for this particular dropdown, select all team members and then re-enable select2
                 currentRow.find(".Team_dpdwn").select2('destroy').find('option').prop('selected', 'selected');
-                fn_enableSelect2();   
+                fn_enableSelect2();
             });
 
             //differs between new daily report and an existing one
@@ -448,7 +445,7 @@
             $("#saveAndSubmit_btn").click(function () {//when the add button is clicked...
 
                 //console.log("Total number of indexWorkDescEntries_Add: " + indexWorkDescEntries_Add);
-                fn_exitSubmit(1);               
+                fn_exitSubmit(1);
             });
 
             //
@@ -475,6 +472,8 @@
                 var totalOpsToDo = recordsToAddStatus;//stores the total number of types of ops to carry out
                 var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
                 console.log("total operations to complete on entry is: " + totalOpsToDo);
+
+                fn_showSpinner();
 
                 var data = {
                     dailyReportID: 0,
@@ -513,7 +512,7 @@
             }
 
             //cloned to new daily report
-            function fn_loadTimeEntries_Add () {
+            function fn_loadTimeEntries_Add() {
 
                 var workDescTeam_narr_div_Content_Add = $(".addRecord").find(".workDescTeam_narr_div");
                 var workDescTeam_dpdwn_Content_Add;
@@ -661,6 +660,16 @@
             //BEGIN MISCELLANEOUS SECTION
 
             //cloned to new daily report
+            function fn_showSpinner() {
+                $.LoadingOverlay("show", {
+                    image: "",
+                    fontawesome: "fa fa-cog fa-spin"
+                });
+
+                $('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
+            }
+
+            //cloned to new daily report
             function fn_printArrays() {
                 //console.clear();
 
@@ -745,7 +754,7 @@
 
             $("#disableSelect2").click(function () {
                 fn_disableSelect2();
-            }); 
+            });
 
             //END MISCELLANEOUS SECTION
 
@@ -848,7 +857,7 @@
                 return rowFilled;
             }
             //END VALIDATION BEFORE SAVING SECTION
-               
+
         });//end document read jquery statements
     </script>
 </head>

@@ -51,15 +51,13 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
           
-            var dailyReportID = $("#txt_dailyReportID").html();
+            var dailyReportID = $("#txt_dailyReportID").attr("value");
             var rtndSubmissionStatus;
-
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
             var team_dpdwn = $('#team_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
-            dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
-            var lastDlyRptCrtdByUser;            
+            dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain         
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
@@ -123,7 +121,7 @@
                         });
                     }
                 });
-
+               
                 //begin fill sub jobs dropdown
                 $('#subJobTypes_dpdwn').empty();//clear the dropdown
 
@@ -139,6 +137,23 @@
                     }
                 });
                 //end fill sub jobs dropdown
+
+                //begin fill the job correspondents section
+                $.ajax({
+                    url: 'DataService.asmx/GetJobCrspdtInfoByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
+                        //console.clear();
+                        var temp_output_jobCrspdtInfo = "";
+                        $(data).each(function (index, item) {
+                            temp_output_jobCrspdtInfo = temp_output_jobCrspdtInfo + item.jobCrspdtName + "|";
+                        });
+                        $("#output_jobCrspdtInfo").text(temp_output_jobCrspdtInfo);
+                    }
+                });
+                //end fill the job correspondents section
             });
             //end jobs id dropdown change
 
@@ -249,71 +264,64 @@
             $(".Btn_add").click(function () {
 
                 if (fn_rowFilled($(this))) {
-               
-                fn_produceParsedShortNames($(this));
-                fn_disableSelect2();
-                var currentRow = $(this).parent().parent();
 
-                var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
-                currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html              
+                    fn_produceParsedShortNames($(this));
+                    fn_disableSelect2();
+                    var currentRow = $(this).parent().parent();
 
-                currentRow.find(".narr_div").attr("contenteditable", "false");//lock the narrative for edits
-                currentRow.find(".dpdwn_div").hide();//hide the team dropdown
-                currentRow.find(".dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
-                currentRow.find(".dpdwn_parsed_div").show();//show the parsed version of the team dropdown
-                currentRow.find(".Btn_add").hide();//remove the add button, only needed for new work descriptions
-                currentRow.find(".Btn_clear").hide();//remove the clear button, only needed for new work descriptions
-                currentRow.find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
-                currentRow.find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
-                currentRow.last().find(".narr_div").css('border-bottom-style', 'none');
-                currentRow.find(".dpdwn_parsed_div").css('border-bottom-style', 'none');
-                currentRow.find(".button_div").css('border-bottom-style', 'none');
+                    var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
+                    currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html
 
-                if (/newWorkDescBtn_add/i.test($(this).attr("class"))) {
-                    indexWorkDescEntries_Add = indexWorkDescEntries_Add + 1;
+                    currentRow.find(".narr_div").attr("contenteditable", "false");//lock the narrative for edits
+                    currentRow.find(".dpdwn_div").hide();//hide the team dropdown
+                    currentRow.find(".dpdwn_parsed_div").removeAttr("hidden");//show the parsed version of the team dropdown
+                    currentRow.find(".dpdwn_parsed_div").show();//show the parsed version of the team dropdown
+                    currentRow.find(".Btn_add").hide();//remove the add button, only needed for new work descriptions
+                    currentRow.find(".Btn_clear").hide();//remove the clear button, only needed for new work descriptions
+                    currentRow.find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
+                    currentRow.find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
+                    currentRow.last().find(".narr_div").css('border-bottom-style', 'none');
+                    currentRow.find(".dpdwn_parsed_div").css('border-bottom-style', 'none');
+                    currentRow.find(".button_div").css('border-bottom-style', 'none');
 
-                    $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
-                    currentRow.prop("id", "workDescLine_" + indexWorkDescEntries_Add).appendTo("#workDescriptionLine_template");
-                    $("#workDescLine_" + indexWorkDescEntries_Add).prop("class", " row addRecord workDescLine");
-                    $("#workDescLine_" + indexWorkDescEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
+                    if (/newWorkDescBtn_add/i.test($(this).attr("class"))) {
+                        indexWorkDescEntries_Add = indexWorkDescEntries_Add + 1;
 
-                    $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row entryRow workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
-                    $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
-                }
-                else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
-                    indexDelaysEntries_Add = indexDelaysEntries_Add + 1;
+                        $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
+                        currentRow.prop("id", "workDescLine_" + indexWorkDescEntries_Add).appendTo("#workDescriptionLine_template");
+                        $("#workDescLine_" + indexWorkDescEntries_Add).prop("class", " row addRecord workDescLine");
+                        $("#workDescLine_" + indexWorkDescEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
-                    $(".delaysLine_template_row_hidden").removeAttr("hidden");
-                    currentRow.prop("id", "delaysLine_" + indexDelaysEntries_Add).appendTo("#delaysLine_template");
-                    $("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row addRecord delaysLine");
-                    $("#delaysLine_" + indexDelaysEntries_Add).find(".delaysTeam_hours_div").attr("contenteditable", "false");
-                    $("#delaysLine_" + indexDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
+                        $(".workDescriptionLine_template_row_hidden").clone(true).prop("class", "row entryRow workDescriptionLine_template_row_active").appendTo("#workDescriptionLine_template");
+                        $(".workDescriptionLine_template_row_hidden").attr("hidden", "true");
+                    }
+                    else if (/newDelaysBtn_add/i.test($(this).attr("class"))) {
+                        indexDelaysEntries_Add = indexDelaysEntries_Add + 1;
 
-                    $(".delaysLine_template_row_hidden").clone(true).prop("class", "row entryRow delaysLine_template_row_active").appendTo("#delaysLine_template");
-                    $(".delaysLine_template_row_hidden").attr("hidden", "true");
-                }
-                else if (/newWntyDelaysBtn_add/i.test($(this).attr("class"))) {
-                    indexWntyDelaysEntries_Add = indexWntyDelaysEntries_Add + 1;
+                        $(".delaysLine_template_row_hidden").removeAttr("hidden");
+                        currentRow.prop("id", "delaysLine_" + indexDelaysEntries_Add).appendTo("#delaysLine_template");
+                        $("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row addRecord delaysLine");
+                        $("#delaysLine_" + indexDelaysEntries_Add).find(".delaysTeam_hours_div").attr("contenteditable", "false");
+                        $("#delaysLine_" + indexDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
-                    $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
-                    currentRow.prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries_Add).appendTo("#wntyDelaysLine_template");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row addRecord wntyDelaysLine");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
-                    $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
+                        $(".delaysLine_template_row_hidden").clone(true).prop("class", "row entryRow delaysLine_template_row_active").appendTo("#delaysLine_template");
+                        $(".delaysLine_template_row_hidden").attr("hidden", "true");
+                    }
+                    else if (/newWntyDelaysBtn_add/i.test($(this).attr("class"))) {
+                        indexWntyDelaysEntries_Add = indexWntyDelaysEntries_Add + 1;
 
-                    $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row entryRow wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
-                    $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
-                }
+                        $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
+                        currentRow.prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries_Add).appendTo("#wntyDelaysLine_template");
+                        $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row addRecord wntyDelaysLine");
+                        $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
+                        $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
-                fn_enableSelect2();
-                }
+                        $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row entryRow wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
+                        $(".wntyDelaysLine_template_row_hidden").attr("hidden", "true");
+                    }
 
-                else {
-
-                    $.alert({
-                        title: 'Error!',
-                        content: 'One or more row entries incorrect.  Narrative section must 10 or greater, at least one team member must be added and hours must be of form H.0, H.25, H.5, or H.75.',
-                    });
+                    fn_enableSelect2();
+                    enable_disableSave();
                 }
             });
 
@@ -641,6 +649,8 @@
                 var totalOpsToDo = dailyLogInfoChngd + recordsToAddStatus + recordsToEditStatus + recordsToDeleteStatus + updateSubmissionStatus;//stores the total number of types of ops to carry out
                 var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
                 //console.log("total operations to complete on entry is: " + totalOpsToDo);
+
+                fn_showSpinner();
 
                 //BEGIN EDIT DAILY LOG SECTION OF A DAILY REPORT
                 //only on existing records or copies
@@ -1217,6 +1227,16 @@
             //BEGIN MISCELLANEOUS SECTION
 
             //cloned to new daily report
+            function fn_showSpinner() {
+                $.LoadingOverlay("show", {
+                    image: "",
+                    fontawesome: "fa fa-cog fa-spin"
+                });
+
+                $('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
+            }
+
+            //cloned to new daily report
             function fn_printArrays() {
 
                 //console.clear();
@@ -1416,22 +1436,34 @@
                 var teamDiv = currentRow.find(".select2-selection__rendered").html();
                 var hoursDiv = currentRow.find(".hours_div").html();
                 var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
-                console.clear();               
-                          
+                //console.clear();
+
                 if (narrDiv.length < 10) {
                     //console.log("Narr div is empty.")
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Narrative must be greater than 10 characters.',
+                    });
                     rowFilled = false;
                     return rowFilled;
                 }
 
-                if (teamDiv == "") {
+                if (teamDiv.length < 1) {
                     //console.log("dpdwn_div div is empty.")
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Must have at least one team member',
+                    });
                     rowFilled = false;
                     return rowFilled;
                 }
 
                 if (hoursDiv == "" || !hoursDivMatch) {
                     //console.log("Hours div is empty or the hours do match the pattern.")
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Hours must be of form H.0, H.25, H.5, or H.75.',
+                    });
                     rowFilled = false;
                     return rowFilled;
                 }
@@ -1446,7 +1478,7 @@
 </head>
 
 <div class="container" id="contnrDailyLog">
-    <h3 style="text-align:center">FIELD SERVICE RECORD</h3>
+    <h3 style="text-align:center">EDIT FIELD SERVICE RECORD</h3>
     <div class="row">
         <div class="col-2" style="padding:5px">
             <strong>Daily Log Information</strong>
@@ -1482,13 +1514,6 @@
             <input type="text" id="input_jobs_dpdown" name="" style="width:100%" hidden>
         </div>
         <div class="md-col-5" style="padding:5px"></div>
-        <div class="md-col-1" style="padding:5px">
-            <strong>Date:</strong>
-        </div>
-        <div class="md-col-2" style="padding:5px">
-            <input type="date" class="form-control form-control-sm" id="slct_date"
-                   placeholder="@Model.First().date" value=@Model.First().date>
-        </div>
     </div>
     <div class="row">
         <div class="col-2" style="padding:5px">
@@ -1519,54 +1544,60 @@
             <strong>Customer Contact:</strong>
         </div>
         <div class="col-4" style="padding:5px" id="output_customerContact">@Model.First().customerContact</div>
-        <div class="col-2" style="padding:5px">
-            <strong>Correspondents:</strong>
-        </div>
-        @foreach (var item in Model)
-        {
-            //BEGIN TEMPORARY LOOP VARIABLES
-            List<string> temp_jobCorrespondentName = item.jobCorrespondentName;
-            //END TEMPORARY LOOP VARIABLES
-
-            <div class="col-4" style="padding:5px" id="output_customerContact">
-                @for (var i = 0; i < (temp_jobCorrespondentName.Count); i++)
+        <div class="col-4" style="padding:5px">
+            <div>
+                <span><strong>Correspondents:</strong></span>
+                @foreach (var item in Model)
                 {
-                    <span class="" id="" style="pointer-events:none">@temp_jobCorrespondentName[@i]</span>
+                    //BEGIN TEMPORARY LOOP VARIABLES
+                    List<string> temp_jobCorrespondentName = item.jobCorrespondentName;
+                    //END TEMPORARY LOOP VARIABLES
+
+                        for (var i = 0; i < (temp_jobCorrespondentName.Count); i++)
+                        {
+                            <span class="" id="output_jobCrspdtInfo" style="pointer-events:none">@temp_jobCorrespondentName[@i]|</span>
+                        }
                 }
             </div>
-        }
-    </div>
+        </div>
+        </div>
     <div class="row">
         <div class="col-2" style="padding:5px">
             <strong>Equipment:</strong>
         </div>
         <div class="col-10" style="padding:5px" contenteditable>
-        <input type="text" value="@Model.First().equipment" id="input_equipment" name="" style="width:100%">
+            <input type="text" value="@Model.First().equipment" id="input_equipment" name="" style="width:100%">
         </div>
     </div>
     <div class="row">
-        <div class="col-2" style="padding:5px">
-            <strong>Start Time:</strong>
-        </div>
-        <div class="col-2" style="padding:5px">
-            <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="@Model.First().startTime">
-        </div>
-        <div class="col-2" style="padding:5px">
-            <strong>End Time:</strong>
-        </div>
-        <div class="col-2" style="padding:5px">
-            <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="@Model.First().endTime">
-        </div>
-        <div class="col-2" style="padding:5px">
-            <strong>Lunch (hr)</strong>
-        </div>
-        <div class="col-1" style="padding:5px">
-            <input type="text" class="form-control form-control-sm" id="input_lunch" value="@Model.First().lunchHours">
-        </div>
-        <div class="col-1" style="padding:5px">
+        <div class="col-12" style="padding:5px; text-align:center">
+            <span class="span_inlineBlock">
+                <strong>Date:</strong>
+            </span>
+            <span class="span_inlineBlock">
+                <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="@Model.First().date" value=@Model.First().date>
+            </span>
+            <span class="span_inlineBlock">
+                <strong>Start Time:</strong>
+            </span>
+            <span class="span_inlineBlock">
+                <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="@Model.First().startTime">
+            </span>
+            <span class="span_inlineBlock">
+                <strong>End Time:</strong>
+            </span>
+            <span class="span_inlineBlock">
+                <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="@Model.First().endTime">
+            </span>
+            <span class="span_inlineBlock">
+                <strong>Lunch (hr)</strong>
+            </span>
+            <span class="span_inlineBlock">
+                <input type="text" class="form-control form-control-sm" id="input_lunch" value="@Model.First().lunchHours">
+            </span>
         </div>
     </div>
-</div>
+    </div>
 
 @*BEGIN ALLPAX TEAM*@
 <hr class="sectionSeparator">
