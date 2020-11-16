@@ -324,7 +324,7 @@
                 }
             });
 
-            //cloned to new daily report
+            //differs between new daily report and an existing one
             $(".Btn_delete").click(function () {
                 var currentRow = $(this).parent().parent();
                 temp_LineClass = $(currentRow).prop("class");
@@ -334,26 +334,6 @@
                     $(currentRow).remove();
                     indexWorkDescEntries_Add = indexWorkDescEntries_Add - 1;//only on the new daily report page
                     enable_disableSave();
-                }
-
-                //if this line is a returned record, set its class to deletedRecords
-                if (temp_LineClass.includes("returnedRecords")) {
-                    //used to change the class of a returned record to deleted record for later processing with a delete operation
-                    if (temp_LineClass.includes("workDescLine")) {
-                        $($(currentRow)).prop("class", "row deletedRecords workDescLine");
-                    }
-                    if (temp_LineClass.includes("delaysLine")) {
-                        $($(currentRow)).prop("class", "row deletedRecords delaysLine");
-                    }
-                    if (temp_LineClass.includes("wntyDelaysLine")) {
-                        $($(currentRow)).prop("class", "row deletedRecords wntyDelaysLine");
-                    }
-
-                    $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
-                    $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
-
-                    $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
-                    $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
                 }
             });
 

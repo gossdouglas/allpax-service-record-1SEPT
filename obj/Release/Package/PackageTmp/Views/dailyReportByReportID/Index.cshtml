@@ -376,10 +376,6 @@
                 var currentNumValidRecs = $(".returnedRecords.workDescLine").length + indexWorkDescEntries_Add;
                 temp_LineClass = $(currentRow).prop("class");
 
-                //console.log("number of remaining returned records: " + $(".returnedRecords").length);
-                //console.log("number of remaining added records: " + indexWorkDescEntries_Add);
-                console.log("number of remaining valid records: " + currentNumValidRecs);
-
                 //if this line is a new record, simply remove it
                 if (temp_LineClass.includes("addRecord")) {
                     $(currentRow).remove();
@@ -387,34 +383,41 @@
 
                 //if this line is a returned record, set its class to deletedRecords
                 if (temp_LineClass.includes("returnedRecords")) {                  
-                    recordsToDeleteStatus = 1;
-
+                    
                     //used to change the class of a returned record to deleted record for later processing with a delete operation
                     if (temp_LineClass.includes("workDescLine")) {
-                        $($(currentRow)).prop("class", "row deletedRecords workDescLine");
+                        if (currentNumValidRecs > 1) {//if there is at least one more work description entry, then go ahead and delete this entry
+                            $($(currentRow)).prop("class", "row deletedRecords workDescLine");
+                            $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
+                            $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+                            $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                            $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
+                            recordsToDeleteStatus = 1;
+                        }
+                        else {
+                            $.alert({
+                            title: 'Cannot Delete!',
+                                content: 'Must have at least one copied record or added record in the work description section.',
+                            });
+                        }                       
                     }
                     if (temp_LineClass.includes("delaysLine")) {
                         $($(currentRow)).prop("class", "row deletedRecords delaysLine");
+                        $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
+                        $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+                        $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                        $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
+                        recordsToDeleteStatus = 1;
                     }
                     if (temp_LineClass.includes("wntyDelaysLine")) {
                         $($(currentRow)).prop("class", "row deletedRecords wntyDelaysLine");
-                    }
-
-                    $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
-                    $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
-
-                    $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
-                    $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
+                        $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
+                        $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+                        $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                        $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
+                        recordsToDeleteStatus = 1;
+                    }                    
                 }
-
-                //else {
-
-                //    $.alert({
-                //        title: 'Error!',
-                //        content: 'Must have at least one returned record or added record.',
-                //    });
-                //}
-
             });
 
             //cloned to new daily report
@@ -741,7 +744,7 @@
                             serverResponseSuccess = response;
                             //console.log("response is: " + response);
                             if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
-                                //window.location.href = serverResponseSuccess;
+                                window.location.href = serverResponseSuccess;
                             }
                         }
                     });
