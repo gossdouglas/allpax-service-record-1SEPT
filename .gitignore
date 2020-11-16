@@ -9,3 +9,8 @@ packages
 *.cache
 obj/Debug/allpax_service_record.csprojAssemblyReference.cache
 obj/Debug/allpax_service_record.csprojAssemblyReference.cache
+allpax_service_record.csproj.user
+allpax_service_record.csproj.user
+bin/allpax_service_record.pdb
+obj/Debug/allpax_service_record.dll
+obj/Debug/allpax_service_record.pdb
