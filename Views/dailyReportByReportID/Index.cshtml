@@ -51,7 +51,8 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
           
-            var dailyReportID = $("#txt_dailyReportID").html();
+            //var dailyReportID = $("#txt_dailyReportID").html();
+            var dailyReportID = $("#txt_dailyReportID").attr("value");
             var rtndSubmissionStatus;
 
             var jobs_dpdown = $('#jobs_dpdown');
@@ -1426,22 +1427,34 @@
                 var teamDiv = currentRow.find(".select2-selection__rendered").html();
                 var hoursDiv = currentRow.find(".hours_div").html();
                 var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
-                console.clear();               
-                          
+                //console.clear();
+
                 if (narrDiv.length < 10) {
                     //console.log("Narr div is empty.")
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Narrative must be greater than 10 characters.',
+                    });
                     rowFilled = false;
                     return rowFilled;
                 }
 
-                if (teamDiv == "") {
+                if (teamDiv.length < 1) {
                     //console.log("dpdwn_div div is empty.")
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Must have at least one team member',
+                    });
                     rowFilled = false;
                     return rowFilled;
                 }
 
                 if (hoursDiv == "" || !hoursDivMatch) {
                     //console.log("Hours div is empty or the hours do match the pattern.")
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Hours must be of form H.0, H.25, H.5, or H.75.',
+                    });
                     rowFilled = false;
                     return rowFilled;
                 }
