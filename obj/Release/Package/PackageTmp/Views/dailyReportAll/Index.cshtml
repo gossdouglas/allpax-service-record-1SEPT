@@ -176,9 +176,13 @@ Layout = "~/Views/Shared/_Layout.cshtml";
 
             //$(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked...
             $("#dt_dailyRptAll tbody").on("click", ".copyButton", function () {
-                window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
-                    + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9
-                    + "&customerContact=" + selectedItem10 + "&equipment=" + selectedItem11 + "&copiedDailyReportID=" + selectedItem0;
+                //window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
+                //    + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9
+                //    + "&customerContact=" + selectedItem10 + "&equipment=" + selectedItem11 + "&copiedDailyReportID=" + selectedItem0;
+
+                window.location = '/dailyReportByReportID/copyDailyReport?reportID=' + selectedItem0;
+                //window.location = '/dailyReport/copyDailyReport';
+              
             });
 
             //begin when the line save button is pressed
@@ -187,7 +191,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                 var startDate = $("#startDateInput").val();
                 var endDate = $("#endDateInput").val();
 
-                window.location = 'dailyReportAll/filtered?startDate=' + startDate + "&" + "endDate=" + endDate;
+                window.location.href = '/dailyReportAll/filtered?startDate=' + startDate + "&" + "endDate=" + endDate;
             });
             //end when the line save button is pressed.
 
@@ -280,7 +284,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                         //BEGIN TEMPORARY LOOP VARIABLES
                         string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
                         List<string> temp_teamUserNames = item.teamUserNames;
-                        List<string> temp_team = item.teamNames;
+                        List<string> temp_team = item.teamShortNames;
                         List<string> temp_workDescription = item.workDescription;
                         Boolean temp_active = item.active;
                         string userLoggedIn = Regex.Replace(User.Identity.GetUserName(), "@.*", "");

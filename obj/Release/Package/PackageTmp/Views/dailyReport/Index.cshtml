@@ -9,27 +9,6 @@
 
 <head>
     <style>
-        /*.container {
-            border: 2px solid black;
-        }
-
-        .btn {
-            background-color: transparent;
-            background-repeat: no-repeat;
-            border: none;
-            cursor: pointer;
-            overflow: hidden;
-            outline: none;
-        }
-
-        .select2 {
-            border: 1px solid black;
-        }
-
-        i {
-            pointer-events: none;
-        }*/
-
         /*BEGIN UPDATED CSS COPY FROM EDIT PAGE*/
         #workDesc_container, #delays_container, #wntyDelays_container {
             padding-bottom: 5px;
@@ -74,26 +53,24 @@
     @*<script src="~/Scripts/chosen.jquery.js"></script>*@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+    @*BEGIN JQUERY LoadingOverlay PLUGIN*@
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    @*END JQUERY LoadingOverlay PLUGIN*@
+
     <script>
         $(document).ready(function () {//begin document read jquery statements
-          
-            var dailyReportID = $("#txt_dailyReportID").html();
-            var rtndSubmissionStatus;
 
+            var dailyReportID = $("#txt_dailyReportID").attr("value");
             var jobs_dpdown = $('#jobs_dpdown');
             var subJobTypes_dpdwn = $('#subJobTypes_dpdwn');
             var team_dpdwn = $('#team_dpdwn');
             var dailyRptAuthor = $('#dailyRptAuthor').html();//suck in the current user name along with the domain
             dailyRptAuthor = dailyRptAuthor.replace(/@@.*/, "");//chop off the domain
-            var lastDlyRptCrtdByUser;
 
             var dailyRptTeamArr = [];
             var dailyRptTeamUserIDArr = [];
-            var dailyLogInfoChngd = 0;
             var recordsToAddStatus = 0;
-            var recordsToEditStatus = 0;
-            var recordsToDeleteStatus = 0;
-            var updateSubmissionStatus = 0;  
 
             var workDesc_Add = [];
             var workDescArrJson_Add = [];
@@ -150,6 +127,23 @@
                     }
                 });
                 //end fill sub jobs dropdown
+
+                //begin fill the job correspondents section
+                $.ajax({
+                    url: 'DataService.asmx/GetJobCrspdtInfoByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: jobs_dpdown.val() },
+                    success: function (data) {
+                        //console.clear();
+                        var temp_output_jobCrspdtInfo = "";
+                        $(data).each(function (index, item) {
+                            temp_output_jobCrspdtInfo = temp_output_jobCrspdtInfo + item.jobCrspdtName + "|";
+                        });
+                        $("#output_jobCrspdtInfo").text(temp_output_jobCrspdtInfo);
+                    }
+                });
+                //end fill the job correspondents section
             });
             //end jobs id dropdown change
 
@@ -283,14 +277,6 @@
                     fn_enableSelect2();
                     enable_disableSave();
                 }
-
-                else {
-
-                    $.alert({
-                        title: 'Error!',
-                        content: 'One or more row entries incorrect.  Narrative section must 10 or greater, at least one team member must be added and hours must be of form H.0, H.25, H.5, or H.75.',
-                    });
-                }
             });
 
             //cloned to new daily report
@@ -338,7 +324,7 @@
                 }
             });
 
-            //cloned to new daily report
+            //differs between new daily report and an existing one
             $(".Btn_delete").click(function () {
                 var currentRow = $(this).parent().parent();
                 temp_LineClass = $(currentRow).prop("class");
@@ -349,26 +335,6 @@
                     indexWorkDescEntries_Add = indexWorkDescEntries_Add - 1;//only on the new daily report page
                     enable_disableSave();
                 }
-
-                //if this line is a returned record, set its class to deletedRecords
-                if (temp_LineClass.includes("returnedRecords")) {
-                    //used to change the class of a returned record to deleted record for later processing with a delete operation
-                    if (temp_LineClass.includes("workDescLine")) {
-                        $($(currentRow)).prop("class", "row deletedRecords workDescLine");
-                    }
-                    if (temp_LineClass.includes("delaysLine")) {
-                        $($(currentRow)).prop("class", "row deletedRecords delaysLine");
-                    }
-                    if (temp_LineClass.includes("wntyDelaysLine")) {
-                        $($(currentRow)).prop("class", "row deletedRecords wntyDelaysLine");
-                    }
-
-                    $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
-                    $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
-
-                    $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
-                    $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
-                }
             });
 
             //cloned to new daily report
@@ -377,7 +343,7 @@
 
                 //disable select2 for this particular dropdown, select all team members and then re-enable select2
                 currentRow.find(".Team_dpdwn").select2('destroy').find('option').prop('selected', 'selected');
-                fn_enableSelect2();   
+                fn_enableSelect2();
             });
 
             //differs between new daily report and an existing one
@@ -459,7 +425,7 @@
             $("#saveAndSubmit_btn").click(function () {//when the add button is clicked...
 
                 //console.log("Total number of indexWorkDescEntries_Add: " + indexWorkDescEntries_Add);
-                fn_exitSubmit(1);               
+                fn_exitSubmit(1);
             });
 
             //
@@ -486,6 +452,8 @@
                 var totalOpsToDo = recordsToAddStatus;//stores the total number of types of ops to carry out
                 var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
                 console.log("total operations to complete on entry is: " + totalOpsToDo);
+
+                fn_showSpinner();
 
                 var data = {
                     dailyReportID: 0,
@@ -524,7 +492,7 @@
             }
 
             //cloned to new daily report
-            function fn_loadTimeEntries_Add () {
+            function fn_loadTimeEntries_Add() {
 
                 var workDescTeam_narr_div_Content_Add = $(".addRecord").find(".workDescTeam_narr_div");
                 var workDescTeam_dpdwn_Content_Add;
@@ -672,6 +640,16 @@
             //BEGIN MISCELLANEOUS SECTION
 
             //cloned to new daily report
+            function fn_showSpinner() {
+                $.LoadingOverlay("show", {
+                    image: "",
+                    fontawesome: "fa fa-cog fa-spin"
+                });
+
+                $('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
+            }
+
+            //cloned to new daily report
             function fn_printArrays() {
                 //console.clear();
 
@@ -756,7 +734,7 @@
 
             $("#disableSelect2").click(function () {
                 fn_disableSelect2();
-            }); 
+            });
 
             //END MISCELLANEOUS SECTION
 
@@ -828,18 +806,30 @@
 
                 if (narrDiv.length < 10) {
                     //console.log("Narr div is empty.")
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Narrative must be greater than 10 characters.',
+                    });
                     rowFilled = false;
                     return rowFilled;
                 }
 
-                if (teamDiv == "") {
+                if (teamDiv.length < 1) {
                     //console.log("dpdwn_div div is empty.")
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Must have at least one team member',
+                    });
                     rowFilled = false;
                     return rowFilled;
                 }
 
                 if (hoursDiv == "" || !hoursDivMatch) {
                     //console.log("Hours div is empty or the hours do match the pattern.")
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Hours must be of form H.0, H.25, H.5, or H.75.',
+                    });
                     rowFilled = false;
                     return rowFilled;
                 }
@@ -847,7 +837,7 @@
                 return rowFilled;
             }
             //END VALIDATION BEFORE SAVING SECTION
-               
+
         });//end document read jquery statements
     </script>
 </head>
@@ -888,12 +878,6 @@
             <input type="text" id="input_jobs_dpdown" name="" style="width:100%" hidden>
         </div>
         <div class="md-col-5" style="padding:5px"></div>
-        <div class="md-col-1" style="padding:5px">
-            <strong>Date:</strong>
-        </div>
-        <div class="md-col-2" style="padding:5px">
-            <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value=@DateTime.Today.ToString("yyyy-MM-dd")>
-        </div>
     </div>
     <div class="row">
         <div class="col-2" style="padding:5px">
@@ -923,10 +907,12 @@
             <strong>Customer Contact:</strong>
         </div>
         <div class="col-4" style="padding:5px" id="output_customerContact"></div>
-        <div class="col-2" style="padding:5px">
-            <strong>Correspondents:</strong>
+        <div class="col-4" style="padding:5px">
+            <div>
+                <span><strong>Correspondents:</strong></span>
+                <span class="" id="output_jobCrspdtInfo" style="pointer-events:none"></span>
+            </div>
         </div>
-
     </div>
     <div class="row">
         <div class="col-2" style="padding:5px">
@@ -937,25 +923,31 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-2" style="padding:5px">
-            <strong>Start Time:</strong>
-        </div>
-        <div class="col-2" style="padding:5px">
-            <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="">
-        </div>
-        <div class="col-2" style="padding:5px">
-            <strong>End Time:</strong>
-        </div>
-        <div class="col-2" style="padding:5px">
-            <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="">
-        </div>
-        <div class="col-2" style="padding:5px">
-            <strong>Lunch (hr)</strong>
-        </div>
-        <div class="col-1" style="padding:5px">
-            <input type="text" class="form-control form-control-sm" id="input_lunch" value="1">
-        </div>
-        <div class="col-1" style="padding:5px">
+        <div class="col-12" style="padding:5px; text-align:center">
+            <span class="span_inlineBlock">
+                <strong>Date:</strong>
+            </span>
+            <span class="span_inlineBlock">
+                <input type="date" class="form-control form-control-sm" id="slct_date" placeholder="" value=@DateTime.Today.ToString("yyyy-MM-dd")>
+            </span>
+            <span class="span_inlineBlock">
+                <strong>Start Time:</strong>
+            </span>
+            <span class="span_inlineBlock">
+                <input type="time" class="form-control form-control-sm" id="input_startTime" placeholder="" value="">
+            </span>
+            <span class="span_inlineBlock">
+                <strong>End Time:</strong>
+            </span>
+            <span class="span_inlineBlock">
+                <input type="time" class="form-control form-control-sm" id="input_endTime" placeholder="" value="">
+            </span>
+            <span class="span_inlineBlock">
+                <strong>Lunch (hr)</strong>
+            </span>
+            <span class="span_inlineBlock">
+                <input type="text" class="form-control form-control-sm" id="input_lunch" value="1">
+            </span>
         </div>
     </div>
 </div>
