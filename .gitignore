@@ -14,3 +14,5 @@ allpax_service_record.csproj.user
 bin/allpax_service_record.pdb
 obj/Debug/allpax_service_record.dll
 obj/Debug/allpax_service_record.pdb
+*.dll
+*.pdb
