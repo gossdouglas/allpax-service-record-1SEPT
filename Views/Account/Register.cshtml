@@ -11,6 +11,42 @@
             <h4>Create a new account.</h4>
             @Html.ValidationSummary("", new { @class = "text-danger" })
             <div class="form-group">
+                @Html.LabelFor(m => m.name, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.name, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ShortName, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.ShortName, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @*@Html.LabelFor(m => m.admin, new { @class = "col-md-2 control-label" })*@
+                <div class="col-md-10">
+                    @*@Html.TextBoxFor(m => m.admin, new { @class = "form-control" })*@
+
+                    @Html.CheckBoxFor(m => m.admin)
+                    @Html.LabelFor(m => m.admin)
+                </div>
+            </div>
+            <div class="form-group">
+                @*@Html.LabelFor(m => m.active, new { @class = "col-md-2 control-label" })*@
+                <div class="col-md-10">
+                    @*@Html.TextBoxFor(m => m.active, new { @class = "form-control" })*@
+
+                    @Html.CheckBoxFor(m => m.active)
+                    @Html.LabelFor(m => m.active)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
                 @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
                 <div class="col-md-10">
                     @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })

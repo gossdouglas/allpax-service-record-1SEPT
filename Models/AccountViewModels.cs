@@ -64,6 +64,37 @@ namespace allpax_service_record.Models
 
     public class RegisterViewModel
     {
+
+        //ADDED BY GOSS
+        [Required]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+
+        //ADDED BY GOSS
+        [Required]
+        [Display(Name = "Full Name")]
+        public string name { get; set; }
+
+        //ADDED BY GOSS
+        [Required]
+        [Display(Name = "Short Name")]
+        public string ShortName { get; set; }
+
+        ////ADDED BY GOSS
+        //[Required]
+        //[Display(Name = "DB Password")]
+        //public string password { get; set; }
+
+        //ADDED BY GOSS
+        [Required]
+        [Display(Name = "Admin Status")]
+        public bool admin { get; set; }
+
+        //ADDED BY GOSS
+        [Required]
+        [Display(Name = "Active")]
+        public bool active { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
