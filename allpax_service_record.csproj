@@ -188,12 +188,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Controllers\workDescPrintController.cs" />
-    <Compile Include="Controllers\workDescController.cs" />
-    <Compile Include="Controllers\workDescDelaysPrintController.cs" />
-    <Compile Include="Controllers\workDescWntyDelaysPrintController.cs" />
-    <Compile Include="Controllers\workDescWntyDelaysController.cs" />
-    <Compile Include="Controllers\workDescDelaysController.cs" />
     <Compile Include="DataService.asmx.cs">
       <DependentUpon>DataService.asmx</DependentUpon>
       <SubType>Component</SubType>
