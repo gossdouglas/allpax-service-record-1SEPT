@@ -1,0 +1,104 @@
+﻿@using allpax_service_record.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+    ViewBag.ReturnUrl = "/dailyReportAll";
+}
+
+<head>
+    <script>
+
+        var inputEmail = $("#inputEmail").val();
+        var inputPassword = $("#inputPassword").val();
+        var inputRememberMe = $("#inputRememberMe").val();
+        var inputSubmit = $("#inputSubmit");
+        var returnURL = @ViewBag.ReturnUrl;
+
+        inputSubmit.click(function () {
+
+            $.ajax({
+                url: '/Account/Login',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    Email: inputEmail.val(),
+                    Password: inputPassword.val(),
+                    RememberMe: inputRememberMe,
+                    returnUrl: returnURL
+                },
+                success: function (data) {
+
+                    //$(data).each(function (index, item) {
+                    //    $("#output_customerName").html(item.customerName.toString());
+                    //    $("#output_location").html(item.address.toString());
+                    //    $("#output_customerCode").html(item.customerCode.toString());
+                    //    $("#output_customerContact").html(item.customerContact.toString());
+                    //});
+                }
+            });
+        });
+    </script>
+</head>
+        <div class="col-md-6 offset-md-3">
+        <div class="row justify-content-center">
+            <section id="loginForm">
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+                <div class="container" id="">
+                    <form>
+                        @Html.AntiForgeryToken()
+                        <h4>Log into your account for access.</h4>
+                        @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                @*<label for="inputEmail">Email</label>
+                                <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter email">*@
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                @*<label for="inputPassword">Password</label>
+                                <input type="password" class="form-control" id="inputPassword" placeholder="Password">*@
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <div class="checkbox">
+                                    @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe)
+                                    @*<input type="checkbox" class="form-check-input" id="inputRememberMe">
+                                    <label class="form-check-label" for="inputRememberMe">Remember Me</label>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input id="inputSubmit" type="submit" value="Log in" class="btn btn-default" />
+                                @Html.ActionLink("Register as a new user", "Register")
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                        @Html.ActionLink("Register as a new user", "Register")
+                </div>*@
+                        @* Enable this once you have account confirmation enabled for password reset functionality
+                <p>
+                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                </p>*@
+                    </form>
+                </div>
+                        }
+            </section>
+        </div>
+        </div>
+
+
+    
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+            }
