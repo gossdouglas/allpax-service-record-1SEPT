@@ -80,11 +80,6 @@ namespace allpax_service_record.Models
         [Display(Name = "Short Name")]
         public string ShortName { get; set; }
 
-        ////ADDED BY GOSS
-        //[Required]
-        //[Display(Name = "DB Password")]
-        //public string password { get; set; }
-
         //ADDED BY GOSS
         [Required]
         [Display(Name = "Admin Status")]

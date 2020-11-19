@@ -10,13 +10,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using allpax_service_record.Models;
 
-using System.Collections.Generic;
-using System.Configuration;
+//added by Goss
 using System.Data;
-using System.Data.Entity;
-using System.Data.SqlClient;
-using System.Net;
-using System.Diagnostics;
 
 namespace allpax_service_record.Controllers
 {
@@ -173,6 +168,7 @@ namespace allpax_service_record.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
+                    //need to remove the password field from tbl_Users because the password is handled by ASP.net Identity
                     db.Database.ExecuteSqlCommand("Insert into tbl_Users (userName, password, name, shortName, admin, active) " +
                         "Values({0}, {1}, {2}, {3}, {4}, {5})", model.UserName, "password", model.name, model.ShortName, model.admin, model.active);
 
