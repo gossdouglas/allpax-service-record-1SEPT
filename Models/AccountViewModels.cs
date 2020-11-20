@@ -26,9 +26,8 @@ namespace allpax_service_record.Models
         public bool RememberMe { get; set; }
     }
 
-    public class RegisterViewModel
+    public partial class RegisterViewModel
     {
-
         //ADDED BY GOSS
         [Required]
         [Display(Name = "User Name")]
