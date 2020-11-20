@@ -1,4 +1,5 @@
 ﻿@model allpax_service_record.Models.RegisterViewModel
+@*@model allpax_service_record.Models.View_Models.vm_userAcctInfo*@
 @{
     ViewBag.Title = "Register";
 }
@@ -59,10 +60,9 @@
 
             //enable the select2 add-on
             function fn_enableSelect2() {
-                $('.Team_dpdwn').select2({
-                    //width: "100%",
-                    width: "80%",
-                    placeholder: "Select Team",
+                $('.select2').select2({
+                    width: "100%",
+                    //width: "80%",
                     closeOnSelect: "false"
                 })
             }
@@ -139,23 +139,6 @@
             }
         </div>
     </div>*@
-
-@*BEGIN RETURNED RECORDS*@
-@foreach (var item in Model.userAcctInfo)
-{
-    //BEGIN TEMPORARY LOOP VARIABLES
-    string temp_name = item.name;
-    string temp_shortName = item.ShortName;
-    string temp_userName = item.UserName;
-    string temp_email = item.Email;
-    bool temp_admin = item.admin;
-    bool temp_active = item.active;
-    //END TEMPORARY LOOP VARIABLES
-
-    
-}
-
-@*END RETURNED RECORDS*@
 
 @*BEGIN WORK DESCRIPTION SECTION*@
 <hr class="sectionSeparator">
@@ -243,37 +226,76 @@
                     </div>
                 </div>
             </div>
-
-            @*<div class="row entryRow workDescriptionLine_template_row_hidden" id="" style="" hidden>
-                    <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style=""></div>
-                    <div class="col-3 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
-                        <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
-                        <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
-                        </select>
-                    </div>
-                    <div class="col-3 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
-
-                    </div>
-
-                    <div class="col-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>
-
-                    <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
-                        <button class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-
-                        <button class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                        <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                        <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                    </div>
-
-                    <div class="col-1 state_div workDescTeam_state_div" style="padding:0px;">
-                        <button class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
-                    </div>
-                </div>*@
         </div>
     }
     @*END NEW WORK DESCRIPTION TEMPLATE*@
+
+    @*END WORK DESCRIPTION SECTION*@
+
+    @*BEGIN RETURNED RECORDS*@
+    @foreach (var item in Model.userAcctInfo)
+    {
+        //BEGIN TEMPORARY LOOP VARIABLES
+        string temp_name = item.name;
+        string temp_shortName = item.ShortName;
+        string temp_userName = item.UserName;
+        string temp_email = item.Email;
+        bool temp_admin = item.admin;
+        bool temp_active = item.active;
+        //END TEMPORARY LOOP VARIABLES
+
+        <hr class="sectionSeparator">
+        <div class=" row returnedRecords" id="" data-time-Entry-ID="" style="">
+            <div class="col-2 fullName_div" id="" contenteditable="false" style="">@temp_name</div>
+            <div class="col-1 shortName_div" id="" contenteditable="false" style="">@temp_shortName</div>
+            <div class="col-1 userName_div" id="" contenteditable="false" style="">@temp_userName</div>
+            <div class="col-2 email_div" id="" contenteditable="false" style="">@temp_email</div>
+            <div class="col-1 password_div" id="" contenteditable="false" style="">N/A</div>
+            <div class="col-1 confirmPassword_div" id="" contenteditable="false" style="">N/A</div>
+            <div class="col-1 admin_div" style="padding:0px;">
+                <select class="select2 admin_dpdwn" id="" aria-hidden="false" disabled>
+                    @if (temp_admin)
+                    {
+                        <option value="1" selected>TRUE</option>
+                        <option value="0">FALSE</option>
+                    }
+                    else
+                    {
+                        <option value="1">TRUE</option>
+                        <option value="0" selected>FALSE</option>
+                    }
+                </select>
+            </div>
+            <div class="col-1 active_div" style="padding:0px;">
+                <select class="select2 active_dpdwn" id="" aria-hidden="false" disabled>
+                    @if (temp_active)
+                    {
+                        <option value="1" selected>TRUE</option>
+                        <option value="0">FALSE</option>
+                    }
+                    else
+                    {
+                        <option value="1">TRUE</option>
+                        <option value="0" selected>FALSE</option>
+                    }
+                </select>
+            </div>          
+            <div class="col-1 button_div" style="padding:0px;">
+                <button id="" class="btn btn-light btn-sm Btn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class="btn btn-light btn-sm Btn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+            </div>
+            <div class="col-1 state_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
+                <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
+                <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>
+            </div>
+        </div>
+    }
+
+    @*END RETURNED RECORDS*@
 </div>
-@*END WORK DESCRIPTION SECTION*@
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

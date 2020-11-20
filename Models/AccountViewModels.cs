@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using allpax_service_record.Models.View_Models;
 
 namespace allpax_service_record.Models
 {
@@ -26,7 +27,7 @@ namespace allpax_service_record.Models
         public bool RememberMe { get; set; }
     }
 
-    public partial class RegisterViewModel
+    public class RegisterViewModel
     {
         //ADDED BY GOSS
         [Required]
@@ -68,6 +69,8 @@ namespace allpax_service_record.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public List<vm_userAcctInfo> userAcctInfo { get; set; }
     }
 
     public class ResetPasswordViewModel

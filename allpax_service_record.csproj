@@ -214,6 +214,7 @@
     <Compile Include="Models\tbl_dailyReportUsers.cs" />
     <Compile Include="Models\tbl_customers.cs" />
     <Compile Include="Models\tbl_dailyReport.cs" />
+    <Compile Include="Models\View Models\vm_userAcctInfo.cs" />
     <Compile Include="Models\View Models\vm_jobCrspdtInfo.cs" />
     <Compile Include="Models\View Models\vm_wntyDelays.cs" />
     <Compile Include="Models\View Models\vm_delays.cs" />
@@ -2532,6 +2533,8 @@
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\getUserAcctInfo\Index.cshtml" />
+    <Content Include="Views\Account\getUserAcctInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

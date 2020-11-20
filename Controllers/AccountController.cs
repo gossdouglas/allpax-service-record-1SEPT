@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -9,8 +11,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using allpax_service_record.Models;
-
-//added by Goss
+using allpax_service_record.Models.View_Models;
+using System.Data.SqlClient;
 using System.Data;
 
 namespace allpax_service_record.Controllers
@@ -130,13 +132,60 @@ namespace allpax_service_record.Controllers
                         "Values({0}, {1}, {2}, {3}, {4}, {5})", model.UserName, "password", model.name, model.ShortName, model.admin, model.active);
 
                     //return RedirectToAction("Index", "Home");
-                    return RedirectToAction("Index", "dailyReportAll");
+                    //return RedirectToAction("Index", "dailyReportAll");
+                    return RedirectToAction("GetUserAcctInfo", "Account");
                 }
                 AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        public ActionResult GetUserAcctInfo()
+        {
+            RegisterViewModel regViewModel = new RegisterViewModel();
+            List<vm_userAcctInfo> userAcctInfos = new List<vm_userAcctInfo>();
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            sqlconn.Open();
+
+            string sqlquery1 =
+                "SELECT tbl_Users.name, tbl_Users.shortName, AspNetUsers.UserName, AspNetUsers.email, tbl_Users.admin, tbl_Users.active " +
+
+                "FROM [allpax_service_record].[dbo].[AspNetUsers] " +
+
+                "INNER JOIN " +
+                "tbl_Users ON tbl_Users.userName = AspNetUsers.UserName"; 
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            //sqlcomm1.Parameters.AddWithValue("@reportID", reportID);
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                vm_userAcctInfo userAcctInfo = new vm_userAcctInfo();
+
+                userAcctInfo.name = dr1[0].ToString();
+                userAcctInfo.ShortName = dr1[1].ToString();
+                userAcctInfo.UserName = dr1[2].ToString();
+                userAcctInfo.Email = dr1[3].ToString();
+                userAcctInfo.admin = (bool)dr1[4];
+                userAcctInfo.active = (bool)dr1[5];
+
+                userAcctInfos.Add(userAcctInfo);//add all of the revelevant data objects to dailyReportByID...
+            }
+
+            regViewModel.userAcctInfo = userAcctInfos;
+
+            sqlconn.Close();
+
+            //return View(userAcctInfos);//...to be passed to the view
+            return View(regViewModel);//...to be passed to the view
+
+            //return RedirectToAction("Index", "dailyReportAll");//redirects, and the daily report does kick out the records to its view
         }
 
         //
