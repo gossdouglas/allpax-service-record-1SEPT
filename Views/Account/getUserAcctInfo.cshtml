@@ -140,7 +140,7 @@
         </div>
     </div>*@
 
-@*BEGIN WORK DESCRIPTION SECTION*@
+@*BEGIN USER SECTION*@
 <hr class="sectionSeparator">
 <div class="container-fluid" id="userData_container">
     <div class="row">
@@ -175,7 +175,7 @@
             <strong>State</strong>
         </div>
     </div>
-    @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
+    @*BEGIN NEW USER TEMPLATE*@
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
@@ -228,9 +228,7 @@
             </div>
         </div>
     }
-    @*END NEW WORK DESCRIPTION TEMPLATE*@
-
-    @*END WORK DESCRIPTION SECTION*@
+    @*END NEW USER TEMPLATE*@
 
     @*BEGIN RETURNED RECORDS*@
     @foreach (var item in Model.userAcctInfo)
@@ -279,7 +277,7 @@
                         <option value="0" selected>FALSE</option>
                     }
                 </select>
-            </div>          
+            </div>
             <div class="col-1 button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
                 <button class="btn btn-light btn-sm Btn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
@@ -295,7 +293,7 @@
 
     @*END RETURNED RECORDS*@
 </div>
-
+@*END USER SECTION*@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
