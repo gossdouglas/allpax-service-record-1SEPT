@@ -2535,6 +2535,9 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\getUserAcctInfo\Index.cshtml" />
     <Content Include="Views\Account\getUserAcctInfo.cshtml" />
+    <Content Include="Views\Account\getUserAcctInfo-mine.cshtml" />
+    <Content Include="Views\Account\getUserAcctInfo-canned.cshtml" />
+    <Content Include="Views\Account\Register-broken.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

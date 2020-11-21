@@ -107,44 +107,12 @@ namespace allpax_service_record.Controllers
 
         //
         // POST: /Account/Register
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Register(RegisterViewModel model)
-        //{
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-        //        var result = await UserManager.CreateAsync(user, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-
-        //            // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-        //            // Send an email with this link
-        //            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-        //            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-        //            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-        //            //need to remove the password field from tbl_Users because the password is handled by ASP.net Identity
-        //            db.Database.ExecuteSqlCommand("Insert into tbl_Users (userName, password, name, shortName, admin, active) " +
-        //                "Values({0}, {1}, {2}, {3}, {4}, {5})", model.UserName, "password", model.name, model.ShortName, model.admin, model.active);
-
-        //            //return RedirectToAction("Index", "Home");
-        //            //return RedirectToAction("Index", "dailyReportAll");
-        //            return RedirectToAction("GetUserAcctInfo", "Account");
-        //        }
-        //        AddErrors(result);
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
-
-        //public ActionResult RegisterNewUser (RegisterViewModel model)
-        public async Task<ActionResult> RegisterNewUser(RegisterViewModel model)
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Register(RegisterViewModel model)
         {
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
@@ -170,8 +138,40 @@ namespace allpax_service_record.Controllers
                 AddErrors(result);
             }
 
+            // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+        //public ActionResult RegisterNewUser (RegisterViewModel model)
+        //public async Task<ActionResult> RegisterNewUser(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+        //            // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+        //            // Send an email with this link
+        //            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+        //            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+        //            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+        //            //need to remove the password field from tbl_Users because the password is handled by ASP.net Identity
+        //            db.Database.ExecuteSqlCommand("Insert into tbl_Users (userName, password, name, shortName, admin, active) " +
+        //                "Values({0}, {1}, {2}, {3}, {4}, {5})", model.UserName, "password", model.name, model.ShortName, model.admin, model.active);
+
+        //            //return RedirectToAction("Index", "Home");
+        //            //return RedirectToAction("Index", "dailyReportAll");
+        //            return RedirectToAction("GetUserAcctInfo", "Account");
+        //        }
+        //        AddErrors(result);
+        //    }
+
+        //    return View(model);
+        //}
         public ActionResult GetUserAcctInfo()
         {
             RegisterViewModel regViewModel = new RegisterViewModel();
