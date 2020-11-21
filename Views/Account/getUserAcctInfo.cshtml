@@ -156,35 +156,24 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="form-group">
-
             <div class="" id="userLine_template" style="">
                 <div class="row entryRow userLine_template_row_active" id="" style="">
-
-                    <div class="col-2 fullName_div" id="fullName_div" contenteditable="true" style="">@*@Html.TextBoxFor(m => m.name, new { @class = "form-control" })*@</div>
-                    <div class="col-1 shortName_div" id="shortName_div" contenteditable="true" style="">@*@Html.TextBoxFor(m => m.ShortName, new { @class = "form-control" })*@</div>
-                    <div class="col-1 userName_div" id="userName_div" contenteditable="true" style="">@*@Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })*@</div>
-                    <div class="col-2 email_div" id="email_div" contenteditable="true" style="">@*@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })*@</div>
-                    <div class="col-1 password_div" id="password_div" contenteditable="true" style="">@*@Html.PasswordFor(m => m.Password, new { @class = "form-control" })*@</div>
-                    <div class="col-1 confirmPassword_div" id="confirmPassword_div" contenteditable="true" style="">@*@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })*@</div>
-                    <div class="col-1 admin_div" id="admin_div" style="padding:0px;" contenteditable="true">@*@Html.CheckBoxFor(m => m.admin)*@</div>
-                    <div class="col-1 active_div" id="active_div" style="padding:0px;" contenteditable="true">@*@Html.CheckBoxFor(m => m.active)*@</div>
+                    <div class="col-2 fullName_div" id="fullName_div" contenteditable="false" style="">@Html.TextBoxFor(m => m.name, new { @class = "form-control" })</div>
+                    <div class="col-1 shortName_div" id="shortName_div" contenteditable="false" style="">@Html.TextBoxFor(m => m.ShortName, new { @class = "form-control" })</div>
+                    <div class="col-1 userName_div" id="userName_div" contenteditable="false" style="">@Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })</div>
+                    <div class="col-2 email_div" id="email_div" contenteditable="false" style="">@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })</div>
+                    <div class="col-1 password_div" id="password_div" contenteditable="false" style="">@Html.PasswordFor(m => m.Password, new { @class = "form-control" })</div>
+                    <div class="col-1 confirmPassword_div" id="confirmPassword_div" contenteditable="false" style="">@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })</div>
+                    <div class="col-1 admin_div" id="admin_div" style="padding:0px;" contenteditable="false">@Html.CheckBoxFor(m => m.admin)</div>
+                    <div class="col-1 active_div" id="active_div" style="padding:0px;" contenteditable="false">@Html.CheckBoxFor(m => m.active)</div>
                     <div class="col-1 button_div" id="button_div" style="padding:0px;">
-
-                        @*<button id="" type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
-                        <button id="" type="submit" class="btn btn-light btn-sm Btn_add" value=""><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-
-                        @*<button id="saveAndSubmit_btn" type="submit" class="btn btn-light btn-sm Btn_add" value=""><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
-
-                        @*<button id="" class="btn btn-light btn-sm Btn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class='btn btn-light btn-sm Btn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-        <button class='btn btn-light btn-sm Btn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>*@
+                        <button id="" type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>                        
                     </div>
                     <div class="col-1 state_div" style="padding:0px;">
                         <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
                     </div>
                 </div>
             </div>
-
         </div>
     }
     @*END NEW USER TEMPLATE*@
