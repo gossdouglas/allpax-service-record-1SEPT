@@ -72,73 +72,48 @@
                 $('.Team_dpdwn').select2('destroy')
             }
 
+            $("#saveAndSubmit_btn").click(function () {
+            //function fn_submit() {
+
+                var addItem1 = $("#fullName_div").html();
+                var addItem2 = $("#shortName_div").html();
+                var addItem3 = $("#userName_div").html();
+                var addItem4 = $("#email_div").html();
+                var addItem5 = $("#password_div").html();
+                var addItem6 = $("#confirmPassword_div").html();
+                var addItem7 = $("#admin_div").html();
+                var addItem8 = $("#active_div").html();
+
+                var data = {
+                    name: addItem1,
+                    ShortName: addItem2,
+                    UserName: addItem3,
+                    Email: addItem4,
+                    Password: addItem5,
+                    ConfirmPassword: addItem6,
+                    admin: "true",
+                    active: "true"
+                };
+
+                console.log(data);
+
+                $.ajax({
+                    url: '/Account/RegisterNewUser',
+                    //url: '/Account/Register',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+
+                    }
+                });
+            });
+
         });//end document read jquery statements
     </script>
 </head>
-
-@*<div class="col-md-6 offset-md-3">
-        <div class="row justify-content-center">
-            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>Create a new account.</h4>
-                @Html.ValidationSummary("", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.name, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.name, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.ShortName, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.ShortName, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.CheckBoxFor(m => m.admin)
-                        @Html.LabelFor(m => m.admin)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.CheckBoxFor(m => m.active)
-                        @Html.LabelFor(m => m.active)
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" class="btn btn-default" value="Register" />
-                    </div>
-                </div>
-            }
-        </div>
-    </div>*@
 
 @*BEGIN USER SECTION*@
 <hr class="sectionSeparator">
@@ -176,14 +151,37 @@
         </div>
     </div>
     @*BEGIN NEW USER TEMPLATE*@
-    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @*@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary("", new { @class = "text-danger" })
-        <div class="form-group">
+        <div class="form-group">*@
             <div class="" id="userLine_template" style="">
                 <div class="row entryRow userLine_template_row_active" id="" style="">
 
+                    <div class="col-2 fullName_div" id="fullName_div" contenteditable="true" style="">@*@Html.TextBoxFor(m => m.name, new { @class = "form-control" })*@</div>
+                    <div class="col-1 shortName_div" id="shortName_div" contenteditable="true" style="">@*@Html.TextBoxFor(m => m.ShortName, new { @class = "form-control" })*@</div>
+                    <div class="col-1 userName_div" id="userName_div" contenteditable="true" style="">@*@Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })*@</div>
+                    <div class="col-2 email_div" id="email_div" contenteditable="true" style="">@*@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })*@</div>
+                    <div class="col-1 password_div" id="password_div" contenteditable="true" style="">@*@Html.PasswordFor(m => m.Password, new { @class = "form-control" })*@</div>
+                    <div class="col-1 confirmPassword_div" id="confirmPassword_div" contenteditable="true" style="">@*@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })*@</div>
+                    <div class="col-1 admin_div" id="admin_div" style="padding:0px;" contenteditable="true">@*@Html.CheckBoxFor(m => m.admin)*@</div>
+                    <div class="col-1 active_div" id="active_div" style="padding:0px;" contenteditable="true">@*@Html.CheckBoxFor(m => m.active)*@</div>
+                    <div class="col-1 button_div" id="button_div" style="padding:0px;">
+                        @*<button id="" type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
+                        <button id="saveAndSubmit_btn" type="submit" class="btn btn-light btn-sm Btn_add" value=""><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+
+                        @*<button id="" class="btn btn-light btn-sm Btn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+        <button class='btn btn-light btn-sm Btn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+        <button class='btn btn-light btn-sm Btn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>*@
+                    </div>
+                    <div class="col-1 state_div" style="padding:0px;">
+                        <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
+                    </div>
+                </div>
+
+                @*<div class="row entryRow userLine_template_row_hidden" id="" style="" hidden>
+
                     <div class="col-2 fullName_div" id="" contenteditable="false" style="">@Html.TextBoxFor(m => m.name, new { @class = "form-control" })</div>
                     <div class="col-1 shortName_div" id="" contenteditable="false" style="">@Html.TextBoxFor(m => m.ShortName, new { @class = "form-control" })</div>
                     <div class="col-1 userName_div" id="" contenteditable="false" style="">@Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })</div>
@@ -202,32 +200,10 @@
                     <div class="col-1 state_div" style="padding:0px;">
                         <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
                     </div>
-                </div>
-
-                <div class="row entryRow userLine_template_row_hidden" id="" style="" hidden>
-
-                    <div class="col-2 fullName_div" id="" contenteditable="false" style="">@Html.TextBoxFor(m => m.name, new { @class = "form-control" })</div>
-                    <div class="col-1 shortName_div" id="" contenteditable="false" style="">@Html.TextBoxFor(m => m.ShortName, new { @class = "form-control" })</div>
-                    <div class="col-1 userName_div" id="" contenteditable="false" style="">@Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })</div>
-                    <div class="col-2 email_div" id="" contenteditable="false" style="">@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })</div>
-                    <div class="col-1 password_div" id="" contenteditable="false" style="">@Html.PasswordFor(m => m.Password, new { @class = "form-control" })</div>
-                    <div class="col-1 confirmPassword_div" id="" contenteditable="false" style="">@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })</div>
-                    <div class="col-1 admin_div" style="padding:0px;">@Html.CheckBoxFor(m => m.admin)</div>
-                    <div class="col-1 active_div" style="padding:0px;">@Html.CheckBoxFor(m => m.active)</div>
-                    <div class="col-1 button_div" style="padding:0px;">
-                        <button id="" type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-
-                        <button id="" class="btn btn-light btn-sm Btn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                        <button class='btn btn-light btn-sm Btn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                        <button class='btn btn-light btn-sm Btn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-                    </div>
-                    <div class="col-1 state_div" style="padding:0px;">
-                        <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
-                    </div>
-                </div>
+                </div>*@
             </div>
-        </div>
-    }
+        @*</div>*@
+    @*}*@
     @*END NEW USER TEMPLATE*@
 
     @*BEGIN RETURNED RECORDS*@
