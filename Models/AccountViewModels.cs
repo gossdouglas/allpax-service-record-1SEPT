@@ -13,10 +13,15 @@ namespace allpax_service_record.Models
 
     public class LoginViewModel
     {
+        //ADDED BY GOSS
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+
+        //[Required]
+        //[Display(Name = "Email")]
+        //[EmailAddress]
+        //public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

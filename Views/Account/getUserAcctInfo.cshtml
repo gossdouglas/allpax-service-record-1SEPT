@@ -26,7 +26,7 @@
             padding: 5px;
         }
 
-        .state_div {
+        .button_div {
             border-right: 1px solid black;
         }
 
@@ -111,6 +111,50 @@
                 });
             });
 
+            $('#userEditForm').on('show.bs.modal', function (event) {
+                console.clear();
+
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var temp_fullName = button.data('full-name') // Extract info from data-* attributes
+                var temp_shortName = button.data('short-name') // Extract info from data-* attributes
+                var temp_userName = button.data('user-name') // Extract info from data-* attributes
+                var temp_email = button.data('email') // Extract info from data-* attributes
+                var temp_admin = button.data('admin') // Extract info from data-* attributes
+                var temp_active = button.data('active') // Extract info from data-* attributes
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                var modal = $(this)
+                modal.find('.modal-title').text('User Edit Form')
+                //modal.find('.modal-body input').val(temp_fullName)
+                modal.find('.full-name').val(temp_fullName)
+                modal.find('.short-name').val(temp_shortName)
+                modal.find('.user-name').val(temp_userName)
+                modal.find('.email').val(temp_email)
+                //modal.find('.admin').val(temp_admin)
+                modal.find('#modal_admin').val(temp_admin)
+                modal.find('.active').val(temp_active)
+                console.log("temp_admin: " + temp_admin)
+                console.log("temp_active: " + temp_active)
+
+                //if (temp_admin == true) {//doesn't work
+                //if (temp_admin === true) {//doesn't work
+                if (temp_admin == "True") {//doesn't work
+                    console.log("temp_admin is true.")
+                    modal.find('#modal_admin').prop('checked', true);
+                }
+                else {
+                    modal.find('#modal_admin').prop('checked', false);
+                }
+
+                if (temp_active == "True") {//doesn't work
+                    console.log("temp_active is true.")
+                    modal.find('#modal_active').prop('checked', true);
+                }
+                else {
+                    modal.find('#modal_active').prop('checked', false);
+                }
+            })
+
         });//end document read jquery statements
     </script>
 </head>
@@ -146,9 +190,9 @@
         <div class="col-1 button_hdr" style="padding:5px">
             <strong>Action</strong>
         </div>
-        <div class="col-1 state_hdr" style="padding:5px">
-            <strong>State</strong>
-        </div>
+        @*<div class="col-1 state_hdr" style="padding:5px">
+                <strong>State</strong>
+            </div>*@
     </div>
     @*BEGIN NEW USER TEMPLATE*@
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -196,56 +240,60 @@
             <div class="col-1 shortName_div" id="" contenteditable="false" style="">@temp_shortName</div>
             <div class="col-1 userName_div" id="" contenteditable="false" style="">@temp_userName</div>
             <div class="col-2 email_div" id="" contenteditable="false" style="">@temp_email</div>
-            <div class="col-1 password_div" id="" contenteditable="false" style="">N/A</div>
-            <div class="col-1 confirmPassword_div" id="" contenteditable="false" style="">N/A</div>
-            <div class="col-1 admin_div" style="padding:0px;">
-                <select class="select2 admin_dpdwn" id="" aria-hidden="false" disabled>
-                    @if (temp_admin)
-                    {
-                        <option value="1" selected>TRUE</option>
-                        <option value="0">FALSE</option>
-                    }
-                    else
-                    {
-                        <option value="1">TRUE</option>
-                        <option value="0" selected>FALSE</option>
-                    }
-                </select>
-            </div>
-            <div class="col-1 active_div" style="padding:0px;">
-                <select class="select2 active_dpdwn" id="" aria-hidden="false" disabled>
-                    @if (temp_active)
-                    {
-                        <option value="1" selected>TRUE</option>
-                        <option value="0">FALSE</option>
-                    }
-                    else
-                    {
-                        <option value="1">TRUE</option>
-                        <option value="0" selected>FALSE</option>
-                    }
-                </select>
-            </div>
+            @*<div class="col-1 password_div" id="" contenteditable="false" style="">N/A</div>*@
+            @*<div class="col-1 confirmPassword_div" id="" contenteditable="false" style="">N/A</div>*@
+            @*<div class="col-1 admin_div" style="padding:0px;">
+                    <select class="select2 admin_dpdwn" id="" aria-hidden="false" disabled>
+                        @if (temp_admin)
+                        {
+                            <option value="1" selected>TRUE</option>
+                            <option value="0">FALSE</option>
+                        }
+                        else
+                        {
+                            <option value="1">TRUE</option>
+                            <option value="0" selected>FALSE</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-1 active_div" style="padding:0px;">
+                    <select class="select2 active_dpdwn" id="" aria-hidden="false" disabled>
+                        @if (temp_active)
+                        {
+                            <option value="1" selected>TRUE</option>
+                            <option value="0">FALSE</option>
+                        }
+                        else
+                        {
+                            <option value="1">TRUE</option>
+                            <option value="0" selected>FALSE</option>
+                        }
+                    </select>
+                </div>*@
             <div class="col-1 button_div" style="padding:0px;">
-                <button id="" class="btn btn-light btn-sm Btn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                <button class="btn btn-light btn-sm Btn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-full-name="@temp_name"
+                        data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
+                    <i class="far fa-edit fa-2x" style="color:black;">
+                    </i>
+                </button>
                 <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
             </div>
-            <div class="col-1 state_div" style="padding:0px;">
+            @*<div class="col-1 state_div" style="padding:0px;">
                 <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
                 <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
                 <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>
-            </div>
+            </div>*@
         </div>
     }
 
     @*END RETURNED RECORDS*@
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @*BEGIN MODAL TEMPLATE*@
+    <div class="modal fade" id="userEditForm" tabindex="-1" role="dialog" aria-labelledby="userEditForm" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <h5 class="modal-title" id="userEditForm">Edit user</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -253,22 +301,50 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Recipient:</label>
-                            <input type="text" class="form-control" id="recipient-name">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
+                            <label for="full-name" class="col-form-label">Full Name:</label>
+                            <input type="text" class="form-control full-name" id="full-name">
+                            <label for="short-name" class="col-form-label">Short Name:</label>
+                            <input type="text" class="form-control short-name" id="short-name">
+                            <label for="user-name" class="col-form-label">User Name:</label>
+                            <input type="text" class="form-control user-name" id="user-name">
+                            <label for="email" class="col-form-label">E-mail:</label>
+                            <input type="text" class="form-control email" id="email">
+
+                            @*<label for="admin" class="col-form-label">Admin:</label>
+                            <input type="text" class="form-control" id="admin">*@
+
+                            @*<label for="active" class="col-form-label">Active:</label>*@
+                            @*<input type="text" class="form-control" id="active">*@
+
+                            @*<input class="form-check-input" type="checkbox" value="" id="active">*@
+                            @*<label class="form-check-label" for="defaultCheck1">
+            Default checkbox
+        </label>*@
+                            <div class="form-check">
+                                <input class="form-check-input admin" type="checkbox" value="" id="modal_admin">
+                                <label class="form-check-label" for="modal_admin">
+                                    Administrator
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input active" type="checkbox" value="" id="modal_active">
+                                <label class="form-check-label" for="modal_active">
+                                    Active
+                                </label>
+                            </div>
+
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Send message</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
+    @*BEGIN MODAL TEMPLATE*@
 
 </div>
 @*END USER SECTION*@
