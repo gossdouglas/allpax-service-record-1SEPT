@@ -130,30 +130,48 @@
                 modal.find('.short-name').val(temp_shortName)
                 modal.find('.user-name').val(temp_userName)
                 modal.find('.email').val(temp_email)
-                //modal.find('.admin').val(temp_admin)
-                modal.find('#modal_admin').val(temp_admin)
+                modal.find('.admin').val(temp_admin)
                 modal.find('.active').val(temp_active)
                 console.log("temp_admin: " + temp_admin)
                 console.log("temp_active: " + temp_active)
 
-                //if (temp_admin == true) {//doesn't work
-                //if (temp_admin === true) {//doesn't work
-                if (temp_admin == "True") {//doesn't work
+                if (temp_admin == "True") {
                     console.log("temp_admin is true.")
-                    modal.find('#modal_admin').prop('checked', true);
+                    modal.find('.admin').prop('checked', true);
                 }
                 else {
-                    modal.find('#modal_admin').prop('checked', false);
+                    modal.find('.admin').prop('checked', false);
                 }
 
-                if (temp_active == "True") {//doesn't work
+                if (temp_active == "True") {
                     console.log("temp_active is true.")
-                    modal.find('#modal_active').prop('checked', true);
+                    modal.find('.active').prop('checked', true);
                 }
                 else {
-                    modal.find('#modal_active').prop('checked', false);
+                    modal.find('.active').prop('checked', false);
                 }
             })
+
+            $(".userEditForm.btn_save").click(function () {
+                console.clear();
+
+                var modal = $(this).parent().parent();
+
+                var temp_fullName = modal.find('.full-name').val()
+                var temp_shortName = modal.find('.short-name').val()
+                var temp_userName = modal.find('.user-name').val()
+                var temp_email = modal.find('.email').val()
+                var temp_admin = modal.find('.admin').prop('checked')
+                var temp_active = modal.find('.active').prop('checked')
+
+                console.log("Save button was pressed.")
+                console.log("temp_fullName: " + temp_fullName)
+                console.log("temp_shortName: " + temp_shortName)
+                console.log("temp_userName: " + temp_userName)
+                console.log("temp_email: " + temp_email)
+                console.log("temp_admin: " + temp_admin)
+                console.log("temp_active: " + temp_active)
+            });
 
         });//end document read jquery statements
     </script>
@@ -211,10 +229,10 @@
                     <div class="col-1 admin_div" id="admin_div" style="padding:0px;" contenteditable="false">@Html.CheckBoxFor(m => m.admin)</div>
                     <div class="col-1 active_div" id="active_div" style="padding:0px;" contenteditable="false">@Html.CheckBoxFor(m => m.active)</div>
                     <div class="col-1 button_div" id="button_div" style="padding:0px;">
-                        <button id="" type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                        <button type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
                     </div>
                     <div class="col-1 state_div" style="padding:0px;">
-                        <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
+                        <button class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
                     </div>
                 </div>
             </div>
@@ -302,43 +320,30 @@
                     <form>
                         <div class="form-group">
                             <label for="full-name" class="col-form-label">Full Name:</label>
-                            <input type="text" class="form-control full-name" id="full-name">
+                            <input type="text" class="form-control full-name">
                             <label for="short-name" class="col-form-label">Short Name:</label>
-                            <input type="text" class="form-control short-name" id="short-name">
+                            <input type="text" class="form-control short-name">
                             <label for="user-name" class="col-form-label">User Name:</label>
-                            <input type="text" class="form-control user-name" id="user-name">
+                            <input type="text" class="form-control user-name">
                             <label for="email" class="col-form-label">E-mail:</label>
-                            <input type="text" class="form-control email" id="email">
-
-                            @*<label for="admin" class="col-form-label">Admin:</label>
-                            <input type="text" class="form-control" id="admin">*@
-
-                            @*<label for="active" class="col-form-label">Active:</label>*@
-                            @*<input type="text" class="form-control" id="active">*@
-
-                            @*<input class="form-check-input" type="checkbox" value="" id="active">*@
-                            @*<label class="form-check-label" for="defaultCheck1">
-            Default checkbox
-        </label>*@
+                            <input type="text" class="form-control email">
                             <div class="form-check">
-                                <input class="form-check-input admin" type="checkbox" value="" id="modal_admin">
-                                <label class="form-check-label" for="modal_admin">
+                                <input class="form-check-input admin" type="checkbox" value="">
+                                <label class="form-check-label" for="">
                                     Administrator
                                 </label>
                             </div>
-
                             <div class="form-check">
-                                <input class="form-check-input active" type="checkbox" value="" id="modal_active">
-                                <label class="form-check-label" for="modal_active">
+                                <input class="form-check-input active" type="checkbox" value="">
+                                <label class="form-check-label" for="">
                                     Active
                                 </label>
                             </div>
-
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Send message</button>
+                    <button type="button" class="btn btn-primary userEditForm btn_save">Save</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
