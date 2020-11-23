@@ -167,7 +167,7 @@
                     <div class="col-1 admin_div" id="admin_div" style="padding:0px;" contenteditable="false">@Html.CheckBoxFor(m => m.admin)</div>
                     <div class="col-1 active_div" id="active_div" style="padding:0px;" contenteditable="false">@Html.CheckBoxFor(m => m.active)</div>
                     <div class="col-1 button_div" id="button_div" style="padding:0px;">
-                        <button id="" type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>                        
+                        <button id="" type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
                     </div>
                     <div class="col-1 state_div" style="padding:0px;">
                         <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
@@ -240,6 +240,36 @@
     }
 
     @*END RETURNED RECORDS*@
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Recipient:</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Message:</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Send message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 @*END USER SECTION*@
 
