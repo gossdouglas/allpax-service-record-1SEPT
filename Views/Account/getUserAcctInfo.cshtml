@@ -115,23 +115,24 @@
                 console.clear();
 
                 var button = $(event.relatedTarget) // Button that triggered the modal
+                var temp_aspNetId = button.data('asp-net-id') // Extract info from data-* attributes
                 var temp_fullName = button.data('full-name') // Extract info from data-* attributes
                 var temp_shortName = button.data('short-name') // Extract info from data-* attributes
                 var temp_userName = button.data('user-name') // Extract info from data-* attributes
                 var temp_email = button.data('email') // Extract info from data-* attributes
                 var temp_admin = button.data('admin') // Extract info from data-* attributes
                 var temp_active = button.data('active') // Extract info from data-* attributes
-                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+
                 var modal = $(this)
                 modal.find('.modal-title').text('User Edit Form')
-                //modal.find('.modal-body input').val(temp_fullName)
+                modal.find('.asp-net-id').val(temp_aspNetId)
                 modal.find('.full-name').val(temp_fullName)
                 modal.find('.short-name').val(temp_shortName)
                 modal.find('.user-name').val(temp_userName)
                 modal.find('.email').val(temp_email)
                 modal.find('.admin').val(temp_admin)
                 modal.find('.active').val(temp_active)
+                console.log("temp_aspNetId: " + temp_aspNetId)
                 console.log("temp_admin: " + temp_admin)
                 console.log("temp_active: " + temp_active)
 
@@ -157,6 +158,7 @@
 
                 var modal = $(this).parent().parent();
 
+                var temp_aspNetId = modal.find('.asp-net-id').val()
                 var temp_fullName = modal.find('.full-name').val()
                 var temp_shortName = modal.find('.short-name').val()
                 var temp_userName = modal.find('.user-name').val()
@@ -165,12 +167,38 @@
                 var temp_active = modal.find('.active').prop('checked')
 
                 console.log("Save button was pressed.")
+                console.log("temp_aspNetId: " + temp_aspNetId)
                 console.log("temp_fullName: " + temp_fullName)
                 console.log("temp_shortName: " + temp_shortName)
                 console.log("temp_userName: " + temp_userName)
                 console.log("temp_email: " + temp_email)
                 console.log("temp_admin: " + temp_admin)
                 console.log("temp_active: " + temp_active)
+
+                var data = {
+                    aspNetId: temp_aspNetId,
+                    name: temp_fullName,
+                    ShortName: temp_shortName,
+                    UserName: temp_userName,
+                    Email: temp_email,
+                    admin: temp_admin,
+                    active: temp_active
+                };
+
+                console.log(data);
+
+                $.ajax({
+                    url: '/Account/UpdateUserAcctInfo',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        //console.log(response);
+                        window.location.href = response;
+                    }
+                });
             });
 
         });//end document read jquery statements
@@ -244,6 +272,7 @@
     @foreach (var item in Model.userAcctInfo)
     {
         //BEGIN TEMPORARY LOOP VARIABLES
+        string temp_aspNetId = item.aspNetId;
         string temp_name = item.name;
         string temp_shortName = item.ShortName;
         string temp_userName = item.UserName;
@@ -254,42 +283,47 @@
 
         <hr class="sectionSeparator">
         <div class=" row returnedRecords" id="" data-time-Entry-ID="" style="">
+            @*<div class="col-2 aspNetId_div" id="" contenteditable="false" style="">@temp_aspNetId</div>*@
             <div class="col-2 fullName_div" id="" contenteditable="false" style="">@temp_name</div>
             <div class="col-1 shortName_div" id="" contenteditable="false" style="">@temp_shortName</div>
             <div class="col-1 userName_div" id="" contenteditable="false" style="">@temp_userName</div>
             <div class="col-2 email_div" id="" contenteditable="false" style="">@temp_email</div>
             @*<div class="col-1 password_div" id="" contenteditable="false" style="">N/A</div>*@
             @*<div class="col-1 confirmPassword_div" id="" contenteditable="false" style="">N/A</div>*@
-            @*<div class="col-1 admin_div" style="padding:0px;">
-                    <select class="select2 admin_dpdwn" id="" aria-hidden="false" disabled>
-                        @if (temp_admin)
-                        {
-                            <option value="1" selected>TRUE</option>
-                            <option value="0">FALSE</option>
-                        }
-                        else
-                        {
-                            <option value="1">TRUE</option>
-                            <option value="0" selected>FALSE</option>
-                        }
-                    </select>
-                </div>
-                <div class="col-1 active_div" style="padding:0px;">
-                    <select class="select2 active_dpdwn" id="" aria-hidden="false" disabled>
-                        @if (temp_active)
-                        {
-                            <option value="1" selected>TRUE</option>
-                            <option value="0">FALSE</option>
-                        }
-                        else
-                        {
-                            <option value="1">TRUE</option>
-                            <option value="0" selected>FALSE</option>
-                        }
-                    </select>
-                </div>*@
+        <div class="col-1 admin_div" style="padding:0px;">
+            @*<select class="select2 admin_dpdwn" id="" aria-hidden="false" disabled>*@
+            @if (temp_admin)
+            {
+                @*<option value="1" selected>TRUE</option>*@
+                @*<option value="0">FALSE</option>*@
+                <input class="form-check-input admin" type="checkbox" value="true" checked disabled>
+            }
+            else
+            {
+                @*<option value="1">TRUE</option>*@
+                @*<option value="0" selected>FALSE</option>*@
+                <input class="form-check-input admin" type="checkbox" value="false" disabled>
+            }
+            @*</select>*@
+        </div>
+        <div class="col-1 active_div" style="padding:0px;">
+            @*<select class="select2 active_dpdwn" id="" aria-hidden="false" disabled>*@
+            @if (temp_active)
+            {
+                @*<option value="1" selected>TRUE</option>
+            <option value="0">FALSE</option>*@
+                <input class="form-check-input active" type="checkbox" value="true" checked disabled>
+            }
+            else
+            {
+                @*<option value="1">TRUE</option>
+            <option value="0" selected>FALSE</option>*@
+                <input class="form-check-input active" type="checkbox" value="false" disabled>
+            }
+            @*</select>*@
+        </div>
             <div class="col-1 button_div" style="padding:0px;">
-                <button id="" class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-full-name="@temp_name"
+                <button id="" class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
                         data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
                     <i class="far fa-edit fa-2x" style="color:black;">
                     </i>
@@ -297,10 +331,10 @@
                 <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
             </div>
             @*<div class="col-1 state_div" style="padding:0px;">
-                <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
-                <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
-                <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>
-            </div>*@
+            <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
+            <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
+            <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>
+        </div>*@
         </div>
     }
 
@@ -319,6 +353,8 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
+                            <label for="asp-net-id" class="col-form-label" hidden>ASP.net ID:</label>
+                            <input type="text" class="form-control asp-net-id" hidden>
                             <label for="full-name" class="col-form-label">Full Name:</label>
                             <input type="text" class="form-control full-name">
                             <label for="short-name" class="col-form-label">Short Name:</label>

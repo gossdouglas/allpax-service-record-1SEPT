@@ -8,6 +8,7 @@ namespace allpax_service_record.Models.View_Models
 
     public partial class vm_userAcctInfo
     {
+        public string aspNetId { get; set; }
         public string UserName { get; set; }
         public string name { get; set; }
         public string ShortName { get; set; }

@@ -184,7 +184,7 @@ namespace allpax_service_record.Controllers
             sqlconn.Open();
 
             string sqlquery1 =
-                "SELECT tbl_Users.name, tbl_Users.shortName, AspNetUsers.UserName, AspNetUsers.email, tbl_Users.admin, tbl_Users.active " +
+                "SELECT tbl_Users.name, tbl_Users.shortName, AspNetUsers.UserName, AspNetUsers.email, tbl_Users.admin, tbl_Users.active, AspNetUsers.Id " +
 
                 "FROM [allpax_service_record].[dbo].[AspNetUsers] " +
 
@@ -206,6 +206,7 @@ namespace allpax_service_record.Controllers
                 userAcctInfo.Email = dr1[3].ToString();
                 userAcctInfo.admin = (bool)dr1[4];
                 userAcctInfo.active = (bool)dr1[5];
+                userAcctInfo.aspNetId = dr1[6].ToString();
 
                 userAcctInfos.Add(userAcctInfo);//add all of the revelevant data objects to dailyReportByID...
             }
@@ -220,9 +221,38 @@ namespace allpax_service_record.Controllers
             //return RedirectToAction("Index", "dailyReportAll");//redirects, and the daily report does kick out the records to its view
         }
 
-        //
-        // GET: /Account/ConfirmEmail
-        [AllowAnonymous]
+        //UPDATE A USER'S ACCOUNT INFORMATION
+        public ActionResult UpdateUserAcctInfo(vm_userAcctInfo userAcctInfoUpdate)
+        {
+            db.Database.ExecuteSqlCommand(
+                "UPDATE AspNetUsers " +
+                "SET " +
+
+                "UserName = {1}," +
+                "Email = {2} " +
+
+                "WHERE Id = {0}",
+                userAcctInfoUpdate.aspNetId, userAcctInfoUpdate.UserName, userAcctInfoUpdate.Email);
+
+            db.Database.ExecuteSqlCommand(
+                "UPDATE tbl_Users " +
+                "SET " +
+
+                "name = {1}, " +
+                "ShortName = {2}, " +
+                "admin = {3}, " +
+                "active = {4} " +
+
+                "WHERE userName = {0}",
+                userAcctInfoUpdate.UserName, userAcctInfoUpdate.name, userAcctInfoUpdate.ShortName, userAcctInfoUpdate.admin, userAcctInfoUpdate.active);
+
+            //return new EmptyResult();
+            return Json(Url.Action("GetUserAcctInfo", "Account"));
+            //return Json("complete");            
+        }
+           
+            // GET: /Account/ConfirmEmail
+            [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)

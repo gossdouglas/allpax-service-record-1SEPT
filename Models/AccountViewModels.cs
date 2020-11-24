@@ -34,6 +34,7 @@ namespace allpax_service_record.Models
 
     public class RegisterViewModel
     {
+
         //ADDED BY GOSS
         [Required]
         [Display(Name = "Full Name")]
