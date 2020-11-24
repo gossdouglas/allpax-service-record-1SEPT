@@ -192,7 +192,6 @@ namespace allpax_service_record.Controllers
                 "tbl_Users ON tbl_Users.userName = AspNetUsers.UserName"; 
 
             SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
-            //sqlcomm1.Parameters.AddWithValue("@reportID", reportID);
             SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
             DataTable dt1 = new DataTable();
             sda1.Fill(dt1);
@@ -215,9 +214,7 @@ namespace allpax_service_record.Controllers
 
             sqlconn.Close();
 
-            //return View(userAcctInfos);//...to be passed to the view
             return View(regViewModel);//...to be passed to the view
-
             //return RedirectToAction("Index", "dailyReportAll");//redirects, and the daily report does kick out the records to its view
         }
 
@@ -250,9 +247,19 @@ namespace allpax_service_record.Controllers
             return Json(Url.Action("GetUserAcctInfo", "Account"));
             //return Json("complete");            
         }
-           
-            // GET: /Account/ConfirmEmail
-            [AllowAnonymous]
+
+        //DELETE A USER'S ACCOUNT INFORMATION
+        public ActionResult DeleteUserAcctInfo(vm_userAcctInfo userAcctInfoDelete)
+        {
+            db.Database.ExecuteSqlCommand("DELETE FROM AspNetUsers WHERE Id=({0})", userAcctInfoDelete.aspNetId);
+
+            //return new EmptyResult();
+            return Json(Url.Action("GetUserAcctInfo", "Account"));
+            //return Json("complete");            
+        }
+
+        // GET: /Account/ConfirmEmail
+        [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)

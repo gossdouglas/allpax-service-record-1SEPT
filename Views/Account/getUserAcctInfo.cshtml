@@ -36,6 +36,10 @@
             padding-right: 5px;
         }
 
+        .admin_div, .active_div {
+            text-align: center
+        }
+
         /*.entryRow .narr_div, .entryRow .dpdwn_div, .entryRow .hours_div, .entryRow .button_div, .entryRow .state_div {
             border-bottom: 1px solid black;
         }*/
@@ -201,6 +205,45 @@
                 });
             });
 
+            $(".Btn_delete").click(function () {
+                console.clear();
+
+                var currentRow = $(this).parent().parent();
+                var temp_aspNetId = currentRow.find('.aspNetId_div').html()
+                var temp_userName = currentRow.find('.userName_div').html()
+
+                console.log("Delete button was pressed.")
+                console.log("temp_aspNetId: " + temp_aspNetId)
+
+                var data = {
+                    aspNetId: temp_aspNetId,
+                };
+
+                $.confirm({
+                    title: 'Delete User ' + temp_userName + '?',
+                    content: '',
+                    buttons: {
+                        confirm: function () {
+                            $.ajax({
+                                url: '/Account/DeleteUserAcctInfo',
+                                method: 'post',
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                data: JSON.stringify(data),
+                                traditional: true,
+                                success: function (response) {
+                                    //console.log(response);
+                                    window.location.href = response;
+                                }
+                            });
+                        },
+                        cancel: function () {
+                        }
+                    }
+                });
+                
+            });
+
         });//end document read jquery statements
     </script>
 </head>
@@ -259,9 +302,9 @@
                     <div class="col-1 button_div" id="button_div" style="padding:0px;">
                         <button type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
                     </div>
-                    <div class="col-1 state_div" style="padding:0px;">
+                    @*<div class="col-1 state_div" style="padding:0px;">
                         <button class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
-                    </div>
+                    </div>*@
                 </div>
             </div>
         </div>
@@ -283,45 +326,33 @@
 
         <hr class="sectionSeparator">
         <div class=" row returnedRecords" id="" data-time-Entry-ID="" style="">
-            @*<div class="col-2 aspNetId_div" id="" contenteditable="false" style="">@temp_aspNetId</div>*@
+            <div class="col-2 aspNetId_div" id="" contenteditable="false" style="" hidden>@temp_aspNetId</div>
             <div class="col-2 fullName_div" id="" contenteditable="false" style="">@temp_name</div>
             <div class="col-1 shortName_div" id="" contenteditable="false" style="">@temp_shortName</div>
             <div class="col-1 userName_div" id="" contenteditable="false" style="">@temp_userName</div>
             <div class="col-2 email_div" id="" contenteditable="false" style="">@temp_email</div>
-            @*<div class="col-1 password_div" id="" contenteditable="false" style="">N/A</div>*@
-            @*<div class="col-1 confirmPassword_div" id="" contenteditable="false" style="">N/A</div>*@
-        <div class="col-1 admin_div" style="padding:0px;">
-            @*<select class="select2 admin_dpdwn" id="" aria-hidden="false" disabled>*@
-            @if (temp_admin)
-            {
-                @*<option value="1" selected>TRUE</option>*@
-                @*<option value="0">FALSE</option>*@
-                <input class="form-check-input admin" type="checkbox" value="true" checked disabled>
-            }
-            else
-            {
-                @*<option value="1">TRUE</option>*@
-                @*<option value="0" selected>FALSE</option>*@
-                <input class="form-check-input admin" type="checkbox" value="false" disabled>
-            }
-            @*</select>*@
-        </div>
-        <div class="col-1 active_div" style="padding:0px;">
-            @*<select class="select2 active_dpdwn" id="" aria-hidden="false" disabled>*@
-            @if (temp_active)
-            {
-                @*<option value="1" selected>TRUE</option>
-            <option value="0">FALSE</option>*@
-                <input class="form-check-input active" type="checkbox" value="true" checked disabled>
-            }
-            else
-            {
-                @*<option value="1">TRUE</option>
-            <option value="0" selected>FALSE</option>*@
-                <input class="form-check-input active" type="checkbox" value="false" disabled>
-            }
-            @*</select>*@
-        </div>
+            <div class="col-1 password_div" id="" contenteditable="false" style="">N/A</div>
+            <div class="col-1 confirmPassword_div" id="" contenteditable="false" style="">N/A</div>
+            <div class="col-1 admin_div" style="padding:0px;">
+                @if (temp_admin)
+                {
+                <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+                }
+                else
+                {
+            <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
+                }
+            </div>
+            <div class="col-1 active_div" style="padding:0px;">
+                @if (temp_active)
+                {
+                    <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+                }
+                else
+                {
+                    <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
+                }
+            </div>
             <div class="col-1 button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
                         data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
@@ -330,11 +361,6 @@
                 </button>
                 <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
             </div>
-            @*<div class="col-1 state_div" style="padding:0px;">
-            <button class="btn btn-light btn-sm  Btn_rtndRecord" disabled><i class="fas fa-database fa-2x icon_rtndRecord"></i></button>
-            <button class="btn btn-light btn-sm Btn_editedRecord" disabled hidden><i class="far fa-edit fa-2x icon_editedRecord"></i></button>
-            <button class="btn btn-light btn-sm Btn_deletedRecord" disabled hidden><i class="far fa-minus-square fa-2x icon_deletedRecord"></i></button>
-        </div>*@
         </div>
     }
 
