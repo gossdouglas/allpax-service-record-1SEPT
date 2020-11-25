@@ -111,6 +111,7 @@ namespace allpax_service_record.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]//added by Goss
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
 
@@ -129,11 +130,18 @@ namespace allpax_service_record.Controllers
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     //need to remove the password field from tbl_Users because the password is handled by ASP.net Identity
+
+                    //if user is selected as an administrator...
+                    if (model.admin)
+                    {
+                        UserManager.AddToRole(user.Id, "Admin");//add this user to the Admin role
+                        //System.Diagnostics.Debug.WriteLine(user.Id);
+                    }
+
+                    //update the application table
                     db.Database.ExecuteSqlCommand("Insert into tbl_Users (userName, password, name, shortName, admin, active) " +
                         "Values({0}, {1}, {2}, {3}, {4}, {5})", model.UserName, "password", model.name, model.ShortName, model.admin, model.active);
 
-                    //return RedirectToAction("Index", "Home");
-                    //return RedirectToAction("Index", "dailyReportAll");
                     return RedirectToAction("GetUserAcctInfo", "Account");
                 }
                 AddErrors(result);
@@ -144,36 +152,8 @@ namespace allpax_service_record.Controllers
             //return View("got it");
         }
 
-        //public ActionResult RegisterNewUser (RegisterViewModel model)
-        //public async Task<ActionResult> RegisterNewUser(RegisterViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-        //        var result = await UserManager.CreateAsync(user, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-        //            // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-        //            // Send an email with this link
-        //            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-        //            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-        //            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-        //            //need to remove the password field from tbl_Users because the password is handled by ASP.net Identity
-        //            db.Database.ExecuteSqlCommand("Insert into tbl_Users (userName, password, name, shortName, admin, active) " +
-        //                "Values({0}, {1}, {2}, {3}, {4}, {5})", model.UserName, "password", model.name, model.ShortName, model.admin, model.active);
-
-        //            //return RedirectToAction("Index", "Home");
-        //            //return RedirectToAction("Index", "dailyReportAll");
-        //            return RedirectToAction("GetUserAcctInfo", "Account");
-        //        }
-        //        AddErrors(result);
-        //    }
-
-        //    return View(model);
-        //}
+        //only a role of Admin can access this ActionResult
+        [Authorize(Roles = "Admin")]//added by Goss
         public ActionResult GetUserAcctInfo()
         {
             RegisterViewModel regViewModel = new RegisterViewModel();
@@ -215,12 +195,29 @@ namespace allpax_service_record.Controllers
             sqlconn.Close();
 
             return View(regViewModel);//...to be passed to the view
-            //return RedirectToAction("Index", "dailyReportAll");//redirects, and the daily report does kick out the records to its view
         }
 
+        //only a role of Admin can access this ActionResult
         //UPDATE A USER'S ACCOUNT INFORMATION
+        [Authorize(Roles = "Admin")]//added by Goss
         public ActionResult UpdateUserAcctInfo(vm_userAcctInfo userAcctInfoUpdate)
         {
+
+            //load the roles held by this user into a list for later comparison
+            List<string> roles = UserManager.GetRoles(userAcctInfoUpdate.aspNetId).ToList();
+            bool currentlyAdmin = roles.Contains("Admin");//determine if this user is currently an admin
+            //System.Diagnostics.Debug.WriteLine(currentlyAdmin);
+
+            if ((currentlyAdmin) && (!userAcctInfoUpdate.admin))//if currently an admin, but selected to longer be an admin...
+            {
+                UserManager.RemoveFromRole(userAcctInfoUpdate.aspNetId, "Admin");
+            }
+
+            if ((!currentlyAdmin) && (userAcctInfoUpdate.admin))//if not currently an admin, but selected to be an admin...
+            {
+                UserManager.AddToRole(userAcctInfoUpdate.aspNetId, "Admin");
+            }
+
             db.Database.ExecuteSqlCommand(
                 "UPDATE AspNetUsers " +
                 "SET " +
@@ -243,17 +240,17 @@ namespace allpax_service_record.Controllers
                 "WHERE userName = {0}",
                 userAcctInfoUpdate.UserName, userAcctInfoUpdate.name, userAcctInfoUpdate.ShortName, userAcctInfoUpdate.admin, userAcctInfoUpdate.active);
 
-            //return new EmptyResult();
             return Json(Url.Action("GetUserAcctInfo", "Account"));
             //return Json("complete");            
         }
 
+        //only a role of Admin can access this ActionResult
         //DELETE A USER'S ACCOUNT INFORMATION
+        [Authorize(Roles = "Admin")]//added by Goss
         public ActionResult DeleteUserAcctInfo(vm_userAcctInfo userAcctInfoDelete)
         {
             db.Database.ExecuteSqlCommand("DELETE FROM AspNetUsers WHERE Id=({0})", userAcctInfoDelete.aspNetId);
 
-            //return new EmptyResult();
             return Json(Url.Action("GetUserAcctInfo", "Account"));
             //return Json("complete");            
         }

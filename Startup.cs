@@ -10,6 +10,8 @@ namespace allpax_service_record
 {
     public partial class Startup
     {
+        private allpaxServiceRecordEntities db = new allpaxServiceRecordEntities();
+
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
@@ -35,9 +37,8 @@ namespace allpax_service_record
                 roleManager.Create(role);
 
                 //Here we create a Admin super user who will maintain the website                   
-
                 var user = new ApplicationUser();
-                user.UserName = "gossdouglas";
+                user.UserName = "admin";
                 user.Email = "gossdouglas@gmail.com";
 
                 string userPWD = "YellowNo5";
@@ -49,6 +50,8 @@ namespace allpax_service_record
                 {
                     var result1 = UserManager.AddToRole(user.Id, "Admin");
 
+                    db.Database.ExecuteSqlCommand("Insert into tbl_Users (userName, password, name, shortName, admin, active) " +
+                        "Values({0}, {1}, {2}, {3}, {4}, {5})", "admin", "password", "Admin", "XX", "1", "1");
                 }
             }
 
