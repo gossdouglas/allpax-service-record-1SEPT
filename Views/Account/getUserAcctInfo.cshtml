@@ -379,23 +379,37 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="asp-net-id" class="col-form-label" hidden>ASP.net ID:</label>
-                            <input type="text" class="form-control asp-net-id" hidden>
-                            <label for="full-name" class="col-form-label">Full Name:</label>
-                            <input type="text" class="form-control full-name">
-                            <label for="short-name" class="col-form-label">Short Name:</label>
-                            <input type="text" class="form-control short-name">
-                            <label for="user-name" class="col-form-label">User Name:</label>
-                            <input type="text" class="form-control user-name">
-                            <label for="email" class="col-form-label">E-mail:</label>
-                            <input type="text" class="form-control email">
-                            <div class="form-check">
+                            <div class="row">
+                                <label for="asp-net-id" class="col-form-label" hidden>ASP.net ID:</label>
+                                <input type="text" class="form-control asp-net-id" hidden>
+                                <div class="col-6">
+                                    <label for="full-name" class="col-form-label">Full Name:</label>
+                                    <input type="text" class="form-control full-name">
+                                </div>
+                                <div class="col-6">
+                                    <label for="short-name" class="col-form-label">Short Name:</label>
+                                    <input type="text" class="form-control short-name">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="user-name" class="col-form-label">User Name:</label>
+                                    <input type="text" class="form-control user-name">
+                                </div>
+                                <div class="col-6">
+                                    <label for="email" class="col-form-label">E-mail:</label>
+                                    <input type="text" class="form-control email">
+                                </div>
+                            </div>
+                            <div class="row">
+                            </div>
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input admin" type="checkbox" value="">
                                 <label class="form-check-label" for="">
                                     Administrator
                                 </label>
                             </div>
-                            <div class="form-check">
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input active" type="checkbox" value="">
                                 <label class="form-check-label" for="">
                                     Active

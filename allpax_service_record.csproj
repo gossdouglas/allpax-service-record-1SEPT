@@ -2538,6 +2538,9 @@
     <Content Include="Views\Account\getUserAcctInfo-mine.cshtml" />
     <Content Include="Views\Account\getUserAcctInfo-canned.cshtml" />
     <Content Include="Views\Account\Register-broken.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
