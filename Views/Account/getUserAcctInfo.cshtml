@@ -115,6 +115,13 @@
                 });
             });
 
+            $('#userNewForm').on('show.bs.modal', function (event) {
+                console.clear();
+                console.log("userNewForm clicked.")
+
+                var button = $(event.relatedTarget) // Button that triggered the modal               
+            })
+
             $('#userEditForm').on('show.bs.modal', function (event) {
                 console.clear();
 
@@ -250,6 +257,13 @@
 
 @*BEGIN USER SECTION*@
 <hr class="sectionSeparator">
+<div class="col-1" style="padding:0px;">
+    <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#userNewForm">
+        <i class="far fa-plus-square fa-2x" style="color:black;"></i>
+    </button>
+    @*<button type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
+</div>
+<hr class="sectionSeparator">
 <div class="container-fluid" id="userData_container">
     <div class="row">
         <div class="col-2 fullName_hdr" style="padding:5px">
@@ -279,10 +293,8 @@
         <div class="col-1 button_hdr" style="padding:5px">
             <strong>Action</strong>
         </div>
-        @*<div class="col-1 state_hdr" style="padding:5px">
-                <strong>State</strong>
-            </div>*@
     </div>
+
     @*BEGIN NEW USER TEMPLATE*@
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
@@ -302,9 +314,6 @@
                     <div class="col-1 button_div" id="button_div" style="padding:0px;">
                         <button type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
                     </div>
-                    @*<div class="col-1 state_div" style="padding:0px;">
-                        <button class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
-                    </div>*@
                 </div>
             </div>
         </div>
@@ -336,11 +345,11 @@
             <div class="col-1 admin_div" style="padding:0px;">
                 @if (temp_admin)
                 {
-                <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+                    <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
                 }
                 else
                 {
-            <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
+                    <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
                 }
             </div>
             <div class="col-1 active_div" style="padding:0px;">
@@ -353,8 +362,8 @@
                     <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
                 }
             </div>
-            <div class="col-1 button_div" style="padding:0px;">
-                <button id="" class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+             <div class="col-1 button_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
                         data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
                     <i class="far fa-edit fa-2x" style="color:black;">
                     </i>
@@ -366,7 +375,7 @@
 
     @*END RETURNED RECORDS*@
 
-    @*BEGIN MODAL TEMPLATE*@
+    @*BEGIN EDIT USER MODAL TEMPLATE*@
     <div class="modal fade" id="userEditForm" tabindex="-1" role="dialog" aria-labelledby="userEditForm" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -425,7 +434,66 @@
             </div>
         </div>
     </div>
-    @*BEGIN MODAL TEMPLATE*@
+    @*END EDIT USER MODAL TEMPLATE*@
+
+    @*BEGIN NEW USER MODAL TEMPLATE*@
+    <div class="modal fade" id="userNewForm" tabindex="-1" role="dialog" aria-labelledby="userNewForm" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userNewForm">Edit user</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <div class="row">                              
+                                <div class="col-6">
+                                    <label for="full-name" class="col-form-label">Full Name:</label>
+                                    <input type="text" class="form-control full-name">
+                                </div>
+                                <div class="col-6">
+                                    <label for="short-name" class="col-form-label">Short Name:</label>
+                                    <input type="text" class="form-control short-name">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="user-name" class="col-form-label">User Name:</label>
+                                    <input type="text" class="form-control user-name">
+                                </div>
+                                <div class="col-6">
+                                    <label for="email" class="col-form-label">E-mail:</label>
+                                    <input type="text" class="form-control email">
+                                </div>
+                            </div>
+                            <div class="row">
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input admin" type="checkbox" value="">
+                                <label class="form-check-label" for="">
+                                    Administrator
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input active" type="checkbox" value="">
+                                <label class="form-check-label" for="">
+                                    Active
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary userNewForm btn_save">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*END EDIT USER MODAL TEMPLATE*@
 
 </div>
 @*END USER SECTION*@
