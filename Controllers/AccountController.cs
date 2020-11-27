@@ -15,6 +15,9 @@ using allpax_service_record.Models.View_Models;
 using System.Data.SqlClient;
 using System.Data;
 
+using System.Net.Mail;
+using System.Net;
+
 namespace allpax_service_record.Controllers
 {
     [Authorize]
@@ -127,19 +130,37 @@ namespace allpax_service_record.Controllers
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");+
+
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.gmail.com";
+                    smtp.Port = 587;
+                    smtp.EnableSsl = true;
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = new NetworkCredential("allpaxtesting@gmail.com", "Allpax_1234");
+
+                    string body = "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
+
+                    using (var message = new MailMessage("allpaxtesting@gmail.com", model.Email))
+                    {
+                        message.Subject = "Test";
+                        message.Body = body;
+                        message.IsBodyHtml = true;
+                        smtp.Send(message);
+                    }
 
                     //need to remove the password field from tbl_Users because the password is handled by ASP.net Identity
 
                     // Uncomment to debug locally 
                     // TempData["ViewBagLink"] = callbackUrl;
 
-                    //ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
-                    //                + "before you can log in.";
+                    ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
+                                    + "before you can log in.";
 
-                    
+
 
                     //if user is selected as an administrator...
                     if (model.admin)
