@@ -11,7 +11,7 @@
 
     <style>
 
-        #userData_container, #delays_container, #wntyDelays_container {
+        #userData_container {
             padding-bottom: 5px;
         }
 
@@ -22,10 +22,16 @@
         .fullName_div, .shortName_div, .userName_div, .email_div, .password_div, .confirmPassword_div, .button_div, .admin_div, .active_div, .state_div {
             border-top: 1px solid black;
             border-left: 1px solid black;
-            border-bottom: 1px solid black;
+            /*border-bottom: 1px solid black;*/
             padding: 5px;
         }
 
+        .returnedRecords:first-child {
+            /*border-bottom: 1px solid black;*/
+            border:dashed
+        }
+
+        /*ONLY THE LAST COLUMN HAS a RIGHT BORDER*/
         .button_div {
             border-right: 1px solid black;
         }
@@ -40,10 +46,7 @@
             text-align: center
         }
 
-        /*.entryRow .narr_div, .entryRow .dpdwn_div, .entryRow .hours_div, .entryRow .button_div, .entryRow .state_div {
-            border-bottom: 1px solid black;
-        }*/
-
+        /*AN INVISIBLE HORIZONTAL SPACE*/
         .sectionSeparator {
             margin: 1px;
             opacity: 0;
@@ -114,13 +117,6 @@
                     }
                 });
             });
-
-            $('#userNewForm').on('show.bs.modal', function (event) {
-                console.clear();
-                console.log("userNewForm clicked.")
-
-                var button = $(event.relatedTarget) // Button that triggered the modal               
-            })
 
             $('#userEditForm').on('show.bs.modal', function (event) {
                 console.clear();
@@ -251,17 +247,22 @@
                 
             });
 
+            //set the bottom border of the last row of returned records
+            $(".returnedRecords:last div").css('border-bottom', 'solid 1px black');
+
         });//end document read jquery statements
     </script>
 </head>
 
 @*BEGIN USER SECTION*@
 <hr class="sectionSeparator">
-<div class="col-1" style="padding:0px;">
-    <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#userNewForm">
-        <i class="far fa-plus-square fa-2x" style="color:black;"></i>
-    </button>
-    @*<button type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>*@
+<div class="col-12" style="padding:0px;">
+    <span><strong>Register a New User</strong></span>
+    <span>
+        <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#userNewForm">
+            <i class="far fa-plus-square fa-2x" style="color:black;"></i>
+        </button>
+    </span>
 </div>
 <hr class="sectionSeparator">
 <div class="container-fluid" id="userData_container">
@@ -269,20 +270,14 @@
         <div class="col-2 fullName_hdr" style="padding:5px">
             <strong>Full Name</strong>
         </div>
-        <div class="col-1 shortName_hdr" style="padding:5px">
+        <div class="col-2 shortName_hdr" style="padding:5px">
             <strong>Short Name</strong>
         </div>
-        <div class="col-1 userName_hdr" style="padding:5px">
+        <div class="col-2 userName_hdr" style="padding:5px">
             <strong>User Name</strong>
         </div>
         <div class="col-2 email_hdr" style="padding:5px">
             <strong>E-mail</strong>
-        </div>
-        <div class="col-1 password_hdr" style="padding:5px">
-            <strong>Password</strong>
-        </div>
-        <div class="col-1 confirmPassword_hdr" style="padding:5px">
-            <strong>Cfrm Password</strong>
         </div>
         <div class="col-1 admin_hdr" style="padding:5px">
             <strong>Admin</strong>
@@ -290,35 +285,10 @@
         <div class="col-1 active_hdr" style="padding:5px">
             <strong>Active</strong>
         </div>
-        <div class="col-1 button_hdr" style="padding:5px">
+        <div class="col-2 button_hdr" style="padding:5px">
             <strong>Action</strong>
         </div>
     </div>
-
-    @*BEGIN NEW USER TEMPLATE*@
-    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary("", new { @class = "text-danger" })
-        <div class="form-group">
-            <div class="" id="userLine_template" style="">
-                <div class="row entryRow userLine_template_row_active" id="" style="">
-                    <div class="col-2 fullName_div" id="fullName_div" contenteditable="false" style="">@Html.TextBoxFor(m => m.name, new { @class = "form-control" })</div>
-                    <div class="col-1 shortName_div" id="shortName_div" contenteditable="false" style="">@Html.TextBoxFor(m => m.ShortName, new { @class = "form-control" })</div>
-                    <div class="col-1 userName_div" id="userName_div" contenteditable="false" style="">@Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })</div>
-                    <div class="col-2 email_div" id="email_div" contenteditable="false" style="">@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })</div>
-                    <div class="col-1 password_div" id="password_div" contenteditable="false" style="">@Html.PasswordFor(m => m.Password, new { @class = "form-control" })</div>
-                    <div class="col-1 confirmPassword_div" id="confirmPassword_div" contenteditable="false" style="">@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })</div>
-                    <div class="col-1 admin_div" id="admin_div" style="padding:0px;" contenteditable="false">@Html.CheckBoxFor(m => m.admin)</div>
-                    <div class="col-1 active_div" id="active_div" style="padding:0px;" contenteditable="false">@Html.CheckBoxFor(m => m.active)</div>
-                    <div class="col-1 button_div" id="button_div" style="padding:0px;">
-                        <button type="submit" class="btn btn-light btn-sm Btn_add" value="Register"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-    @*END NEW USER TEMPLATE*@
 
     @*BEGIN RETURNED RECORDS*@
     @foreach (var item in Model.userAcctInfo)
@@ -333,15 +303,13 @@
         bool temp_active = item.active;
         //END TEMPORARY LOOP VARIABLES
 
-        <hr class="sectionSeparator">
+        @*<hr class="sectionSeparator">*@
         <div class=" row returnedRecords" id="" data-time-Entry-ID="" style="">
             <div class="col-2 aspNetId_div" id="" contenteditable="false" style="" hidden>@temp_aspNetId</div>
             <div class="col-2 fullName_div" id="" contenteditable="false" style="">@temp_name</div>
-            <div class="col-1 shortName_div" id="" contenteditable="false" style="">@temp_shortName</div>
-            <div class="col-1 userName_div" id="" contenteditable="false" style="">@temp_userName</div>
+            <div class="col-2 shortName_div" id="" contenteditable="false" style="">@temp_shortName</div>
+            <div class="col-2 userName_div" id="" contenteditable="false" style="">@temp_userName</div>
             <div class="col-2 email_div" id="" contenteditable="false" style="">@temp_email</div>
-            <div class="col-1 password_div" id="" contenteditable="false" style="">N/A</div>
-            <div class="col-1 confirmPassword_div" id="" contenteditable="false" style="">N/A</div>
             <div class="col-1 admin_div" style="padding:0px;">
                 @if (temp_admin)
                 {
@@ -362,7 +330,7 @@
                     <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
                 }
             </div>
-             <div class="col-1 button_div" style="padding:0px;">
+            <div class="col-2 button_div" style="padding:0px;">
                 <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
                         data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
                     <i class="far fa-edit fa-2x" style="color:black;">
@@ -437,67 +405,86 @@
     @*END EDIT USER MODAL TEMPLATE*@
 
     @*BEGIN NEW USER MODAL TEMPLATE*@
-    <div class="modal fade" id="userNewForm" tabindex="-1" role="dialog" aria-labelledby="userNewForm" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="userNewForm">Edit user</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <div class="row">                              
-                                <div class="col-6">
-                                    <label for="full-name" class="col-form-label">Full Name:</label>
-                                    <input type="text" class="form-control full-name">
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+
+        <div class="modal fade" id="userNewForm" tabindex="-1" role="dialog" aria-labelledby="userNewForm" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userNewForm">Edit user</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="full-name" class="col-form-label">Full Name:</label>
+                                        @*<input type="text" class="form-control full-name">*@
+                                        @Html.TextBoxFor(m => m.name, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="short-name" class="col-form-label">Short Name:</label>
+                                        @*<input type="text" class="form-control short-name">*@
+                                        @Html.TextBoxFor(m => m.ShortName, new { @class = "form-control" })
+                                    </div>
                                 </div>
-                                <div class="col-6">
-                                    <label for="short-name" class="col-form-label">Short Name:</label>
-                                    <input type="text" class="form-control short-name">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="user-name" class="col-form-label">User Name:</label>
+                                        @*<input type="text" class="form-control user-name">*@
+                                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="email" class="col-form-label">E-mail:</label>
+                                        @*<input type="text" class="form-control email">*@
+                                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="user-name" class="col-form-label">Password:</label>
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="email" class="col-form-label">Confirm Password:</label>
+                                        @*<input type="text" class="form-control email">*@
+                                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    @Html.CheckBoxFor(m => m.admin)
+                                    <label class="form-check-label" for="">
+                                        Administrator
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    @Html.CheckBoxFor(m => m.active)
+                                    <label class="form-check-label" for="">
+                                        Active
+                                    </label>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="user-name" class="col-form-label">User Name:</label>
-                                    <input type="text" class="form-control user-name">
-                                </div>
-                                <div class="col-6">
-                                    <label for="email" class="col-form-label">E-mail:</label>
-                                    <input type="text" class="form-control email">
-                                </div>
-                            </div>
-                            <div class="row">
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input admin" type="checkbox" value="">
-                                <label class="form-check-label" for="">
-                                    Administrator
-                                </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input active" type="checkbox" value="">
-                                <label class="form-check-label" for="">
-                                    Active
-                                </label>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary userNewForm btn_save">Save</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" value="Register">Save</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
     @*END EDIT USER MODAL TEMPLATE*@
 
 </div>
 @*END USER SECTION*@
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

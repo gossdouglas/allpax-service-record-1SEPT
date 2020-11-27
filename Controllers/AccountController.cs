@@ -121,7 +121,9 @@ namespace allpax_service_record.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    //comment out the line below to prevent the newly registered user from being logged in afterward
+                    //the reason being that an admin will be creating new users, not the users themselves
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -150,8 +152,8 @@ namespace allpax_service_record.Controllers
                     db.Database.ExecuteSqlCommand("Insert into tbl_Users (userName, password, name, shortName, admin, active) " +
                         "Values({0}, {1}, {2}, {3}, {4}, {5})", model.UserName, "password", model.name, model.ShortName, model.admin, model.active);
 
-                    //return RedirectToAction("GetUserAcctInfo", "Account");
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("GetUserAcctInfo", "Account");
+                    //return RedirectToAction("Index", "Home");
                     //return View("Info");
                 }
                 AddErrors(result);
