@@ -225,8 +225,6 @@
 
             //determine the screen size on any change
             $(window).resize(function () {
-                //console.clear();
-                //console.log("Screen width is now " + $(window).width());
                 fn_checkScreenSize();
             });
 
@@ -240,12 +238,14 @@
                     $(".email_div").css('border-right', 'none');
                     $(".admin_div").css('border-right', 'none');
                     $(".active_div").css('border-right', 'none');
-                    //$(".button_div").css('border-bottom', 'solid 1px black');
+                    $(".button_div").css('border-bottom', 'none');
+
+                    $(".returnedRecords:last div").css('border-bottom', 'solid 1px black');
 
                     $("#header_userData").show();
 
-                    $(".sectionSeparator.mobile").hide();
-                    $(".sectionSeparator.mobile").attr("hidden", "true");
+                    $("hr.mobile").hide();
+                    $("hr.mobile").attr("hidden", "true");
                 }
                 //this and below are the mobile sizes
                 else if ($(window).width() < 992) {
@@ -262,8 +262,8 @@
 
                     $("#header_userData").hide();
 
-                    $(".sectionSeparator.mobile").show();
-                    $(".sectionSeparator.mobile").removeAttr("hidden");
+                    $("hr.mobile").show();
+                    $("hr.mobile").removeAttr("hidden");
                 }
             }
 
@@ -356,8 +356,7 @@
                 <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
             </div>
         </div>
-        @*<hr class="sectionSeparator mobile" hidden>
-        <hr />*@
+        <hr class="mobile" hidden>
     }
 
     @*END RETURNED RECORDS*@
