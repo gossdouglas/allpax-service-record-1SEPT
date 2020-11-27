@@ -19,16 +19,10 @@
             border: 1px solid black;
         }
 
-        .fullName_div, .shortName_div, .userName_div, .email_div, .password_div, .confirmPassword_div, .button_div, .admin_div, .active_div, .state_div {
+        .fullName_div, .shortName_div, .userName_div, .email_div, .button_div, .admin_div, .active_div, .state_div {
             border-top: 1px solid black;
             border-left: 1px solid black;
-            /*border-bottom: 1px solid black;*/
             padding: 5px;
-        }
-
-        .returnedRecords:first-child {
-            /*border-bottom: 1px solid black;*/
-            border:dashed
         }
 
         /*ONLY THE LAST COLUMN HAS a RIGHT BORDER*/
@@ -55,29 +49,8 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            fn_enableSelect2();//enable the select2 add-on on page load
-
-            //console.log($(".admin_hdr").width());
-            //$(".admin_div").width($(".admin_hdr").width());
-            //$(".active_div").width($(".active_hdr").width());
-
-            //alert($(".col-2.fullName_hdr").width());
-            //alert($("#admin_hdr").width());
-            //alert("Width of div: " + $(".admin_hdr").width());
-
-            //enable the select2 add-on
-            function fn_enableSelect2() {
-                $('.select2').select2({
-                    width: "100%",
-                    //width: "80%",
-                    closeOnSelect: "false"
-                })
-            }
-
-            //disable the select2 add-on
-            function fn_disableSelect2() {
-                $('.Team_dpdwn').select2('destroy')
-            }
+            //determine the screen size on load
+            fn_checkScreenSize();
 
             $("#saveAndSubmit_btn").click(function () {
             //function fn_submit() {
@@ -250,6 +223,50 @@
             //set the bottom border of the last row of returned records
             $(".returnedRecords:last div").css('border-bottom', 'solid 1px black');
 
+            //determine the screen size on any change
+            $(window).resize(function () {
+                //console.clear();
+                //console.log("Screen width is now " + $(window).width());
+                fn_checkScreenSize();
+            });
+
+            function fn_checkScreenSize() {
+
+                //this is the monitor size
+                if ($(window).width() >= 992) {
+                    $(".fullName_div").css('border-right', 'none');
+                    $(".shortName_div").css('border-right', 'none');
+                    $(".userName_div").css('border-right', 'none');
+                    $(".email_div").css('border-right', 'none');
+                    $(".admin_div").css('border-right', 'none');
+                    $(".active_div").css('border-right', 'none');
+                    //$(".button_div").css('border-bottom', 'solid 1px black');
+
+                    $("#header_userData").show();
+
+                    $(".sectionSeparator.mobile").hide();
+                    $(".sectionSeparator.mobile").attr("hidden", "true");
+                }
+                //this and below are the mobile sizes
+                else if ($(window).width() < 992) {
+                    $(".fullName_div").css('border-right', 'solid 1px black');
+                    $(".shortName_div").css('border-right', 'solid 1px black');
+                    $(".userName_div").css('border-right', 'solid 1px black');
+                    $(".email_div").css('border-right', 'solid 1px black');
+                    $(".admin_div").css('border-right', 'solid 1px black');
+                    $(".active_div").css('border-right', 'solid 1px black');
+                    
+
+                    $(".returnedRecords:last div").css('border-bottom', 'none');
+                    $(".button_div").css('border-bottom', 'solid 1px black');
+
+                    $("#header_userData").hide();
+
+                    $(".sectionSeparator.mobile").show();
+                    $(".sectionSeparator.mobile").removeAttr("hidden");
+                }
+            }
+
         });//end document read jquery statements
     </script>
 </head>
@@ -266,26 +283,26 @@
 </div>
 <hr class="sectionSeparator">
 <div class="container-fluid" id="userData_container">
-    <div class="row">
-        <div class="col-2 fullName_hdr" style="padding:5px">
+    <div class="row" id="header_userData">
+        <div class="col-lg-2 fullName_hdr" style="padding:5px">
             <strong>Full Name</strong>
         </div>
-        <div class="col-2 shortName_hdr" style="padding:5px">
+        <div class="col-lg-2 shortName_hdr" style="padding:5px">
             <strong>Short Name</strong>
         </div>
-        <div class="col-2 userName_hdr" style="padding:5px">
+        <div class="col-lg-2 userName_hdr" style="padding:5px">
             <strong>User Name</strong>
         </div>
-        <div class="col-2 email_hdr" style="padding:5px">
+        <div class="col-lg-2 email_hdr" style="padding:5px">
             <strong>E-mail</strong>
         </div>
-        <div class="col-1 admin_hdr" style="padding:5px">
+        <div class="col-lg-1 admin_hdr" style="padding:5px">
             <strong>Admin</strong>
         </div>
-        <div class="col-1 active_hdr" style="padding:5px">
+        <div class="col-lg-1 active_hdr" style="padding:5px">
             <strong>Active</strong>
         </div>
-        <div class="col-2 button_hdr" style="padding:5px">
+        <div class="col-lg-2 button_hdr" style="padding:5px">
             <strong>Action</strong>
         </div>
     </div>
@@ -305,12 +322,12 @@
 
         @*<hr class="sectionSeparator">*@
         <div class=" row returnedRecords" id="" data-time-Entry-ID="" style="">
-            <div class="col-2 aspNetId_div" id="" contenteditable="false" style="" hidden>@temp_aspNetId</div>
-            <div class="col-2 fullName_div" id="" contenteditable="false" style="">@temp_name</div>
-            <div class="col-2 shortName_div" id="" contenteditable="false" style="">@temp_shortName</div>
-            <div class="col-2 userName_div" id="" contenteditable="false" style="">@temp_userName</div>
-            <div class="col-2 email_div" id="" contenteditable="false" style="">@temp_email</div>
-            <div class="col-1 admin_div" style="padding:0px;">
+            <div class="col-lg-2 aspNetId_div" id="" contenteditable="false" style="" hidden>@temp_aspNetId</div>
+            <div class="col-lg-2 fullName_div" id="" contenteditable="false" style="">@temp_name</div>
+            <div class="col-lg-2 shortName_div" id="" contenteditable="false" style="">@temp_shortName</div>
+            <div class="col-lg-2 userName_div" id="" contenteditable="false" style="">@temp_userName</div>
+            <div class="col-lg-2 email_div" id="" contenteditable="false" style="">@temp_email</div>
+            <div class="col-lg-1 admin_div" style="padding:0px;">
                 @if (temp_admin)
                 {
                     <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
@@ -320,7 +337,7 @@
                     <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
                 }
             </div>
-            <div class="col-1 active_div" style="padding:0px;">
+            <div class="col-lg-1 active_div" style="padding:0px;">
                 @if (temp_active)
                 {
                     <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
@@ -330,7 +347,7 @@
                     <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
                 }
             </div>
-            <div class="col-2 button_div" style="padding:0px;">
+            <div class="col-lg-2 button_div" style="padding:0px;">
                 <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
                         data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
                     <i class="far fa-edit fa-2x" style="color:black;">
@@ -339,6 +356,8 @@
                 <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
             </div>
         </div>
+        @*<hr class="sectionSeparator mobile" hidden>
+        <hr />*@
     }
 
     @*END RETURNED RECORDS*@
