@@ -220,3 +220,8 @@ C:\Users\goss\Documents\Github\service-record\allpax_service_record\obj\Release\
 C:\Users\goss\Documents\Github\service-record\allpax_service_record\obj\Release\allpax_service_record.csproj.CopyComplete
 C:\Users\goss\Documents\Github\service-record\allpax_service_record\obj\Release\allpax_service_record.dll
 C:\Users\goss\Documents\Github\service-record\allpax_service_record\obj\Release\allpax_service_record.pdb
+C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\SendGrid.dll
+C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\SendGrid.SmtpApi.dll
+C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\SendGridMail.dll
+C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\System.Net.Http.Formatting.dll
+C:\Users\goss\Documents\Github\service-record\allpax_service_record\bin\System.Net.Http.Formatting.xml

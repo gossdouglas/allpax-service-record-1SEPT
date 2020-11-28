@@ -70,7 +70,6 @@ namespace allpax_service_record.Controllers
             return View();
         }
 
-        //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
@@ -80,6 +79,17 @@ namespace allpax_service_record.Controllers
             if (!ModelState.IsValid)
             {
                 return View(model);
+            }
+
+            // Require the user to have a confirmed email before they can log on.
+            var user = await UserManager.FindByNameAsync(model.UserName);
+            if (user != null)
+            {
+                if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+                {
+                    ViewBag.errorMessage = "You must have a confirmed email to log on.";
+                    return View("Error");
+                }
             }
 
             // This doesn't count login failures towards account lockout
@@ -135,16 +145,34 @@ namespace allpax_service_record.Controllers
                     //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");+
 
                     SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtp.gmail.com";
-                    smtp.Port = 587;
-                    smtp.EnableSsl = true;
+
+                    //smtp.Host = "smtp.gmail.com";
+                    //smtp.Port = 587;
+                    //smtp.EnableSsl = true;
+                    //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    //smtp.UseDefaultCredentials = false;
+                    //smtp.Credentials = new NetworkCredential("allpaxtesting@gmail.com", "Allpax_1234");
+
+                    //string body = "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
+
+                    //using (var message = new MailMessage("allpaxtesting@gmail.com", model.Email))
+                    //{
+                    //    message.Subject = "Test";
+                    //    message.Body = body;
+                    //    message.IsBodyHtml = true;
+                    //    smtp.Send(message);
+                    //}
+
+                    smtp.Host = "relay-hosting.secureserver.net";
+                    smtp.Port = 25;
+                    smtp.EnableSsl = false;
                     smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                     smtp.UseDefaultCredentials = false;
-                    smtp.Credentials = new NetworkCredential("allpaxtesting@gmail.com", "Allpax_1234");
+                    smtp.Credentials = new NetworkCredential("ph14185669651", "Allpax_1");
 
                     string body = "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
 
-                    using (var message = new MailMessage("allpaxtesting@gmail.com", model.Email))
+                    using (var message = new MailMessage("ph14185669651@secureserver.net", model.Email))
                     {
                         message.Subject = "Test";
                         message.Body = body;
@@ -319,8 +347,8 @@ namespace allpax_service_record.Controllers
             {
                 //var user = await UserManager.FindByNameAsync(model.Email);
                 var user = await UserManager.FindByEmailAsync(model.Email);
-                //if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-                if (user == null)
+                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                //if (user == null)
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
