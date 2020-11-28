@@ -146,39 +146,39 @@ namespace allpax_service_record.Controllers
 
                     SmtpClient smtp = new SmtpClient();
 
-                    //smtp.Host = "smtp.gmail.com";
-                    //smtp.Port = 587;
-                    //smtp.EnableSsl = true;
-                    //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    //smtp.UseDefaultCredentials = false;
-                    //smtp.Credentials = new NetworkCredential("allpaxtesting@gmail.com", "Allpax_1234");
-
-                    //string body = "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
-
-                    //using (var message = new MailMessage("allpaxtesting@gmail.com", model.Email))
-                    //{
-                    //    message.Subject = "Test";
-                    //    message.Body = body;
-                    //    message.IsBodyHtml = true;
-                    //    smtp.Send(message);
-                    //}
-
-                    smtp.Host = "relay-hosting.secureserver.net";
-                    smtp.Port = 25;
-                    smtp.EnableSsl = false;
+                    smtp.Host = "smtp.gmail.com";
+                    smtp.Port = 587;
+                    smtp.EnableSsl = true;
                     smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                     smtp.UseDefaultCredentials = false;
-                    smtp.Credentials = new NetworkCredential("ph14185669651", "Allpax_1");
+                    smtp.Credentials = new NetworkCredential("allpaxtesting@gmail.com", "Allpax_1234");
 
                     string body = "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
 
-                    using (var message = new MailMessage("ph14185669651@secureserver.net", model.Email))
+                    using (var message = new MailMessage("allpaxtesting@gmail.com", model.Email))
                     {
                         message.Subject = "Test";
                         message.Body = body;
                         message.IsBodyHtml = true;
                         smtp.Send(message);
                     }
+
+                    //smtp.Host = "relay-hosting.secureserver.net";
+                    //smtp.Port = 25;
+                    //smtp.EnableSsl = false;
+                    //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    //smtp.UseDefaultCredentials = false;
+                    //smtp.Credentials = new NetworkCredential("ph14185669651", "Allpax_1");
+
+                    //string body = "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
+
+                    //using (var message = new MailMessage("ph14185669651@secureserver.net", model.Email))
+                    //{
+                    //    message.Subject = "Confirm your e-mail address.";
+                    //    message.Body = body;
+                    //    message.IsBodyHtml = true;
+                    //    smtp.Send(message);
+                    //}
 
                     //need to remove the password field from tbl_Users because the password is handled by ASP.net Identity
 
@@ -354,12 +354,56 @@ namespace allpax_service_record.Controllers
                     return View("ForgotPasswordConfirmation");
                 }
 
+                SmtpClient smtp = new SmtpClient();
+
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                //await UserManager.SendEmailAsync(user.Email, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                ////BEGIN ORIGINAL SEND E-MAIL LOGIC
+                //await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                ////await UserManager.SendEmailAsync(user.Email, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                ////BEGIN ORIGINAL SEND E-MAIL LOGIC
+
+                //BEGIN LOCAL GMAIL TESTING SEND E-MAIL LOGIC
+                smtp.Host = "smtp.gmail.com";
+                smtp.Port = 587;
+                smtp.EnableSsl = true;
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential("allpaxtesting@gmail.com", "Allpax_1234");
+
+                string body = "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>";
+
+                using (var message = new MailMessage("allpaxtesting@gmail.com", model.Email))
+                {
+                    message.Subject = "Reset password.";
+                    message.Body = body;
+                    message.IsBodyHtml = true;
+                    smtp.Send(message);
+                }
+                //END LOCAL GMAIL TESTING SEND E-MAIL LOGIC
+
+                ////BEGIN NEW SEND E-MAIL LOGIC
+                //smtp.Host = "relay-hosting.secureserver.net";
+                //smtp.Port = 25;
+                //smtp.EnableSsl = false;
+                //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                //smtp.UseDefaultCredentials = false;
+                //smtp.Credentials = new NetworkCredential("ph14185669651", "Allpax_1");
+
+                //string body = "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>";
+
+                //using (var message = new MailMessage("ph14185669651@secureserver.net", model.Email))
+                //{
+                //    message.Subject = "Reset your password.";
+                //    message.Body = body;
+                //    message.IsBodyHtml = true;
+                //    smtp.Send(message);
+                //}
+                ////END NEW SEND E-MAIL LOGIC
+
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
