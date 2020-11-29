@@ -2545,7 +2545,7 @@
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
-    <Content Include="Views\getUserAcctInfo\Index.cshtml" />
+    <Content Include="Views\getUserAcctInfo-old\Index.cshtml" />
     <Content Include="Views\Account\getUserAcctInfo.cshtml" />
     <Content Include="Views\Account\getUserAcctInfo-mine.cshtml" />
     <Content Include="Views\Account\getUserAcctInfo-canned.cshtml" />

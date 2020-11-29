@@ -267,7 +267,8 @@
                     List<string> temp_team = item.teamShortNames;
                     List<string> temp_workDescription = item.workDescription;
                     Boolean temp_active = item.active;
-                    string userLoggedIn = Regex.Replace(User.Identity.GetUserName(), "@.*", "");
+                    //string userLoggedIn = Regex.Replace(User.Identity.GetUserName(), "@.*", "");
+                    string userLoggedIn = @User.Identity.GetUserName();
                     Boolean userAuthorized = false;
                     string temp_author = item.dailyReportAuthor;
                     //END TEMPORARY LOOP VARIABLES
@@ -306,7 +307,7 @@
                             }
                         </td>
                         <td>
-                            @if (userLoggedIn == "admin1" | userLoggedIn == temp_author)
+                            @if (User.IsInRole("Admin") | userLoggedIn == temp_author)
                             {
                                 userAuthorized = true;
                             }
@@ -314,7 +315,7 @@
                             {
                                 for (var i = 0; i < (temp_teamUserNames.Count); i++)
                                 {
-                                    if (temp_teamUserNames[@i] == userLoggedIn | userLoggedIn == "admin1")
+                                    if (temp_teamUserNames[@i] == userLoggedIn | User.IsInRole("Admin"))
                                     {
                                         userAuthorized = true;
                                     }
