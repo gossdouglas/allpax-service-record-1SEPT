@@ -423,7 +423,7 @@
                 //end fill sub jobs dropdown
 
                 //begin load team members on page load
-                console.log("daily report ID passed: " + dailyReportID);
+                //console.log("daily report ID passed: " + dailyReportID);
                 $.ajax({
                     //url: 'DataService.asmx/GetAllTeamNamesByReportID',
                     url: '/DataService.asmx/GetAllTeamNamesByReportID',
@@ -441,7 +441,7 @@
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
                         });
-                        console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
+                        //console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
 
                         //cloned to new daily report
                         //begin fill the team names dropdown
@@ -462,19 +462,20 @@
                                     //if the user is part of this copied daily report, add this user to the report team as selected and as available for the new team dropdowns
                                     if ($.inArray(temp_userName, dailyRptTeamUserIDArr) !== -1) {
                                         $("<option value=" + temp_userName + " selected>" + temp_name + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
-                                        $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
+                                        $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");                                        
                                         //console.log(temp_userName + " is in dailyRptTeamUserIDArr");
                                     }
 
                                     //if the user is not part of this copied daily report but is the author, add this user to the report team as selected and as available for the new team dropdowns
                                     else if ($.inArray(dailyRptAuthor, dailyRptTeamUserIDArr) == -1 && dailyRptAuthor == temp_userName) {
-                                        console.log("The currently logged in user " + dailyRptAuthor + " was not found the copied daily report.  They will be added.")
+                                        //console.log("The currently logged in user " + dailyRptAuthor + " was not found the copied daily report.  They will be added.")
                                         dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                                         dailyRptTeamUserIDArr.push(temp_userName);
-                                        console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
+                                        //console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
 
                                         $("<option value=" + temp_userName + " selected>" + temp_name + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
                                         $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
+                                        $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.RtndRecs");
                                     }
 
                                     //add this user as available, but not selected in the report team dropdown
