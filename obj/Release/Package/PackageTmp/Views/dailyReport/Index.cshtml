@@ -382,7 +382,7 @@
                             var temp_shortName = item.shortName;
 
                             if (item.userName == dailyRptAuthor) {
-                                $("<option value=" + temp_userName + " selected>" + temp_userName + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
+                                $("<option value=" + temp_userName + " selected>" + temp_name + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
                                 $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".team_dpdwn_new");
                                 dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                                 dailyRptTeamUserIDArr.push(temp_userName);
