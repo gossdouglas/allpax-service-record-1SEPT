@@ -2505,7 +2505,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\dailyReport\Index-prior to one shot work.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper.js.flow" />
@@ -2530,13 +2529,9 @@
     <Content Include="Views\workDescWntyDelaysPrint\Index.cshtml" />
     <Content Include="Views\dailyReportByReportIDPrint\Index-orig.cshtml" />
     <Content Include="Views\dailyReportAll\Filtered.cshtml" />
-    <Content Include="Views\dailyReport\copyDailyReport-rom edit by id.cshtml" />
     <Content Include="Views\dailyReport\Index.cshtml" />
-    <Content Include="Views\dailyReport\Index-before too much chosen work.cshtml" />
     <Content Include="Views\workDesc\Index-before select2 update.cshtml" />
-    <Content Include="Views\dailyReport\copyDailyReport-orig.cshtml" />
     <Content Include="Views\dailyReportByReportID\copyDailyReport.cshtml" />
-    <Content Include="Views\dailyReport\copyDailyReport.cshtml" />
     <Content Include="Views\Manage\Index-orig.cshtml" />
     <Content Include="Views\Manage\ChangePassword-orig.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />

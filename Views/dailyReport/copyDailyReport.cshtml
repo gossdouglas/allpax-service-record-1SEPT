@@ -421,6 +421,7 @@
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
                         });
+
                         //console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
 
                         //cloned to new daily report
@@ -438,6 +439,7 @@
                                     var temp_name = item.name;
                                     var temp_shortName = item.shortName;
 
+                                    //if the user is part of this copied daily report, add this user to the report team as selected and as available for the new team dropdowns
                                     if ($.inArray(temp_userName, dailyRptTeamUserIDArr) !== -1) {
                                         $("<option value=" + temp_userName + " selected>" + temp_name + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
                                         $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
@@ -448,6 +450,8 @@
                                         $("<option value=" + temp_userName + ">" + temp_name + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
                                         //console.log(temp_userName + " is not in dailyRptTeamUserIDArr");
                                     }
+
+                                    console.log("Is the currently logged in user in the copied daily report? " + $.inArray(dailyRptAuthor, dailyRptTeamUserIDArr) == -1)
                                 });
                             }
                         });

@@ -51,48 +51,7 @@
 
             //determine the screen size on load
             fn_checkScreenSize();
-
-            $("#saveAndSubmit_btn").click(function () {
-            //function fn_submit() {
-
-                var addItem1 = $("#fullName_div").html();
-                var addItem2 = $("#shortName_div").html();
-                var addItem3 = $("#userName_div").html();
-                var addItem4 = $("#email_div").html();
-                var addItem5 = $("#password_div").html();
-                var addItem6 = $("#confirmPassword_div").html();
-                var addItem7 = $("#admin_div").html();
-                var addItem8 = $("#active_div").html();
-
-                var data = {
-                    name: addItem1,
-                    ShortName: addItem2,
-                    UserName: addItem3,
-                    Email: "noone@nothing.com",
-                    Password: "User_1",
-                    ConfirmPassword: "User_1",
-                    admin: "true",
-                    active: "true"
-                };
-
-                console.log(data);
-
-                fn_showSpinner();
-
-                $.ajax({
-                    //url: '/Account/RegisterNewUser',
-                    url: '/Account/Register',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function (response) {
-
-                    }
-                });
-            });
-
+      
             $('#userEditForm').on('show.bs.modal', function (event) {
                 console.clear();
 
@@ -226,7 +185,7 @@
             });
 
             $(".userNewForm.btn_save").click(function () {
-                fn_showSpinner();
+                //fn_showSpinner();
             });
 
             //set the bottom border of the last row of returned records
@@ -284,6 +243,10 @@
 
                 //$('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
             }
+
+            $('.short-name').keyup(function () {
+                $(this).val($(this).val().toUpperCase());
+            });
 
         });//end document read jquery statements
     </script>
@@ -456,8 +419,8 @@
     @*BEGIN NEW USER MODAL TEMPLATE*@
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary("", new { @class = "text-danger" })
+        @*@Html.AntiForgeryToken()*@
+        @*@Html.ValidationSummary("", new { @class = "text-danger" })*@
 
         <div class="modal fade" id="userNewForm" tabindex="-1" role="dialog" aria-labelledby="userNewForm" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -470,29 +433,31 @@
                     </div>
                     <div class="modal-body">
                         <form>
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary("", new { @class = "text-danger" })
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="full-name" class="col-form-label">Full Name:</label>
                                         @*<input type="text" class="form-control full-name">*@
-                                        @Html.TextBoxFor(m => m.name, new { @class = "form-control", @maxlength = "50" })
+                                        @Html.TextBoxFor(m => m.name, new { @class = "form-control full-name", @maxlength = "50" })
                                     </div>
                                     <div class="col-6">
                                         <label for="short-name" class="col-form-label">Short Name:</label>
                                         @*<input type="text" class="form-control short-name">*@
-                                        @Html.TextBoxFor(m => m.ShortName, new { @class = "form-control", @maxlength = "2" })
+                                        @Html.TextBoxFor(m => m.ShortName, new { @class = "form-control short-name", @maxlength = "2" })
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="user-name" class="col-form-label">User Name:</label>
                                         @*<input type="text" class="form-control user-name">*@
-                                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @maxlength = "16" })
+                                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control user-name", @maxlength = "16" })
                                     </div>
                                     <div class="col-6">
                                         <label for="email" class="col-form-label">E-mail:</label>
                                         @*<input type="text" class="form-control email">*@
-                                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control email" })
                                     </div>
                                 </div>
                                 <div class="row">

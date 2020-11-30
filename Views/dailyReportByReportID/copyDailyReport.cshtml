@@ -459,15 +459,27 @@
                                     var temp_name = item.name;
                                     var temp_shortName = item.shortName;
 
+                                    //if the user is part of this copied daily report, add this user to the report team as selected and as available for the new team dropdowns
                                     if ($.inArray(temp_userName, dailyRptTeamUserIDArr) !== -1) {
                                         $("<option value=" + temp_userName + " selected>" + temp_name + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
                                         $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
                                         //console.log(temp_userName + " is in dailyRptTeamUserIDArr");
                                     }
 
+                                    //if the user is not part of this copied daily report but is the author, add this user to the report team as selected and as available for the new team dropdowns
+                                    else if ($.inArray(dailyRptAuthor, dailyRptTeamUserIDArr) == -1 && dailyRptAuthor == temp_userName) {
+                                        console.log("The currently logged in user " + dailyRptAuthor + " was not found the copied daily report.  They will be added.")
+                                        dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
+                                        dailyRptTeamUserIDArr.push(temp_userName);
+                                        console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
+
+                                        $("<option value=" + temp_userName + " selected>" + temp_name + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
+                                        $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".Team_dpdwn.team_dpdwn_new");
+                                    }
+
+                                    //add this user as available, but not selected in the report team dropdown
                                     else {
                                         $("<option value=" + temp_userName + ">" + temp_name + "|" + temp_shortName + "</option>").appendTo("#team_dpdwn");
-                                        //console.log(temp_userName + " is not in dailyRptTeamUserIDArr");
                                     }
                                 });
                             }
@@ -512,7 +524,6 @@
             //differs between new daily report and an existing one
             //$("#addButton").click(function () {//when the add button is clicked...
             function fn_exitSubmit(submissionState) {
-                console.log("yo")
                 submissionStatus = submissionState;//0 indicates meant to be stored, 1 indicates stored and submitted for review
 
                 //differs between new daily report and an existing one
@@ -950,8 +961,8 @@
         <div class="col-3" style="padding:5px">
             <div>
                 <span><strong>Author</strong></span>
-                @*<span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>*@
-                <span class="" id="dailyRptAuthor">@Model.First().dailyReportAuthor</span>
+                <span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>
+                @*<span class="" id="dailyRptAuthor">@Model.First().dailyReportAuthor</span>*@
             </div>
         </div>
     </div>

@@ -39,25 +39,34 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
-                                <div class="checkbox">
-                                    @Html.CheckBoxFor(m => m.RememberMe)
-                                    @Html.LabelFor(m => m.RememberMe)
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10">
                                 <input id="inputSubmit" type="submit" value="Log in" class="btn btn-default" />
-                                @Html.ActionLink("Register as a new user", "Register")
+                                @*@Html.ActionLink("Register as a new user", "Register")*@
+                                @Html.CheckBoxFor(m => m.RememberMe)
+                                @Html.LabelFor(m => m.RememberMe)
                             </div>
+                            <div class="col-md-offset-2 col-md-10">
+                                @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                            </div>
+                            @*<div class="col-md-offset-2 col-md-10">
+            <div class="checkbox">
+                @Html.CheckBoxFor(m => m.RememberMe)
+                @Html.LabelFor(m => m.RememberMe)
+            </div>
+        </div>*@
                         </div>
+                        <!--<div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input id="inputSubmit" type="submit" value="Log in" class="btn btn-default" />-->
+                                @*@Html.ActionLink("Register as a new user", "Register")*@
+                            <!--</div>
+                        </div>-->
                         @*<div class="form-group">
                         @Html.ActionLink("Register as a new user", "Register")
                         </div>*@
                          @*Enable this once you have account confirmation enabled for password reset functionality*@
-                    <p>
+                    @*<p>
                         @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                    </p>
+                    </p>*@
                     </form>
                 </div>
                         }
