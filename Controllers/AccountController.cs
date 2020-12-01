@@ -267,46 +267,52 @@ namespace allpax_service_record.Controllers
         [Authorize(Roles = "Admin")]//added by Goss
         public ActionResult UpdateUserAcctInfo(vm_userAcctInfo userAcctInfoUpdate)
         {
-
-            //load the roles held by this user into a list for later comparison
-            List<string> roles = UserManager.GetRoles(userAcctInfoUpdate.aspNetId).ToList();
-            bool currentlyAdmin = roles.Contains("Admin");//determine if this user is currently an admin
-            //System.Diagnostics.Debug.WriteLine(currentlyAdmin);
-
-            if ((currentlyAdmin) && (!userAcctInfoUpdate.admin))//if currently an admin, but selected to longer be an admin...
+            if (ModelState.IsValid)
             {
-                UserManager.RemoveFromRole(userAcctInfoUpdate.aspNetId, "Admin");
+
+                //load the roles held by this user into a list for later comparison
+                List<string> roles = UserManager.GetRoles(userAcctInfoUpdate.aspNetId).ToList();
+                bool currentlyAdmin = roles.Contains("Admin");//determine if this user is currently an admin
+                                                              //System.Diagnostics.Debug.WriteLine(currentlyAdmin);
+
+                if ((currentlyAdmin) && (!userAcctInfoUpdate.admin))//if currently an admin, but selected to longer be an admin...
+                {
+                    UserManager.RemoveFromRole(userAcctInfoUpdate.aspNetId, "Admin");
+                }
+
+                if ((!currentlyAdmin) && (userAcctInfoUpdate.admin))//if not currently an admin, but selected to be an admin...
+                {
+                    UserManager.AddToRole(userAcctInfoUpdate.aspNetId, "Admin");
+                }
+
+                db.Database.ExecuteSqlCommand(
+                    "UPDATE AspNetUsers " +
+                    "SET " +
+
+                    "UserName = {1}," +
+                    "Email = {2} " +
+
+                    "WHERE Id = {0}",
+                    userAcctInfoUpdate.aspNetId, userAcctInfoUpdate.UserName, userAcctInfoUpdate.Email);
+
+                db.Database.ExecuteSqlCommand(
+                    "UPDATE tbl_Users " +
+                    "SET " +
+
+                    "name = {1}, " +
+                    "ShortName = {2}, " +
+                    "admin = {3}, " +
+                    "active = {4} " +
+
+                    "WHERE userName = {0}",
+                    userAcctInfoUpdate.UserName, userAcctInfoUpdate.name, userAcctInfoUpdate.ShortName, userAcctInfoUpdate.admin, userAcctInfoUpdate.active);
+
+                return Json(Url.Action("GetUserAcctInfo", "Account"));
+                //return Json("complete");  
             }
 
-            if ((!currentlyAdmin) && (userAcctInfoUpdate.admin))//if not currently an admin, but selected to be an admin...
-            {
-                UserManager.AddToRole(userAcctInfoUpdate.aspNetId, "Admin");
-            }
-
-            db.Database.ExecuteSqlCommand(
-                "UPDATE AspNetUsers " +
-                "SET " +
-
-                "UserName = {1}," +
-                "Email = {2} " +
-
-                "WHERE Id = {0}",
-                userAcctInfoUpdate.aspNetId, userAcctInfoUpdate.UserName, userAcctInfoUpdate.Email);
-
-            db.Database.ExecuteSqlCommand(
-                "UPDATE tbl_Users " +
-                "SET " +
-
-                "name = {1}, " +
-                "ShortName = {2}, " +
-                "admin = {3}, " +
-                "active = {4} " +
-
-                "WHERE userName = {0}",
-                userAcctInfoUpdate.UserName, userAcctInfoUpdate.name, userAcctInfoUpdate.ShortName, userAcctInfoUpdate.admin, userAcctInfoUpdate.active);
-
-            return Json(Url.Action("GetUserAcctInfo", "Account"));
-            //return Json("complete");            
+            // If we got this far, something failed, redisplay form
+            return View(userAcctInfoUpdate);
         }
 
         //only a role of Admin can access this ActionResult

@@ -128,20 +128,20 @@
 
                 console.log(data);
 
-                fn_showSpinner();
+                //fn_showSpinner();
 
-                $.ajax({
-                    url: '/Account/UpdateUserAcctInfo',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function (response) {
-                        //console.log(response);
-                        window.location.href = response;
-                    }
-                });
+                //$.ajax({
+                //    url: '/Account/UpdateUserAcctInfo',
+                //    method: 'post',
+                //    contentType: 'application/json',
+                //    dataType: 'json',
+                //    data: JSON.stringify(data),
+                //    traditional: true,
+                //    success: function (response) {
+                //        //console.log(response);
+                //        window.location.href = response;
+                //    }
+                //});
             });
 
             $(".Btn_delete").click(function () {
@@ -329,26 +329,28 @@
                 }
             </div>
 
-            @if (@temp_userName == "admin") {
-            <div class="col-lg-2 button_div" style="padding:0px;">
-                <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                        data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
-                    <i class="far fa-edit fa-2x" style="color:black;">
-                    </i>
-                </button>
-                <button class="btn btn-light btn-sm Btn_delete" disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-            </div>    
+            @if (@temp_userName == "admin")
+            {
+                <div class="col-lg-2 button_div" style="padding:0px;">
+                    <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
+                        <i class="far fa-edit fa-2x" style="color:black;">
+                        </i>
+                    </button>
+                    <button class="btn btn-light btn-sm Btn_delete" disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                </div>
             }
-            else {
-            <div class="col-lg-2 button_div" style="padding:0px;">
-                <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                        data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
-                    <i class="far fa-edit fa-2x" style="color:black;">
-                    </i>
-                </button>
-                <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-            </div>
-            }           
+            else
+            {
+                <div class="col-lg-2 button_div" style="padding:0px;">
+                    <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
+                        <i class="far fa-edit fa-2x" style="color:black;">
+                        </i>
+                    </button>
+                    <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                </div>
+            }
         </div>
         <hr class="mobile" hidden>
     }
@@ -356,77 +358,13 @@
     @*END RETURNED RECORDS*@
 
     @*BEGIN EDIT USER MODAL TEMPLATE*@
-    <div class="modal fade" id="userEditForm" tabindex="-1" role="dialog" aria-labelledby="userEditForm" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="userEditForm">Edit user</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <div class="row">
-                                <label for="asp-net-id" class="col-form-label" hidden>ASP.net ID:</label>
-                                <input type="text" class="form-control asp-net-id" hidden>
-                                <div class="col-6">
-                                    <label for="full-name" class="col-form-label">Full Name:</label>
-                                    <input type="text" class="form-control full-name" maxlength="50">
-                                </div>
-                                <div class="col-6">
-                                    <label for="short-name" class="col-form-label">Short Name:</label>
-                                    <input type="text" class="form-control short-name" maxlength="2">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="user-name" class="col-form-label">User Name:</label>
-                                    <input type="text" class="form-control user-name" maxlength="16">
-                                </div>
-                                <div class="col-6">
-                                    <label for="email" class="col-form-label">E-mail:</label>
-                                    <input type="text" class="form-control email">
-                                </div>
-                            </div>
-                            <div class="row">
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input admin" type="checkbox" value="">
-                                <label class="form-check-label" for="">
-                                    Administrator
-                                </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input active" type="checkbox" value="">
-                                <label class="form-check-label" for="">
-                                    Active
-                                </label>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary userEditForm btn_save">Save</button>
-                    <button type="button" class="btn btn-secondary btn_cancel" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    @*END EDIT USER MODAL TEMPLATE*@
-
-    @*BEGIN NEW USER MODAL TEMPLATE*@
-    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("UpdateUserAcctInfo", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
-        @*@Html.AntiForgeryToken()*@
-        @*@Html.ValidationSummary("", new { @class = "text-danger" })*@
-
-        <div class="modal fade" id="userNewForm" tabindex="-1" role="dialog" aria-labelledby="userNewForm" aria-hidden="true">
+        <div class="modal fade" id="userEditForm" tabindex="-1" role="dialog" aria-labelledby="userEditForm" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="userNewForm">Add User</h5>
+                        <h5 class="modal-title" id="userEditForm">Edit user</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -437,21 +375,23 @@
                             @Html.ValidationSummary("", new { @class = "text-danger" })
                             <div class="form-group">
                                 <div class="row">
+                                    <label for="asp-net-id" class="col-form-label" hidden>ASP.net ID:</label>
+                                    <input type="text" class="form-control asp-net-id" hidden>
                                     <div class="col-6">
                                         <label for="full-name" class="col-form-label">Full Name:</label>
-                                        @*<input type="text" class="form-control full-name">*@
+                                        @*<input type="text" class="form-control full-name" maxlength="50">*@
                                         @Html.TextBoxFor(m => m.name, new { @class = "form-control full-name", @maxlength = "50" })
                                     </div>
                                     <div class="col-6">
                                         <label for="short-name" class="col-form-label">Short Name:</label>
-                                        @*<input type="text" class="form-control short-name">*@
+                                        @*<input type="text" class="form-control short-name" maxlength="2">*@
                                         @Html.TextBoxFor(m => m.ShortName, new { @class = "form-control short-name", @maxlength = "2" })
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="user-name" class="col-form-label">User Name:</label>
-                                        @*<input type="text" class="form-control user-name">*@
+                                        @*<input type="text" class="form-control user-name" maxlength="16">*@
                                         @Html.TextBoxFor(m => m.UserName, new { @class = "form-control user-name", @maxlength = "16" })
                                     </div>
                                     <div class="col-6">
@@ -461,23 +401,16 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-6">
-                                        <label for="user-name" class="col-form-label">Password:</label>
-                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @maxlength = "16" })
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="email" class="col-form-label">Confirm Password:</label>
-                                        @*<input type="text" class="form-control email">*@
-                                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @maxlength = "16" })
-                                    </div>
                                 </div>
                                 <div class="form-check form-check-inline">
+                                    @*<input class="form-check-input admin" type="checkbox" value="">*@
                                     @Html.CheckBoxFor(m => m.admin)
                                     <label class="form-check-label" for="">
                                         Administrator
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
+                                    @*<input class="form-check-input active" type="checkbox" value="">*@
                                     @Html.CheckBoxFor(m => m.active)
                                     <label class="form-check-label" for="">
                                         Active
@@ -487,16 +420,96 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary userNewForm btn_save" value="Register">Save</button>
+                        <button type="button" class="btn btn-primary userEditForm btn_save" value="UpdateUserAcctInfo">Save</button>
                         <button type="button" class="btn btn-secondary btn_cancel" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
     }
-    @*END EDIT USER MODAL TEMPLATE*@
+        @*END EDIT USER MODAL TEMPLATE*@
 
-</div>
+        @*BEGIN NEW USER MODAL TEMPLATE*@
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @*@Html.AntiForgeryToken()*@
+            @*@Html.ValidationSummary("", new { @class = "text-danger" })*@
+
+            <div class="modal fade" id="userNewForm" tabindex="-1" role="dialog" aria-labelledby="userNewForm" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="userNewForm">Add User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary("", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="full-name" class="col-form-label">Full Name:</label>
+                                            @*<input type="text" class="form-control full-name">*@
+                                            @Html.TextBoxFor(m => m.name, new { @class = "form-control full-name", @maxlength = "50" })
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="short-name" class="col-form-label">Short Name:</label>
+                                            @*<input type="text" class="form-control short-name">*@
+                                            @Html.TextBoxFor(m => m.ShortName, new { @class = "form-control short-name", @maxlength = "2" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="user-name" class="col-form-label">User Name:</label>
+                                            @*<input type="text" class="form-control user-name">*@
+                                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control user-name", @maxlength = "16" })
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="email" class="col-form-label">E-mail:</label>
+                                            @*<input type="text" class="form-control email">*@
+                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control email" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="user-name" class="col-form-label">Password:</label>
+                                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @maxlength = "16" })
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="email" class="col-form-label">Confirm Password:</label>
+                                            @*<input type="text" class="form-control email">*@
+                                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @maxlength = "16" })
+                                        </div>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        @Html.CheckBoxFor(m => m.admin)
+                                        <label class="form-check-label" for="">
+                                            Administrator
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        @Html.CheckBoxFor(m => m.active)
+                                        <label class="form-check-label" for="">
+                                            Active
+                                        </label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary userNewForm btn_save" value="Register">Save</button>
+                            <button type="button" class="btn btn-secondary btn_cancel" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @*END NEW USER MODAL TEMPLATE*@
+
+    </div>
 @*END USER SECTION*@
 
     @section Scripts {
