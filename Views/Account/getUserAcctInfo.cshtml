@@ -161,7 +161,7 @@
                 console.clear();
                 console.log("Modal delete pressed.")
 
-                var modal = $(this).parent().parent();
+                var modal = $(this).parent().parent().parent();
 
                 var temp_aspNetId = modal.find('.asp-net-id').val()
                 //var temp_fullName = modal.find('.full-name').val()
@@ -252,10 +252,6 @@
                     }
                 });
                 
-            });
-
-            $(".userNewForm.btn_save").click(function () {
-                //fn_showSpinner();
             });
 
             //set the bottom border of the last row of returned records
@@ -434,11 +430,16 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
+                        <div class="float-left">
                         <h5 class="modal-title" id="userEditForm">Edit user</h5>
-                        <button type="button" class="btn btn-light btn-sm userEditForm btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        </div>
+                        <div class="float-none">
+                            <button type="button" class="btn btn-light btn-sm userEditForm" data-toggle="modal" data-target="#userNewForm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                            <button type="button" class="btn btn-light btn-sm userEditForm btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="modal-body">
                         <form>
@@ -495,7 +496,6 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn userEditForm btn_delete" value="">Delete</button>
                         <button type="button" class="btn userEditForm btn_save" value="">Save</button>
                         <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
                     </div>
@@ -508,9 +508,6 @@
         @*BEGIN NEW USER MODAL TEMPLATE*@
         @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
-            @*@Html.AntiForgeryToken()*@
-            @*@Html.ValidationSummary("", new { @class = "text-danger" })*@
-
             <div class="modal fade" id="userNewForm" tabindex="-1" role="dialog" aria-labelledby="userNewForm" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
