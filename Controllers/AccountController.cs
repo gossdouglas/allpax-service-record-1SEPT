@@ -266,6 +266,7 @@ namespace allpax_service_record.Controllers
         //UPDATE A USER'S ACCOUNT INFORMATION
         [Authorize(Roles = "Admin")]//added by Goss
         public ActionResult UpdateUserAcctInfo(vm_userAcctInfo userAcctInfoUpdate)
+        //public async Task<ActionResult> UpdateUserAcctInfo(vm_userAcctInfo userAcctInfoUpdate)
         {
             if (ModelState.IsValid)
             {
@@ -310,9 +311,24 @@ namespace allpax_service_record.Controllers
                 return Json(Url.Action("GetUserAcctInfo", "Account"));
                 //return Json("complete");  
             }
+           
+            var modelErrors = new List<string>();
+
+            foreach (var modelState in ModelState.Values)
+            {
+                foreach (var modelError in modelState.Errors)
+                {
+                    modelErrors.Add(modelError.ErrorMessage);
+                }
+            }
+            
+            userAcctInfoUpdate.ModelErrors = modelErrors;
 
             // If we got this far, something failed, redisplay form
             return View(userAcctInfoUpdate);
+            //return View(userAcctInfoUpdate.ModelErrors);
+
+            //return View("got it");
         }
 
         //only a role of Admin can access this ActionResult

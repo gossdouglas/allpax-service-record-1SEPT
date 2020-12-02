@@ -10,11 +10,6 @@ namespace allpax_service_record.Models.View_Models
     {
         public string aspNetId { get; set; }
 
-        //public string UserName { get; set; }
-        [Required]
-        [Display(Name = "User Name")]
-        public string UserName { get; set; }
-
         //public string name { get; set; }
         [Required]
         [Display(Name = "Full Name")]
@@ -24,6 +19,17 @@ namespace allpax_service_record.Models.View_Models
         [Required]
         [Display(Name = "Short Name")]
         public string ShortName { get; set; }
+
+        //public string UserName { get; set; }
+        [Required]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+
+        //public string Email { get; set; }
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
 
         //public bool admin { get; set; }
         [Required]
@@ -35,10 +41,6 @@ namespace allpax_service_record.Models.View_Models
         [Display(Name = "Active")]
         public bool active { get; set; }
 
-        //public string Email { get; set; }
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
+        public List<string> ModelErrors { get; set; }
     }
 }

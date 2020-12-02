@@ -126,22 +126,35 @@
                     active: temp_active
                 };
 
-                console.log(data);
+                //console.log(data);
 
                 //fn_showSpinner();
 
-                //$.ajax({
-                //    url: '/Account/UpdateUserAcctInfo',
-                //    method: 'post',
-                //    contentType: 'application/json',
-                //    dataType: 'json',
-                //    data: JSON.stringify(data),
-                //    traditional: true,
-                //    success: function (response) {
-                //        //console.log(response);
-                //        window.location.href = response;
-                //    }
-                //});
+                $.ajax({
+                    url: '/Account/UpdateUserAcctInfo',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        //console.log(response);
+                        window.location.href = response;
+                    },
+                    error: function (response) {
+
+                        console.log("an error!");
+                        //console.log(response);
+                        $(response).each(function (index, item) {
+
+                            //var modelErrors = item.ModelErrors
+                            //console.log(item.name)
+                            //console.log(item.Email)
+                            //console.log(item.ModelErrors)
+                            console.log(item.name)
+                        });
+                    }
+                });
             });
 
             $(".Btn_delete").click(function () {
@@ -372,46 +385,50 @@
                     <div class="modal-body">
                         <form>
                             @Html.AntiForgeryToken()
-                            @Html.ValidationSummary("", new { @class = "text-danger" })
+                            @*@Html.ValidationSummary("", new { @class = "text-danger" })*@
+                            <div class="validation-summary-valid text-danger" data-valmsg-summary="true">
+                                @*@Model.userAcctInfo.Count*@
+                                @*@Model.userAcctInfo.FirstOrDefault().ModelErrors.Count*@
+                            </div>
                             <div class="form-group">
                                 <div class="row">
                                     <label for="asp-net-id" class="col-form-label" hidden>ASP.net ID:</label>
                                     <input type="text" class="form-control asp-net-id" hidden>
                                     <div class="col-6">
                                         <label for="full-name" class="col-form-label">Full Name:</label>
-                                        @*<input type="text" class="form-control full-name" maxlength="50">*@
-                                        @Html.TextBoxFor(m => m.name, new { @class = "form-control full-name", @maxlength = "50" })
+                                        <input type="text" class="form-control full-name" maxlength="50">
+                                        @*@Html.TextBoxFor(m => m.name, new { @class = "form-control full-name", @maxlength = "50" })*@
                                     </div>
                                     <div class="col-6">
                                         <label for="short-name" class="col-form-label">Short Name:</label>
-                                        @*<input type="text" class="form-control short-name" maxlength="2">*@
-                                        @Html.TextBoxFor(m => m.ShortName, new { @class = "form-control short-name", @maxlength = "2" })
+                                        <input type="text" class="form-control short-name" maxlength="2">
+                                        @*@Html.TextBoxFor(m => m.ShortName, new { @class = "form-control short-name", @maxlength = "2" })*@
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="user-name" class="col-form-label">User Name:</label>
-                                        @*<input type="text" class="form-control user-name" maxlength="16">*@
-                                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control user-name", @maxlength = "16" })
+                                        <input type="text" class="form-control user-name" maxlength="16">
+                                        @*@Html.TextBoxFor(m => m.UserName, new { @class = "form-control user-name", @maxlength = "16" })*@
                                     </div>
                                     <div class="col-6">
                                         <label for="email" class="col-form-label">E-mail:</label>
-                                        @*<input type="text" class="form-control email">*@
-                                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control email" })
+                                        <input type="text" class="form-control email">
+                                        @*@Html.TextBoxFor(m => m.Email, new { @class = "form-control email" })*@
                                     </div>
                                 </div>
                                 <div class="row">
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    @*<input class="form-check-input admin" type="checkbox" value="">*@
-                                    @Html.CheckBoxFor(m => m.admin)
+                                    <input class="form-check-input admin" type="checkbox" value="">
+                                    @*@Html.CheckBoxFor(m => m.admin)*@
                                     <label class="form-check-label" for="">
                                         Administrator
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    @*<input class="form-check-input active" type="checkbox" value="">*@
-                                    @Html.CheckBoxFor(m => m.active)
+                                    <input class="form-check-input active" type="checkbox" value="">
+                                    @*@Html.CheckBoxFor(m => m.active)*@
                                     <label class="form-check-label" for="">
                                         Active
                                     </label>
@@ -447,7 +464,7 @@
                         <div class="modal-body">
                             <form>
                                 @Html.AntiForgeryToken()
-                                @Html.ValidationSummary("", new { @class = "text-danger" })
+                                @Html.ValidationSummary("", new { @class = "text-danger" })                             
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-6">
