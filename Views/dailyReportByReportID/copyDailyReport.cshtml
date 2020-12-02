@@ -783,6 +783,12 @@
                     placeholder: "Select Team",
                     closeOnSelect: "false"
                 })
+
+                $('#team_dpdwn').select2({
+                    width: "100%",
+                    placeholder: "Select Team",
+                    closeOnSelect: "false"
+                })
             }
 
             //disable the select2 add-on
@@ -837,6 +843,20 @@
             $("#disableSelect2").click(function () {
                 fn_disableSelect2();
             });
+
+            function okToCloseBrowser(e) {
+                if (!e) e = window.event;
+                //e.cancelBubble is supported by IE - this will kill the bubbling process.
+                e.cancelBubble = true;
+                e.returnValue = 'You sure you want to leave?';
+
+                //e.stopPropagation works in Firefox.
+                if (e.stopPropagation) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+            window.onbeforeunload = okToCloseBrowser; 
 
             //END MISCELLANEOUS SECTION
 

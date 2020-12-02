@@ -133,6 +133,8 @@
                 <li class="nav-item ">
                     <a class="nav-link" href="/dailyReportAll">Select Daily Report</a>
                 </li>
+                @if (User.IsInRole("Admin"))
+                {
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin Tasks
@@ -144,6 +146,7 @@
                         <a class="nav-link" href="/Account/GetUserAcctInfo">Register/View Users</a>
                     </div>
                 </li>
+                }                
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
