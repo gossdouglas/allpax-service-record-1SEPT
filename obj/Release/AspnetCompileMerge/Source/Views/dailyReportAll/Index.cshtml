@@ -155,6 +155,8 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                     content: '',
                     buttons: {
                         confirm: function () {
+
+                            fn_showSpinner();
                             //begin axios add post
                             axios.post('/dailyReportAll/DeleteDailyReport', {
                                 dailyReportID: selectedItem0
@@ -210,6 +212,21 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             //BEGIN HIDE TABLEFILTER HELP LINK AFTER PAGE LOAD
             $(".helpBtn").css("display", "none");
             //END HIDE TABLEFILTER HELP LINK AFTER PAGE LOAD
+
+            //BEGIN MISCELLANEOUS SECTION
+
+            function fn_showSpinner() {
+                $.LoadingOverlay("show", {
+                    image: "",
+                    fontawesome: "fa fa-cog fa-spin"
+                });
+
+                $('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
+            }
+
+            //window.onbeforeunload = function (e) {
+            //    return 'Dialog text here.';
+            //};
 
         });//end document read jquery statements
     </script>

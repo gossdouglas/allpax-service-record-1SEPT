@@ -157,15 +157,72 @@
                 });
             });
 
-            $(".Btn_delete").click(function () {
+            $(".userEditForm.btn_delete").click(function () {
+                console.clear();
+                console.log("Modal delete pressed.")
+
+                var modal = $(this).parent().parent();
+
+                var temp_aspNetId = modal.find('.asp-net-id').val()
+                //var temp_fullName = modal.find('.full-name').val()
+                //var temp_shortName = modal.find('.short-name').val()
+                var temp_userName = modal.find('.user-name').val()
+                //var temp_email = modal.find('.email').val()
+                //var temp_admin = modal.find('.admin').prop('checked')
+                //var temp_active = modal.find('.active').prop('checked')
+
+                //var data = {
+                //    aspNetId: temp_aspNetId,
+                //    name: temp_fullName,
+                //    ShortName: temp_shortName,
+                //    UserName: temp_userName,
+                //    Email: temp_email,
+                //    admin: temp_admin,
+                //    active: temp_active
+                //};
+
+                var data = {
+                    aspNetId: temp_aspNetId,
+                };
+
+                //console.log(data);
+
+                //fn_showSpinner();
+
+                $.confirm({
+                    title: 'Delete User ' + temp_userName + '?',
+                    content: '',
+                    buttons: {
+                        confirm: function () {
+                            fn_showSpinner();
+                            $.ajax({
+                                url: '/Account/DeleteUserAcctInfo',
+                                method: 'post',
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                data: JSON.stringify(data),
+                                traditional: true,
+                                success: function (response) {
+                                    //console.log(response);
+                                    window.location.href = response;
+                                }
+                            });
+                        },
+                        cancel: function () {
+                        }
+                    }
+                });
+            });
+
+            $(".returnedRecords .Btn_delete").click(function () {
                 console.clear();
 
                 var currentRow = $(this).parent().parent();
                 var temp_aspNetId = currentRow.find('.aspNetId_div').html()
                 var temp_userName = currentRow.find('.userName_div').html()
 
-                console.log("Delete button was pressed.")
-                console.log("temp_aspNetId: " + temp_aspNetId)
+                //console.log("Delete button was pressed.")
+                //console.log("temp_aspNetId: " + temp_aspNetId)
 
                 var data = {
                     aspNetId: temp_aspNetId,
@@ -437,8 +494,9 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary userEditForm btn_save" value="UpdateUserAcctInfo">Save</button>
-                        <button type="button" class="btn btn-secondary btn_cancel" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn userEditForm btn_delete" value="UpdateUserAcctInfo">Delete</button>
+                        <button type="button" class="btn userEditForm btn_save" value="UpdateUserAcctInfo">Save</button>
+                        <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -517,8 +575,8 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary userNewForm btn_save" value="Register">Save</button>
-                            <button type="button" class="btn btn-secondary btn_cancel" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn userNewForm btn_save" value="Register">Save</button>
+                            <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>
                 </div>
