@@ -11,57 +11,109 @@
     <script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
 
     <style>
-
-        #customerData_container {
-            padding-bottom: 5px;
-        }
-
-        .container {
-            border: 1px solid black;
-        }
-
-        .customerCode_div, .customerName_div, .address_div, .button_div {
-            border-top: 1px solid black;
-            border-left: 1px solid black;
-            padding: 5px;
-        }
-
-        /*ONLY THE LAST COLUMN HAS a RIGHT BORDER*/
-        .button_div {
-            border-right: 1px solid black;
-        }
-
-        .row {
-            border: none;
-            padding-left: 5px;
-            padding-right: 5px;
-        }
-
+       
         /*AN INVISIBLE HORIZONTAL SPACE*/
         .sectionSeparator {
             margin: 1px;
             opacity: 0;
         }
+
+        table {
+            table-layout: auto !important;
+        }
+
+        thead th, tbody td, tfoot td, tfoot th {
+            /*width: auto !important;*/
+            white-space: nowrap;
+        }
+
+        /*BEGIN CHANGE LAYOUT FOR MOBILE*/
+        @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+
+            /* Force table to not be like tables anymore */
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+                /* Hide table headers (but not display: none;, for accessibility) */
+                thead tr {
+                    position: absolute;
+                    top: -9999px;
+                    left: -9999px;
+                }
+
+            tr {
+                border: 1px solid #ccc;
+            }
+
+            td {
+                /* Behave  like a "row" */
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 50%;
+            }
+
+                td:before {
+                    /* Now like a table header */
+                    position: absolute;
+                    /* Top/left values mimic padding */
+                    top: 6px;
+                    left: 6px;
+                    width: 45%;
+                    padding-right: 10px;
+                    white-space: nowrap;
+                }
+            /*END CHANGE LAYOUT FOR MOBILE*/
+        }
     </style>
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            //determine the screen size on load
-            fn_checkScreenSize();
+            $(".customerNewForm.btn_save").click(function () {
+
+                if (fn_rowFilled($(this))) {
+
+                    var modal = $(this).parent().parent();
+                    var temp_customerCode = modal.find('.customer-code').val()
+                    var temp_customerName = modal.find('.customer-name').val()
+                    var temp_address = modal.find('.address').val()
+
+                    var data = {
+                        customerCode: temp_customerCode,
+                        customerName: temp_customerName,
+                        address: temp_address
+                    };
+
+                fn_showSpinner();
+
+                $.ajax({
+                    url: '/Customers/AddCustomer',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        window.location.href = response;
+                    },
+                    error: function (response) {
+                        console.log("an error!");
+                        $(response).each(function (index, item) {
+                            console.log(item.name)
+                        });
+                    }
+                });
+                }               
+            });
 
             $('#customerEditForm').on('show.bs.modal', function (event) {
-                console.clear();
 
                 var button = $(event.relatedTarget) // Button that triggered the modal
                 var temp_customerCode = button.data('customer-code') // Extract info from data-* attributes
                 var temp_customerName = button.data('customer-name') // Extract info from data-* attributes
                 var temp_address = button.data('address') // Extract info from data-* attributes
                 var temp_id = button.data('id') // Extract info from data-* attributes
-
-                //console.log(temp_customerCode)
-                //console.log(temp_customerName)
-                //console.log(temp_address)
-                //console.log(temp_id)
 
                 var modal = $(this)
                 modal.find('.modal-title').text('Customer Edit Form')
@@ -72,76 +124,60 @@
             })
 
             $(".customerEditForm.btn_save").click(function () {
-                console.clear();
 
-                var modal = $(this).parent().parent();
+                if (fn_rowFilled($(this))) {
 
-                var temp_customerCode = modal.find('.customer-code').val()
-                var temp_customerName = modal.find('.customer-name').val()
-                var temp_address = modal.find('.address').val()
-                var temp_id = modal.find('.id').val()
+                    var modal = $(this).parent().parent();
+                    var temp_customerCode = modal.find('.customer-code').val()
+                    var temp_customerName = modal.find('.customer-name').val()
+                    var temp_address = modal.find('.address').val()
+                    var temp_id = modal.find('.id').val()
 
-                console.log("Save button was pressed.")
-                console.log("temp_customerCode: " + temp_customerCode)
-                console.log("temp_customerName: " + temp_customerName)
-                console.log("temp_address: " + temp_address)
-                console.log("temp_id: " + temp_id)
+                    var data = {
+                        customerCode: temp_customerCode,
+                        customerName: temp_customerName,
+                        address: temp_address,
+                        id: temp_id
+                    };
 
-                var data = {
-                    customerCode: temp_customerCode,
-                    customerName: temp_customerName,
-                    address: temp_address,
-                    id: temp_id
-                };
+                    fn_showSpinner();
 
-                //console.log(data);
+                    $.ajax({
+                        url: '/Customers/UpdateCustomer',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        success: function (response) {
+                            window.location.href = response;
+                        },
+                        error: function (response) {
+                            console.log("an error!");
+                            $(response).each(function (index, item) {
 
-                //fn_showSpinner();
-
-                $.ajax({
-                    url: '/Customers/UpdateCustomer',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function (response) {
-                        //console.log(response);
-                        window.location.href = response;
-                    },
-                    error: function (response) {
-
-                        console.log("an error!");
-                        //console.log(response);
-                        $(response).each(function (index, item) {
-
-                            //var modelErrors = item.ModelErrors
-                            //console.log(item.name)
-                            //console.log(item.Email)
-                            //console.log(item.ModelErrors)
-                            console.log(item.name)
-                        });
-                    }
-                });
+                                //var modelErrors = item.ModelErrors
+                                //console.log(item.name)
+                                //console.log(item.Email)
+                                //console.log(item.ModelErrors)
+                                console.log(item.name)
+                            });
+                        }
+                    });
+                }
             });
-
+           
             $(".customerEditForm.btn_delete").click(function () {
-                console.clear();
-                console.log("Modal delete pressed.")
 
                 var modal = $(this).parent().parent().parent();
-
                 var temp_customerCode = modal.find('.customer-code').val()
                 var temp_customerName = modal.find('.customer-name').val()
-
 
                 var data = {
                     customerCode: temp_customerCode,
                 };
 
-                //console.log(data);
-
-                //fn_showSpinner();
+                fn_showSpinner();
 
                 $.confirm({
                     title: 'Delete Customer ' + temp_customerName + ': ' + temp_customerCode + '?',
@@ -157,7 +193,6 @@
                                 data: JSON.stringify(data),
                                 traditional: true,
                                 success: function (response) {
-                                    //console.log(response);
                                     window.location.href = response;
                                 }
                             });
@@ -169,34 +204,28 @@
             });
 
             $(".returnedRecords .Btn_delete").click(function () {
-                console.clear();
 
                 var currentRow = $(this).parent().parent();
-                var temp_aspNetId = currentRow.find('.aspNetId_div').html()
-                var temp_address = currentRow.find('.address_div').html()
-
-                //console.log("Delete button was pressed.")
-                //console.log("temp_aspNetId: " + temp_aspNetId)
+                var temp_customerCode = currentRow.find('.customerCode_div').html()
 
                 var data = {
-                    aspNetId: temp_aspNetId,
+                    customerCode: temp_customerCode,
                 };
 
                 $.confirm({
-                    title: 'Delete User ' + temp_address + '?',
+                    title: 'Delete Customer ' + temp_customerCode + '?',
                     content: '',
                     buttons: {
                         confirm: function () {
                             fn_showSpinner();
                             $.ajax({
-                                url: '/Account/DeleteUserAcctInfo',
+                                url: '/Customers/DeleteCustomer',
                                 method: 'post',
                                 contentType: 'application/json',
                                 dataType: 'json',
                                 data: JSON.stringify(data),
                                 traditional: true,
                                 success: function (response) {
-                                    //console.log(response);
                                     window.location.href = response;
                                 }
                             });
@@ -205,68 +234,59 @@
                         }
                     }
                 });
-
             });
-
-            //set the bottom border of the last row of returned records
-            $(".returnedRecords:last div").css('border-bottom', 'solid 1px black');
-
-            //determine the screen size on any change
-            $(window).resize(function () {
-                fn_checkScreenSize();
-            });
-
-            function fn_checkScreenSize() {
-
-                //this is the monitor size
-                if ($(window).width() >= 992) {
-                    $(".customerCode_div").css('border-right', 'none');
-                    $(".customerName_div").css('border-right', 'none');
-                    $(".address_div").css('border-right', 'none');
-                    $(".email_div").css('border-right', 'none');
-                    $(".admin_div").css('border-right', 'none');
-                    $(".active_div").css('border-right', 'none');
-                    $(".button_div").css('border-bottom', 'none');
-
-                    $(".returnedRecords:last div").css('border-bottom', 'solid 1px black');
-
-                    $("#header_customerData").show();
-
-                    $("hr.mobile").hide();
-                    $("hr.mobile").attr("hidden", "true");
-                }
-                //this and below are the mobile sizes
-                else if ($(window).width() < 992) {
-                    $(".customerCode_div").css('border-right', 'solid 1px black');
-                    $(".customerName_div").css('border-right', 'solid 1px black');
-                    $(".address_div").css('border-right', 'solid 1px black');
-                    $(".email_div").css('border-right', 'solid 1px black');
-                    $(".admin_div").css('border-right', 'solid 1px black');
-                    $(".active_div").css('border-right', 'solid 1px black');
-
-
-                    $(".returnedRecords:last div").css('border-bottom', 'none');
-                    $(".button_div").css('border-bottom', 'solid 1px black');
-
-                    $("#header_customerData").hide();
-
-                    $("hr.mobile").show();
-                    $("hr.mobile").removeAttr("hidden");
-                }
-            }
 
             function fn_showSpinner() {
                 $.LoadingOverlay("show", {
                     image: "",
                     fontawesome: "fa fa-cog fa-spin"
                 });
-
-                //$('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
             }
 
             $('.customer-code, .customer-name, .address').keyup(function () {
                 $(this).val($(this).val().toUpperCase());
             });
+
+            //BEGIN VALIDATION BEFORE SAVING SECTION
+
+            //cloned to new daily report
+            function fn_rowFilled(button) {
+                var currentRow = button.parent().parent();
+                var rowFilled = true;
+                var temp_customerCode = currentRow.find(".customer-code").val();
+                var temp_customerName = currentRow.find(".customer-name").val();
+                var temp_address = currentRow.find(".address").val();
+
+                if (temp_customerCode.length < 3) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Customer code must be at least 3 characters.',
+                    });
+                    rowFilled = false;
+                    return rowFilled;
+                }
+
+                if (temp_customerName.length < 1) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Customer name must not be empty.',
+                    });
+                    rowFilled = false;
+                    return rowFilled;
+                }
+
+                if (temp_address.length < 1) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Location must not be empty.',
+                    });
+                    rowFilled = false;
+                    return rowFilled;
+                }
+                return rowFilled;
+            }
+
+            //END VALIDATION BEFORE SAVING SECTION  
 
         });//end document read jquery statements
     </script>
@@ -283,51 +303,57 @@
     </span>
 </div>
 <hr class="sectionSeparator">
-<div class="container-fluid" id="customerData_container">
-    <div class="row" id="header_customerData">
-        <div class="col-lg-2 customerCode_hdr" style="padding:5px">
-            <strong>Customer Code</strong>
-        </div>
-        <div class="col-lg-2 customerName_hdr" style="padding:5px">
-            <strong>Customer Name</strong>
-        </div>
-        <div class="col-lg-2 address_hdr" style="padding:5px">
-            <strong>Address</strong>
-        </div>
-        <div class="col-lg-2 button_hdr" style="padding:5px">
-            <strong>Action</strong>
-        </div>
+<div class="container" id="customerData_container" style="overflow:auto; height: calc(100vh - 150px)">
+    <div class="table-responsive">
+        <table id="dt_customerData" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="">
+                        <span>Customer Code</span>
+                    </th>
+                    <th class="">
+                        Customer Name
+                    </th>
+                    <th class="">
+                        Location
+                    </th>
+                    <th class="">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @*BEGIN RETURNED RECORDS*@
+                @foreach (var item in Model)
+                {
+                    //BEGIN TEMPORARY LOOP VARIABLES
+                    string temp_customerCode = item.customerCode;
+                    string temp_customerName = item.customerName;
+                    string temp_address = item.address;
+                    int temp_id = item.id;
+                    //END TEMPORARY LOOP VARIABLES
+
+                    @*<hr class="sectionSeparator">*@
+                    <tr class="returnedRecords" id="" style="">
+                        <td class="customerCode_div">@temp_customerCode</td>
+                        <td class="customerName_div">@temp_customerName</td>
+                        <td class="address_div">@temp_address</td>
+                        <td class="id_div" hidden>@temp_id</td>
+                        <td class="button_div" style="padding:0px;">
+                            <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#customerEditForm" data-customer-code="@temp_customerCode"
+                                    data-customer-name="@temp_customerName" data-address="@temp_address" data-id="@temp_id">
+                                <i class="far fa-edit fa-2x" style="color:black;">
+                                </i>
+                            </button>
+                            <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                        </td>
+                    </tr>
+                }
+                @*END RETURNED RECORDS*@
+            </tbody>
+        </table>
     </div>
-
-    @*BEGIN RETURNED RECORDS*@
-    @foreach (var item in Model)
-    {
-        //BEGIN TEMPORARY LOOP VARIABLES
-        string temp_customerCode = item.customerCode;
-        string temp_customerName = item.customerName;
-        string temp_address = item.address;
-        int temp_id = item.id;
-        //END TEMPORARY LOOP VARIABLES
-
-        @*<hr class="sectionSeparator">*@
-        <div class=" row returnedRecords" id="" style="">
-            <div class="col-lg-2 customerCode_div" id="" contenteditable="false" style="">@temp_customerCode</div>
-            <div class="col-lg-2 customerName_div" id="" contenteditable="false" style="">@temp_customerName</div>
-            <div class="col-lg-2 address_div" id="" contenteditable="false" style="">@temp_address</div>
-            <div class="col-lg-2 id_div" id="" contenteditable="false" style="" hidden>@temp_id</div>
-            <div class="col-lg-2 button_div" style="padding:0px;">
-                <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#customerEditForm" data-customer-code="@temp_customerCode"
-                        data-customer-name="@temp_customerName" data-address="@temp_address" data-id="@temp_id">
-                    <i class="far fa-edit fa-2x" style="color:black;">
-                    </i>
-                </button>
-                <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-            </div>
-        </div>
-        <hr class="mobile" hidden>
-    }
-    @*END RETURNED RECORDS*@
-
+</div>
     @*BEGIN EDIT CUSTOMER MODAL TEMPLATE*@
     <div class="modal fade" id="customerEditForm" tabindex="-1" role="dialog" aria-labelledby="customerEditForm" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -361,7 +387,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="address" class="col-form-label">Address:</label>
+                                    <label for="address" class="col-form-label">Location:</label>
                                     <input type="text" class="form-control address" maxlength="50">
                                     <label for="id" class="col-form-label" hidden>Table ID:</label>
                                     <input type="text" class="form-control id" hidden>
@@ -404,7 +430,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="address" class="col-form-label">Address:</label>
+                                    <label for="address" class="col-form-label">Location:</label>
                                     <input type="text" class="form-control address" maxlength="50">
                                 </div>
                             </div>
@@ -419,7 +445,6 @@
         </div>
     </div>
     @*END NEW CUSTOMER MODAL TEMPLATE*@
-</div>
 @*END CUSTOMER SECTION*@
 
 @section Scripts {

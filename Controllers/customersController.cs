@@ -62,6 +62,22 @@ namespace allpax_service_record.Controllers
             return Json(Url.Action("Index", "Customers"));
         }
 
+        [HttpPost]
+        public ActionResult AddCustomer(tbl_customers customerAdd)
+        {
+            db.Database.ExecuteSqlCommand("Insert into tbl_customers Values({0},{1},{2})",
+               customerAdd.customerCode, customerAdd.customerName, customerAdd.address);
+
+            return Json(Url.Action("Index", "Customers"));
+        }
+
+        public ActionResult DeleteCustomer(tbl_customers customerDelete)
+        {
+            db.Database.ExecuteSqlCommand("DELETE FROM tbl_customers WHERE customerCode=({0})", customerDelete.customerCode);
+
+            return Json(Url.Action("Index", "Customers"));
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
