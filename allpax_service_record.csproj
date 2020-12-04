@@ -193,6 +193,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\customersController.cs" />
     <Compile Include="Controllers\dailyReportAllController.cs" />
     <Compile Include="Controllers\dailyReportByReportIDPrintController.cs" />
     <Compile Include="Controllers\dailyReportByReportIDController.cs" />
@@ -219,7 +220,6 @@
     <Compile Include="Models\Dropdown Models\dpdwn_jobID.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\MODEL TESTING\Model1.cs" />
     <Compile Include="Models\tbl_Users.cs" />
     <Compile Include="Models\tbl_dailyReportTimeEntry.cs" />
     <Compile Include="Models\tbl_dailyReportTimeEntryUsers.cs" />
@@ -2542,17 +2542,22 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\getUserAcctInfo-old\Index.cshtml" />
     <Content Include="Views\Account\getUserAcctInfo.cshtml" />
-    <Content Include="Views\Account\getUserAcctInfo-mine.cshtml" />
-    <Content Include="Views\Account\getUserAcctInfo-canned.cshtml" />
     <Content Include="Views\Account\Register-broken.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\customers\Create.cshtml" />
+    <Content Include="Views\customers\Delete.cshtml" />
+    <Content Include="Views\customers\Details.cshtml" />
+    <Content Include="Views\customers\Edit.cshtml" />
+    <Content Include="Views\customers\Index.cshtml" />
+    <Content Include="Views\customers\Index-orig.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\MODEL TESTING\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,0 +1,427 @@
+﻿@*@model allpax_service_record.Models.tbl_customers*@
+@*@model allpax_service_record.Models.View_Models.vm_customerInfo*@
+@model IEnumerable<allpax_service_record.Models.tbl_customers>
+@{
+    ViewBag.Title = "Customers";
+}
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
+
+    <style>
+
+        #customerData_container {
+            padding-bottom: 5px;
+        }
+
+        .container {
+            border: 1px solid black;
+        }
+
+        .customerCode_div, .customerName_div, .address_div, .button_div {
+            border-top: 1px solid black;
+            border-left: 1px solid black;
+            padding: 5px;
+        }
+
+        /*ONLY THE LAST COLUMN HAS a RIGHT BORDER*/
+        .button_div {
+            border-right: 1px solid black;
+        }
+
+        .row {
+            border: none;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        /*AN INVISIBLE HORIZONTAL SPACE*/
+        .sectionSeparator {
+            margin: 1px;
+            opacity: 0;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {//begin document read jquery statements
+
+            //determine the screen size on load
+            fn_checkScreenSize();
+
+            $('#customerEditForm').on('show.bs.modal', function (event) {
+                console.clear();
+
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var temp_customerCode = button.data('customer-code') // Extract info from data-* attributes
+                var temp_customerName = button.data('customer-name') // Extract info from data-* attributes
+                var temp_address = button.data('address') // Extract info from data-* attributes
+                var temp_id = button.data('id') // Extract info from data-* attributes
+
+                //console.log(temp_customerCode)
+                //console.log(temp_customerName)
+                //console.log(temp_address)
+                //console.log(temp_id)
+
+                var modal = $(this)
+                modal.find('.modal-title').text('Customer Edit Form')
+                modal.find('.customer-code').val(temp_customerCode)
+                modal.find('.customer-name').val(temp_customerName)
+                modal.find('.address').val(temp_address)
+                modal.find('.id').val(temp_id)
+            })
+
+            $(".customerEditForm.btn_save").click(function () {
+                console.clear();
+
+                var modal = $(this).parent().parent();
+
+                var temp_customerCode = modal.find('.customer-code').val()
+                var temp_customerName = modal.find('.customer-name').val()
+                var temp_address = modal.find('.address').val()
+                var temp_id = modal.find('.id').val()
+
+                console.log("Save button was pressed.")
+                console.log("temp_customerCode: " + temp_customerCode)
+                console.log("temp_customerName: " + temp_customerName)
+                console.log("temp_address: " + temp_address)
+                console.log("temp_id: " + temp_id)
+
+                var data = {
+                    customerCode: temp_customerCode,
+                    customerName: temp_customerName,
+                    address: temp_address,
+                    id: temp_id
+                };
+
+                //console.log(data);
+
+                //fn_showSpinner();
+
+                $.ajax({
+                    url: '/Customers/UpdateCustomer',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        //console.log(response);
+                        window.location.href = response;
+                    },
+                    error: function (response) {
+
+                        console.log("an error!");
+                        //console.log(response);
+                        $(response).each(function (index, item) {
+
+                            //var modelErrors = item.ModelErrors
+                            //console.log(item.name)
+                            //console.log(item.Email)
+                            //console.log(item.ModelErrors)
+                            console.log(item.name)
+                        });
+                    }
+                });
+            });
+
+            $(".customerEditForm.btn_delete").click(function () {
+                console.clear();
+                console.log("Modal delete pressed.")
+
+                var modal = $(this).parent().parent().parent();
+
+                var temp_customerCode = modal.find('.customer-code').val()
+                var temp_customerName = modal.find('.customer-name').val()
+
+
+                var data = {
+                    customerCode: temp_customerCode,
+                };
+
+                //console.log(data);
+
+                //fn_showSpinner();
+
+                $.confirm({
+                    title: 'Delete Customer ' + temp_customerName + ': ' + temp_customerCode + '?',
+                    content: '',
+                    buttons: {
+                        confirm: function () {
+                            fn_showSpinner();
+                            $.ajax({
+                                url: '/Customers/DeleteCustomer',
+                                method: 'post',
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                data: JSON.stringify(data),
+                                traditional: true,
+                                success: function (response) {
+                                    //console.log(response);
+                                    window.location.href = response;
+                                }
+                            });
+                        },
+                        cancel: function () {
+                        }
+                    }
+                });
+            });
+
+            $(".returnedRecords .Btn_delete").click(function () {
+                console.clear();
+
+                var currentRow = $(this).parent().parent();
+                var temp_aspNetId = currentRow.find('.aspNetId_div').html()
+                var temp_address = currentRow.find('.address_div').html()
+
+                //console.log("Delete button was pressed.")
+                //console.log("temp_aspNetId: " + temp_aspNetId)
+
+                var data = {
+                    aspNetId: temp_aspNetId,
+                };
+
+                $.confirm({
+                    title: 'Delete User ' + temp_address + '?',
+                    content: '',
+                    buttons: {
+                        confirm: function () {
+                            fn_showSpinner();
+                            $.ajax({
+                                url: '/Account/DeleteUserAcctInfo',
+                                method: 'post',
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                data: JSON.stringify(data),
+                                traditional: true,
+                                success: function (response) {
+                                    //console.log(response);
+                                    window.location.href = response;
+                                }
+                            });
+                        },
+                        cancel: function () {
+                        }
+                    }
+                });
+
+            });
+
+            //set the bottom border of the last row of returned records
+            $(".returnedRecords:last div").css('border-bottom', 'solid 1px black');
+
+            //determine the screen size on any change
+            $(window).resize(function () {
+                fn_checkScreenSize();
+            });
+
+            function fn_checkScreenSize() {
+
+                //this is the monitor size
+                if ($(window).width() >= 992) {
+                    $(".customerCode_div").css('border-right', 'none');
+                    $(".customerName_div").css('border-right', 'none');
+                    $(".address_div").css('border-right', 'none');
+                    $(".email_div").css('border-right', 'none');
+                    $(".admin_div").css('border-right', 'none');
+                    $(".active_div").css('border-right', 'none');
+                    $(".button_div").css('border-bottom', 'none');
+
+                    $(".returnedRecords:last div").css('border-bottom', 'solid 1px black');
+
+                    $("#header_customerData").show();
+
+                    $("hr.mobile").hide();
+                    $("hr.mobile").attr("hidden", "true");
+                }
+                //this and below are the mobile sizes
+                else if ($(window).width() < 992) {
+                    $(".customerCode_div").css('border-right', 'solid 1px black');
+                    $(".customerName_div").css('border-right', 'solid 1px black');
+                    $(".address_div").css('border-right', 'solid 1px black');
+                    $(".email_div").css('border-right', 'solid 1px black');
+                    $(".admin_div").css('border-right', 'solid 1px black');
+                    $(".active_div").css('border-right', 'solid 1px black');
+
+
+                    $(".returnedRecords:last div").css('border-bottom', 'none');
+                    $(".button_div").css('border-bottom', 'solid 1px black');
+
+                    $("#header_customerData").hide();
+
+                    $("hr.mobile").show();
+                    $("hr.mobile").removeAttr("hidden");
+                }
+            }
+
+            function fn_showSpinner() {
+                $.LoadingOverlay("show", {
+                    image: "",
+                    fontawesome: "fa fa-cog fa-spin"
+                });
+
+                //$('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
+            }
+
+            $('.customer-code, .customer-name, .address').keyup(function () {
+                $(this).val($(this).val().toUpperCase());
+            });
+
+        });//end document read jquery statements
+    </script>
+</head>
+
+@*BEGIN USER SECTION*@
+<hr class="sectionSeparator">
+<div class="col-12" style="padding:0px;">
+    <span><strong>Add a New Customer</strong></span>
+    <span>
+        <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#customerNewForm">
+            <i class="far fa-plus-square fa-2x" style="color:black;"></i>
+        </button>
+    </span>
+</div>
+<hr class="sectionSeparator">
+<div class="container-fluid" id="customerData_container">
+    <div class="row" id="header_customerData">
+        <div class="col-lg-2 customerCode_hdr" style="padding:5px">
+            <strong>Customer Code</strong>
+        </div>
+        <div class="col-lg-2 customerName_hdr" style="padding:5px">
+            <strong>Customer Name</strong>
+        </div>
+        <div class="col-lg-2 address_hdr" style="padding:5px">
+            <strong>Address</strong>
+        </div>
+        <div class="col-lg-2 button_hdr" style="padding:5px">
+            <strong>Action</strong>
+        </div>
+    </div>
+
+    @*BEGIN RETURNED RECORDS*@
+    @foreach (var item in Model)
+    {
+        //BEGIN TEMPORARY LOOP VARIABLES
+        string temp_customerCode = item.customerCode;
+        string temp_customerName = item.customerName;
+        string temp_address = item.address;
+        int temp_id = item.id;
+        //END TEMPORARY LOOP VARIABLES
+
+        @*<hr class="sectionSeparator">*@
+        <div class=" row returnedRecords" id="" style="">
+            <div class="col-lg-2 customerCode_div" id="" contenteditable="false" style="">@temp_customerCode</div>
+            <div class="col-lg-2 customerName_div" id="" contenteditable="false" style="">@temp_customerName</div>
+            <div class="col-lg-2 address_div" id="" contenteditable="false" style="">@temp_address</div>
+            <div class="col-lg-2 id_div" id="" contenteditable="false" style="" hidden>@temp_id</div>
+            <div class="col-lg-2 button_div" style="padding:0px;">
+                <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#customerEditForm" data-customer-code="@temp_customerCode"
+                        data-customer-name="@temp_customerName" data-address="@temp_address" data-id="@temp_id">
+                    <i class="far fa-edit fa-2x" style="color:black;">
+                    </i>
+                </button>
+                <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+            </div>
+        </div>
+        <hr class="mobile" hidden>
+    }
+    @*END RETURNED RECORDS*@
+
+    @*BEGIN EDIT CUSTOMER MODAL TEMPLATE*@
+    <div class="modal fade" id="customerEditForm" tabindex="-1" role="dialog" aria-labelledby="customerEditForm" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="float-left">
+                        <h5 class="modal-title" id="customerEditForm">Edit Customer</h5>
+                    </div>
+                    <div class="float-none">
+                        <button type="button" class="btn btn-light btn-sm customerEditForm" data-toggle="modal" data-target="#customerNewForm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                        <button type="button" class="btn btn-light btn-sm customerEditForm btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="validation-summary-valid text-danger" data-valmsg-summary="true">
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="customer-code" class="col-form-label">Customer Code:</label>
+                                    <input type="text" class="form-control customer-code" maxlength="3">
+                                </div>
+                                <div class="col-6">
+                                    <label for="customer-name" class="col-form-label">Customer Name:</label>
+                                    <input type="text" class="form-control customer-name" maxlength="50">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="address" class="col-form-label">Address:</label>
+                                    <input type="text" class="form-control address" maxlength="50">
+                                    <label for="id" class="col-form-label" hidden>Table ID:</label>
+                                    <input type="text" class="form-control id" hidden>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn customerEditForm btn_save" value="">Save</button>
+                    <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*END EDIT CUSTOMER MODAL TEMPLATE*@
+
+    @*BEGIN NEW CUSTOMER MODAL TEMPLATE*@
+    <div class="modal fade" id="customerNewForm" tabindex="-1" role="dialog" aria-labelledby="customerNewForm" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="customerNewForm">Add Customer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="customer-code" class="col-form-label">Customer Code:</label>
+                                    <input type="text" class="form-control customer-code" maxlength="3">
+                                </div>
+                                <div class="col-6">
+                                    <label for="customer-name" class="col-form-label">Customer Name:</label>
+                                    <input type="text" class="form-control customer-name" maxlength="50">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="address" class="col-form-label">Address:</label>
+                                    <input type="text" class="form-control address" maxlength="50">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn customerNewForm btn_save" value="">Save</button>
+                    <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*END NEW CUSTOMER MODAL TEMPLATE*@
+</div>
+@*END CUSTOMER SECTION*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

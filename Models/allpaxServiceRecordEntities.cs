@@ -72,7 +72,6 @@ namespace allpax_service_record.Models
             modelBuilder.Entity<tbl_Users>()
                 .Property(e => e.shortName)
                 .IsUnicode(false);
-
         }
 
         public System.Data.Entity.DbSet<allpax_service_record.Models.View_Models.vm_workDesc> vm_workDesc { get; set; }
