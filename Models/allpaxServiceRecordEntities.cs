@@ -19,6 +19,8 @@ namespace allpax_service_record.Models
         public virtual DbSet<tbl_dailyReportTimeEntry> tbl_dailyReportTimeEntry { get; set; }
         public virtual DbSet<tbl_dailyReportTimeEntryUsers> tbl_dailyReportTimeEntryUsers { get; set; }
         public virtual DbSet<tbl_Users> tbl_Users { get; set; }
+        public virtual DbSet<tbl_jobCorrespondents> tbl_jobCorrespondents { get; set; }
+        public virtual DbSet<tbl_Jobs> tbl_Jobs { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<tbl_customers>()
@@ -72,6 +74,43 @@ namespace allpax_service_record.Models
             modelBuilder.Entity<tbl_Users>()
                 .Property(e => e.shortName)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_jobCorrespondents>()
+                .Property(e => e.jobID)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_jobCorrespondents>()
+                .Property(e => e.name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_jobCorrespondents>()
+                .Property(e => e.email)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_Jobs>()
+                .Property(e => e.jobID)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_Jobs>()
+                .Property(e => e.description)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_Jobs>()
+                .Property(e => e.customerCode)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_Jobs>()
+                .Property(e => e.customerContact)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_Jobs>()
+                .Property(e => e.location)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_Jobs>()
+                .HasMany(e => e.tbl_jobCorrespondents)
+                .WithRequired(e => e.tbl_Jobs)
+                .WillCascadeOnDelete(false);
         }
 
         public System.Data.Entity.DbSet<allpax_service_record.Models.View_Models.vm_workDesc> vm_workDesc { get; set; }

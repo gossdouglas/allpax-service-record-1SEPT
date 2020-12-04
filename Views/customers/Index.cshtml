@@ -257,10 +257,14 @@
                 var temp_customerName = currentRow.find(".customer-name").val();
                 var temp_address = currentRow.find(".address").val();
 
-                if (temp_customerCode.length < 3) {
+                var temp_customerCodeMatch = temp_customerCode.match(/^([A-Z]{3})$/);//maches the form ABC
+                var temp_addressMatch = temp_address.match(/([A-Za-z ]+), ([A-Za-z]{2}$)/);//maches the form LAS VEGAS, NV
+
+                //if (temp_customerCode.length < 3) {
+                if (!temp_customerCodeMatch) {
                     $.alert({
                         title: 'Error!',
-                        content: 'Customer code must be at least 3 characters.',
+                        content: 'Customer code must be at least 3 letters.',
                     });
                     rowFilled = false;
                     return rowFilled;
@@ -275,10 +279,10 @@
                     return rowFilled;
                 }
 
-                if (temp_address.length < 1) {
+                if (!temp_addressMatch) {
                     $.alert({
                         title: 'Error!',
-                        content: 'Location must not be empty.',
+                        content: 'Location must not be empty and must match the form City, ST.',
                     });
                     rowFilled = false;
                     return rowFilled;

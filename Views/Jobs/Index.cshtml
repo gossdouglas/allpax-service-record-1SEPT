@@ -1,0 +1,64 @@
+﻿@model IEnumerable<allpax_service_record.Models.tbl_Jobs>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customerCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customerContact)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.active)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.location)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.id)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.customerCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.customerContact)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.active)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.location)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.id)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.jobID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.jobID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.jobID })
+        </td>
+    </tr>
+}
+
+</table>
