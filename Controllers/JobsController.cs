@@ -7,113 +7,84 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using allpax_service_record.Models;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace allpax_service_record.Controllers
 {
-    public class JobsController : Controller
+    public class jobsController : Controller
     {
         private allpaxServiceRecordEntities db = new allpaxServiceRecordEntities();
 
-        // GET: Jobs
         public ActionResult Index()
         {
-            return View(db.tbl_Jobs.ToList());
+            List<tbl_Jobs> jobs = new List<tbl_Jobs>();
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            sqlconn.Open();
+
+            string sqlquery1 =
+                "SELECT tbl_Jobs.jobID, tbl_Jobs.description, tbl_Jobs.customerCode, tbl_Jobs.customerContact, tbl_Jobs.active, tbl_Jobs.location, tbl_Jobs.nrmlHoursStart, " +
+                "tbl_Jobs.nrmlHoursEnd, tbl_Jobs.nrmlHoursDaily, tbl_Jobs.dblTimeHours, tbl_Jobs.id " +
+                "FROM tbl_Jobs";
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                tbl_Jobs job = new tbl_Jobs();
+
+                job.jobID = dr1[0].ToString();
+                job.description = dr1[1].ToString();
+                job.customerCode = dr1[2].ToString();
+                job.customerContact = dr1[3].ToString();
+                job.active = (Boolean)dr1[4];
+                job.location = dr1[5].ToString();
+                job.nrmlHoursStart = dr1[6].ToString();
+                job.nrmlHoursEnd = dr1[7].ToString();
+                job.nrmlHoursDaily = dr1[8].ToString();
+                job.dblTimeHours = (Boolean)dr1[9];
+                job.id = (int)dr1[10];
+                jobs.Add(job);
+            }
+            sqlconn.Close();
+            return View(jobs);
         }
 
-        // GET: Jobs/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            tbl_Jobs tbl_Jobs = db.tbl_Jobs.Find(id);
-            if (tbl_Jobs == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tbl_Jobs);
-        }
+        //public ActionResult UpdateJob(tbl_Jobs customerUpdate)
+        //{
+        //    db.Database.ExecuteSqlCommand(
+        //        "UPDATE tbl_Jobs " +
+        //        "SET " +
 
-        // GET: Jobs/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        //        "customerCode = {0}, " +
+        //        "customerName = {1}, " +
+        //        "address = {2} " +
 
-        // POST: Jobs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "jobID,description,customerCode,customerContact,active,location,id")] tbl_Jobs tbl_Jobs)
-        {
-            if (ModelState.IsValid)
-            {
-                db.tbl_Jobs.Add(tbl_Jobs);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+        //        "WHERE id = {3}",
+        //        customerUpdate.customerCode, customerUpdate.customerName, customerUpdate.address, customerUpdate.id);
 
-            return View(tbl_Jobs);
-        }
+        //    return Json(Url.Action("Index", "Customers"));
+        //}
 
-        // GET: Jobs/Edit/5
-        public ActionResult Edit(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            tbl_Jobs tbl_Jobs = db.tbl_Jobs.Find(id);
-            if (tbl_Jobs == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tbl_Jobs);
-        }
+        //[HttpPost]
+        //public ActionResult AddJob(tbl_Jobs customerAdd)
+        //{
+        //    db.Database.ExecuteSqlCommand("Insert into tbl_Jobs Values({0},{1},{2})",
+        //       customerAdd.customerCode, customerAdd.customerName, customerAdd.address);
 
-        // POST: Jobs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "jobID,description,customerCode,customerContact,active,location,id")] tbl_Jobs tbl_Jobs)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(tbl_Jobs).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(tbl_Jobs);
-        }
+        //    return Json(Url.Action("Index", "Customers"));
+        //}
 
-        // GET: Jobs/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            tbl_Jobs tbl_Jobs = db.tbl_Jobs.Find(id);
-            if (tbl_Jobs == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tbl_Jobs);
-        }
+        //public ActionResult DeleteCustomer(tbl_Jobs customerDelete)
+        //{
+        //    db.Database.ExecuteSqlCommand("DELETE FROM tbl_Jobs WHERE customerCode=({0})", customerDelete.customerCode);
 
-        // POST: Jobs/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            tbl_Jobs tbl_Jobs = db.tbl_Jobs.Find(id);
-            db.tbl_Jobs.Remove(tbl_Jobs);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        //    return Json(Url.Action("Index", "Customers"));
+        //}
 
         protected override void Dispose(bool disposing)
         {

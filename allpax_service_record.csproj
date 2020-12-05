@@ -222,7 +222,6 @@
     <Compile Include="Models\Dropdown Models\dpdwn_jobID.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\MODEL TESTING\Model1.cs" />
     <Compile Include="Models\tbl_jobCorrespondents.cs" />
     <Compile Include="Models\tbl_Jobs.cs" />
     <Compile Include="Models\tbl_Users.cs" />
@@ -2554,19 +2553,17 @@
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\customers\Index.cshtml" />
+    <Content Include="Views\Jobs\Index.cshtml" />
+    <Content Include="Views\Jobs\Index-orig.cshtml" />
     <Content Include="Views\jobCorrespondents\Create.cshtml" />
     <Content Include="Views\jobCorrespondents\Delete.cshtml" />
     <Content Include="Views\jobCorrespondents\Details.cshtml" />
     <Content Include="Views\jobCorrespondents\Edit.cshtml" />
     <Content Include="Views\jobCorrespondents\Index.cshtml" />
-    <Content Include="Views\Jobs\Create.cshtml" />
-    <Content Include="Views\Jobs\Delete.cshtml" />
-    <Content Include="Views\Jobs\Details.cshtml" />
-    <Content Include="Views\Jobs\Edit.cshtml" />
-    <Content Include="Views\Jobs\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\MODEL TESTING\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

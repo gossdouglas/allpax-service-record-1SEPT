@@ -17,8 +17,11 @@ namespace allpax_service_record.Controllers
         // GET: jobCorrespondents
         public ActionResult Index()
         {
-            var tbl_jobCorrespondents = db.tbl_jobCorrespondents.Include(t => t.tbl_Jobs);
-            return View(tbl_jobCorrespondents.ToList());
+            //var tbl_jobCorrespondents = db.tbl_jobCorrespondents.Include(t => t.tbl_Jobs);
+            //return View(tbl_jobCorrespondents.ToList());
+
+            var tbl_jobCorrespondents = db.tbl_jobCorrespondents.ToList();
+            return View(tbl_jobCorrespondents);
         }
 
         // GET: jobCorrespondents/Details/5

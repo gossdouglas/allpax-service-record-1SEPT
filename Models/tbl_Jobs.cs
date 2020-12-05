@@ -17,20 +17,19 @@ namespace allpax_service_record.Models
         [Key]
         [StringLength(8)]
         public string jobID { get; set; }
-
         [StringLength(255)]
         public string description { get; set; }
-
         [StringLength(3)]
         public string customerCode { get; set; }
-
         [StringLength(50)]
         public string customerContact { get; set; }
-
-        public bool? active { get; set; }
-
+        public bool active { get; set; }
         [StringLength(255)]
         public string location { get; set; }
+        public string nrmlHoursStart { get; set; }
+        public string nrmlHoursEnd { get; set; }
+        public string nrmlHoursDaily { get; set; }
+        public Boolean dblTimeHours { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
