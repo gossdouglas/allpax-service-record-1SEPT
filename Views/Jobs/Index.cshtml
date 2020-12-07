@@ -71,6 +71,8 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
+            var customerCodeNew_dpdwn = $('#customer-code-new');
+
             $(".jobNewForm.btn_save").click(function () {
 
                 if (fn_rowFilled($(this))) {
@@ -137,6 +139,60 @@
                     modal.find('.active').prop('checked', false);
                 }
             })
+
+            $('#jobNewForm').on('show.bs.modal', function (event) {
+                //begin fill the jobs dropdown
+
+                var tempCustomerCodeArr = [];
+
+                $.ajax({
+                    url: 'DataService.asmx/GetCustomerInfoByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: '%' },
+                    success: function (data) {
+                        $(customerCodeNew_dpdwn).empty();
+                        $(data).each(function (index, item) {
+
+                            tempCustomerCodeArr.push(item.customerCode);
+                            customerCodeNew_dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode }));
+                            //console.log("customerCode: " + item.customerCode)
+                            //console.log("customerName: " + item.customerName)
+                            //console.log("address: " + item.address)
+                        });
+                    }
+                });
+                //end fill the jobs dropdown
+            })
+
+            //begin customer code dropdown change
+            customerCodeNew_dpdwn.change(function () {
+
+                var currCustomerCode = $(this).val();
+                console.clear();
+                $.ajax({
+                    url: 'DataService.asmx/GetCustomerInfoByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: '%' },
+                    success: function (data) {
+
+                        $(data).each(function (index, item) {
+
+                            if (item.customerCode == currCustomerCode) {
+                                //console.log("Selected customerCode: " + item.customerCode)
+                                //console.log("Selected customerName: " + item.customerName)
+                                //console.log("Selected address: " + item.address)
+                                $("#customer-name-new").val(item.customerName);
+                                $("#customer-location-new").val(item.address);
+                            }
+                        });
+                    }
+                });
+
+                console.log($(this).val());
+            });
+            //end customer code dropdown change
 
             $(".jobEditForm.btn_save").click(function () {
 
@@ -430,8 +486,6 @@
             </div>
             <div class="modal-body">
                 <form>
-                    @*<div class="validation-summary-valid text-danger" data-valmsg-summary="true">
-                    </div>*@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-6">
@@ -481,42 +535,127 @@
 
 @*BEGIN NEW CUSTOMER MODAL TEMPLATE*@
 <div class="modal fade" id="jobNewForm" tabindex="-1" role="dialog" aria-labelledby="jobNewForm" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="jobNewForm">Add Customer</h5>
+                <h5 class="modal-title" id="jobNewForm">Add Job</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+                <!--<form>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-12">
+                    <label for="job-id" class="col-form-label">Job ID:</label>
+                    <input type="text" class="form-control job-id" maxlength="10">
+                    <label for="customer-code" class="col-form-label">Customer Code:</label>-->
+                @*<input type="text" class="form-control customer-code" maxlength="3">*@
+                <!--<select class="customer-code" id="customer-code-new">
+            <option value="AL">Alabama</option>
+            <option value="WY">Wyoming</option>
+        </select>
+        <label for="customer-name" class="col-form-label">Customer Name:</label>
+        <input type="text" class="form-control customer-name" id="customer-name-new" maxlength="50" disabled value="">
+        <label for="customer-location" class="col-form-label">Customer Location:</label>
+        <input type="text" class="form-control customer-location" id="customer-location-new" disabled value="">
+        <label for="customer-contact" class="col-form-label">Customer Contact:</label>
+        <input type="text" class="form-control customer-contact">
+    </div>-->
+                <!--<div class="col-6">-->
+                @*<label>Checkboxes</label>*@
+                @*<div class="col-8">*@
+                <!--<div class="custom-control custom-checkbox custom-control-inline">-->
+                @*<label>Checkboxes</label>*@
+                <!--<input name="checkbox" id="checkbox_0" type="checkbox" checked="checked" class="custom-control-input" value="rabbit">
+        <label for="checkbox_0" class="custom-control-label">Rabbit</label>
+    </div>-->
+                @*</div>*@
+                <!--<label for="normal-hours-start" class="col-form-label">Normal Hours Start:</label>
+        <input type="time" class="form-control normal-hours-start">
+        <label for="normal-hours-end" class="col-form-label">Normal Hours End:</label>
+        <input type="time" class="form-control normal-hours-end">
+    </div>-->
+                @*</div>*@
+                @*<div class="row">
+            <div class="col-6">
+                <label for="job-description" class="col-form-label">Job Description:</label>
+                <input type="text" class="form-control job-description" maxlength="50">
+            </div>
+        </div>*@
+                @*<div class="form-check form-check-inline">
+            <input class="form-check-input active" type="checkbox" value="">
+            <label class="form-check-label" for="">
+                Job Active
+            </label>
+        </div>*@
+                @*<div class="form-group row">
+            <label class="col-4">Checkboxes</label>
+            <div class="col-8">
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input name="checkbox" id="checkbox_0" type="checkbox" checked="checked" class="custom-control-input" value="rabbit">
+                    <label for="checkbox_0" class="custom-control-label">Rabbit</label>
+                </div>
+            </div>
+        </div>*@
+                @*</div>
+        </form>*@
                 <form>
-                    <div class="form-group">
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-4">
+                            <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                        </div>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-4">
+                            <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                        </div>
+                    </div>
+                    <fieldset class="form-group">
                         <div class="row">
-                            <div class="col-6">
-                                <label for="customer-code" class="col-form-label">Customer Code:</label>
-                                @*<input type="text" class="form-control customer-code" maxlength="3">*@
-                                <select class="form-control customer-code" id="new-customer-code">
-                                    <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label for="customer-name" class="col-form-label">Customer Name:</label>
-                                <input type="text" class="form-control customer-name" maxlength="50">
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+                                    <label class="form-check-label" for="gridRadios1">
+                                        First radio
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                                    <label class="form-check-label" for="gridRadios2">
+                                        Second radio
+                                    </label>
+                                </div>
+                                <div class="form-check disabled">
+                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
+                                    <label class="form-check-label" for="gridRadios3">
+                                        Third disabled radio
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <label for="job-description" class="col-form-label">Location:</label>
-                                <input type="text" class="form-control job-description" maxlength="50">
+                    </fieldset>
+                    <div class="form-group row">
+                        <div class="col-sm-2">Checkbox</div>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="gridCheck1">
+                                <label class="form-check-label" for="gridCheck1">
+                                    Example checkbox
+                                </label>
                             </div>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input active" type="checkbox" value="">
-                            <label class="form-check-label" for="">
-                                Active
-                            </label>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Sign in</button>
                         </div>
                     </div>
                 </form>
