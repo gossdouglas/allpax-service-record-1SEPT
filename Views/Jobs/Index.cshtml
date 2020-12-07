@@ -262,6 +262,29 @@
                 $(this).val($(this).val().toUpperCase());
             });
 
+            //BEGIN MISCELLANEOUS SECTION
+
+            //enable the select2 add-on
+            function fn_enableSelect2() {
+                $('.Team_dpdwn').select2({
+                    width: "80%",
+                    placeholder: "Select Team",
+                    closeOnSelect: "false"
+                })
+
+                $('#team_dpdwn').select2({
+                    width: "100%",
+                    placeholder: "Select Team",
+                    closeOnSelect: "false"
+                })
+            }
+
+            //disable the select2 add-on
+            function fn_disableSelect2() {
+                $('.Team_dpdwn').select2('destroy')
+            }
+
+            //END MISCELLANEOUS SECTION
             //BEGIN VALIDATION BEFORE SAVING SECTION
             function fn_rowFilled(button) {
                 var currentRow = button.parent().parent();
@@ -472,7 +495,11 @@
                         <div class="row">
                             <div class="col-6">
                                 <label for="customer-code" class="col-form-label">Customer Code:</label>
-                                <input type="text" class="form-control customer-code" maxlength="3">
+                                @*<input type="text" class="form-control customer-code" maxlength="3">*@
+                                <select class="form-control customer-code" id="new-customer-code">
+                                    <option value="AL">Alabama</option>
+                                    <option value="WY">Wyoming</option>
+                                </select>
                             </div>
                             <div class="col-6">
                                 <label for="customer-name" class="col-form-label">Customer Name:</label>
