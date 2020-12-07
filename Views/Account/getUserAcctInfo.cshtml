@@ -97,9 +97,6 @@
                 modal.find('.email').val(temp_email)
                 modal.find('.admin').val(temp_admin)
                 modal.find('.active').val(temp_active)
-                console.log("temp_aspNetId: " + temp_aspNetId)
-                console.log("temp_admin: " + temp_admin)
-                console.log("temp_active: " + temp_active)
 
                 if (temp_admin == "True") {
                     console.log("temp_admin is true.")
@@ -507,8 +504,6 @@
                                         <input type="text" class="form-control email">
                                         @*@Html.TextBoxFor(m => m.Email, new { @class = "form-control email" })*@
                                     </div>
-                                </div>
-                                <div class="row">
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input admin" type="checkbox" value="">

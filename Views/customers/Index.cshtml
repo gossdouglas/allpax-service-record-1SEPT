@@ -206,6 +206,8 @@
                 var currentRow = $(this).parent().parent();
                 var temp_customerCode = currentRow.find('.customerCode_div').html()
 
+                console.log("Delete temp_customerCode: " + temp_customerCode);
+
                 var data = {
                     customerCode: temp_customerCode,
                 };

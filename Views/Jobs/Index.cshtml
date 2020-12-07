@@ -71,7 +71,7 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            $(".customerNewForm.btn_save").click(function () {
+            $(".jobNewForm.btn_save").click(function () {
 
                 if (fn_rowFilled($(this))) {
 
@@ -79,11 +79,13 @@
                     var temp_customerCode = modal.find('.customer-code').val()
                     var temp_customerContact = modal.find('.customer-name').val()
                     var temp_jobDescription = modal.find('.job-description').val()
+                    var temp_active = modal.find('.active').val()
 
                     var data = {
                         customerCode: temp_customerCode,
                         customerContact: temp_customerContact,
-                        jobDescription: temp_jobDescription
+                        jobDescription: temp_jobDescription,
+                        active: temp_active
                     };
 
                 fn_showSpinner();
@@ -108,23 +110,35 @@
                 }
             });
 
-            $('#customerEditForm').on('show.bs.modal', function (event) {
+            $('#jobEditForm').on('show.bs.modal', function (event) {
 
                 var button = $(event.relatedTarget) // Button that triggered the modal
+                var temp_jobID = button.data('job-id') // Extract info from data-* attributes
                 var temp_customerCode = button.data('customer-code') // Extract info from data-* attributes
-                var temp_customerContact = button.data('customer-name') // Extract info from data-* attributes
+                var temp_customerContact = button.data('customer-contact') // Extract info from data-* attributes
                 var temp_jobDescription = button.data('job-description') // Extract info from data-* attributes
+                var temp_active = button.data('active') // Extract info from data-* attributes
                 var temp_id = button.data('id') // Extract info from data-* attributes
 
                 var modal = $(this)
-                modal.find('.modal-title').text('Customer Edit Form')
+                modal.find('.modal-title').text('Job Edit Form')
+                modal.find('.job-id').val(temp_jobID)
                 modal.find('.customer-code').val(temp_customerCode)
-                modal.find('.customer-name').val(temp_customerContact)
-                modal.find('.job-description').val(temp_jobDescription)
+                modal.find('.customer-contact').val(temp_customerContact)
+                modal.find('.job-description').val(temp_jobDescription)               
+                modal.find('.active').val(temp_active)
                 modal.find('.id').val(temp_id)
+
+                if (temp_active == "True") {
+                    console.log("temp_active is true.")
+                    modal.find('.active').prop('checked', true);
+                }
+                else {
+                    modal.find('.active').prop('checked', false);
+                }
             })
 
-            $(".customerEditForm.btn_save").click(function () {
+            $(".jobEditForm.btn_save").click(function () {
 
                 if (fn_rowFilled($(this))) {
 
@@ -168,7 +182,7 @@
                 }
             });
 
-            $(".customerEditForm.btn_delete").click(function () {
+            $(".jobEditForm.btn_delete").click(function () {
 
                 var modal = $(this).parent().parent().parent();
                 var temp_customerCode = modal.find('.customer-code').val()
@@ -249,8 +263,6 @@
             });
 
             //BEGIN VALIDATION BEFORE SAVING SECTION
-
-            //cloned to new daily report
             function fn_rowFilled(button) {
                 var currentRow = button.parent().parent();
                 var rowFilled = true;
@@ -290,7 +302,6 @@
                 }
                 return rowFilled;
             }
-
             //END VALIDATION BEFORE SAVING SECTION
 
         });//end document read jquery statements
@@ -300,9 +311,9 @@
 @*BEGIN USER SECTION*@
 <hr class="sectionSeparator">
 <div class="col-12" style="padding:0px;">
-    <span><strong>Add a New Customer</strong></span>
+    <span><strong>Add a New Job</strong></span>
     <span>
-        <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#customerNewForm">
+        <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#jobNewForm">
             <i class="far fa-plus-square fa-2x" style="color:black;"></i>
         </button>
     </span>
@@ -364,8 +375,8 @@
                     </td>
                     <td class="id_div" hidden>@temp_id</td>
                     <td class="button_div" style="padding:0px;">
-                        <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#customerEditForm" data-customer-code="@temp_customerCode"
-                                data-customer-name="@temp_customerContact" data-job-description="@temp_jobDescription" data-id="@temp_id">
+                        <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#jobEditForm" data-job-id="@temp_jobID" data-customer-code="@temp_customerCode"
+                                data-customer-contact="@temp_customerContact" data-job-description="@temp_jobDescription" data-active="@temp_active" data-id="@temp_id">
                             <i class="far fa-edit fa-2x" style="color:black;">
                             </i>
                         </button>
@@ -379,16 +390,16 @@
     </div>
 </div>
 @*BEGIN EDIT CUSTOMER MODAL TEMPLATE*@
-<div class="modal fade" id="customerEditForm" tabindex="-1" role="dialog" aria-labelledby="customerEditForm" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="jobEditForm" tabindex="-1" role="dialog" aria-labelledby="jobEditForm" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="float-left">
-                    <h5 class="modal-title" id="customerEditForm">Edit Customer</h5>
+                    <h5 class="modal-title" id="jobEditForm">Edit Job</h5>
                 </div>
                 <div class="float-none">
-                    <button type="button" class="btn btn-light btn-sm customerEditForm" data-toggle="modal" data-target="#customerNewForm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                    <button type="button" class="btn btn-light btn-sm customerEditForm btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                    <button type="button" class="btn btn-light btn-sm jobEditForm" data-toggle="modal" data-target="#jobNewForm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                    <button type="button" class="btn btn-light btn-sm jobEditForm btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -396,32 +407,48 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="validation-summary-valid text-danger" data-valmsg-summary="true">
-                    </div>
+                    @*<div class="validation-summary-valid text-danger" data-valmsg-summary="true">
+                    </div>*@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-6">
+                                <label for="job-id" class="col-form-label">Job ID:</label>
+                                <input type="text" class="form-control job-id" maxlength="10">
                                 <label for="customer-code" class="col-form-label">Customer Code:</label>
                                 <input type="text" class="form-control customer-code" maxlength="3">
+                                <label for="customer-name" class="col-form-label">Customer Name:</label>
+                                <input type="text" class="form-control customer-name" maxlength="50" disabled value="dead for the db">
+                                <label for="customer-location" class="col-form-label">Customer Location:</label>
+                                <input type="text" class="form-control customer-location" disabled value="dead for the db">
+                                <label for="customer-contact" class="col-form-label">Customer Contact:</label>
+                                <input type="text" class="form-control customer-contact">
                             </div>
                             <div class="col-6">
-                                <label for="customer-name" class="col-form-label">Customer Name:</label>
-                                <input type="text" class="form-control customer-name" maxlength="50">
+                                <label for="job-id" class="col-form-label">Job ID:</label>
+                                <input type="text" class="form-control job-id" maxlength="3">
+                                <label for="normal-hours-start" class="col-form-label">Normal Hours Start:</label>
+                                <input type="time" class="form-control normal-hours-start">
+                                <label for="normal-hours-end" class="col-form-label">Normal Hours End:</label>
+                                <input type="time" class="form-control normal-hours-end">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-6">
-                                <label for="job-description" class="col-form-label">Location:</label>
-                                <input type="text" class="form-control job-description" maxlength="50">
-                                <label for="id" class="col-form-label" hidden>Table ID:</label>
-                                <input type="text" class="form-control id" hidden>
+                                <label for="job-description" class="col-form-label">Job Description:</label>
+                                <input type="text" class="form-control job-description" maxlength="50">                               
                             </div>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input active" type="checkbox" value="">
+                            <label class="form-check-label" for="">
+                                Job Active
+                            </label>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn customerEditForm btn_save" value="">Save</button>
+                <button type="button" class="btn jobEditForm btn_save" value="">Save</button>
                 <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -430,11 +457,11 @@
 @*END EDIT CUSTOMER MODAL TEMPLATE*@
 
 @*BEGIN NEW CUSTOMER MODAL TEMPLATE*@
-<div class="modal fade" id="customerNewForm" tabindex="-1" role="dialog" aria-labelledby="customerNewForm" aria-hidden="true">
+<div class="modal fade" id="jobNewForm" tabindex="-1" role="dialog" aria-labelledby="jobNewForm" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="customerNewForm">Add Customer</h5>
+                <h5 class="modal-title" id="jobNewForm">Add Customer</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -458,11 +485,17 @@
                                 <input type="text" class="form-control job-description" maxlength="50">
                             </div>
                         </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input active" type="checkbox" value="">
+                            <label class="form-check-label" for="">
+                                Active
+                            </label>
+                        </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn customerNewForm btn_save" value="">Save</button>
+                <button type="submit" class="btn jobNewForm btn_save" value="">Save</button>
                 <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -470,6 +503,21 @@
 </div>
 @*END NEW CUSTOMER MODAL TEMPLATE*@
 @*END CUSTOMER SECTION*@
+
+<form>
+    <div class="form-group row">
+        <label for="inputEmail3" class="col-auto col-form-label">Email</label>
+        <div class="col-auto">
+            <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputPassword3" class="col-autocol-form-label">Password</label>
+        <div class="col-auto">
+            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+        </div>
+    </div>
+</form>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
