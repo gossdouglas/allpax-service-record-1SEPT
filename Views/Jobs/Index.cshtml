@@ -30,6 +30,17 @@
             white-space: nowrap;
         }
 
+        /*html, body {
+            height: 100%;
+        }*/
+
+        #table_div {
+            height: 100px;
+            width: 100%;
+            background-color: powderblue;
+            overflow: auto;
+        }
+
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
             /* Force table to not be like tables anymore */
@@ -144,6 +155,21 @@
                 //begin fill the jobs dropdown
 
                 var tempCustomerCodeArr = [];
+
+                // get the viewport height
+                var viewportHeight = $(window).height();
+                console.log('viewportHeight = ' + viewportHeight);
+
+
+                // get the viewport width
+                var viewportWidth = $(window).width();
+                console.log('viewportWidth = ' + viewportWidth);
+
+                var modalDialogHeight = $(this).find('.modal-dialog').outerHeight(true);
+                console.log('modalDialogHeight = ' + modalDialogHeight);
+
+                var modalDialogWidth = $(this).find('.modal-dialog').outerWidth(true);
+                console.log('modalDialogWidth = ' + modalDialogWidth);
 
                 $.ajax({
                     url: 'DataService.asmx/GetCustomerInfoByJobID',
@@ -341,6 +367,7 @@
             }
 
             //END MISCELLANEOUS SECTION
+
             //BEGIN VALIDATION BEFORE SAVING SECTION
             function fn_rowFilled(button) {
                 var currentRow = button.parent().parent();
@@ -382,6 +409,9 @@
                 return rowFilled;
             }
             //END VALIDATION BEFORE SAVING SECTION
+
+            //console.log($(window).height());
+            //console.log($(window).width());
 
         });//end document read jquery statements
     </script>
@@ -535,7 +565,7 @@
 
 @*BEGIN NEW CUSTOMER MODAL TEMPLATE*@
 <div class="modal fade" id="jobNewForm" tabindex="-1" role="dialog" aria-labelledby="jobNewForm" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg" id="" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="jobNewForm">Add Job</h5>
@@ -682,11 +712,16 @@
                 <textarea class="form-control job-description" id="" rows="3"></textarea>
             </div>
         </div>
+</form>
+        </div>
+
+<div class="container" id="table_test">
+    <form>
         <div class="form-group row">
             <label for="sub-job-types" class="col-sm-2 col-form-label">Sub Job Types</label>
             <div class="col-sm-3">
                 <div class="table-responsive">
-                    <table id="dt_customerData" class="table table-striped table-bordered" style="width:100%">
+                    <table id="dt_customerData" class="table table-striped table-bordered" style="width:100%; height: 5%">
                         <thead>
                             <tr>
                                 <th class="">
@@ -786,6 +821,96 @@
         </div>
     </form>
 </div>
+
+<div class="container" id="table_div">
+    <table border=1>
+        <tr>
+            <td rowspan="2">
+                This is 1st row 1st column
+            </td>
+            <td>
+                2
+            </td>
+        </tr>
+        <tr>
+            <td>
+                This is 2nd row 1st column
+            </td>
+
+        </tr>
+        <tr>
+            <td rowspan="2">
+                This is 1st row 1st column
+            </td>
+            <td>
+                2
+            </td>
+        </tr>
+        <tr>
+            <td>
+                This is 2nd row 1st column
+            </td>
+
+        </tr>
+        <tr>
+            <td rowspan="2">
+                This is 1st row 1st column
+            </td>
+            <td>
+                2
+            </td>
+        </tr>
+        <tr>
+            <td>
+                This is 2nd row 1st column
+            </td>
+
+        </tr>
+        <tr>
+            <td rowspan="2">
+                This is 1st row 1st column
+            </td>
+            <td>
+                2
+            </td>
+        </tr>
+        <tr>
+            <td>
+                This is 2nd row 1st column
+            </td>
+
+        </tr>
+        <tr>
+            <td rowspan="2">
+                This is 1st row 1st column
+            </td>
+            <td>
+                2
+            </td>
+        </tr>
+        <tr>
+            <td>
+                This is 2nd row 1st column
+            </td>
+
+        </tr>
+        <tr>
+            <td rowspan="2">
+                This is 1st row 1st column
+            </td>
+            <td>
+                2
+            </td>
+        </tr>
+        <tr>
+            <td>
+                This is 2nd row 1st column
+            </td>
+
+        </tr>
+    </table>
+</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
