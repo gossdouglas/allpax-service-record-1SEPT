@@ -41,6 +41,12 @@
             overflow: auto;
         }
 
+        @@media (min-width: 992px) {
+          .modal-dialog {
+            max-width: 70%;
+          }
+        }
+
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
             /* Force table to not be like tables anymore */
@@ -81,6 +87,8 @@
     </style>
     <script>
         $(document).ready(function () {//begin document read jquery statements
+
+            fn_enableSelect2();
 
             var customerCodeNew_dpdwn = $('#customer-code-new');
 
@@ -160,7 +168,6 @@
                 var viewportHeight = $(window).height();
                 console.log('viewportHeight = ' + viewportHeight);
 
-
                 // get the viewport width
                 var viewportWidth = $(window).width();
                 console.log('viewportWidth = ' + viewportWidth);
@@ -170,6 +177,14 @@
 
                 var modalDialogWidth = $(this).find('.modal-dialog').outerWidth(true);
                 console.log('modalDialogWidth = ' + modalDialogWidth);
+
+                //console.log($(this).find('.modal-content').width())
+                //$(this).find('.modal-dialog').css('width', '900px');
+
+                //$('.modal-content').css('width', $(window).width() * 0.8);
+
+                $('.modal .modal-body').css('overflow-y', 'auto');
+                $('.modal .modal-body').css('max-height', $(window).height() * 0.9);
 
                 $.ajax({
                     url: 'DataService.asmx/GetCustomerInfoByJobID',
@@ -348,22 +363,17 @@
 
             //enable the select2 add-on
             function fn_enableSelect2() {
-                $('.Team_dpdwn').select2({
-                    width: "80%",
-                    placeholder: "Select Team",
-                    closeOnSelect: "false"
-                })
 
-                $('#team_dpdwn').select2({
+                $('#customer-code-new').select2({
                     width: "100%",
-                    placeholder: "Select Team",
+                    placeholder: "Select Customer",
                     closeOnSelect: "false"
                 })
             }
 
             //disable the select2 add-on
             function fn_disableSelect2() {
-                $('.Team_dpdwn').select2('destroy')
+                $('#customer-code-new').select2('destroy')
             }
 
             //END MISCELLANEOUS SECTION
@@ -575,7 +585,7 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="form-group">
+                    @*<div class="form-group">
             <div class="row">
                 <div class="col-12">
                     <label for="job-id" class="col-form-label">Job ID:</label>
@@ -586,19 +596,22 @@
                         <option value="AL">Alabama</option>
                         <option value="WY">Wyoming</option>
                     </select>
-                <label for="customer-name" class="col-form-label">Customer Name:</label>
-                <input type="text" class="form-control customer-name" id="customer-name-new" maxlength="50" disabled value="">
-                <label for="customer-location" class="col-form-label">Customer Location:</label>
-                <input type="text" class="form-control customer-location" id="customer-location-new" disabled value="">
-                <label for="customer-contact" class="col-form-label">Customer Contact:</label>
-                <input type="text" class="form-control customer-contact">
+                    <label for="customer-name" class="col-form-label">Customer Name:</label>
+                    <input type="text" class="form-control customer-name" id="customer-name-new"
+                           maxlength="50" disabled value="">
+                    <label for="customer-location" class="col-form-label">Customer Location:</label>
+                    <input type="text" class="form-control customer-location" id="customer-location-new"
+                           disabled value="">
+                    <label for="customer-contact" class="col-form-label">Customer Contact:</label>
+                    <input type="text" class="form-control customer-contact">
                 </div>
                 <div class="col-6">
                     <label>Checkboxes</label>
                     <div class="col-8">
                         <div class="custom-control custom-checkbox custom-control-inline">
                             <label>Checkboxes</label>
-                            <input name="checkbox" id="checkbox_0" type="checkbox" checked="checked" class="custom-control-input" value="rabbit">
+                            <input name="checkbox" id="checkbox_0" type="checkbox" checked="checked"
+                                   class="custom-control-input" value="rabbit">
                             <label for="checkbox_0" class="custom-control-label">Rabbit</label>
                         </div>
                     </div>
@@ -607,31 +620,202 @@
                     <label for="normal-hours-end" class="col-form-label">Normal Hours End:</label>
                     <input type="time" class="form-control normal-hours-end">
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label for="job-description" class="col-form-label">Job Description:</label>
+                    <input type="text" class="form-control job-description" maxlength="50">
                 </div>
-                <div class="row">
-                    <div class="col-6">
-                        <label for="job-description" class="col-form-label">Job Description:</label>
-                        <input type="text" class="form-control job-description" maxlength="50">
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input active" type="checkbox" value="">
+                <label class="form-check-label" for="">
+                    Job Active
+                </label>
+            </div>
+            <div class="form-group row">
+                <label class="col-4">Checkboxes</label>
+                <div class="col-8">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input name="checkbox" id="checkbox_0" type="checkbox" checked="checked"
+                               class="custom-control-input" value="rabbit">
+                        <label for="checkbox_0" class="custom-control-label">Rabbit</label>
                     </div>
                 </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input active" type="checkbox" value="">
-                    <label class="form-check-label" for="">
-                        Job Active
-                    </label>
-                </div>
-                <div class="form-group row">
-                    <label class="col-4">Checkboxes</label>
-                    <div class="col-8">
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                            <input name="checkbox" id="checkbox_0" type="checkbox" checked="checked" class="custom-control-input" value="rabbit">
-                            <label for="checkbox_0" class="custom-control-label">Rabbit</label>
+            </div>
+        </div>*@
+                    <div class="form-group row">
+                        <label for="job-id" class="col-sm-3 col-form-label">Job ID</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control job-id" maxlength="10">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-check">
+                                <input class="form-check-input job-active" type="checkbox" id="">
+                                <label class="form-check-label" for="job-active">
+                                    Job Active
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </div>
-        </div>
-        </form>
-               
+                    <div class="form-group row">
+                        <label for="customer-code" class="col-sm-3 col-form-label">Customer Code</label>
+                        <div class="col-sm-3">
+                            <select class="customer-code" id="customer-code-new">
+                                <option value="AL">Alabama</option>
+                                <option value="WY">Wyoming</option>
+                            </select>
+                        </div>
+                        <label for="normal-hours-start" class="col-sm-3 col-form-label">Normal Hours Start</label>
+                        <div class="col-sm-3">
+                            <input type="time" class="form-control normal-hours-start">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="customer-name" class="col-sm-3 col-form-label">Customer Name</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control customer-name" id="customer-name-new" maxlength="50" disabled value="">
+                        </div>
+                        <label for="normal-hours-end" class="col-sm-3 col-form-label">Normal Hours End</label>
+                        <div class="col-sm-3">
+                            <input type="time" class="form-control normal-hours-end" id="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="customer-location" class="col-sm-3 col-form-label">Customer Location</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control customer-location" id="customer-location-new" maxlength="50" disabled value="">
+                        </div>
+                        <label for="normal-hours-daily" class="col-sm-3 col-form-label">Normal Hours Daily</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control normal-hours-daily" id="" maxlength="2" value="8">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="customer-contact" class="col-sm-3 col-form-label">Customer Contact</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control customer-contact" maxlength="50">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-check">
+                                <input class="form-check-input double-time-hours" type="checkbox" id="">
+                                <label class="form-check-label" for="double-time-hours">
+                                    Double Time Hours
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="job-description" class="col-sm-3 col-form-label">Job Description</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control job-description" id="" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="sub-job-types" class="col-sm-2 col-form-label">Sub Job Types</label>
+                        <div class="col-sm-3">
+                            <div class="table-responsive">
+                                <table id="dt_customerData" class="table table-striped table-bordered" style="width:100%; height: 5%">
+                                    <thead>
+                                        <tr>
+                                            <th class="">
+                                                Sub-job Type
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input double-time-hours" type="checkbox" id="">
+                                                    <label class="form-check-label" for="double-time-hours">
+                                                        Double Time Hours
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input double-time-hours" type="checkbox" id="">
+                                                    <label class="form-check-label" for="double-time-hours">
+                                                        Double Time Hours
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input double-time-hours" type="checkbox" id="">
+                                                    <label class="form-check-label" for="double-time-hours">
+                                                        Double Time Hours
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input double-time-hours" type="checkbox" id="">
+                                                    <label class="form-check-label" for="double-time-hours">
+                                                        Double Time Hours
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input double-time-hours" type="checkbox" id="">
+                                                    <label class="form-check-label" for="double-time-hours">
+                                                        Double Time Hours
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <label for="sub-job-types" class="col-sm-2 col-form-label">Job Resources</label>
+                        <div class="col-sm-5">
+                            <div class="table-responsive">
+                                <table id="dt_customerData" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="">
+                                                Resource Type
+                                            </th>
+                                            <th class="">
+                                                Resource
+                                            </th>
+                                            <th class="">
+                                                Rate
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                CE
+                                            </td>
+                                            <td>
+                                                Controls Engineer
+                                            </td>
+                                            <td>
+                                                Rate
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn jobNewForm btn_save" value="">Save</button>
@@ -713,7 +897,7 @@
             </div>
         </div>
 </form>
-        </div>
+</div>
 
 <div class="container" id="table_test">
     <form>
@@ -823,7 +1007,7 @@
 </div>
 
 <div class="container" id="table_div">
-    <table border=1>
+    @*<table border=1>
         <tr>
             <td rowspan="2">
                 This is 1st row 1st column
@@ -908,7 +1092,7 @@
             </td>
 
         </tr>
-    </table>
+    </table>*@
 </div>
 
 
