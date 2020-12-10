@@ -21,6 +21,10 @@ namespace allpax_service_record.Models
         public virtual DbSet<tbl_Users> tbl_Users { get; set; }
         public virtual DbSet<tbl_jobCorrespondents> tbl_jobCorrespondents { get; set; }
         public virtual DbSet<tbl_Jobs> tbl_Jobs { get; set; }
+        public virtual DbSet<tbl_jobResourceTypes> tbl_jobResourceTypes { get; set; }
+        public virtual DbSet<tbl_jobSubJobs> tbl_jobSubJobs { get; set; }
+        public virtual DbSet<tbl_resourceTypes> tbl_resourceTypes { get; set; }
+        public virtual DbSet<tbl_subJobTypes> tbl_subJobTypes { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<tbl_customers>()
@@ -111,6 +115,26 @@ namespace allpax_service_record.Models
                 .HasMany(e => e.tbl_jobCorrespondents)
                 .WithRequired(e => e.tbl_Jobs)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<tbl_jobResourceTypes>()
+                .Property(e => e.jobID)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_jobResourceTypes>()
+                .Property(e => e.rate)
+                .HasPrecision(6, 2);
+
+            modelBuilder.Entity<tbl_jobSubJobs>()
+                .Property(e => e.jobID)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_resourceTypes>()
+                .Property(e => e.resourceType)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_subJobTypes>()
+                .Property(e => e.description)
+                .IsUnicode(false);
         }
 
         public System.Data.Entity.DbSet<allpax_service_record.Models.View_Models.vm_workDesc> vm_workDesc { get; set; }
