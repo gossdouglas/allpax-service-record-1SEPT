@@ -21,7 +21,9 @@ namespace allpax_service_record.Controllers
         {
             //List<tbl_Jobs> jobs = new List<tbl_Jobs>();
             //List<vm_Jobs> jobs = new List<vm_Jobs>();
-            List<vm_Jobs> jobs = new List<vm_Jobs>();
+            //List<vm_Jobs> jobs = new List<vm_Jobs>();
+            vm_Jobs vm_Jobs = new vm_Jobs();
+
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
@@ -39,30 +41,50 @@ namespace allpax_service_record.Controllers
             foreach (DataRow dr1 in dt1.Rows)
             {
                 //tbl_Jobs job = new tbl_Jobs();
-                vm_Jobs job = new vm_Jobs();
+                //vm_Jobs job = new vm_Jobs();
 
-                job.jobID = dr1[0].ToString();
-                job.description = dr1[1].ToString();
-                job.customerCode = dr1[2].ToString();
-                job.customerContact = dr1[3].ToString();
-                job.active = (Boolean)dr1[4];
-                job.location = dr1[5].ToString();
-                job.nrmlHoursStart = dr1[6].ToString();
-                job.nrmlHoursEnd = dr1[7].ToString();
-                job.nrmlHoursDaily = dr1[8].ToString();
-                job.dblTimeHours = (Boolean)dr1[9];
-                job.id = (int)dr1[10];
+                //job.jobID = dr1[0].ToString();
+                //job.description = dr1[1].ToString();
+                //job.customerCode = dr1[2].ToString();
+                //job.customerContact = dr1[3].ToString();
+                //job.active = (Boolean)dr1[4];
+                //job.location = dr1[5].ToString();
+                //job.nrmlHoursStart = dr1[6].ToString();
+                //job.nrmlHoursEnd = dr1[7].ToString();
+                //job.nrmlHoursDaily = dr1[8].ToString();
+                //job.dblTimeHours = (Boolean)dr1[9];
+                //job.id = (int)dr1[10];
+
+                tbl_Jobs tbl_Job = new tbl_Jobs();
+
+                tbl_Job.jobID = dr1[0].ToString();
+                tbl_Job.description = dr1[1].ToString();
+                tbl_Job.customerCode = dr1[2].ToString();
+                tbl_Job.customerContact = dr1[3].ToString();
+                tbl_Job.active = (Boolean)dr1[4];
+                tbl_Job.location = dr1[5].ToString();
+                tbl_Job.nrmlHoursStart = dr1[6].ToString();
+                tbl_Job.nrmlHoursEnd = dr1[7].ToString();
+                tbl_Job.nrmlHoursDaily = dr1[8].ToString();
+                tbl_Job.dblTimeHours = (Boolean)dr1[9];
+                tbl_Job.id = (int)dr1[10];
+
                 //GET JOB CORRESPONDENT NAME RECORDS FOR THE DAILY REPORT
                 //job.subJobTypes = subJobTypesByJobID("%");
 
-                jobs.Add(job);
+                //jobs.Add(job);
+                //vm_Jobs.jobs.Add(tbl_Job);
+
             }
+
+            vm_Jobs.subJobTypes = subJobTypesByJobID("%");
             sqlconn.Close();
 
             //GET JOB CORRESPONDENT NAME RECORDS FOR THE DAILY REPORT
             //jobs.subJobTypes = subJobTypesByJobID("%");
 
-            return View(jobs);
+            //return View(jobs);
+            return View(vm_Jobs);
         }
 
         //GET JOB CORRESPONDENT NAME RECORDS FOR THE DAILY REPORT
@@ -74,12 +96,9 @@ namespace allpax_service_record.Controllers
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
-            string sqlquery1 = "SELECT tbl_jobSubJobs.jobID, tbl_subJobTypes.subJobID, tbl_subJobTypes.description " +
+            string sqlquery1 = "SELECT tbl_subJobTypes.subJobID, tbl_subJobTypes.description, tbl_subJobTypes.id " +
 
-            "FROM tbl_subJobTypes " +
-            "INNER JOIN tbl_jobSubJobs ON tbl_jobSubJobs.subJobID=tbl_subJobTypes.subJobID " +
-            "WHERE " +
-            "tbl_jobSubJobs.jobID = @jobID";
+            "FROM tbl_subJobTypes ";
 
             SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
             sqlcomm1.Parameters.Add(new SqlParameter("jobID", jobID));
