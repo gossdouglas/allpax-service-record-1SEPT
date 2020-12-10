@@ -187,7 +187,7 @@
                 $('.modal .modal-body').css('max-height', $(window).height() * 0.9);
 
                 $.ajax({
-                    url: 'DataService.asmx/GetCustomerInfoByJobID',
+                    url: '/DataService.asmx/GetCustomerInfoByJobID',
                     method: 'post',
                     dataType: 'json',
                     data: { jobID: '%' },
@@ -212,7 +212,7 @@
                 var currCustomerCode = $(this).val();
                 console.clear();
                 $.ajax({
-                    url: 'DataService.asmx/GetCustomerInfoByJobID',
+                    url: '/DataService.asmx/GetCustomerInfoByJobID',
                     method: 'post',
                     dataType: 'json',
                     data: { jobID: '%' },
@@ -662,8 +662,6 @@
                         <label for="customer-code" class="col-sm-3 col-form-label">Customer Code</label>
                         <div class="col-sm-3">
                             <select class="customer-code" id="customer-code-new">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
                             </select>
                         </div>
                         <label for="normal-hours-start" class="col-sm-3 col-form-label">Normal Hours Start</label>
