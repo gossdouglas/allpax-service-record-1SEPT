@@ -9,13 +9,11 @@ namespace allpax_service_record.Models
     public partial class tbl_subJobTypes
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public byte subJobID { get; set; }
 
         [Required]
         [StringLength(25)]
         public string description { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
     }
 }

@@ -9,13 +9,15 @@ namespace allpax_service_record.Models
     public partial class tbl_resourceTypes
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public byte resourceTypeID { get; set; }
 
         [Required]
         [StringLength(50)]
         public string resourceType { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string description { get; set; }
     }
 }

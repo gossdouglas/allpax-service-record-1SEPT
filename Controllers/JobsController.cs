@@ -19,10 +19,8 @@ namespace allpax_service_record.Controllers
 
         public ActionResult Index()
         {
-            //List<tbl_Jobs> jobs = new List<tbl_Jobs>();
-            //List<vm_Jobs> jobs = new List<vm_Jobs>();
-            //List<vm_Jobs> jobs = new List<vm_Jobs>();
             vm_Jobs vm_Jobs = new vm_Jobs();
+            List<tbl_Jobs> jobList = new List<tbl_Jobs>();
 
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
@@ -40,63 +38,41 @@ namespace allpax_service_record.Controllers
             sda1.Fill(dt1);
             foreach (DataRow dr1 in dt1.Rows)
             {
-                //tbl_Jobs job = new tbl_Jobs();
-                //vm_Jobs job = new vm_Jobs();
+                tbl_Jobs job = new tbl_Jobs();
 
-                //job.jobID = dr1[0].ToString();
-                //job.description = dr1[1].ToString();
-                //job.customerCode = dr1[2].ToString();
-                //job.customerContact = dr1[3].ToString();
-                //job.active = (Boolean)dr1[4];
-                //job.location = dr1[5].ToString();
-                //job.nrmlHoursStart = dr1[6].ToString();
-                //job.nrmlHoursEnd = dr1[7].ToString();
-                //job.nrmlHoursDaily = dr1[8].ToString();
-                //job.dblTimeHours = (Boolean)dr1[9];
-                //job.id = (int)dr1[10];
+                job.jobID = dr1[0].ToString();
+                job.description = dr1[1].ToString();
+                job.customerCode = dr1[2].ToString();
+                job.customerContact = dr1[3].ToString();
+                job.active = (Boolean)dr1[4];
+                job.location = dr1[5].ToString();
+                job.nrmlHoursStart = dr1[6].ToString();
+                job.nrmlHoursEnd = dr1[7].ToString();
+                job.nrmlHoursDaily = dr1[8].ToString();
+                job.dblTimeHours = (Boolean)dr1[9];
+                job.id = (int)dr1[10];
 
-                tbl_Jobs tbl_Job = new tbl_Jobs();
-
-                tbl_Job.jobID = dr1[0].ToString();
-                tbl_Job.description = dr1[1].ToString();
-                tbl_Job.customerCode = dr1[2].ToString();
-                tbl_Job.customerContact = dr1[3].ToString();
-                tbl_Job.active = (Boolean)dr1[4];
-                tbl_Job.location = dr1[5].ToString();
-                tbl_Job.nrmlHoursStart = dr1[6].ToString();
-                tbl_Job.nrmlHoursEnd = dr1[7].ToString();
-                tbl_Job.nrmlHoursDaily = dr1[8].ToString();
-                tbl_Job.dblTimeHours = (Boolean)dr1[9];
-                tbl_Job.id = (int)dr1[10];
-
-                //GET JOB CORRESPONDENT NAME RECORDS FOR THE DAILY REPORT
-                //job.subJobTypes = subJobTypesByJobID("%");
-
-                //jobs.Add(job);
-                //vm_Jobs.jobs.Add(tbl_Job);
-
+                jobList.Add(job);
             }
 
+            vm_Jobs.jobs = jobList;
             vm_Jobs.subJobTypes = subJobTypesByJobID("%");
+            vm_Jobs.resourceTypes = resourceTypesByJobID("%");
+
             sqlconn.Close();
 
-            //GET JOB CORRESPONDENT NAME RECORDS FOR THE DAILY REPORT
-            //jobs.subJobTypes = subJobTypesByJobID("%");
-
-            //return View(jobs);
             return View(vm_Jobs);
         }
 
-        //GET JOB CORRESPONDENT NAME RECORDS FOR THE DAILY REPORT
+        //GET SUB JOB TYPES
         public List<tbl_subJobTypes> subJobTypesByJobID(string jobID)
         {
-            //List<tbl_subJobTypes> jobCrspdtNames = new List<tbl_subJobTypes>;
             List<tbl_subJobTypes> subJobTypes = new List<tbl_subJobTypes>();
 
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
-            string sqlquery1 = "SELECT tbl_subJobTypes.subJobID, tbl_subJobTypes.description, tbl_subJobTypes.id " +
+            string sqlquery1 = "SELECT tbl_subJobTypes.subJobID, tbl_subJobTypes.description " +
 
             "FROM tbl_subJobTypes ";
 
@@ -111,11 +87,40 @@ namespace allpax_service_record.Controllers
 
                 subJobType.subJobID = (byte)dr1[0];
                 subJobType.description = dr1[1].ToString();
-                subJobType.id = (int)dr1[2];
 
                 subJobTypes.Add(subJobType);
             }
             return subJobTypes;
+        }
+
+        //GET RESOURCE TYPES
+        public List<tbl_resourceTypes> resourceTypesByJobID(string jobID)
+        {
+            List<tbl_resourceTypes> resourceTypes = new List<tbl_resourceTypes>();
+
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            string sqlquery1 = "SELECT tbl_resourceTypes.resourceTypeID, tbl_resourceTypes.resourceType, tbl_resourceTypes.description " +
+
+            "FROM tbl_resourceTypes ";
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.Add(new SqlParameter("jobID", jobID));
+            SqlDataAdapter sda3 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda3.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                tbl_resourceTypes resourceType = new tbl_resourceTypes();
+
+                resourceType.resourceTypeID = (byte)dr1[0];
+                resourceType.resourceType = dr1[1].ToString();
+                resourceType.description = dr1[2].ToString();
+
+                resourceTypes.Add(resourceType);
+            }
+            return resourceTypes;
         }
 
         //public ActionResult UpdateJob(tbl_Jobs customerUpdate)

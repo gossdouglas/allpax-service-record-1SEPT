@@ -33,13 +33,14 @@ namespace allpax_service_record.Models.View_Models
         //public Boolean dblTimeHours { get; set; }
 
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
+        //public int id { get; set; }
 
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         //public virtual ICollection<tbl_jobCorrespondents> tbl_jobCorrespondents { get; set; }
 
         public List<tbl_Jobs> jobs { get; set; }
         public List<tbl_subJobTypes> subJobTypes { get; set; }
+        public List<tbl_resourceTypes> resourceTypes { get; set; }
 
         //public List<tbl_subJobTypes> jobResourceTypes { get; set; }
         //public List<tbl_subJobTypes> jobCorrespondents { get; set; }

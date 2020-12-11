@@ -223,12 +223,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MODEL TESTING\Model1.cs" />
-    <Compile Include="Models\MODEL TESTING\tbl_jobCorrespondents.cs" />
-    <Compile Include="Models\MODEL TESTING\tbl_jobResourceTypes.cs" />
-    <Compile Include="Models\MODEL TESTING\tbl_Jobs.cs" />
-    <Compile Include="Models\MODEL TESTING\tbl_jobSubJobs.cs" />
     <Compile Include="Models\MODEL TESTING\tbl_resourceTypes.cs" />
-    <Compile Include="Models\MODEL TESTING\tbl_subJobTypes.cs" />
     <Compile Include="Models\tbl_jobCorrespondents.cs" />
     <Compile Include="Models\tbl_jobResourceTypes.cs" />
     <Compile Include="Models\tbl_Jobs.cs" />
