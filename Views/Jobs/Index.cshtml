@@ -752,86 +752,133 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 subJobTypes_div">
-                        <div class="table-responsive">
-                            <table id="dt_subJobTypes" class="table table-striped table-bordered" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th class="">
-                                            Sub-job Type
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var subJobtype in Model.subJobTypes)
-                                    {
-                                        //BEGIN TEMPORARY LOOP VARIABLES
-                                        byte temp_subJobID = subJobtype.subJobID;
-                                        string temp_description = subJobtype.description;
-                                        //END TEMPORARY LOOP VARIABLES
+                    <div class="col-md-4 subJobTypes_div">Sub-job Types
+                        @foreach (var subJobtype in Model.subJobTypes)
+                        {
+                            //BEGIN TEMPORARY LOOP VARIABLES
+                            byte temp_subJobID = subJobtype.subJobID;
+                            string temp_description = subJobtype.description;
+                            //END TEMPORARY LOOP VARIABLES
 
-                                        <tr>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input sub-job-type" type="checkbox" id="sub-job-type_+@temp_subJobID">
-                                                    <label class="form-check-label">
-                                                        @temp_description
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input sub-job-type" type="checkbox" id="sub-job-type_+@temp_subJobID">
+                                        <label class="form-check-label">
+                                            @temp_description
+                                        </label>
+                                    </div>
+                        }
+
+                        @*<div class="table-responsive">
+            <table id="dt_subJobTypes" class="table table-striped table-bordered" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th class="">
+                            Sub-job Type
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var subJobtype in Model.subJobTypes)
+                    {
+                        //BEGIN TEMPORARY LOOP VARIABLES
+                        byte temp_subJobID = subJobtype.subJobID;
+                        string temp_description = subJobtype.description;
+                        //END TEMPORARY LOOP VARIABLES
+
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input sub-job-type" type="checkbox" id="sub-job-type_+@temp_subJobID">
+                                    <label class="form-check-label">
+                                        @temp_description
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>*@
                     </div>
 
-                    <div class="col-md-8 jobResourceTypes_div">
-                        <div class="table-responsive">
-                            <table id="dt_resourceTypes" class="table table-striped table-bordered" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th colspan="3">Job Resources</th>
-                                    </tr>
-                                </thead>
-                                <thead>
-                                    <tr>
-                                        <th class="">
-                                            Resource Type
-                                        </th>
-                                        <th class="">
-                                            Resource
-                                        </th>
-                                        <th class="">
-                                            Rate
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var resourceType in Model.resourceTypes)
-                                    {
-                                        //BEGIN TEMPORARY LOOP VARIABLES
-                                        byte temp_resourceTypeID = resourceType.resourceTypeID;
-                                        string temp_resourceType = resourceType.resourceType;
-                                        string temp_description = resourceType.description;
-                                        //string temp_rate = resourceType.description;
-                                        //END TEMPORARY LOOP VARIABLES
+                    <div class="col-md-8 jobResourceTypes_div" style="border: 1px solid black;">
 
-                                        <tr>
-                                            <td>
-                                                @temp_resourceType
-                                            </td>
-                                            <td>
-                                                @temp_description
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control rate-new" maxlength="6">
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                        @foreach (var resourceType in Model.resourceTypes)
+                        {
+                            //BEGIN TEMPORARY LOOP VARIABLES
+                            byte temp_resourceTypeID = resourceType.resourceTypeID;
+                            string temp_resourceType = resourceType.resourceType;
+                            string temp_description = resourceType.description;
+                            //string temp_rate = resourceType.description;
+                            //END TEMPORARY LOOP VARIABLES
+
+                        <div class="row">
+                            <div class="col-md-2" style="border: 1px solid black;">
+                                @temp_resourceType
+                            </div>
+                            <div class="col-md-8" style="border: 1px solid black;">
+                                @temp_description
+                            </div>
+                            <div class="col-md-2" style="border: 1px solid black;">
+                                @*<input type="text" class="form-control rate-new" maxlength="6" style="padding:5px;">*@
+                                rate
+                            </div>
                         </div>
+                                @*<div class="col-md-1" style="border: 1px solid black;">
+                    @temp_resourceType
+                </div>*@
+                                @*<div class="col-md-1">
+                    <input type="text" class="form-control rate-new" maxlength="6">
+                </div>*@
+                                }
+                            
+
+                        </div>
+                        @*<div class="table-responsive">
+            <table id="dt_resourceTypes" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th colspan="3">Job Resources</th>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <th class="">
+                            Resource Type
+                        </th>
+                        <th class="">
+                            Resource
+                        </th>
+                        <th class="">
+                            Rate
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var resourceType in Model.resourceTypes)
+                    {
+                        //BEGIN TEMPORARY LOOP VARIABLES
+                        byte temp_resourceTypeID = resourceType.resourceTypeID;
+                        string temp_resourceType = resourceType.resourceType;
+                        string temp_description = resourceType.description;
+                        //string temp_rate = resourceType.description;
+                        //END TEMPORARY LOOP VARIABLES
+
+                        <tr>
+                            <td>
+                                @temp_resourceType
+                            </td>
+                            <td>
+                                @temp_description
+                            </td>
+                            <td>
+                                <input type="text" class="form-control rate-new" maxlength="6">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>*@
                     </div>
                 </div>
                 <div class="row">
@@ -884,7 +931,7 @@
                 </div>
             </div>
     </div>
-</div>
+@*</div>*@
 @*END NEW CUSTOMER MODAL TEMPLATE*@
 @*END CUSTOMER SECTION*@
 
