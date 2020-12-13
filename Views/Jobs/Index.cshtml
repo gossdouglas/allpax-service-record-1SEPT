@@ -61,6 +61,15 @@
             }
         }*/
 
+        .modal-dialog {
+            position: relative;
+            display: table; /* This is important */
+            overflow-y: auto;
+            overflow-x: auto;
+            width: auto;
+            min-width: 300px;
+        }
+
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
             /* Force table to not be like tables anymore */
@@ -197,8 +206,8 @@
 
                 //$('.modal-content').css('width', $(window).width() * 0.8);
 
-                $('.modal .modal-body').css('overflow-y', 'auto');
-                $('.modal .modal-body').css('max-height', $(window).height() * 0.9);
+                //$('.modal .modal-body').css('overflow-y', 'auto');
+                //$('.modal .modal-body').css('max-height', $(window).height() * 0.9);
 
                 //begin fill the customer code dropdown
                 $.ajax({
@@ -614,7 +623,6 @@
 @*BEGIN NEW CUSTOMER MODAL TEMPLATE*@
 <div class="modal fade" id="jobNewForm" tabindex="-1" role="dialog" aria-labelledby="jobNewForm" aria-hidden="true">
     <div class="modal-dialog modal-lg" id="" role="document">
-    @*<div class="modal-dialog modal-md" id="" role="document">*@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="jobNewForm">Add Job</h5>
@@ -781,78 +789,6 @@
 </div>
 @*END NEW CUSTOMER MODAL TEMPLATE*@
 @*END CUSTOMER SECTION*@
-
-<div class="container">
-    @*<form>
-                <div class="form-group row">
-                    <label for="job-id" class="col-sm-2 col-form-label">Job ID</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control job-id" maxlength="10">
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-check">
-                            <input class="form-check-input job-active" type="checkbox" id="">
-                            <label class="form-check-label" for="job-active">
-                                Job Active
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="customer-code" class="col-sm-2 col-form-label">Customer Code</label>
-                    <div class="col-sm-4">
-                        <select class="customer-code" id="customer-code-new">
-                            <option value="AL">Alabama</option>
-                            <option value="WY">Wyoming</option>
-                        </select>
-                    </div>
-                    <label for="normal-hours-start" class="col-sm-2 col-form-label">Normal Hours Start</label>
-                    <div class="col-sm-4">
-                        <input type="time" class="form-control normal-hours-start">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="customer-name" class="col-sm-2 col-form-label">Customer Name</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control customer-name" id="customer-name-new" maxlength="50" disabled value="">
-                    </div>
-                    <label for="normal-hours-end" class="col-sm-2 col-form-label">Normal Hours End</label>
-                    <div class="col-sm-4">
-                        <input type="time" class="form-control normal-hours-end" id="">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="customer-location" class="col-sm-2 col-form-label">Customer Location</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control customer-location" id="customer-location-new" maxlength="50" disabled value="">
-                    </div>
-                    <label for="normal-hours-daily" class="col-sm-2 col-form-label">Normal Hours Daily</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control normal-hours-daily" id="" maxlength="2" value="8">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="customer-contact" class="col-sm-2 col-form-label">Customer Contact</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control customer-contact" maxlength="50">
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-check">
-                            <input class="form-check-input double-time-hours" type="checkbox" id="">
-                            <label class="form-check-label" for="double-time-hours">
-                                Double Time Hours
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="job-description" class="col-sm-2 col-form-label">Job Description</label>
-                    <div class="col-sm-10">
-                        <textarea class="form-control job-description" id="" rows="3"></textarea>
-                    </div>
-                </div>
-        </form>*@
-</div>
 
 <div class="container" id="table_test">
     @*<form>
