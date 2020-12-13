@@ -703,7 +703,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <label for="job-id" class="col-md-3 col-form-label">Job ID</label>
+                    <div class="col-md-3">Job ID</div>
                     <div class="col-md-3">
                         <input type="text" class="form-control job-id" maxlength="10">
                     </div>
@@ -718,39 +718,40 @@
                 </div>
                 <div class="row">
                     <label for="customer-code" class="col-md-3 col-form-label">Customer Code</label>
+                    <div class="col-md-3">Customer Code</div>
                     <div class="col-md-3">
                         <select class="customer-code" id="customer-code-new">
                         </select>
                     </div>
-                    <label for="normal-hours-start" class="col-md-3 col-form-label">Normal Hours Start</label>
+                    <div class="col-md-3">Customer Name</div>
                     <div class="col-md-3">
-                        <input type="time" class="form-control normal-hours-start">
+                        <input type="text" class="form-control customer-name" id="customer-name-new" maxlength="50" disabled value="">
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-form-label">Customer Location</div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control customer-location" id="customer-location-new" maxlength="50" disabled value="">
+                    </div>
+                    <div class="col-md-3 col-form-label">Customer Contact</div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control customer-contact" maxlength="50">
                     </div>
                 </div>
                 <div class="row">
-                    <label for="customer-name" class="col-md-3 col-form-label">Customer Name</label>
+                    <div class="col-md-3">Normal Hours Start</div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control customer-name" id="customer-name-new" maxlength="50" disabled value="">
+                        <input type="time" class="form-control normal-hours-start">
                     </div>
-                    <label for="normal-hours-end" class="col-md-3 col-form-label">Normal Hours End</label>
+                    <div class="col-md-3">Normal Hours End</div>
                     <div class="col-md-3">
                         <input type="time" class="form-control normal-hours-end" id="">
                     </div>
                 </div>
                 <div class="row">
-                    <label for="customer-location" class="col-md-3 col-form-label">Customer Location</label>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control customer-location" id="customer-location-new" maxlength="50" disabled value="">
-                    </div>
-                    <label for="normal-hours-daily" class="col-md-3 col-form-label">Normal Hours Daily</label>
+                    <div class="col-md-3 col-form-label">Normal Hours Daily</div>
                     <div class="col-md-3">
                         <input type="text" class="form-control normal-hours-daily" id="" maxlength="2" value="8">
-                    </div>
-                </div>
-                <div class="row">
-                    <label for="customer-contact" class="col-md-3 col-form-label">Customer Contact</label>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control customer-contact" maxlength="50">
                     </div>
                     <div class="col-md-3">
                         <div class="form-check">
@@ -762,7 +763,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <label for="job-description" class="col-md-3 col-form-label">Job Description</label>
+                    <div class="col-md-3 col-form-label">Job Description</div>
                     <div class="col-md-9">
                         <textarea class="form-control job-description" id="" rows="3" style="resize: none;"></textarea>
                     </div>
