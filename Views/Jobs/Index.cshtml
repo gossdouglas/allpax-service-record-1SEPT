@@ -70,6 +70,11 @@
             min-width: 300px;
         }*/
 
+        input {
+            /*min-width: 100%;
+            max-width: 100%;*/
+        }
+
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
             /* Force table to not be like tables anymore */
@@ -111,6 +116,7 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
+            var indexJobCrspdtEntries_Add = 0;
             fn_enableSelect2();
 
             var customerCodeNew_dpdwn = $('#customer-code-new');
@@ -425,8 +431,114 @@
             }
             //END VALIDATION BEFORE SAVING SECTION
 
-            //console.log($(window).height());
-            //console.log($(window).width());
+            $(".Btn_add").click(function () {
+
+                //if (fn_rowFilled($(this))) {
+
+                    //fn_produceParsedShortNames($(this));
+                    //fn_disableSelect2();
+                var currentRow = $(this).parent().parent();
+                console.log(currentRow.attr("class"));
+
+                    //var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
+                    //currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html
+
+                    currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
+                    currentRow.find(".email_input").attr("disabled", "true");//lock the name field for edits
+                    currentRow.find(".Btn_add").hide();//remove the add button, only needed for new work descriptions
+                    currentRow.find(".Btn_clear").hide();//remove the clear button, only needed for new work descriptions
+                    currentRow.find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
+                    currentRow.find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
+                    //currentRow.last().find(".narr_div").css('border-bottom-style', 'none');
+                    //currentRow.find(".dpdwn_parsed_div").css('border-bottom-style', 'none');
+                    //currentRow.find(".button_div").css('border-bottom-style', 'none');
+
+                    indexJobCrspdtEntries_Add = indexJobCrspdtEntries_Add + 1;
+
+                    $(".jobCrspdtLine_template_row_hidden").removeAttr("hidden");
+                    currentRow.prop("id", "jobCrspdtLine_" + indexJobCrspdtEntries_Add).appendTo("#jobCrspdtLine_template");
+                    $("#jobCrspdtLine_" + indexJobCrspdtEntries_Add).prop("class", " row addRecord jobCrspdtLine");
+                    $("#jobCrspdtLine_" + indexJobCrspdtEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
+
+                    $(".jobCrspdtLine_template_row_hidden").clone(true).prop("class", "row entryRow jobCrspdtLine_template_row_active").appendTo("#jobCrspdtLine_template");
+                    $(".jobCrspdtLine_template_row_hidden").attr("hidden", "true");
+
+                    
+                    //fn_enableSelect2();
+                    //enable_disableSave();
+                //}
+            });
+
+            $(".Btn_edit").click(function () {
+                var currentRow = $(this).parent().parent();
+
+                $(this).hide();
+                $(currentRow).find(".Btn_save").removeAttr("hidden");
+                $(currentRow).find(".Btn_save").show();
+
+                currentRow.find(".name_input").removeAttr("disabled");//
+                currentRow.find(".email_input").removeAttr("disabled");//
+                $(currentRow).find(".name_input, .email_input").css("color", "red");
+            });
+
+            $(".Btn_save").click(function () {
+
+                //if (fn_rowFilled($(this))) {
+
+                    var currentRow = $(this).parent().parent();
+                    //var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
+                    //currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html 
+
+                    $(this).hide();
+                    $(currentRow).find(".Btn_edit").removeAttr("hidden");
+                    $(currentRow).find(".Btn_edit").show();
+
+                    currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
+                    currentRow.find(".email_input").attr("disabled", "true");//lock the name field for edits
+                    $(currentRow).find(".name_input, .email_input").css("color", "black");
+
+                //}
+                //else {
+
+                //    $.alert({
+                //        title: 'Error!',
+                //        content: 'One or more row entries incorrect.  Narrative section must 10 or greater, at least one team member must be added and hours must be of form H.0, H.25, H.5, or H.75.',
+                //    });
+                //}
+            });
+
+            $(".Btn_delete").click(function () {
+                var currentRow = $(this).parent().parent();
+                //var currentNumValidRecs = $(".returnedRecords.workDescLine").length + indexWorkDescEntries_Add;
+                temp_LineClass = $(currentRow).prop("class");
+
+                //if this line is a new record, simply remove it
+                if (temp_LineClass.includes("addRecord")) {
+                    $(currentRow).remove();
+                }
+
+                //if this line is a returned record, set its class to deletedRecords
+                //if (temp_LineClass.includes("returnedRecords")) {
+
+                //    //used to change the class of a returned record to deleted record for later processing with a delete operation
+                //    if (temp_LineClass.includes("workDescLine")) {
+                //        if (currentNumValidRecs > 1) {//if there is at least one more work description entry, then go ahead and delete this entry
+                //            $($(currentRow)).prop("class", "row deletedRecords workDescLine");
+                //            $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
+                //            $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+                //            $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                //            $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
+                //            recordsToDeleteStatus = 1;
+                //        }
+                //        else {
+                //            $.alert({
+                //                title: 'Cannot Delete!',
+                //                content: 'Must have at least one copied record or added record in the work description section.',
+                //            });
+                //        }
+                //    }                    
+                //}
+            });
 
         });//end document read jquery statements
     </script>
@@ -739,56 +851,54 @@
                     </div>
                 </div>
                 <div class="row">
-                    <label for="customer-contact" class="col-md-3 col-form-label">Job Correspondents</label>
-                    <div class="col-md-6">
-                        <span><input type="text" class="form-control customer-contact"><input type="text" class="form-control customer-contact"></span>
-                    </div>
-                    @*<div class="col-md-3">
-                <input type="text" class="form-control customer-contact">
-            </div>*@
+                    <div class="col-md-3 col-form-label">Job Correspondents</div>
+                    <div class="col-md-3 col-form-label" style="padding:5px;">Name</div>
+                    <div class="col-md-3 col-form-label" style="padding:5px;">E-mail</div>
                 </div>
 
-                @*BEGIN NEW WORK DESCRIPTION TEMPLATE*@
-                <div class="" id="workDescriptionLine_template" style="">
-                    <div class="row entryRow workDescriptionLine_template_row_active" id="" style="">
-                        <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style=""></div>
-                        <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
-                            <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-
-                            <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                            <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                            <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                @*BEGIN NEW JOB CORRESPONDENT TEMPLATE*@
+                <div class="" id="jobCrspdtLine_template" style="">
+                    <div class="row entryRow jobCrspdt_template_row_active">
+                        <div class="col-md-3" style=""></div>
+                        <div class="col-md-3 name_div" style="padding:0px;">
+                            <input type="text" class="form-control name_input" style="padding:5px;">
                         </div>
-
-                        <div class="col-1 state_div workDescTeam_state_div" style="padding:0px;">
-                            <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
+                        <div class="col-md-3 email_div" style="padding:0px;">
+                            <input type="text" class="form-control email_input" style="padding:5px;">
                         </div>
+                        <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
+                            <button id="" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
 
+                            <button id="" class="btn btn-light btn-sm Btn_edit lineJobCrspdtBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                            <button class='btn btn-light btn-sm Btn_save lineJobCrspdtBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                            <button class='btn btn-light btn-sm Btn_delete lineJobCrspdtBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                        </div>
                     </div>
 
-                    <div class="row entryRow workDescriptionLine_template_row_hidden" id="" style="" hidden>
-                        <div class="col-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style=""></div>
-                        <div class="col-2 button_div workDescTeam_button_div" style="padding:0px;">
-                            <button class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-
-                            <button class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                            <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                            <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                    <div class="row entryRow jobCrspdtLine_template_row_hidden" id="" style="" hidden>
+                        <div class="col-md-3" style=""></div>
+                        <div class="col-md-3 name_div" style="padding:0px;">
+                            <input type="text" class="form-control name_input" style="padding:5px;">
                         </div>
+                        <div class="col-md-3 email_div" style="padding:0px;">
+                            <input type="text" class="form-control email_input" style="padding:5px;">
+                        </div>
+                        <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
+                            <button id="" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
 
-                        <div class="col-1 state_div workDescTeam_state_div" style="padding:0px;">
-                            <button class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
+                            <button id="" class="btn btn-light btn-sm Btn_edit lineJobCrspdtBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                            <button class='btn btn-light btn-sm Btn_save lineJobCrspdtBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                            <button class='btn btn-light btn-sm Btn_delete lineJobCrspdtBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
                         </div>
                     </div>
                 </div>
                 @*END NEW WORK DESCRIPTION TEMPLATE*@
-
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn jobNewForm btn_save" value="">Save</button>
+                    <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn jobNewForm btn_save" value="">Save</button>
-                <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
     </div>
 </div>
 @*END NEW CUSTOMER MODAL TEMPLATE*@
