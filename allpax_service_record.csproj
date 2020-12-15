@@ -2567,6 +2567,7 @@
     <Content Include="Views\jobCorrespondents\Details.cshtml" />
     <Content Include="Views\jobCorrespondents\Edit.cshtml" />
     <Content Include="Views\jobCorrespondents\Index.cshtml" />
+    <Content Include="Views\jobCorrespondents\Index-in work.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
