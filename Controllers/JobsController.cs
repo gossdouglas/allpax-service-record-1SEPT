@@ -75,74 +75,12 @@ namespace allpax_service_record.Controllers
                jobAdd.jobID, jobAdd.description, jobAdd.customerCode, jobAdd.customerContact, jobAdd.active,
                jobAdd.location, jobAdd.nrmlHoursStart, jobAdd.nrmlHoursEnd, jobAdd.dblTimeHours, jobAdd.nrmlHoursDaily);
 
-            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
-
-            //string passedJobID = jobAdd.jobID;
-
-            //using (SqlConnection con = new SqlConnection(cs))
-            //{
-            //    con.Open();
-
-            //    SqlCommand cmd = new SqlCommand("spGetLastDlyRptCrtdByUserName", con);
-            //    cmd.CommandType = CommandType.StoredProcedure;
-            //    SqlParameter param = new SqlParameter()
-            //    {
-            //        ParameterName = "@dailyReportAuthor",
-            //        Value = dailyReportAdd.dailyReportAuthor
-            //    };
-            //    cmd.Parameters.Add(param);
-            //    SqlDataReader rdr = cmd.ExecuteReader();
-            //    while (rdr.Read())
-            //    {
-            //        passedDailyRptID = (int)rdr["dailyReportID"];
-            //    }
-            //}
-
-            //foreach (string item in dailyReportAdd.dailyRptTeamArr)
-            //{
-            //    db.Database.ExecuteSqlCommand("Insert into tbl_dailyReportUsers Values({0},{1})",
-            //    passedDailyRptID, item);
-            //}
-
-            //if (dailyReportAdd.workDescArr != null)
-            //{
-            //    //System.Diagnostics.Debug.WriteLine("size of workDescArr is " + dailyReportAdd.workDescArr.Count);
-            //    foreach (vm_workDesc item in dailyReportAdd.workDescArr)
-            //    {
-            //        db.Database.ExecuteSqlCommand(
-
-            //        "INSERT INTO tbl_dailyReportTimeEntry VALUES({0}, {1}, {2}, {3}) ",
-
-            //        passedDailyRptID, item.workDescription, item.workDescriptionCategory, item.hours);
-
-            //        //System.Diagnostics.Debug.WriteLine(item.workDescription);
-
-            //        foreach (string userNames in item.userNames)
-            //        {
-            //            //System.Diagnostics.Debug.WriteLine(userNames);
-            //            db.Database.ExecuteSqlCommand(
-
-            //        "DECLARE @timeEntryID INT " +
-
-            //        "SET @timeEntryID = " +
-            //            "(SELECT tbl_dailyReportTimeEntry.timeEntryID " +
-            //            "FROM tbl_dailyReportTimeEntry " +
-            //            "WHERE " +
-
-            //            "tbl_dailyReportTimeEntry.dailyReportID like {0} " +
-            //            "AND " +
-            //            "workDescription = {1} " +
-            //            "AND " +
-            //            "workDescriptionCategory = {3}) " +
-
-            //        "INSERT INTO tbl_dailyReportTimeEntryUsers(timeEntryID, userName) VALUES(@timeEntryID, {02}) ",
-
-            //        //191, item.workDescription, userNames, item.workDescriptionCategory);
-            //        passedDailyRptID, item.workDescription, userNames, item.workDescriptionCategory);
-            //        }
-            //    }
-            //}
-        
+            foreach (string item in jobAdd.subJobTypes_Add)
+            {
+                db.Database.ExecuteSqlCommand("Insert into tbl_jobSubJobs Values({0},{1})",
+                jobAdd.jobID, item);
+            }
+           
             return Json(Url.Action("Index", "Jobs"));
         }
 
