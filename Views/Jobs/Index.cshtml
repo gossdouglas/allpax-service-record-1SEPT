@@ -130,25 +130,51 @@
 
             $(".jobNewForm.btn_save").click(function () {
 
-                if (fn_rowFilled($(this))) {
+                //if (fn_rowFilled($(this))) {
 
                     var modal = $(this).parent().parent();
-                    var temp_customerCode = modal.find('.customer-code').val()
-                    var temp_customerContact = modal.find('.customer-name').val()
-                    var temp_jobDescription = modal.find('.job-description').val()
-                    var temp_active = modal.find('.active').val()
+                    var temp_jobID = modal.find('.job-id').val();
+                    var temp_active = modal.find('.job-active').prop('checked');
+                    var temp_customerCode = modal.find('.customer-code').val();
+                    var temp_customerName = modal.find('.customer-name').val();
+                    var temp_location = modal.find('.customer-location').val();
+                    var temp_customerContact = modal.find('.customer-contact').val();
+                    var temp_nrmlHoursStart = modal.find('.normal-hours-start').val();
+                    var temp_nrmlHoursEnd = modal.find('.normal-hours-end').val();
+                var temp_nrmlHoursDaily = modal.find('.normal-hours-daily').val();
+                var temp_dblTimeHours = modal.find('.double-time-hours').prop('checked');
+                    var temp_description = modal.find('.job-description').val();
+
+                //    console.log("Save button was pressed.")
+                //    console.log("temp_jobID: " + temp_jobID);
+                //    console.log("temp_active: " + temp_active);
+                //    console.log("temp_customerCode: " + temp_customerCode);
+                //    console.log("temp_customerName: " + temp_customerName);
+                //    console.log("temp_location: " + temp_location);
+                //    console.log("temp_customerContact: " + temp_customerContact);
+                //    console.log("temp_nrmlHoursStart: " + temp_nrmlHoursStart);
+                //    console.log("temp_nrmlHoursEnd: " + temp_nrmlHoursEnd);
+                //console.log("temp_nrmlHoursDaily: " + temp_nrmlHoursDaily);
+                //console.log("temp_dblTimeHours: " + temp_dblTimeHours);
+                //    console.log("temp_description: " + temp_description);
 
                     var data = {
+                        jobID: temp_jobID,
+                        active: temp_active,
                         customerCode: temp_customerCode,
+                        location: temp_location,
                         customerContact: temp_customerContact,
-                        jobDescription: temp_jobDescription,
-                        active: temp_active
+                        nrmlHoursStart: temp_nrmlHoursStart,
+                        nrmlHoursEnd: temp_nrmlHoursEnd,
+                        nrmlHoursDaily: temp_nrmlHoursDaily,
+                        dblTimeHours: temp_dblTimeHours,
+                        description: temp_description
                     };
 
-                    fn_showSpinner();
+                    //fn_showSpinner();
 
                     $.ajax({
-                        url: '/Customers/AddCustomer',
+                        url: '/Jobs/AddJob',
                         method: 'post',
                         contentType: 'application/json',
                         dataType: 'json',
@@ -164,7 +190,7 @@
                             });
                         }
                     });
-                }
+                //}
             });
 
             $('#jobEditForm').on('show.bs.modal', function (event) {
@@ -889,7 +915,7 @@
                 @*END NEW WORK DESCRIPTION TEMPLATE*@
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn jobEditForm btn_save" value="">Save</button>
+                <button type="button" class="btn jobNewForm btn_save" value="">Save</button>
                 <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
             </div>
         </div>
