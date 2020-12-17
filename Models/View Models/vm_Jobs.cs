@@ -41,10 +41,8 @@ namespace allpax_service_record.Models.View_Models
         public List<tbl_Jobs> jobs { get; set; }
         public List<tbl_subJobTypes> subJobTypes { get; set; }
         public List<tbl_resourceTypes> resourceTypes { get; set; }
-
+        public List<vm_jobCrspdtInfo> jobCrspdtInfo { get; set; }
         public string[] subJobTypes_Add { get; set; }
 
-        //public List<tbl_subJobTypes> jobResourceTypes { get; set; }
-        //public List<tbl_subJobTypes> jobCorrespondents { get; set; }
     }
 }

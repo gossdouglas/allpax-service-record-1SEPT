@@ -126,13 +126,17 @@
             var indexJobCrspdtEntries_Add = 0;
             var subJobTypes_Add = [];
 
+            var jobCrspdtInfo_Add = [];
+            var jobCrspdtInfoJson_Add = [];
+
             fn_enableSelect2();
 
             var customerCodeNew_dpdwn = $('#customer-code-new');
 
             $(".jobNewForm.btn_save").click(function () {
 
-                fn_loadSlctdJobSubTypes_Add();
+                fn_loadEntries_Add();
+                fn_buildJsonObjects();
 
                 //if (fn_rowFilled($(this))) {
 
@@ -147,7 +151,7 @@
                     var temp_nrmlHoursEnd = modal.find('.normal-hours-end').val();
                 var temp_nrmlHoursDaily = modal.find('.normal-hours-daily').val();
                 var temp_dblTimeHours = modal.find('.double-time-hours').prop('checked');
-                    var temp_description = modal.find('.job-description').val();
+                    var temp_description = modal.find('.job-description').val(); 
 
                 //    console.log("Save button was pressed.")
                 //    console.log("temp_jobID: " + temp_jobID);
@@ -173,7 +177,8 @@
                         nrmlHoursDaily: temp_nrmlHoursDaily,
                         dblTimeHours: temp_dblTimeHours,
                         description: temp_description,
-                        subJobTypes_Add: subJobTypes_Add
+                        subJobTypes_Add: subJobTypes_Add,
+                        jobCrspdtInfo: jobCrspdtInfoJson_Add
                     };
 
                     //fn_showSpinner();
@@ -578,22 +583,40 @@
                 //}
             });
 
-            function fn_loadSlctdJobSubTypes_Add() {
+            function fn_loadEntries_Add() {
 
                 var subJobTypes_div_Add = $(".subJobTypes_div").find(".sub-job-type_input");
 
-                $(subJobTypes_div_Add).each(function (index1) {
+                $(subJobTypes_div_Add).each(function (index) {
 
-                    //var temp_subJobTypeID = $(this).attr("id");
                     var temp_subJobTypeID = $(this).val();
                     var temp_subJobTypeStatus = $(this).prop('checked');
 
-                    console.log("Sub-job Type ID " + temp_subJobTypeID + " selected status is: " + temp_subJobTypeStatus);
+                    //console.log("Sub-job Type ID " + temp_subJobTypeID + " selected status is: " + temp_subJobTypeStatus);
 
                     if (temp_subJobTypeStatus) {
                         subJobTypes_Add.push(temp_subJobTypeID)
-                    }
-                    //var workDescUserNamesArrTemp = [];
+                    }                    
+                });
+
+                var jobCrspdt_div_Add = $(".addRecord.jobCrspdtLine");
+
+                $(jobCrspdt_div_Add).each(function (index) {
+
+                    var temp_name = $(this).find(".name_input").val();
+                    var temp_email = $(this).find(".email_input").val();
+
+                    jobCrspdtInfo_Add.push([temp_name, temp_email]);
+                });
+
+                for (var i = 0; i < jobCrspdtInfo_Add.length; i++) {
+
+                    console.log(jobCrspdtInfo_Add[i][0]);
+                    console.log(jobCrspdtInfo_Add[i][1]);
+
+                }
+
+                //var workDescUserNamesArrTemp = [];
 
                     //currentDropdownLine_Add = $(this).parent().attr("id");
                     //workDescTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
@@ -614,9 +637,26 @@
                     //if (recordsToAddStatus == 0) {
                     //    recordsToAddStatus = 1;
                     //}
-                });
+            }
 
-                console.log(subJobTypes_Add);
+            function fn_buildJsonObjects() {
+                //BEGIN BUILD THE WORK DESCRIPTION JSON OBJECT
+                //if there are no work description time entries to add, set the json object to null
+                if (jobCrspdtInfo_Add.length < 1) {
+                    jobCrspdtInfoJson_Add = null
+                }
+                else {
+                    for (var i = 0; i < jobCrspdtInfo_Add.length; i++) {
+                        jobCrspdtInfoJson_Add[i] = {
+                            jobCrspdtName: jobCrspdtInfo_Add[i][0],
+                            jobCrspdtEmail: jobCrspdtInfo_Add[i][1]
+                        };
+                    }
+                }
+                console.log("jobCrspdtInfoJson_Add:");
+                console.log(jobCrspdtInfoJson_Add);
+
+                //END BUILD THE WORK DESCRIPTION JSON OBJECT                
             }
 
         });//end document read jquery statements
