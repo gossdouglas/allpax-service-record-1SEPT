@@ -19,6 +19,14 @@ namespace allpax_service_record.Models.MODEL_TESTING
             modelBuilder.Entity<tbl_resourceTypes>()
                 .Property(e => e.resourceType)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_resourceTypes>()
+                .Property(e => e.description)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_resourceTypes>()
+                .Property(e => e.rate)
+                .HasPrecision(5, 2);
         }
     }
 }

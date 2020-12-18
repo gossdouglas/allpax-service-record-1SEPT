@@ -75,12 +75,33 @@ namespace allpax_service_record.Controllers
                jobAdd.jobID, jobAdd.description, jobAdd.customerCode, jobAdd.customerContact, jobAdd.active,
                jobAdd.location, jobAdd.nrmlHoursStart, jobAdd.nrmlHoursEnd, jobAdd.dblTimeHours, jobAdd.nrmlHoursDaily);
 
+            //add sub-jobs to this job
             foreach (string item in jobAdd.subJobTypes_Add)
             {
                 db.Database.ExecuteSqlCommand("Insert into tbl_jobSubJobs Values({0},{1})",
                 jobAdd.jobID, item);
             }
-           
+
+            //add resource types to this job
+            foreach (tbl_resourceTypes item in jobAdd.resourceTypes)
+            {
+                db.Database.ExecuteSqlCommand(
+
+                "INSERT INTO tbl_jobResourceTypes VALUES({0}, {1}, {2}) ",
+
+                jobAdd.jobID, item.resourceTypeID, item.rate);
+            }
+
+            //add correspondents to this job
+            foreach (vm_jobCrspdtInfo item in jobAdd.jobCrspdtInfo)
+            {
+                db.Database.ExecuteSqlCommand(
+
+                "INSERT INTO tbl_jobCorrespondents VALUES({0}, {1}, {2}, {3}) ",
+
+                jobAdd.jobID, item.jobCrspdtName, item.jobCrspdtEmail, "1");
+            }
+
             return Json(Url.Action("Index", "Jobs"));
         }
 
@@ -121,7 +142,7 @@ namespace allpax_service_record.Controllers
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
-            string sqlquery1 = "SELECT tbl_resourceTypes.resourceTypeID, tbl_resourceTypes.resourceType, tbl_resourceTypes.description " +
+            string sqlquery1 = "SELECT tbl_resourceTypes.resourceTypeID, tbl_resourceTypes.resourceType, tbl_resourceTypes.description, tbl_resourceTypes.rate " +
 
             "FROM tbl_resourceTypes ";
 
@@ -137,6 +158,7 @@ namespace allpax_service_record.Controllers
                 resourceType.resourceTypeID = (byte)dr1[0];
                 resourceType.resourceType = dr1[1].ToString();
                 resourceType.description = dr1[2].ToString();
+                resourceType.rate = (decimal)dr1[3];
 
                 resourceTypes.Add(resourceType);
             }

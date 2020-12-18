@@ -45,7 +45,7 @@
             overflow-y: auto;
         }
 
-        .sub-job-type_input, .sub-job-type_label {
+        .sub-job-type_input, .sub-job-type_label, .jobResource_Line {
             padding: 0px;
             margin: 0px;
         }
@@ -126,6 +126,9 @@
             var indexJobCrspdtEntries_Add = 0;
             var subJobTypes_Add = [];
 
+            var jobResources_Add = [];
+            var jobResourcesJson_Add = [];
+
             var jobCrspdtInfo_Add = [];
             var jobCrspdtInfoJson_Add = [];
 
@@ -149,8 +152,8 @@
                     var temp_customerContact = modal.find('.customer-contact').val();
                     var temp_nrmlHoursStart = modal.find('.normal-hours-start').val();
                     var temp_nrmlHoursEnd = modal.find('.normal-hours-end').val();
-                var temp_nrmlHoursDaily = modal.find('.normal-hours-daily').val();
-                var temp_dblTimeHours = modal.find('.double-time-hours').prop('checked');
+                    var temp_nrmlHoursDaily = modal.find('.normal-hours-daily').val();
+                    var temp_dblTimeHours = modal.find('.double-time-hours').prop('checked');
                     var temp_description = modal.find('.job-description').val(); 
 
                 //    console.log("Save button was pressed.")
@@ -178,6 +181,7 @@
                         dblTimeHours: temp_dblTimeHours,
                         description: temp_description,
                         subJobTypes_Add: subJobTypes_Add,
+                        resourceTypes: jobResourcesJson_Add,
                         jobCrspdtInfo: jobCrspdtInfoJson_Add
                     };
 
@@ -586,21 +590,32 @@
             function fn_loadEntries_Add() {
 
                 var subJobTypes_div_Add = $(".subJobTypes_div").find(".sub-job-type_input");
+                var jobResources_div_Add = $(".jobResourceTypes_div").find(".jobResource_Line");
+                var jobCrspdt_div_Add = $(".addRecord.jobCrspdtLine");
 
                 $(subJobTypes_div_Add).each(function (index) {
 
                     var temp_subJobTypeID = $(this).val();
                     var temp_subJobTypeStatus = $(this).prop('checked');
 
-                    //console.log("Sub-job Type ID " + temp_subJobTypeID + " selected status is: " + temp_subJobTypeStatus);
-
-                    if (temp_subJobTypeStatus) {
-                        subJobTypes_Add.push(temp_subJobTypeID)
+                    if (temp_subJobTypeStatus) {//if this sub-job type is selected..
+                        subJobTypes_Add.push(temp_subJobTypeID)//...push it to the array
                     }                    
                 });
+                console.log(subJobTypes_Add);
+               
+                $(jobResources_div_Add).each(function (index) {
+                   
+                    var temp_resourceTypeStatus = $(this).find(".resource-type_input.resourceTypeID").prop('checked');
+                    var temp_resourceTypeID = $(this).find(".resource-type_input.resourceTypeID").val();
+                    var temp_resourceTypeRate = $(this).find(".resource-type_input.resourceRate").val();
 
-                var jobCrspdt_div_Add = $(".addRecord.jobCrspdtLine");
-
+                    if (temp_resourceTypeStatus) {//if this resource type is selected..
+                        jobResources_Add.push([temp_resourceTypeID, temp_resourceTypeRate])//...push it to the array
+                    }                     
+                });
+                console.log(jobResources_Add);
+               
                 $(jobCrspdt_div_Add).each(function (index) {
 
                     var temp_name = $(this).find(".name_input").val();
@@ -608,40 +623,13 @@
 
                     jobCrspdtInfo_Add.push([temp_name, temp_email]);
                 });
+                console.log(jobCrspdtInfo_Add);
 
-                for (var i = 0; i < jobCrspdtInfo_Add.length; i++) {
-
-                    console.log(jobCrspdtInfo_Add[i][0]);
-                    console.log(jobCrspdtInfo_Add[i][1]);
-
-                }
-
-                //var workDescUserNamesArrTemp = [];
-
-                    //currentDropdownLine_Add = $(this).parent().attr("id");
-                    //workDescTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
-
-                    //$(workDescTeam_dpdwn_Content_Add).each(function (index2) {
-
-                    //    var tempworkDescTeam_dpdwn_ID = $(workDescTeam_dpdwn_Content_Add[index2]).attr("id");
-                    //    var regex = /\w+$/;
-                    //    var temp_workDescTeam_dpdwn_ID_object = tempworkDescTeam_dpdwn_ID.match(regex);
-                    //    var temp_UserID = temp_workDescTeam_dpdwn_ID_object[0];
-
-                    //    workDescUserNamesArrTemp.push(temp_UserID);
-                    //});
-
-                    //workDesc_Add.push([$(workDescTeam_narr_div_Content_Add[index1]).html(), 0, workDescUserNamesArrTemp]);
-                    //console.log(workDesc_Add);
-
-                    //if (recordsToAddStatus == 0) {
-                    //    recordsToAddStatus = 1;
-                    //}
             }
 
             function fn_buildJsonObjects() {
-                //BEGIN BUILD THE WORK DESCRIPTION JSON OBJECT
-                //if there are no work description time entries to add, set the json object to null
+                //BEGIN BUILD THE JOB CORRESPONDENT JSON OBJECT
+                //if there are none to add, set the json object to null
                 if (jobCrspdtInfo_Add.length < 1) {
                     jobCrspdtInfoJson_Add = null
                 }
@@ -653,10 +641,31 @@
                         };
                     }
                 }
-                console.log("jobCrspdtInfoJson_Add:");
-                console.log(jobCrspdtInfoJson_Add);
+                //console.log("jobCrspdtInfoJson_Add:");
+                //console.log(jobCrspdtInfoJson_Add);
 
-                //END BUILD THE WORK DESCRIPTION JSON OBJECT                
+                //END BUILD THE JOB CORRESPONDENT JSON OBJECT
+
+                //BEGIN BUILD THE JOB RESOURCES JSON OBJECT
+                //if there are none to add, set the json object to null
+                if (jobResources_Add.length < 1) {
+                    jobResourcesJson_Add = null
+                }
+                else {
+                    for (var i = 0; i < jobResources_Add.length; i++) {
+                        jobResourcesJson_Add[i] = {
+                            //jobCrspdtName: jobCrspdtInfo_Add[i][0],
+                            //jobCrspdtEmail: jobCrspdtInfo_Add[i][1]
+
+                            resourceTypeID: jobResources_Add[i][0],
+                            rate: jobResources_Add[i][1]
+                        };
+                    }
+                }
+                //console.log("jobResourcesJson_Add:");
+                //console.log(jobResourcesJson_Add);
+
+                //END BUILD THE JOB RESOURCES JSON OBJECT
             }
 
         });//end document read jquery statements
@@ -822,12 +831,12 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-3"><strong>Job ID</strong></div>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control job-id" maxlength="10">
+                    <div class="col-md-3" style="border:1px solid black; padding:0px; margin:0px;">
+                        <input type="text" class="form-control job-id" maxlength="10" style="border:1px solid black; padding:0px; margin:0px;">
                     </div>
                     <div class="col-sm-auto">
                         <div class="form-check">
-                            <input class="form-check-input job-active" type="checkbox" id="">
+                            <input class="form-check-input job-active" type="checkbox">
                             <label class="form-check-label" for="job-active">
                                 <strong>Job Active</strong>
                             </label>
@@ -864,17 +873,17 @@
                     </div>
                     <div class="col-md-3"><strong>Normal Hours End</strong></div>
                     <div class="col-md-3">
-                        <input type="time" class="form-control normal-hours-end" id="">
+                        <input type="time" class="form-control normal-hours-end">
                     </div>
                 </div><hr class="sectionSeparator">
                 <div class="row">
                     <div class="col-md-3 col-form-label"><strong>Normal Hours Daily</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control normal-hours-daily" id="" maxlength="2" value="8">
+                        <input type="text" class="form-control normal-hours-daily" maxlength="2" value="8">
                     </div>
                     <div class="col-md-4">
                         <div class="form-check">
-                            <input class="form-check-input double-time-hours" type="checkbox" id="">
+                            <input class="form-check-input double-time-hours" type="checkbox">
                             <label class="form-check-label" for="double-time-hours">
                                 <strong>Double Time Hours</strong>
                             </label>
@@ -884,63 +893,95 @@
                 <div class="row">
                     <div class="col-md-3 col-form-label"><strong>Job Description</strong></div>
                     <div class="col-md-9">
-                        <textarea class="form-control job-description" id="" rows="3" style="resize: none;"></textarea>
+                        <textarea class="form-control job-description" rows="3" style="resize: none;"></textarea>
                     </div>
                 </div><hr class="sectionSeparator">
-                <div class="row">
-                    <div class="col-md-5 col-form-label" style="">
-                        <strong>Sub-job Types</strong>
-                        <div class="subJobTypes_div">
-                            @foreach (var subJobtype in Model.subJobTypes)
-                            {
-                                //BEGIN TEMPORARY LOOP VARIABLES
-                                byte temp_subJobID = subJobtype.subJobID;
-                                string temp_description = subJobtype.description;
-                                //END TEMPORARY LOOP VARIABLES
+                      <div class="row">
+                          <div class="col-md-4 col-form-label" style="">
+                              <strong>Sub-job Types</strong>
+                              <div class="subJobTypes_div">
+                                  @foreach (var subJobtype in Model.subJobTypes)
+                                  {
+                                      //BEGIN TEMPORARY LOOP VARIABLES
+                                      byte temp_subJobID = subJobtype.subJobID;
+                                      string temp_description = subJobtype.description;
+                                      //END TEMPORARY LOOP VARIABLES
 
-                                <input class="sub-job-type_input" type="checkbox" id="sub-job-type_@temp_subJobID"
-                                       name="sub-job-type_@temp_subJobID" value="@temp_subJobID">
-                                <label class="sub-job-type_label"
-                                       for="sub-job-type_@temp_subJobID">@temp_description</label><br>
-                                }
-                        </div>
+                                      <input class="sub-job-type_input" type="checkbox" id="sub-job-type_@temp_subJobID"
+                                             name="sub-job-type_@temp_subJobID" value="@temp_subJobID">
+                                      <label class="sub-job-type_label"
+                                             for="sub-job-type_@temp_subJobID">@temp_description</label><br>
+                                      }
+                              </div>
+                          </div>
+
+                          <div class="col-md-8 col-form-label" style="">
+                              <strong>Job Resources</strong>
+                              <div class="jobResourceTypes_div">
+                                  @foreach (var resourceType in Model.resourceTypes)
+                                  {
+                                      //BEGIN TEMPORARY LOOP VARIABLES
+                                      byte temp_resourceTypeID = resourceType.resourceTypeID;
+                                      string temp_resourceType = resourceType.resourceType;
+                                      string temp_description = resourceType.description;
+                                      decimal temp_rate = resourceType.rate;
+                                      //string temp_rate = resourceType.description;
+                                      //END TEMPORARY LOOP VARIABLES
+
+                                      <div class="row jobResource_Line">
+                                          <div class="col-md-3" style="border:1px solid black; padding:0px; margin:0px;">
+                                              <input class="resource-type_input resourceTypeID" type="checkbox" id="resource-type_@temp_resourceTypeID"
+                                                     name="resource-type_@temp_resourceTypeID" value="@temp_resourceTypeID" style="border:1px solid black; padding:0px; margin:0px;">
+                                              <label class="resource-type_label"
+                                                     for="resource-type_@temp_resourceTypeID" style="padding:0px; margin:0px;">@temp_resourceType</label>
+                                              </div>
+                                          <div class="col-md-6" style="border:1px solid black; padding:0px; margin:0px;">
+                                              @temp_description
+                                          </div>
+                                          <div class="col-md-3" style="border:1px solid black; padding:0px; margin:0px;">
+                                              <input type="text" class="form-control resource-type_input resourceRate" maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;">
+                                          </div>
+                                      </div>
+                                  }
+                              </div>
+                          </div>
+
+                          <!--<div class="col-md-7" style="">
+        <div class="row">
+            <div class="col-md-12" style="padding:0px;"><strong>Job Resources</strong></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 tbl_header" style="padding:0px;">Type</div>
+            <div class="col-md-8 tbl_header" style="padding:0px;">Resource</div>
+            <div class="col-md-2 tbl_header" style="padding:0px;">Rate</div>
+        </div>-->
+                          @*<div class="jobResourceTypes_div" style="padding:0px; margin:0px;">*@
+                          <!--<div class="" style="padding:0px; margin:0px;">-->
+                          @*<div class="" style="padding:0px; margin:0px;">*@
+                          <!--@foreach (var resourceType in Model.resourceTypes)
+            {
+                //BEGIN TEMPORARY LOOP VARIABLES
+                byte temp_resourceTypeID = resourceType.resourceTypeID;
+                string temp_resourceType = resourceType.resourceType;
+                string temp_description = resourceType.description;
+                //string temp_rate = resourceType.description;
+                //END TEMPORARY LOOP VARIABLES
+
+                <div class="row tbl_returned-row">
+                    <div class="col-md-2 tbl_returned-cell">
+                        @temp_resourceType
                     </div>
-                    <div class="col-md-7" style="">
-                        <div class="row">
-                            <div class="col-md-12" style="padding:0px;"><strong>Job Resources</strong></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2 tbl_header" style="padding:0px;">Type</div>
-                            <div class="col-md-8 tbl_header" style="padding:0px;">Resource</div>
-                            <div class="col-md-2 tbl_header" style="padding:0px;">Rate</div>
-                        </div>
-                        @*<div class="jobResourceTypes_div" style="padding:0px; margin:0px;">*@
-                        <div class="" style="padding:0px; margin:0px;">
-                            @*<div class="" style="padding:0px; margin:0px;">*@
-                            @foreach (var resourceType in Model.resourceTypes)
-                            {
-                                //BEGIN TEMPORARY LOOP VARIABLES
-                                byte temp_resourceTypeID = resourceType.resourceTypeID;
-                                string temp_resourceType = resourceType.resourceType;
-                                string temp_description = resourceType.description;
-                                //string temp_rate = resourceType.description;
-                                //END TEMPORARY LOOP VARIABLES
-
-                                <div class="row tbl_returned-row">
-                                    <div class="col-md-2 tbl_returned-cell">
-                                        @temp_resourceType
-                                    </div>
-                                    <div class="col-md-8 tbl_returned-cell">
-                                        @temp_description
-                                    </div>
-                                    <div class="col-md-2 tbl_returned-cell">
-                                        rate
-                                    </div>
-                                </div>
-                            }
-                        </div>
+                    <div class="col-md-8 tbl_returned-cell">
+                        @temp_description
+                    </div>
+                    <div class="col-md-2 tbl_returned-cell">
+                        rate
                     </div>
                 </div>
+            }
+        </div>
+    </div>-->
+                      </div>
                 <div class="row">
                     <div class="col-md-3 col-form-label"><strong>Job Correspondents</strong></div>
                     <div class="col-md-3 col-form-label" style="padding:5px;">Name</div>

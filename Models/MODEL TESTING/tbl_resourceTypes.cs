@@ -15,5 +15,11 @@ namespace allpax_service_record.Models.MODEL_TESTING
         [Required]
         [StringLength(50)]
         public string resourceType { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string description { get; set; }
+
+        public decimal rate { get; set; }
     }
 }

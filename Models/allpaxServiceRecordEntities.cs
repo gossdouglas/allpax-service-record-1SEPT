@@ -122,7 +122,7 @@ namespace allpax_service_record.Models
 
             modelBuilder.Entity<tbl_jobResourceTypes>()
                 .Property(e => e.rate)
-                .HasPrecision(6, 2);
+                .HasPrecision(5, 2);
 
             modelBuilder.Entity<tbl_jobSubJobs>()
                 .Property(e => e.jobID)
@@ -131,6 +131,14 @@ namespace allpax_service_record.Models
             modelBuilder.Entity<tbl_resourceTypes>()
                 .Property(e => e.resourceType)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_resourceTypes>()
+                .Property(e => e.description)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tbl_resourceTypes>()
+                .Property(e => e.rate)
+                .HasPrecision(5, 2);
 
             modelBuilder.Entity<tbl_subJobTypes>()
                 .Property(e => e.description)

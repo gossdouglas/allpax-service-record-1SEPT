@@ -2561,7 +2561,6 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\customers\Index.cshtml" />
     <Content Include="Views\Jobs\Index.cshtml" />
-    <Content Include="Views\Jobs\Index-orig.cshtml" />
     <Content Include="Views\jobCorrespondents\Create.cshtml" />
     <Content Include="Views\jobCorrespondents\Delete.cshtml" />
     <Content Include="Views\jobCorrespondents\Details.cshtml" />
