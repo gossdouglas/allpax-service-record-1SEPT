@@ -202,6 +202,7 @@
     <Compile Include="Controllers\jobCorrespondentsController.cs" />
     <Compile Include="Controllers\JobsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\resourceTypesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DataService.asmx.cs">
       <DependentUpon>DataService.asmx</DependentUpon>
@@ -2567,6 +2568,11 @@
     <Content Include="Views\jobCorrespondents\Edit.cshtml" />
     <Content Include="Views\jobCorrespondents\Index.cshtml" />
     <Content Include="Views\Jobs\Index-inwork.cshtml" />
+    <Content Include="Views\resourceTypes\Create.cshtml" />
+    <Content Include="Views\resourceTypes\Delete.cshtml" />
+    <Content Include="Views\resourceTypes\Details.cshtml" />
+    <Content Include="Views\resourceTypes\Edit.cshtml" />
+    <Content Include="Views\resourceTypes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

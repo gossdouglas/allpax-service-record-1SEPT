@@ -24,12 +24,17 @@
         }
 
         table {
-            table-layout: auto !important;
+            /*table-layout: auto !important;*/
+            table-layout: fixed !important;
         }
 
         thead th, tbody td, tfoot td, tfoot th {
             /*width: auto !important;*/
             white-space: nowrap;
+        }
+
+        td {
+            overflow: auto;
         }
 
         .subJobTypes_div {
@@ -420,7 +425,7 @@
                 });
             }
 
-            $('.customer-code, .customer-name, .job-description').keyup(function () {
+            $('.job-id').keyup(function () {
                 $(this).val($(this).val().toUpperCase());
             });
 
