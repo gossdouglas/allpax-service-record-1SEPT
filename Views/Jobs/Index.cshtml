@@ -45,6 +45,13 @@
             overflow-y: auto;
         }
 
+        .resourceTypeID_div, .description_div, .resourceRate_div {
+            border-left: 1px solid black;
+            border-bottom: 1px solid black;
+            padding:0px; 
+            margin:0px;
+        }
+
         .sub-job-type_input, .sub-job-type_label, .jobResource_Line {
             padding: 0px;
             margin: 0px;
@@ -831,8 +838,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-3"><strong>Job ID</strong></div>
-                    <div class="col-md-3" style="border:1px solid black; padding:0px; margin:0px;">
-                        <input type="text" class="form-control job-id" maxlength="10" style="border:1px solid black; padding:0px; margin:0px;">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control job-id" maxlength="10">
                     </div>
                     <div class="col-sm-auto">
                         <div class="form-check">
@@ -929,20 +936,24 @@
                                       //END TEMPORARY LOOP VARIABLES
 
                                       <div class="row jobResource_Line">
-                                          <div class="col-md-3" style="border:1px solid black; padding:0px; margin:0px;">
+                                          @*<div class="col-md-3" style="border:1px solid black; padding:0px; margin:0px;">*@
+                                          <div class="col-md-3 resourceTypeID_div">
                                               <input class="resource-type_input resourceTypeID" type="checkbox" id="resource-type_@temp_resourceTypeID"
-                                                     name="resource-type_@temp_resourceTypeID" value="@temp_resourceTypeID" style="border:1px solid black; padding:0px; margin:0px;">
-                                              <label class="resource-type_label"
-                                                     for="resource-type_@temp_resourceTypeID" style="padding:0px; margin:0px;">@temp_resourceType</label>
+                                                     @*name="resource-type_@temp_resourceTypeID" value="@temp_resourceTypeID"
+                style="border:1px solid black; padding:0px; margin:0px;">*@
+                                                     name="resource-type_@temp_resourceTypeID" value="@temp_resourceTypeID" style="padding:0px; margin:0px;">
+                                              <label class="resource-type_label" for="resource-type_@temp_resourceTypeID"
+                                                     style="padding:0px; margin:0px;">@temp_resourceType</label>
                                               </div>
-                                          <div class="col-md-6" style="border:1px solid black; padding:0px; margin:0px;">
-                                              @temp_description
-                                          </div>
-                                          <div class="col-md-3" style="border:1px solid black; padding:0px; margin:0px;">
-                                              <input type="text" class="form-control resource-type_input resourceRate" maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;">
-                                          </div>
+                                              <div class="col-md-6 description_div">
+                                                  @temp_description
+                                              </div>
+                                              <div class="col-md-3 resourceRate_div">
+                                                  <input type="text" class="form-control resource-type_input resourceRate" maxlength="6" value="@temp_rate"
+                                                         style="padding:0px; margin:0px;">
+                                              </div>
                                       </div>
-                                  }
+                                      }
                               </div>
                           </div>
 
