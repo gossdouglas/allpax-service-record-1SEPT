@@ -205,6 +205,34 @@ namespace allpax_service_record
             Context.Response.Write(js.Serialize(jobTypes));
         }
 
+        [WebMethod]
+        public void GetJobResourcesByJobID(string jobID)
+        {
+            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            List<tbl_resourceTypes> resourceTypes = new List<tbl_resourceTypes>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                SqlCommand cmd = new SqlCommand("spGetJobResourcesByJobID", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@jobID", jobID);
+
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    tbl_resourceTypes resourceType = new tbl_resourceTypes();
+                    resourceType.resourceTypeID = (byte) rdr["resourceTypeID"];
+                    resourceType.resourceType = rdr["resourceType"].ToString();
+                    resourceType.description = rdr["description"].ToString();
+                    resourceType.rate = (decimal)rdr["rate"];
+                    resourceTypes.Add(resourceType);
+                }
+            }
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.Write(js.Serialize(resourceTypes));
+        }
+
         //[WebMethod]
         //public void SaveNewWorkDescEntry(int dailyReportID, string workDescription, string userName)
         //{
