@@ -2562,10 +2562,6 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\customers\Index.cshtml" />
     <Content Include="Views\Jobs\Index.cshtml" />
-    <Content Include="Views\jobCorrespondents\Create.cshtml" />
-    <Content Include="Views\jobCorrespondents\Delete.cshtml" />
-    <Content Include="Views\jobCorrespondents\Details.cshtml" />
-    <Content Include="Views\jobCorrespondents\Edit.cshtml" />
     <Content Include="Views\jobCorrespondents\Index.cshtml" />
     <Content Include="Views\Jobs\Index-inwork.cshtml" />
     <Content Include="Views\resourceTypes\Create.cshtml" />
@@ -2573,6 +2569,7 @@
     <Content Include="Views\resourceTypes\Details.cshtml" />
     <Content Include="Views\resourceTypes\Edit.cshtml" />
     <Content Include="Views\resourceTypes\Index.cshtml" />
+    <Content Include="Views\resourceTypes\Index-orig.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

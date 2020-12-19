@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using allpax_service_record.Models;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace allpax_service_record.Controllers
 {
@@ -15,104 +17,71 @@ namespace allpax_service_record.Controllers
         private allpaxServiceRecordEntities db = new allpaxServiceRecordEntities();
 
         // GET: resourceTypes
+        //public ActionResult Index()
+        //{
+        //    return View(db.tbl_resourceTypes.ToList());
+        //}
+
         public ActionResult Index()
         {
-            return View(db.tbl_resourceTypes.ToList());
-        }
+            List<tbl_resourceTypes> resourceTypes = new List<tbl_resourceTypes>();
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
 
-        // GET: resourceTypes/Details/5
-        public ActionResult Details(byte? id)
-        {
-            if (id == null)
+            sqlconn.Open();
+
+            string sqlquery1 =
+                "SELECT tbl_resourceTypes.resourceTypeID, tbl_resourceTypes.resourceType, tbl_resourceTypes.description, tbl_resourceTypes.rate " +
+                "FROM tbl_resourceTypes";
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                tbl_resourceTypes resourceType = new tbl_resourceTypes();
+
+                resourceType.resourceTypeID = (byte)dr1[0];
+                resourceType.resourceType = dr1[1].ToString();
+                resourceType.description = dr1[2].ToString();
+                resourceType.rate = (decimal)dr1[3];
+                resourceTypes.Add(resourceType);
             }
-            tbl_resourceTypes tbl_resourceTypes = db.tbl_resourceTypes.Find(id);
-            if (tbl_resourceTypes == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tbl_resourceTypes);
+            sqlconn.Close();
+            return View(resourceTypes);
         }
 
-        // GET: resourceTypes/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: resourceTypes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "resourceTypeID,resourceType,description,rate")] tbl_resourceTypes tbl_resourceTypes)
+        public ActionResult AddResourceType(tbl_resourceTypes resourceTypeAdd)
         {
-            if (ModelState.IsValid)
-            {
-                db.tbl_resourceTypes.Add(tbl_resourceTypes);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            db.Database.ExecuteSqlCommand("Insert into tbl_resourceTypes Values({0},{1},{2})",
+               resourceTypeAdd.resourceType, resourceTypeAdd.description, resourceTypeAdd.rate);
 
-            return View(tbl_resourceTypes);
+            return Json(Url.Action("Index", "ResourceTypes"));
         }
 
-        // GET: resourceTypes/Edit/5
-        public ActionResult Edit(byte? id)
+        public ActionResult UpdateResourceType(tbl_resourceTypes resourceUpdate)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            tbl_resourceTypes tbl_resourceTypes = db.tbl_resourceTypes.Find(id);
-            if (tbl_resourceTypes == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tbl_resourceTypes);
+            db.Database.ExecuteSqlCommand(
+                "UPDATE tbl_resourceTypes " +
+                "SET " +
+
+                "resourceType = {0}, " +
+                "description = {1}, " +
+                "rate = {2} " +
+
+                "WHERE resourceTypeID = {3}",
+                resourceUpdate.resourceType, resourceUpdate.description, resourceUpdate.rate, resourceUpdate.resourceTypeID);
+
+            return Json(Url.Action("Index", "ResourceTypes"));
         }
 
-        // POST: resourceTypes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "resourceTypeID,resourceType,description,rate")] tbl_resourceTypes tbl_resourceTypes)
+        public ActionResult DeleteResourceType(tbl_resourceTypes resourceTypeDelete)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(tbl_resourceTypes).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(tbl_resourceTypes);
-        }
+            db.Database.ExecuteSqlCommand("DELETE FROM tbl_resourceTypes WHERE resourceTypeID=({0})", resourceTypeDelete.resourceTypeID);
 
-        // GET: resourceTypes/Delete/5
-        public ActionResult Delete(byte? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            tbl_resourceTypes tbl_resourceTypes = db.tbl_resourceTypes.Find(id);
-            if (tbl_resourceTypes == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tbl_resourceTypes);
-        }
-
-        // POST: resourceTypes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(byte id)
-        {
-            tbl_resourceTypes tbl_resourceTypes = db.tbl_resourceTypes.Find(id);
-            db.tbl_resourceTypes.Remove(tbl_resourceTypes);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            return Json(Url.Action("Index", "ResourceTypes"));
         }
 
         protected override void Dispose(bool disposing)
