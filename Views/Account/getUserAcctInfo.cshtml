@@ -330,7 +330,7 @@
     </span>
 </div>
 <hr class="sectionSeparator">
-<div class="container" id="userData_container" style="overflow:auto; height: calc(100vh - 150px)">
+<div class="container-md" id="userData_container" style="overflow:auto; height: calc(100vh - 150px)">
     <div class="table-responsive">
         <table id="dt_dailyRptAll" class="table table-striped table-bordered" style="width:100%">
             <thead>
@@ -403,7 +403,7 @@
 
                         @if (@temp_userName == "admin")
                         {
-                            <td class="col-lg-2 button_div" style="padding:0px;">
+                            <td class="button_div" style="padding:0px;">
                                 <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
                                         data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
                                     <i class="far fa-edit fa-2x" style="color:black;">
@@ -414,7 +414,7 @@
                         }
                         else
                         {
-                            <td class="col-lg-2 button_div" style="padding:0px;">
+                            <td class="button_div" style="padding:0px;">
                                 <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
                                         data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
                                     <i class="far fa-edit fa-2x" style="color:black;">

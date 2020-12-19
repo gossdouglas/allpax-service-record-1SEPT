@@ -16,12 +16,6 @@ namespace allpax_service_record.Controllers
     {
         private allpaxServiceRecordEntities db = new allpaxServiceRecordEntities();
 
-        // GET: resourceTypes
-        //public ActionResult Index()
-        //{
-        //    return View(db.tbl_resourceTypes.ToList());
-        //}
-
         public ActionResult Index()
         {
             List<tbl_resourceTypes> resourceTypes = new List<tbl_resourceTypes>();
