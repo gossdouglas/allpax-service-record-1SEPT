@@ -223,22 +223,17 @@
                
                 var button = $(event.relatedTarget) // Button that triggered the modal
                 var temp_jobID = button.data('job-id') // Extract info from data-* attributes
-                //var temp_customerCode = button.data('customer-code') // Extract info from data-* attributes
-                //var temp_customerContact = button.data('customer-contact') // Extract info from data-* attributes
-                //var temp_jobDescription = button.data('job-description') // Extract info from data-* attributes
-                //var temp_active = button.data('active') // Extract info from data-* attributes
-                //var temp_id = button.data('id') // Extract info from data-* attributes
 
-                var temp_jobDescription;
-                var temp_customerCode;
-                var temp_customerContact;
-                var temp_active;
-                var temp_location;
-                var temp_nrmlHoursStart;
-                var temp_nrmlHoursEnd;
-                var temp_dblTimeHours;
-                var temp_nrmlHoursDaily;
-                var temp_id;
+                //var temp_jobDescription;
+                //var temp_customerCode;
+                //var temp_customerContact;
+                //var temp_active;
+                //var temp_location;
+                //var temp_nrmlHoursStart;
+                //var temp_nrmlHoursEnd;
+                //var temp_dblTimeHours;
+                //var temp_nrmlHoursDaily;
+                //var temp_id;
 
                 var modal = $(this)
                 modal.find('.modal-title').text('Job Edit Form');
@@ -275,41 +270,10 @@
                                 modal.find('.double-time-hours').prop('checked', false);
                             }
                         });
-                        console.log(data);
                     }
                 });
                 //end get job info by job id
 
-                //var modal = $(this)
-                //modal.find('.modal-title').text('Job Edit Form');
-                //modal.find('.job-id').val(temp_jobID);
-                //modal.find('.job-description').text('blah');
-                //modal.find('.customer-code').val(temp_customerCode);
-
-                console.log("temp_customerContact is: " + temp_customerContact);
-                //modal.find('.customer-contact').val(temp_customerContact);                
-                //modal.find('.job-active').val(temp_active);
-                //modal.find('.customer-location').val(temp_location);
-                //modal.find('.normal-hours-start').val(temp_nrmlHoursStart);
-                //modal.find('.normal-hours-end').val(temp_nrmlHoursEnd);
-                //modal.find('.normal-hours-daily').val(temp_nrmlHoursDaily);
-                //modal.find('.double-time-hours').val(temp_jobDescription);
-
-                //if (temp_active == "True") {
-                //    console.log("temp_active is true.")
-                //    modal.find('.job-active').prop('checked', true);
-                //}
-                //else {
-                //    modal.find('.job-active').prop('checked', false);
-                //}  
-
-                //if (temp_dblTimeHours == "True") {
-                //    console.log("temp_dblTimeHours is true.")
-                //    modal.find('.double-time-hours').prop('checked', true);
-                //}
-                //else {
-                //    modal.find('.double-time-hours').prop('checked', false);
-                //}
             })
 
             $('#jobNewForm').on('show.bs.modal', function (event) {
