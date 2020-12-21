@@ -147,6 +147,7 @@
             //fn_enableSelect2();
 
             var customerCodeNew_dpdwn = $('#customer-code-new');
+            var customerCodeEdit_dpdwn = $('#customer-code-edit');
 
             $(".jobNewForm.btn_save").click(function () {
 
@@ -228,6 +229,8 @@
                 var temp_jobDescription = button.data('job-description') // Extract info from data-* attributes
                 var temp_active = button.data('active') // Extract info from data-* attributes
                 var temp_id = button.data('id') // Extract info from data-* attributes
+
+                console.log(temp_customerCode);
 
                 var modal = $(this)
                 modal.find('.modal-title').text('Job Edit Form')
@@ -686,12 +689,13 @@
                 <div class="row">
                     <div class="col-md-3"><strong>Customer Code</strong></div>
                     <div class="col-md-3">
-                        <select class="customer-code" id="customer-code-new">
+                        @*<select class="customer-code" id="customer-code-new">*@
+                        <select class="customer-code" id="customer-code-edit">
                         </select>
                     </div>
                     <div class="col-md-3"><strong>Customer Name</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control customer-name" id="customer-name-new" maxlength="50"
+                        <input type="text" class="form-control customer-name" id="customer-name-edit" maxlength="50"
                                disabled value="">
                     </div>
                 </div>
@@ -699,7 +703,7 @@
                 <div class="row">
                     <div class="col-md-3 col-form-label"><strong>Customer Location</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control customer-location" id="customer-location-new"
+                        <input type="text" class="form-control customer-location" id="customer-location-edit"
                                maxlength="50" disabled value="">
                     </div>
                     <div class="col-md-3 col-form-label"><strong>Customer Contact</strong></div>
