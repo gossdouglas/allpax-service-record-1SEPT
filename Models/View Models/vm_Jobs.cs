@@ -39,6 +39,7 @@ namespace allpax_service_record.Models.View_Models
         //public virtual ICollection<tbl_jobCorrespondents> tbl_jobCorrespondents { get; set; }
 
         public List<tbl_Jobs> jobs { get; set; }
+        public List<tbl_customers> customers { get; set; }
         public List<tbl_subJobTypes> subJobTypes { get; set; }
         public List<tbl_resourceTypes> resourceTypes { get; set; }
         public List<vm_jobCrspdtInfo> jobCrspdtInfo { get; set; }

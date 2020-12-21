@@ -56,6 +56,7 @@ namespace allpax_service_record.Controllers
             }
 
             vm_Jobs.jobs = jobList;
+            vm_Jobs.customers = customerList();
             vm_Jobs.subJobTypes = subJobTypesByJobID("%");
             vm_Jobs.resourceTypes = resourceTypesByJobID("%");
 
@@ -163,6 +164,37 @@ namespace allpax_service_record.Controllers
                 resourceTypes.Add(resourceType);
             }
             return resourceTypes;
+        }
+
+        //GET RESOURCE TYPES
+        public List<tbl_customers> customerList()
+        {
+            List<tbl_customers> customers = new List<tbl_customers>();
+
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            string sqlquery1 = "SELECT tbl_customers.customerCode, tbl_customers.customerName, tbl_customers.address, tbl_customers.id " +
+
+            "FROM tbl_customers ";
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            //sqlcomm1.Parameters.Add(new SqlParameter("jobID", jobID));
+            SqlDataAdapter sda3 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda3.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                tbl_customers customer = new tbl_customers();
+
+                customer.customerCode = dr1[0].ToString();
+                customer.customerName = dr1[1].ToString();
+                customer.address = dr1[2].ToString();
+                customer.id = (int)dr1[3];
+
+                customers.Add(customer);
+            }
+            return customers;
         }
 
         //public ActionResult UpdateJob(tbl_Jobs customerUpdate)

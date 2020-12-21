@@ -147,6 +147,7 @@
             fn_enableSelect2();
 
             var customerCodeNew_dpdwn = $('#customer-code-new');
+            var customerCodeEdit_dpdwn = $('#customer-code-edit');
 
             $(".jobNewForm.btn_save").click(function () {
 
@@ -223,6 +224,7 @@
                
                 var button = $(event.relatedTarget) // Button that triggered the modal
                 var temp_jobID = button.data('job-id') // Extract info from data-* attributes
+                var temp_customerCode = button.data('customer-code') // Extract info from data-* attributes
 
                 //var temp_jobDescription;
                 //var temp_customerCode;
@@ -255,7 +257,6 @@
                             modal.find('.job-description').text(item.description);
 
                             if (item.active) {
-                                console.log("active is true.")
                                 modal.find('.job-active').prop('checked', true);
                             }
                             else {
@@ -263,7 +264,6 @@
                             }
 
                             if (item.dblTimeHours) {
-                                console.log("dblTimeHours is true.")
                                 modal.find('.double-time-hours').prop('checked', true);
                             }
                             else {
@@ -273,6 +273,56 @@
                     }
                 });
                 //end get job info by job id
+
+                //begin fill the customer code dropdown
+                //$.ajax({
+                //    url: '/DataService.asmx/GetCustomerInfoByJobID',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { jobID: '%' },
+                //    success: function (data) {
+                //        $(customerCodeEdit_dpdwn).empty();
+                //        //customerCodeEdit_dpdwn.append($('<option/>', { value: -1, text: 'Select Customer Code' }));
+                //        $(data).each(function (index, item) {
+
+                //            //console.log(item.customerCode + " " + temp_customerCode);
+
+                //            if (item.customerCode == temp_customerCode) {
+
+                //                console.log("item.customerCode == temp_customerCode " + item.customerCode + " " + temp_customerCode);
+                //                customerCodeEdit_dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode, selected: true }));
+                //            }
+
+                //            else {
+                //                customerCodeEdit_dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode }));
+                //            }
+
+                //            //tempCustomerCodeArr.push(item.customerCode);//is this really needed?
+                //            //customerCodeEdit_dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode }));
+                //        });
+                //    }
+                //});
+                //end fill the customer code dropdown
+
+                //begin get customer info by job id
+                $.ajax({
+                    url: '/DataService.asmx/GetCustomerInfoByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: temp_jobID },
+                    success: function (data) {
+
+                        $(data).each(function (index, item) {
+
+                            modal.find('.customer-name').val(item.customerName);
+                            modal.find('.normal-hours-end').val(item.nrmlHoursEnd);
+                            modal.find('.customer-location').val(item.address);
+                            modal.find('.customer-contact').val(item.customerContact);
+
+                        });
+                    }
+                });
+                //end get customer info by job id
 
             })
 
@@ -466,6 +516,11 @@
                 $('#customer-code-new').select2({
                     width: "100%",
                     placeholder: "Select Customer",
+                    closeOnSelect: "false"
+                })
+
+                $('#customer-code-edit').select2({
+                    width: "100%",
                     closeOnSelect: "false"
                 })
             }
@@ -825,14 +880,23 @@
                 <div class="row">
                     <div class="col-md-3"><strong>Customer Code</strong></div>
                     <div class="col-md-3">
-                        @*<select class="customer-code" id="customer-code-new">*@
                         <select class="customer-code" id="customer-code-edit">
+                            @foreach (var customer in Model.customers)
+                            {
+                                //BEGIN TEMPORARY LOOP VARIABLES
+                                string temp_customerCode = customer.customerCode;
+                                string temp_customerName = customer.customerName;
+                                string temp_address = customer.address; 
+                                int temp_id = customer.id;
+                                //END TEMPORARY LOOP VARIABLES
+
+                                <option value="@temp_customerCode">@temp_customerCode</option>
+                            }
                         </select>
                     </div>
                     <div class="col-md-3"><strong>Customer Name</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control customer-name" id="customer-name-edit" maxlength="50"
-                               disabled value="">
+                        <input type="text" class="form-control customer-name" id="customer-name-edit" maxlength="50" disabled value="">
                     </div>
                 </div>
                 <hr class="sectionSeparator">
