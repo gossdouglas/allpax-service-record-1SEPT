@@ -332,21 +332,21 @@
                 var tempCustomerCodeArr = [];
 
                 //begin fill the customer code dropdown
-                $.ajax({
-                    url: '/DataService.asmx/GetCustomerInfoByJobID',
-                    method: 'post',
-                    dataType: 'json',
-                    data: { jobID: '%' },
-                    success: function (data) {
-                        $(customerCodeNew_dpdwn).empty();
-                        customerCodeNew_dpdwn.append($('<option/>', { value: -1, text: 'Select Customer Code' }));
-                        $(data).each(function (index, item) {
+                //$.ajax({
+                //    url: '/DataService.asmx/GetCustomerInfoByJobID',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { jobID: '%' },
+                //    success: function (data) {
+                //        $(customerCodeNew_dpdwn).empty();
+                //        customerCodeNew_dpdwn.append($('<option/>', { value: -1, text: 'Select Customer Code' }));
+                //        $(data).each(function (index, item) {
 
-                            tempCustomerCodeArr.push(item.customerCode);//is this really needed?
-                            customerCodeNew_dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode }));
-                        });
-                    }
-                });
+                //            tempCustomerCodeArr.push(item.customerCode);//is this really needed?
+                //            customerCodeNew_dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode }));
+                //        });
+                //    }
+                //});
                 //end fill the customer code dropdown
             })
 
@@ -1156,6 +1156,17 @@
                     <div class="col-md-3"><strong>Customer Code</strong></div>
                     <div class="col-md-3">
                         <select class="customer-code" id="customer-code-new">
+                            @foreach (var customer in Model.customers)
+                            {
+                                //BEGIN TEMPORARY LOOP VARIABLES
+                                string temp_customerCode = customer.customerCode;
+                                string temp_customerName = customer.customerName;
+                                string temp_address = customer.address;
+                                int temp_id = customer.id;
+                                //END TEMPORARY LOOP VARIABLES
+
+                                <option value="@temp_customerCode">@temp_customerCode</option>
+                            }
                         </select>
                     </div>
                     <div class="col-md-3"><strong>Customer Name</strong></div>
