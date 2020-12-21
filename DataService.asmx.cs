@@ -271,6 +271,32 @@ namespace allpax_service_record
             Context.Response.Write(js.Serialize(jobs));
         }
 
+        [WebMethod]
+        public void GetAllCustomers()
+        {
+            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            List<tbl_customers> customers = new List<tbl_customers>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                SqlCommand cmd = new SqlCommand("spGetAllCustomers", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    tbl_customers customer = new tbl_customers();
+                    customer.customerCode = rdr["customerCode"].ToString();
+                    customer.customerName = rdr["customerName"].ToString();
+                    customer.address = rdr["address"].ToString();
+                    customer.id = (int)rdr["id"];
+                    customers.Add(customer);
+                }
+            }
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.Write(js.Serialize(customers));
+        }
+
         //[WebMethod]
         //public void SaveNewWorkDescEntry(int dailyReportID, string workDescription, string userName)
         //{

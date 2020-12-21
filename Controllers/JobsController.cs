@@ -176,7 +176,7 @@ namespace allpax_service_record.Controllers
 
             string sqlquery1 = "SELECT tbl_customers.customerCode, tbl_customers.customerName, tbl_customers.address, tbl_customers.id " +
 
-            "FROM tbl_customers ";
+            "FROM tbl_customers";
 
             SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
             //sqlcomm1.Parameters.Add(new SqlParameter("jobID", jobID));

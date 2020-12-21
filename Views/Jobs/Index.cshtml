@@ -221,10 +221,14 @@
             });
 
             $('#jobEditForm').on('show.bs.modal', function (event) {
-               
+
+                fn_disableSelect2();
+
+                var modal = $(this)                
                 var button = $(event.relatedTarget) // Button that triggered the modal
                 var temp_jobID = button.data('job-id') // Extract info from data-* attributes
                 var temp_customerCode = button.data('customer-code') // Extract info from data-* attributes
+                var temp_customerCode_dpdwn = modal.find('.customer-code option');
 
                 //var temp_jobDescription;
                 //var temp_customerCode;
@@ -236,9 +240,15 @@
                 //var temp_dblTimeHours;
                 //var temp_nrmlHoursDaily;
                 //var temp_id;
-
-                var modal = $(this)
+              
                 modal.find('.modal-title').text('Job Edit Form');
+                
+                $(temp_customerCode_dpdwn).each(function (index) {
+
+                    if ($(this).val() == temp_customerCode) {//
+                        $(this).prop('selected', true);
+                    }
+                });
 
                 //begin get job info by job id
                 $.ajax({
@@ -252,7 +262,7 @@
                             
                             modal.find('.job-id').val(temp_jobID);                                                       
                             modal.find('.normal-hours-start').val(item.nrmlHoursStart); 
-                            modal.find('.normal-hours-end').val(item.nrmlHoursEnd); 
+                            modal.find('.normal-hours-end').val(item.nrmlHoursEnd);
                             modal.find('.normal-hours-daily').val(item.nrmlHoursDaily); 
                             modal.find('.job-description').text(item.description);
 
@@ -315,14 +325,14 @@
                         $(data).each(function (index, item) {
 
                             modal.find('.customer-name').val(item.customerName);
-                            modal.find('.normal-hours-end').val(item.nrmlHoursEnd);
                             modal.find('.customer-location').val(item.address);
                             modal.find('.customer-contact').val(item.customerContact);
-
                         });
                     }
                 });
                 //end get customer info by job id
+
+                fn_enableSelect2();
 
             })
 
@@ -362,10 +372,9 @@
                 }
                 else {
                     $.ajax({
-                        url: '/DataService.asmx/GetCustomerInfoByJobID',
+                        url: '/DataService.asmx/GetAllCustomers',
                         method: 'post',
                         dataType: 'json',
-                        data: { jobID: '%' },
                         success: function (data) {
 
                             $(data).each(function (index, item) {
@@ -381,6 +390,39 @@
                         }
                     });
                 }
+            });
+            //end customer code dropdown change
+
+            //begin customer code dropdown change
+            customerCodeEdit_dpdwn.change(function () {
+
+                var currCustomerCode = $(this).val();
+                console.clear();
+
+                //if (currCustomerCode == '-1') {
+                //    $("#customer-name-new").val('');
+                //    $("#customer-location-edit").val('');
+                //}
+                //else {
+                    $.ajax({
+                        url: '/DataService.asmx/GetAllCustomers',
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+
+                            $(data).each(function (index, item) {
+
+                                if (item.customerCode == currCustomerCode) {
+                                    //console.log("Selected customerCode: " + item.customerCode)
+                                    //console.log("Selected customerName: " + item.customerName)
+                                    //console.log("Selected address: " + item.address)
+                                    $("#customer-name-edit").val(item.customerName);
+                                    $("#customer-location-edit").val(item.address);
+                                }
+                            });
+                        }
+                    });
+                //}
             });
             //end customer code dropdown change
 
@@ -865,7 +907,7 @@
                 <div class="row">
                     <div class="col-md-3"><strong>Job ID</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control job-id" maxlength="10">
+                        <input type="text" class="form-control job-id" maxlength="10" disabled>
                     </div>
                     <div class="col-sm-auto">
                         <div class="form-check">
@@ -1156,6 +1198,7 @@
                     <div class="col-md-3"><strong>Customer Code</strong></div>
                     <div class="col-md-3">
                         <select class="customer-code" id="customer-code-new">
+                            <option value="-1">Select Customer Code</option>
                             @foreach (var customer in Model.customers)
                             {
                                 //BEGIN TEMPORARY LOOP VARIABLES
