@@ -220,6 +220,84 @@
                 //}
             });
 
+            $(".newJobCrspdtBtn_add").click(function () {
+
+                //if (fn_rowFilled($(this))) {
+
+                //fn_disableSelect2();
+                var currentRow = $(this).parent().parent();
+                console.log(currentRow.attr("class"));
+
+                currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
+                currentRow.find(".email_input").attr("disabled", "true");//lock the name field for edits
+                //currentRow.find(".Btn_add").hide();//remove the add button, only needed for new work descriptions
+                //currentRow.find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
+                //currentRow.find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
+
+                indexJobCrspdtEntries_Add = indexJobCrspdtEntries_Add + 1;
+
+                $(".jobCrspdtLine_template_row_hidden").removeAttr("hidden");
+
+                //currentRow.prop("id", "jobCrspdtLine_" + indexJobCrspdtEntries_Add).appendTo("#jobCrspdtLine_template");
+                currentRow.prop("id", "jobCrspdtLine_" + indexJobCrspdtEntries_Add);
+
+                $("#jobCrspdtLine_" + indexJobCrspdtEntries_Add).prop("class", " row addRecord jobCrspdtLine");
+                $("#jobCrspdtLine_" + indexJobCrspdtEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
+
+                $(".jobCrspdtLine_template_row_hidden").clone(true).prop("class", "row entryRow jobCrspdtLine_template_row_active").appendTo("#jobCrspdtLine_template");
+                //$(".jobCrspdtLine_template_row_hidden").attr("hidden", "true");
+
+
+                //fn_enableSelect2();
+                //enable_disableSave();
+                //}
+            });
+
+            $(".Btn_edit").click(function () {
+                var currentRow = $(this).parent().parent();
+
+                $(this).hide();
+                $(currentRow).find(".Btn_save").removeAttr("hidden");
+                $(currentRow).find(".Btn_save").show();
+
+                currentRow.find(".name_input").removeAttr("disabled");//
+                currentRow.find(".email_input").removeAttr("disabled");//
+                $(currentRow).find(".name_input, .email_input").css("color", "red");
+            });
+
+            $(".Btn_delete").click(function () {
+                var currentRow = $(this).parent().parent();
+                //var currentNumValidRecs = $(".returnedRecords.workDescLine").length + indexWorkDescEntries_Add;
+                temp_LineClass = $(currentRow).prop("class");
+
+                //if this line is a new record, simply remove it
+                if (temp_LineClass.includes("addRecord")) {
+                    $(currentRow).remove();
+                }
+
+                //if this line is a returned record, set its class to deletedRecords
+                //if (temp_LineClass.includes("returnedRecords")) {
+
+                //    //used to change the class of a returned record to deleted record for later processing with a delete operation
+                //    if (temp_LineClass.includes("workDescLine")) {
+                //        if (currentNumValidRecs > 1) {//if there is at least one more work description entry, then go ahead and delete this entry
+                //            $($(currentRow)).prop("class", "row deletedRecords workDescLine");
+                //            $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
+                //            $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+                //            $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                //            $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
+                //            recordsToDeleteStatus = 1;
+                //        }
+                //        else {
+                //            $.alert({
+                //                title: 'Cannot Delete!',
+                //                content: 'Must have at least one copied record or added record in the work description section.',
+                //            });
+                //        }
+                //    }
+                //}
+            });
+
             $('#jobEditForm').on('show.bs.modal', function (event) {
 
                 var button = $(event.relatedTarget) // Button that triggered the modal
@@ -1009,57 +1087,57 @@
                     <div class="col-md-3 col-form-label" style="padding:5px;">E-mail</div>
                 </div>
                 @*BEGIN NEW JOB CORRESPONDENT TEMPLATE*@
-                <div class="" id="jobCrspdtLine_template" style="">
-                    <div class="row entryRow jobCrspdt_template_row_active">
-                        <div class="col-md-3" style=""></div>
-                        <div class="col-md-3 name_div" style="padding:0px;">
-                            <input type="text" class="form-control name_input" style="padding:5px;">
-                        </div>
-                        <div class="col-md-3 email_div" style="padding:0px;">
-                            <input type="text" class="form-control email_input" style="padding:5px;">
-                        </div>
-                        <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
-                            <button id="test_add" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add">
-                                <i class="far fa-plus-square fa-2x" style="color:black;"></i>
-                            </button>
-
-                            <button id="" class="btn btn-light btn-sm Btn_edit lineJobCrspdtBtn_edit" hidden>
-                                <i class="far fa-edit fa-2x" style="color:black;"></i>
-                            </button>
-                            <button class='btn btn-light btn-sm Btn_save lineJobCrspdtBtn_save' hidden>
-                                <i class='far fa-save fa-2x' style='color: black;'></i>
-                            </button>
-                            <button class='btn btn-light btn-sm Btn_delete lineJobCrspdtBtn_delete' hidden>
-                                <i class='far fa-minus-square fa-2x' style='color: black;'></i>
-                            </button>
-                        </div>
+            <div class="" id="jobCrspdtLine_template" style="">
+                <div class="row entryRow jobCrspdt_template_row_active">
+                    <div class="col-md-3" style=""></div>
+                    <div class="col-md-3 name_div" style="padding:0px;">
+                        <input type="text" class="form-control name_input" style="padding:5px;">
                     </div>
+                    <div class="col-md-3 email_div" style="padding:0px;">
+                        <input type="text" class="form-control email_input" style="padding:5px;">
+                    </div>
+                    <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
+                        <button id="test_add" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add">
+                            <i class="far fa-plus-square fa-2x" style="color:black;"></i>
+                        </button>
 
-                    <div class="row entryRow jobCrspdtLine_template_row_hidden" id="" style="" hidden>
-                        <div class="col-md-3" style=""></div>
-                        <div class="col-md-3 name_div" style="padding:0px;">
-                            <input type="text" class="form-control name_input" style="padding:5px;">
-                        </div>
-                        <div class="col-md-3 email_div" style="padding:0px;">
-                            <input type="text" class="form-control email_input" style="padding:5px;">
-                        </div>
-                        <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
-                            <button id="" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add">
-                                <i class="far fa-plus-square fa-2x" style="color:black;"></i>
-                            </button>
-
-                            <button id="" class="btn btn-light btn-sm Btn_edit lineJobCrspdtBtn_edit" hidden>
-                                <i class="far fa-edit fa-2x" style="color:black;"></i>
-                            </button>
-                            <button class='btn btn-light btn-sm Btn_save lineJobCrspdtBtn_save' hidden>
-                                <i class='far fa-save fa-2x' style='color: black;'></i>
-                            </button>
-                            <button class='btn btn-light btn-sm Btn_delete lineJobCrspdtBtn_delete' hidden>
-                                <i class='far fa-minus-square fa-2x' style='color: black;'></i>
-                            </button>
-                        </div>
+                        <button id="" class="btn btn-light btn-sm Btn_edit lineJobCrspdtBtn_edit" hidden>
+                            <i class="far fa-edit fa-2x" style="color:black;"></i>
+                        </button>
+                        <button class='btn btn-light btn-sm Btn_save lineJobCrspdtBtn_save' hidden>
+                            <i class='far fa-save fa-2x' style='color: black;'></i>
+                        </button>
+                        <button class='btn btn-light btn-sm Btn_delete lineJobCrspdtBtn_delete' hidden>
+                            <i class='far fa-minus-square fa-2x' style='color: black;'></i>
+                        </button>
                     </div>
                 </div>
+
+                <div class="row entryRow jobCrspdtLine_template_row_hidden" id="" style="" hidden>
+                    <div class="col-md-3" style=""></div>
+                    <div class="col-md-3 name_div" style="padding:0px;">
+                        <input type="text" class="form-control name_input" style="padding:5px;">
+                    </div>
+                    <div class="col-md-3 email_div" style="padding:0px;">
+                        <input type="text" class="form-control email_input" style="padding:5px;">
+                    </div>
+                    <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
+                        <button id="" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add">
+                            <i class="far fa-plus-square fa-2x" style="color:black;"></i>
+                        </button>
+
+                        <button id="" class="btn btn-light btn-sm Btn_edit lineJobCrspdtBtn_edit" hidden>
+                            <i class="far fa-edit fa-2x" style="color:black;"></i>
+                        </button>
+                        <button class='btn btn-light btn-sm Btn_save lineJobCrspdtBtn_save' hidden>
+                            <i class='far fa-save fa-2x' style='color: black;'></i>
+                        </button>
+                        <button class='btn btn-light btn-sm Btn_delete lineJobCrspdtBtn_delete' hidden>
+                            <i class='far fa-minus-square fa-2x' style='color: black;'></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
                 @*END NEW WORK DESCRIPTION TEMPLATE*@
             </div>
             <div class="modal-footer">
