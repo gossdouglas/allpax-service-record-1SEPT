@@ -28,7 +28,8 @@ namespace allpax_service_record.Models
         public string location { get; set; }
         public string nrmlHoursStart { get; set; }
         public string nrmlHoursEnd { get; set; }
-        public string nrmlHoursDaily { get; set; }
+        //public string nrmlHoursDaily { get; set; }
+        public int nrmlHoursDaily { get; set; }
         public Boolean dblTimeHours { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

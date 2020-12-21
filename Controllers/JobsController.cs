@@ -48,7 +48,7 @@ namespace allpax_service_record.Controllers
                 job.location = dr1[5].ToString();
                 job.nrmlHoursStart = dr1[6].ToString();
                 job.nrmlHoursEnd = dr1[7].ToString();
-                job.nrmlHoursDaily = dr1[8].ToString();
+                job.nrmlHoursDaily = (int) dr1[8];
                 job.dblTimeHours = (Boolean)dr1[9];
                 job.id = (int)dr1[10];
 

@@ -2563,13 +2563,14 @@
     <Content Include="Views\customers\Index.cshtml" />
     <Content Include="Views\Jobs\Index.cshtml" />
     <Content Include="Views\jobCorrespondents\Index.cshtml" />
-    <Content Include="Views\Jobs\Index-inwork.cshtml" />
+    <Content Include="Views\Jobs\Index-os-master.cshtml" />
     <Content Include="Views\resourceTypes\Create.cshtml" />
     <Content Include="Views\resourceTypes\Delete.cshtml" />
     <Content Include="Views\resourceTypes\Details.cshtml" />
     <Content Include="Views\resourceTypes\Edit.cshtml" />
     <Content Include="Views\resourceTypes\Index.cshtml" />
     <Content Include="Views\resourceTypes\Index-orig.cshtml" />
+    <Content Include="Views\Jobs\Index-job_crspndts_not_wkng.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

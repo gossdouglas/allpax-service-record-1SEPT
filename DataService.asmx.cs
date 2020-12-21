@@ -233,6 +233,44 @@ namespace allpax_service_record
             Context.Response.Write(js.Serialize(resourceTypes));
         }
 
+        [WebMethod]
+        public void GetJobInfoByJobID(string jobID)
+        {
+            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            List<tbl_Jobs> jobs = new List<tbl_Jobs>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                SqlCommand cmd = new SqlCommand("spGetJobInfoByJobID", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@jobID", jobID);
+
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    tbl_Jobs job = new tbl_Jobs();
+                    job.jobID = rdr["jobID"].ToString();
+                    job.description = rdr["description"].ToString();
+                    job.customerCode = rdr["customerCode"].ToString();
+                    job.customerContact = rdr["customerContact"].ToString();
+
+                    job.active = (bool) rdr["active"];
+                    job.location = rdr["location"].ToString();
+                    job.nrmlHoursStart = rdr["nrmlHoursStart"].ToString();
+                    job.nrmlHoursEnd = rdr["nrmlHoursEnd"].ToString();
+
+                    job.dblTimeHours = (bool) rdr["dblTimeHours"];
+                    job.nrmlHoursDaily = (int) rdr["nrmlHoursDaily"];
+                    job.id = (int) rdr["id"];
+
+                    jobs.Add(job);
+                }
+            }
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.Write(js.Serialize(jobs));
+        }
+
         //[WebMethod]
         //public void SaveNewWorkDescEntry(int dailyReportID, string workDescription, string userName)
         //{
