@@ -222,7 +222,7 @@
 
             $('#jobEditForm').on('show.bs.modal', function (event) {
 
-                fn_disableSelect2();
+                fn_disableSelect2();//disable select2 so the selected option can be reached
 
                 var modal = $(this)                
                 var button = $(event.relatedTarget) // Button that triggered the modal
@@ -242,13 +242,8 @@
                 //var temp_id;
               
                 modal.find('.modal-title').text('Job Edit Form');
-                
-                $(temp_customerCode_dpdwn).each(function (index) {
 
-                    if ($(this).val() == temp_customerCode) {//
-                        $(this).prop('selected', true);
-                    }
-                });
+                
 
                 //begin get job info by job id
                 $.ajax({
@@ -284,35 +279,13 @@
                 });
                 //end get job info by job id
 
-                //begin fill the customer code dropdown
-                //$.ajax({
-                //    url: '/DataService.asmx/GetCustomerInfoByJobID',
-                //    method: 'post',
-                //    dataType: 'json',
-                //    data: { jobID: '%' },
-                //    success: function (data) {
-                //        $(customerCodeEdit_dpdwn).empty();
-                //        //customerCodeEdit_dpdwn.append($('<option/>', { value: -1, text: 'Select Customer Code' }));
-                //        $(data).each(function (index, item) {
+                //set the record's customer as the one selected in the customer dropdown on form load
+                $(temp_customerCode_dpdwn).each(function (index) {
 
-                //            //console.log(item.customerCode + " " + temp_customerCode);
-
-                //            if (item.customerCode == temp_customerCode) {
-
-                //                console.log("item.customerCode == temp_customerCode " + item.customerCode + " " + temp_customerCode);
-                //                customerCodeEdit_dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode, selected: true }));
-                //            }
-
-                //            else {
-                //                customerCodeEdit_dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode }));
-                //            }
-
-                //            //tempCustomerCodeArr.push(item.customerCode);//is this really needed?
-                //            //customerCodeEdit_dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode }));
-                //        });
-                //    }
-                //});
-                //end fill the customer code dropdown
+                    if ($(this).val() == temp_customerCode) {
+                        $(this).prop('selected', true);
+                    }
+                });
 
                 //begin get customer info by job id
                 $.ajax({
@@ -323,7 +296,6 @@
                     success: function (data) {
 
                         $(data).each(function (index, item) {
-
                             modal.find('.customer-name').val(item.customerName);
                             modal.find('.customer-location').val(item.address);
                             modal.find('.customer-contact').val(item.customerContact);
@@ -332,7 +304,7 @@
                 });
                 //end get customer info by job id
 
-                fn_enableSelect2();
+                fn_enableSelect2();//re-enable select2 after affecting work to allow the selected option to be reached
 
             })
 
