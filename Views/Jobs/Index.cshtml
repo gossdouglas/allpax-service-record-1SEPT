@@ -144,14 +144,41 @@
             var jobCrspdtInfo_Add = [];
             var jobCrspdtInfoJson_Add = [];
 
+            var temp_arr = [];
+
             fn_enableSelect2();
+            //fn_loadRtndRecs();
 
             var customerCodeNew_dpdwn = $('#customer-code-new');
             var customerCodeEdit_dpdwn = $('#customer-code-edit');
 
+            $('#jobNewForm').on('show.bs.modal', function (event) {
+                //begin fill the jobs dropdown
+
+                var tempCustomerCodeArr = [];
+
+                //begin fill the customer code dropdown
+                //$.ajax({
+                //    url: '/DataService.asmx/GetCustomerInfoByJobID',
+                //    method: 'post',
+                //    dataType: 'json',
+                //    data: { jobID: '%' },
+                //    success: function (data) {
+                //        $(customerCodeNew_dpdwn).empty();
+                //        customerCodeNew_dpdwn.append($('<option/>', { value: -1, text: 'Select Customer Code' }));
+                //        $(data).each(function (index, item) {
+
+                //            tempCustomerCodeArr.push(item.customerCode);//is this really needed?
+                //            customerCodeNew_dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode }));
+                //        });
+                //    }
+                //});
+                //end fill the customer code dropdown
+            })
+
             $(".jobNewForm.btn_save").click(function () {
 
-                fn_loadEntries_Add();
+                fn_loadEntries_Add();//determine which list items need to be added
                 fn_buildJsonObjects();
 
                 //if (fn_rowFilled($(this))) {
@@ -222,6 +249,7 @@
 
             $('#jobEditForm').on('show.bs.modal', function (event) {
 
+                console.clear();
                 fn_disableSelect2();//disable select2 so the selected option can be reached
 
                 var modal = $(this)                
@@ -229,7 +257,16 @@
                 var temp_jobID = button.data('job-id') // Extract info from data-* attributes
                 var temp_customerCode = button.data('customer-code') // Extract info from data-* attributes
                 var temp_customerCode_dpdwn = modal.find('.customer-code option');
+                var temp_subJobTypeInput = modal.find('.sub-job-type_input');
 
+                //console.log(temp_subJobTypeInput);
+
+                var subJobTypeIDs_RtndRecs = [];//array which holds which subJobTypeIDs are stored in the database
+                var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
+
+                var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
+                var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
+               
                 //var temp_jobDescription;
                 //var temp_customerCode;
                 //var temp_customerContact;
@@ -242,9 +279,7 @@
                 //var temp_id;
               
                 modal.find('.modal-title').text('Job Edit Form');
-
                 
-
                 //begin get job info by job id
                 $.ajax({
                     url: '/DataService.asmx/GetJobInfoByJobID',
@@ -285,6 +320,7 @@
                     if ($(this).val() == temp_customerCode) {
                         $(this).prop('selected', true);
                     }
+                    
                 });
 
                 //begin get customer info by job id
@@ -304,33 +340,90 @@
                 });
                 //end get customer info by job id
 
+                //begin get sub-job types by job id
+                $.ajax({
+                    url: '/DataService.asmx/GetSubJobTypesByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: temp_jobID },
+                    success: function (data) {
+                        $(data).each(function (index, item) {
+
+                            var temp_subJobID = item.subJobID;
+
+                            //store the subJobTypeIDs in the database to an array
+                            subJobTypeIDs_RtndRecs.push(temp_subJobID);
+                        });
+
+                        //get the value of each sub-job type checkbox
+                        $(temp_subJobTypeInput).each(function (index, item) {
+
+                            //if the value of the current sub-job type checkbox is part of the subJobTypeIDs_RtndRecs array...
+                            if ($.inArray($(this).val(), subJobTypeIDs_RtndRecs) !== -1) {
+                                console.log($(this).val() + " was found in the returned record array.");
+                                $(this).prop('checked', true);//...check the input box for the HTML element
+                            }
+
+                            else {
+                                console.log($(this).val() + " was not found in the returned record array.");
+                                $(this).prop('checked', false);//...un-check the input box for the HTML element
+                            }
+
+                        });
+                    }
+                });
+                //end get sub-job types by job id
+
+                
+
                 fn_enableSelect2();//re-enable select2 after affecting work to allow the selected option to be reached
-
             })
 
-            $('#jobNewForm').on('show.bs.modal', function (event) {
-                //begin fill the jobs dropdown
+            $(".jobEditForm.btn_save").click(function () {
 
-                var tempCustomerCodeArr = [];
+                //if (fn_rowFilled($(this))) {
 
-                //begin fill the customer code dropdown
-                //$.ajax({
-                //    url: '/DataService.asmx/GetCustomerInfoByJobID',
-                //    method: 'post',
-                //    dataType: 'json',
-                //    data: { jobID: '%' },
-                //    success: function (data) {
-                //        $(customerCodeNew_dpdwn).empty();
-                //        customerCodeNew_dpdwn.append($('<option/>', { value: -1, text: 'Select Customer Code' }));
-                //        $(data).each(function (index, item) {
+                    var modal = $(this).parent().parent();
+                    var temp_customerCode = modal.find('.customer-code').val()
+                    var temp_customerContact = modal.find('.customer-name').val()
+                    var temp_jobDescription = modal.find('.job-description').val()
+                    var temp_id = modal.find('.id').val()
 
-                //            tempCustomerCodeArr.push(item.customerCode);//is this really needed?
-                //            customerCodeNew_dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode }));
-                //        });
-                //    }
-                //});
-                //end fill the customer code dropdown
-            })
+                    console.log(subJobTypeIDs_RtndRecs);
+
+                    //var data = {
+                    //    customerCode: temp_customerCode,
+                    //    customerContact: temp_customerContact,
+                    //    jobDescription: temp_jobDescription,
+                    //    id: temp_id
+                    //};
+
+                    //fn_showSpinner();
+
+                    //$.ajax({
+                    //    url: '/Customers/UpdateCustomer',
+                    //    method: 'post',
+                    //    contentType: 'application/json',
+                    //    dataType: 'json',
+                    //    data: JSON.stringify(data),
+                    //    traditional: true,
+                    //    success: function (response) {
+                    //        window.location.href = response;
+                    //    },
+                    //    error: function (response) {
+                    //        console.log("an error!");
+                    //        $(response).each(function (index, item) {
+
+                    //            //var modelErrors = item.ModelErrors
+                    //            //console.log(item.name)
+                    //            //console.log(item.Email)
+                    //            //console.log(item.ModelErrors)
+                    //            console.log(item.name)
+                    //        });
+                    //    }
+                    //});
+                //}
+            });
 
             //begin customer code dropdown change
             customerCodeNew_dpdwn.change(function () {
@@ -397,85 +490,41 @@
                 //}
             });
             //end customer code dropdown change
-
-            $(".jobEditForm.btn_save").click(function () {
-
-                if (fn_rowFilled($(this))) {
-
-                    var modal = $(this).parent().parent();
-                    var temp_customerCode = modal.find('.customer-code').val()
-                    var temp_customerContact = modal.find('.customer-name').val()
-                    var temp_jobDescription = modal.find('.job-description').val()
-                    var temp_id = modal.find('.id').val()
-
-                    var data = {
-                        customerCode: temp_customerCode,
-                        customerContact: temp_customerContact,
-                        jobDescription: temp_jobDescription,
-                        id: temp_id
-                    };
-
-                    fn_showSpinner();
-
-                    $.ajax({
-                        url: '/Customers/UpdateCustomer',
-                        method: 'post',
-                        contentType: 'application/json',
-                        dataType: 'json',
-                        data: JSON.stringify(data),
-                        traditional: true,
-                        success: function (response) {
-                            window.location.href = response;
-                        },
-                        error: function (response) {
-                            console.log("an error!");
-                            $(response).each(function (index, item) {
-
-                                //var modelErrors = item.ModelErrors
-                                //console.log(item.name)
-                                //console.log(item.Email)
-                                //console.log(item.ModelErrors)
-                                console.log(item.name)
-                            });
-                        }
-                    });
-                }
-            });
-
+           
             $(".jobEditForm.btn_delete").click(function () {
 
-                var modal = $(this).parent().parent().parent();
-                var temp_customerCode = modal.find('.customer-code').val()
-                var temp_customerContact = modal.find('.customer-name').val()
+                //var modal = $(this).parent().parent().parent();
+                //var temp_customerCode = modal.find('.customer-code').val()
+                //var temp_customerContact = modal.find('.customer-name').val()
 
-                var data = {
-                    customerCode: temp_customerCode,
-                };
+                //var data = {
+                //    customerCode: temp_customerCode,
+                //};
 
-                fn_showSpinner();
+                //fn_showSpinner();
 
-                $.confirm({
-                    title: 'Delete Customer ' + temp_customerContact + ': ' + temp_customerCode + '?',
-                    content: '',
-                    buttons: {
-                        confirm: function () {
-                            fn_showSpinner();
-                            $.ajax({
-                                url: '/Customers/DeleteCustomer',
-                                method: 'post',
-                                contentType: 'application/json',
-                                dataType: 'json',
-                                data: JSON.stringify(data),
-                                traditional: true,
-                                success: function (response) {
-                                    window.location.href = response;
-                                }
-                            });
-                        },
-                        cancel: function () {
-                        }
-                    }
-                });
+                //$.confirm({
+                //    title: 'Delete Customer ' + temp_customerContact + ': ' + temp_customerCode + '?',
+                //    content: '',
+                //    buttons: {
+                //        confirm: function () {
+                //            fn_showSpinner();
+                //            $.ajax({
+                //                url: '/Customers/DeleteCustomer',
+                //                method: 'post',
+                //                contentType: 'application/json',
+                //                dataType: 'json',
+                //                data: JSON.stringify(data),
+                //                traditional: true,
+                //                success: function (response) {
+                //                    window.location.href = response;
+                //                }
+                //            });
+                //        },
+                //        cancel: function () {
+                //        }
+                //    }
+                //});
             });
 
             $(".returnedRecords .Btn_delete").click(function () {
@@ -1012,11 +1061,11 @@
                         </div>
                     </div>
                 </div>
-                @*<div class="row">
+                <div class="row">
                     <div class="col-md-3 col-form-label"><strong>Job Correspondents</strong></div>
                     <div class="col-md-3 col-form-label" style="padding:5px;">Name</div>
                     <div class="col-md-3 col-form-label" style="padding:5px;">E-mail</div>
-                </div>*@
+                </div>
                 @*BEGIN NEW JOB CORRESPONDENT TEMPLATE*@
                 @*<div class="" id="jobCrspdtLine_template" style="">
                     <div class="row entryRow jobCrspdt_template_row_active">
@@ -1078,68 +1127,6 @@
         </div>
     </div>
 </div>
-@*<div class="modal fade" id="jobEditForm" tabindex="-1" role="dialog" aria-labelledby="jobEditForm" aria-hidden="true">
-    <div class="modal-dialog modal-md" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="float-left">
-                    <h5 class="modal-title" id="jobEditForm">Edit Job</h5>
-                </div>
-                <div class="float-none">
-                    <button type="button" class="btn btn-light btn-sm jobEditForm" data-toggle="modal" data-target="#jobNewForm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                    <button type="button" class="btn btn-light btn-sm jobEditForm btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-6">
-                                <label for="job-id" class="col-form-label">Job ID:</label>
-                                <input type="text" class="form-control job-id" maxlength="10">
-                                <label for="customer-code" class="col-form-label">Customer Code:</label>
-                                <input type="text" class="form-control customer-code" maxlength="3">
-                                <label for="customer-name" class="col-form-label">Customer Name:</label>
-                                <input type="text" class="form-control customer-name" maxlength="50" disabled value="dead for the db">
-                                <label for="customer-location" class="col-form-label">Customer Location:</label>
-                                <input type="text" class="form-control customer-location" disabled value="dead for the db">
-                                <label for="customer-contact" class="col-form-label">Customer Contact:</label>
-                                <input type="text" class="form-control customer-contact">
-                            </div>
-                            <div class="col-6">
-                                <label for="job-id" class="col-form-label">Job ID:</label>
-                                <input type="text" class="form-control job-id" maxlength="3">
-                                <label for="normal-hours-start" class="col-form-label">Normal Hours Start:</label>
-                                <input type="time" class="form-control normal-hours-start">
-                                <label for="normal-hours-end" class="col-form-label">Normal Hours End:</label>
-                                <input type="time" class="form-control normal-hours-end">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <label for="job-description" class="col-form-label">Job Description:</label>
-                                <input type="text" class="form-control job-description" maxlength="50">
-                            </div>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input active" type="checkbox" value="">
-                            <label class="form-check-label" for="">
-                                Job Active
-                            </label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn jobEditForm btn_save" value="">Save</button>
-                <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>*@
 @*END EDIT CUSTOMER MODAL TEMPLATE*@
 @*BEGIN NEW CUSTOMER MODAL TEMPLATE*@
 <div class="modal fade" id="jobNewForm" tabindex="-1" role="dialog" aria-labelledby="jobNewForm" aria-hidden="true">

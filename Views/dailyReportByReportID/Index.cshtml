@@ -184,6 +184,8 @@
                         });
                         //end AddTeamMember
 
+                        
+
                         //begin DeleteTeamMember
                         //begin axios delete post
                         axios.post('/dailyReportByReportID/AddTeamMember', {
@@ -482,7 +484,8 @@
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
                         });
-                        //console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
+                        console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
+                        console.log("yo " + dailyRptTeamUserIDArr.length)
 
                         //cloned to new daily report
                         //begin fill the team names dropdown
