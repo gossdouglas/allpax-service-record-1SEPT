@@ -144,7 +144,12 @@
             var jobCrspdtInfo_Add = [];
             var jobCrspdtInfoJson_Add = [];
 
-            var temp_arr = [];
+            var subJobTypeIDs_RtndRecs = [];//array which holds which subJobTypeIDs are stored in the database
+            //var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
+            //var subJobTypeIDs_UnSlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
+
+            var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
+            var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
 
             fn_enableSelect2();
             //fn_loadRtndRecs();
@@ -250,6 +255,13 @@
             $('#jobEditForm').on('show.bs.modal', function (event) {
 
                 console.clear();
+                subJobTypeIDs_RtndRecs.length = 0;
+                //subJobTypeIDs_SlctdRecs.length = 0;
+                //subJobTypeIDs_UnSlctdRecs.length = 0;
+
+                jobResourceIDs_RtndRecs.length = 0;
+                jobCrspdts_RtndRecs.length = 0;
+
                 fn_disableSelect2();//disable select2 so the selected option can be reached
 
                 var modal = $(this)                
@@ -261,11 +273,11 @@
 
                 //console.log(temp_subJobTypeInput);
 
-                var subJobTypeIDs_RtndRecs = [];//array which holds which subJobTypeIDs are stored in the database
-                var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
+                //var subJobTypeIDs_RtndRecs = [];//array which holds which subJobTypeIDs are stored in the database
+                //var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
 
-                var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
-                var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
+                //var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
+                //var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
                
                 //var temp_jobDescription;
                 //var temp_customerCode;
@@ -355,74 +367,60 @@
                             subJobTypeIDs_RtndRecs.push(temp_subJobID);
                         });
 
+                        console.log("subJobTypeIDs_RtndRecs:" + subJobTypeIDs_RtndRecs);
+
                         //get the value of each sub-job type checkbox
                         $(temp_subJobTypeInput).each(function (index, item) {
 
                             //if the value of the current sub-job type checkbox is part of the subJobTypeIDs_RtndRecs array...
                             if ($.inArray($(this).val(), subJobTypeIDs_RtndRecs) !== -1) {
-                                console.log($(this).val() + " was found in the returned record array.");
+                                //console.log($(this).val() + " was found in the returned record array.");
                                 $(this).prop('checked', true);//...check the input box for the HTML element
                             }
 
                             else {
-                                console.log($(this).val() + " was not found in the returned record array.");
+                                //console.log($(this).val() + " was not found in the returned record array.");
                                 $(this).prop('checked', false);//...un-check the input box for the HTML element
                             }
 
                         });
                     }
+                    
                 });
                 //end get sub-job types by job id
-
-                
-
+               
                 fn_enableSelect2();//re-enable select2 after affecting work to allow the selected option to be reached
             })
 
             $(".jobEditForm.btn_save").click(function () {
 
-                //if (fn_rowFilled($(this))) {
+                console.clear();
+                var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
+                var modal = $(this).parent().parent();
+                var temp_subJobTypeInput = modal.find('.sub-job-type_input');
+                
+                //var temp_customerCode = modal.find('.customer-code').val()
+                //var temp_customerContact = modal.find('.customer-name').val()
+                //var temp_jobDescription = modal.find('.job-description').val()
+                //var temp_id = modal.find('.id').val()
+                
+                $(temp_subJobTypeInput).each(function (index, item) {
 
-                    var modal = $(this).parent().parent();
-                    var temp_customerCode = modal.find('.customer-code').val()
-                    var temp_customerContact = modal.find('.customer-name').val()
-                    var temp_jobDescription = modal.find('.job-description').val()
-                    var temp_id = modal.find('.id').val()
+                    var temp_val = $(this).val();
 
-                    console.log(subJobTypeIDs_RtndRecs);
+                    //if the the current sub-job type checkbox is checked...
+                    if ($(this).prop('checked')) {
+                        subJobTypeIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs
+                        //console.log(temp_val + " is selected.")
+                    }
 
-                    //var data = {
-                    //    customerCode: temp_customerCode,
-                    //    customerContact: temp_customerContact,
-                    //    jobDescription: temp_jobDescription,
-                    //    id: temp_id
-                    //};
+                });
 
-                    //fn_showSpinner();
-
-                    //$.ajax({
-                    //    url: '/Customers/UpdateCustomer',
-                    //    method: 'post',
-                    //    contentType: 'application/json',
-                    //    dataType: 'json',
-                    //    data: JSON.stringify(data),
-                    //    traditional: true,
-                    //    success: function (response) {
-                    //        window.location.href = response;
-                    //    },
-                    //    error: function (response) {
-                    //        console.log("an error!");
-                    //        $(response).each(function (index, item) {
-
-                    //            //var modelErrors = item.ModelErrors
-                    //            //console.log(item.name)
-                    //            //console.log(item.Email)
-                    //            //console.log(item.ModelErrors)
-                    //            console.log(item.name)
-                    //        });
-                    //    }
-                    //});
-                //}
+                console.log("subJobTypeIDs_RtndRecs:" + subJobTypeIDs_RtndRecs);
+                console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
+                console.log("subJobTypeIDs to add:" + _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs));
+                console.log("subJobTypeIDs to delete:" + _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs));
+                    
             });
 
             //begin customer code dropdown change
