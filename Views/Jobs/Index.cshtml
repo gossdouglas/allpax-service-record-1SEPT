@@ -255,12 +255,11 @@
             $('#jobEditForm').on('show.bs.modal', function (event) {
 
                 console.clear();
+                console.log("Arrays upon modal load.")
                 subJobTypeIDs_RtndRecs.length = 0;
-                //subJobTypeIDs_SlctdRecs.length = 0;
-                //subJobTypeIDs_UnSlctdRecs.length = 0;
-
                 jobResourceIDs_RtndRecs.length = 0;
-                jobCrspdts_RtndRecs.length = 0;
+
+                //jobCrspdts_RtndRecs.length = 0;
 
                 fn_disableSelect2();//disable select2 so the selected option can be reached
 
@@ -270,6 +269,7 @@
                 var temp_customerCode = button.data('customer-code') // Extract info from data-* attributes
                 var temp_customerCode_dpdwn = modal.find('.customer-code option');
                 var temp_subJobTypeInput = modal.find('.sub-job-type_input');
+                var temp_resourceTypeInput = modal.find('.resource-type_input.resourceTypeID');
 
                 //console.log(temp_subJobTypeInput);
 
@@ -360,7 +360,6 @@
                     data: { jobID: temp_jobID },
                     success: function (data) {
                         $(data).each(function (index, item) {
-
                             var temp_subJobID = item.subJobID;
 
                             //store the subJobTypeIDs in the database to an array
@@ -382,19 +381,52 @@
                                 //console.log($(this).val() + " was not found in the returned record array.");
                                 $(this).prop('checked', false);//...un-check the input box for the HTML element
                             }
-
                         });
-                    }
-                    
+                    }                    
                 });
                 //end get sub-job types by job id
+
+                //begin get job resources by job id
+                $.ajax({
+                    url: '/DataService.asmx/GetJobResourcesByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: temp_jobID },
+                    success: function (data) {
+                        $(data).each(function (index, item) {
+                            var temp_resourceTypeID = item.resourceTypeID;
+
+                            //store the subJobTypeIDs in the database to an array
+                            jobResourceIDs_RtndRecs.push(temp_resourceTypeID);
+                        });
+
+                        console.log("jobResourceIDs_RtndRecs:" + jobResourceIDs_RtndRecs);
+
+                        //get the value of each sub-job type checkbox
+                        $(temp_resourceTypeInput).each(function (index, item) {
+
+                            //if the value of the current resource type checkbox is part of the jobResourceIDs_RtndRecs array...
+                            if ($.inArray($(this).val(), jobResourceIDs_RtndRecs) !== -1) {
+                                //console.log($(this).val() + " was found in the returned record array.");
+                                $(this).prop('checked', true);//...check the input box for the HTML element
+                            }
+
+                            else {
+                                //console.log($(this).val() + " was not found in the returned record array.");
+                                $(this).prop('checked', false);//...un-check the input box for the HTML element
+                            }
+                        });
+                    }
+                });
+                //end get job resources by job id
                
                 fn_enableSelect2();//re-enable select2 after affecting work to allow the selected option to be reached
             })
 
             $(".jobEditForm.btn_save").click(function () {
 
-                console.clear();
+                console.log("_____________________")
+                console.log("Arrays upon modal save press.")
                 var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
                 var modal = $(this).parent().parent();
                 var temp_subJobTypeInput = modal.find('.sub-job-type_input');

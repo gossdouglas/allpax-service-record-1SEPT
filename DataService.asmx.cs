@@ -209,7 +209,8 @@ namespace allpax_service_record
         public void GetJobResourcesByJobID(string jobID)
         {
             string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
-            List<tbl_resourceTypes> resourceTypes = new List<tbl_resourceTypes>();
+            //List<tbl_resourceTypes> resourceTypes = new List<tbl_resourceTypes>();
+            List<vm_resourceTypes> resourceTypes = new List<vm_resourceTypes>();
             using (SqlConnection con = new SqlConnection(cs))
             {
                 SqlCommand cmd = new SqlCommand("spGetJobResourcesByJobID", con);
@@ -221,8 +222,10 @@ namespace allpax_service_record
                 SqlDataReader rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
-                    tbl_resourceTypes resourceType = new tbl_resourceTypes();
-                    resourceType.resourceTypeID = (byte) rdr["resourceTypeID"];
+                    //tbl_resourceTypes resourceType = new tbl_resourceTypes();
+                    vm_resourceTypes resourceType = new vm_resourceTypes();
+                    //resourceType.resourceTypeID = (byte) rdr["resourceTypeID"];
+                    resourceType.resourceTypeID = rdr["resourceTypeID"].ToString();
                     resourceType.resourceType = rdr["resourceType"].ToString();
                     resourceType.description = rdr["description"].ToString();
                     resourceType.rate = (decimal)rdr["rate"];

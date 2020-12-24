@@ -237,6 +237,7 @@
     <Compile Include="Models\tbl_dailyReportUsers.cs" />
     <Compile Include="Models\tbl_customers.cs" />
     <Compile Include="Models\tbl_dailyReport.cs" />
+    <Compile Include="Models\View Models\vm_resourceTypes.cs" />
     <Compile Include="Models\View Models\vm_Jobs.cs" />
     <Compile Include="Models\View Models\vm_userAcctInfo.cs" />
     <Compile Include="Models\View Models\vm_jobCrspdtInfo.cs" />
