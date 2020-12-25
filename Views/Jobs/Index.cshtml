@@ -734,18 +734,17 @@
                 currentRow.find(".Btn_clear").hide();//remove the clear button, only needed for new work descriptions
                 currentRow.find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
                 currentRow.find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
-                //currentRow.last().find(".narr_div").css('border-bottom-style', 'none');
-                //currentRow.find(".dpdwn_parsed_div").css('border-bottom-style', 'none');
-                //currentRow.find(".button_div").css('border-bottom-style', 'none');
 
                 indexJobCrspdtEntries_Add = indexJobCrspdtEntries_Add + 1;
 
                 $(".jobCrspdtLine_template_row_hidden").removeAttr("hidden");
                 currentRow.prop("id", "jobCrspdtLine_" + indexJobCrspdtEntries_Add).appendTo("#jobCrspdtLine_template");
+                //currentRow.prop("id", "jobCrspdtLine_" + indexJobCrspdtEntries_Add).appendTo(".jobCrspdtLine_template");
                 $("#jobCrspdtLine_" + indexJobCrspdtEntries_Add).prop("class", " row addRecord jobCrspdtLine");
                 $("#jobCrspdtLine_" + indexJobCrspdtEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
                 $(".jobCrspdtLine_template_row_hidden").clone(true).prop("class", "row entryRow jobCrspdtLine_template_row_active").appendTo("#jobCrspdtLine_template");
+                //$(".jobCrspdtLine_template_row_hidden").clone(true).prop("class", "row entryRow jobCrspdtLine_template_row_active").appendTo(".jobCrspdtLine_template");
                 $(".jobCrspdtLine_template_row_hidden").attr("hidden", "true");
 
 
@@ -1028,7 +1027,7 @@
                                 //BEGIN TEMPORARY LOOP VARIABLES
                                 string temp_customerCode = customer.customerCode;
                                 string temp_customerName = customer.customerName;
-                                string temp_address = customer.address; 
+                                string temp_address = customer.address;
                                 int temp_id = customer.id;
                                 //END TEMPORARY LOOP VARIABLES
 
@@ -1147,56 +1146,56 @@
                 </div>
                 @*BEGIN NEW JOB CORRESPONDENT TEMPLATE*@
                 @*<div class="" id="jobCrspdtLine_template" style="">
-                    <div class="row entryRow jobCrspdt_template_row_active">
-                        <div class="col-md-3" style=""></div>
-                        <div class="col-md-3 name_div" style="padding:0px;">
-                            <input type="text" class="form-control name_input" style="padding:5px;">
-                        </div>
-                        <div class="col-md-3 email_div" style="padding:0px;">
-                            <input type="text" class="form-control email_input" style="padding:5px;">
-                        </div>
-                        <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
-                            <button id="test_add" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add">
-                                <i class="far fa-plus-square fa-2x" style="color:black;"></i>
-                            </button>
+            <div class="row entryRow jobCrspdt_template_row_active">
+                <div class="col-md-3" style=""></div>
+                <div class="col-md-3 name_div" style="padding:0px;">
+                    <input type="text" class="form-control name_input" style="padding:5px;">
+                </div>
+                <div class="col-md-3 email_div" style="padding:0px;">
+                    <input type="text" class="form-control email_input" style="padding:5px;">
+                </div>
+                <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
+                    <button id="test_add" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add">
+                        <i class="far fa-plus-square fa-2x" style="color:black;"></i>
+                    </button>
 
-                            <button id="" class="btn btn-light btn-sm Btn_edit lineJobCrspdtBtn_edit" hidden>
-                                <i class="far fa-edit fa-2x" style="color:black;"></i>
-                            </button>
-                            <button class='btn btn-light btn-sm Btn_save lineJobCrspdtBtn_save' hidden>
-                                <i class='far fa-save fa-2x' style='color: black;'></i>
-                            </button>
-                            <button class='btn btn-light btn-sm Btn_delete lineJobCrspdtBtn_delete' hidden>
-                                <i class='far fa-minus-square fa-2x' style='color: black;'></i>
-                            </button>
-                        </div>
-                    </div>
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineJobCrspdtBtn_edit" hidden>
+                        <i class="far fa-edit fa-2x" style="color:black;"></i>
+                    </button>
+                    <button class='btn btn-light btn-sm Btn_save lineJobCrspdtBtn_save' hidden>
+                        <i class='far fa-save fa-2x' style='color: black;'></i>
+                    </button>
+                    <button class='btn btn-light btn-sm Btn_delete lineJobCrspdtBtn_delete' hidden>
+                        <i class='far fa-minus-square fa-2x' style='color: black;'></i>
+                    </button>
+                </div>
+            </div>
 
-                    <div class="row entryRow jobCrspdtLine_template_row_hidden" id="" style="" hidden>
-                        <div class="col-md-3" style=""></div>
-                        <div class="col-md-3 name_div" style="padding:0px;">
-                            <input type="text" class="form-control name_input" style="padding:5px;">
-                        </div>
-                        <div class="col-md-3 email_div" style="padding:0px;">
-                            <input type="text" class="form-control email_input" style="padding:5px;">
-                        </div>
-                        <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
-                            <button id="" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add">
-                                <i class="far fa-plus-square fa-2x" style="color:black;"></i>
-                            </button>
+            <div class="row entryRow jobCrspdtLine_template_row_hidden" id="" style="" hidden>
+                <div class="col-md-3" style=""></div>
+                <div class="col-md-3 name_div" style="padding:0px;">
+                    <input type="text" class="form-control name_input" style="padding:5px;">
+                </div>
+                <div class="col-md-3 email_div" style="padding:0px;">
+                    <input type="text" class="form-control email_input" style="padding:5px;">
+                </div>
+                <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
+                    <button id="" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add">
+                        <i class="far fa-plus-square fa-2x" style="color:black;"></i>
+                    </button>
 
-                            <button id="" class="btn btn-light btn-sm Btn_edit lineJobCrspdtBtn_edit" hidden>
-                                <i class="far fa-edit fa-2x" style="color:black;"></i>
-                            </button>
-                            <button class='btn btn-light btn-sm Btn_save lineJobCrspdtBtn_save' hidden>
-                                <i class='far fa-save fa-2x' style='color: black;'></i>
-                            </button>
-                            <button class='btn btn-light btn-sm Btn_delete lineJobCrspdtBtn_delete' hidden>
-                                <i class='far fa-minus-square fa-2x' style='color: black;'></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>*@
+                    <button id="" class="btn btn-light btn-sm Btn_edit lineJobCrspdtBtn_edit" hidden>
+                        <i class="far fa-edit fa-2x" style="color:black;"></i>
+                    </button>
+                    <button class='btn btn-light btn-sm Btn_save lineJobCrspdtBtn_save' hidden>
+                        <i class='far fa-save fa-2x' style='color: black;'></i>
+                    </button>
+                    <button class='btn btn-light btn-sm Btn_delete lineJobCrspdtBtn_delete' hidden>
+                        <i class='far fa-minus-square fa-2x' style='color: black;'></i>
+                    </button>
+                </div>
+            </div>
+        </div>*@
                 @*END NEW WORK DESCRIPTION TEMPLATE*@
             </div>
             <div class="modal-footer">
