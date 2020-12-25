@@ -149,7 +149,8 @@
             //var subJobTypeIDs_UnSlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
 
             var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
-            var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
+            var jobRates_RtndRecs = [];//array which holds which job resource rates are stored in the database
+            //var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
 
             fn_enableSelect2();
             //fn_loadRtndRecs();
@@ -258,6 +259,7 @@
                 console.log("Arrays upon modal load.")
                 subJobTypeIDs_RtndRecs.length = 0;
                 jobResourceIDs_RtndRecs.length = 0;
+                jobRates_RtndRecs.length = 0;
 
                 //jobCrspdts_RtndRecs.length = 0;
 
@@ -398,11 +400,14 @@
                             var temp_rate = item.rate;
 
                             //store the subJobTypeIDs in the database to an array
+                            //jobResourceIDs_RtndRecs.push(temp_resourceTypeID);
                             jobResourceIDs_RtndRecs.push(temp_resourceTypeID);
+                            //jobRates_RtndRecs.push(temp_rate);
                             //jobResourceIDs_RtndRecs.push([temp_resourceTypeID, temp_rate]);
                         });
 
                         console.log("jobResourceIDs_RtndRecs:" + jobResourceIDs_RtndRecs);
+                        //console.log("jobRates_RtndRecs:" + jobRates_RtndRecs);
 
                         //get the value of each sub-job type checkbox
                         $(temp_resourceTypeInput).each(function (index, item) {
@@ -431,6 +436,7 @@
                 console.log("Arrays upon modal save press.")
                 var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
                 var jobResourceIDs_SlctdRecs = [];//array which holds which jobResourceIDs are selected in the modal
+                //var jobRates_SlctdRecs = [];//array which holds which jobRates are selected in the modal
                 var modal = $(this).parent().parent();
                 var temp_subJobTypeInput = modal.find('.sub-job-type_input');
                 var temp_resourceTypeInput = modal.find('.resource-type_input.resourceTypeID');
@@ -456,14 +462,12 @@
 
                     var temp_val = $(this).val();
                     var temp_rate = $(this).parent().parent().find(".resourceRate").val();
-                    //console.log((temp_rate).attr("class"));
 
                     //if the the current sub-job type checkbox is checked...
                     if ($(this).prop('checked')) {
                         jobResourceIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs
-                        console.log("jobResourceID " + temp_val + " is selected with a rate of " + temp_rate);
+                        //console.log("jobResourceID " + temp_val + " is selected with a rate of " + temp_rate);
                     }
-
                 });
 
                 console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
@@ -474,6 +478,30 @@
                 console.log("jobResourceIDs to add:" + _.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs));
                 console.log("jobResourceIDs to delete:" + _.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs));
                     
+            });
+
+            //if the check box or resource rate is changed..
+            $("#jobEditForm .resourceRate, .resource-type_input").on("change", function () {
+            //$("#jobEditForm .resourceRate").on("change", function () {
+
+                //var currentRow = $(this).parent().parent();
+                //var currentResourceTypeInput = currentRow.find(".resourceTypeID");
+                //var currentResourceRate = currentRow.find(".resourceRate");
+
+                ////... and the input is checked...
+                //if (currentResourceTypeInput.prop('checked')) {
+                //    //$(this).css("color", "red");
+                //    currentResourceRate.css("color", "red");
+                //    console.log("checked.")
+                //}
+
+                //if (!currentResourceTypeInput.prop('checked')) {
+                //    //$(this).css("color", "black");
+                //    currentResourceRate.css("color", "black");
+                //    console.log("un-checked.")
+                //}
+
+                //console.log("resource-type_input pressed.")
             });
 
             //begin customer code dropdown change
@@ -1105,7 +1133,7 @@
                                         </div>
                                         <div class="col-md-3 resourceRate_div">
                                             <input type="text" class="form-control resource-type_input resourceRate"
-                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;">
+                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;" disabled>
                                         </div>
                                     </div>
                                 }
@@ -1315,49 +1343,12 @@
                                             @temp_description
                                         </div>
                                         <div class="col-md-3 resourceRate_div">
-                                            <input type="text" class="form-control resource-type_input resourceRate" maxlength="6" value="@temp_rate"
-                                                   style="padding:0px; margin:0px;">
+                                            <input type="text" class="form-control resource-type_input resourceRate" maxlength="6" value="@temp_rate" disabled style="padding:0px; margin:0px;">
                                         </div>
                                     </div>
                                 }
                         </div>
-                    </div>
-
-                    <!--<div class="col-md-7" style="">
-                    <div class="row">
-                        <div class="col-md-12" style="padding:0px;"><strong>Job Resources</strong></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2 tbl_header" style="padding:0px;">Type</div>
-                        <div class="col-md-8 tbl_header" style="padding:0px;">Resource</div>
-                        <div class="col-md-2 tbl_header" style="padding:0px;">Rate</div>
-                    </div>-->
-                    @*<div class="jobResourceTypes_div" style="padding:0px; margin:0px;">*@
-                    <!--<div class="" style="padding:0px; margin:0px;">-->
-                    @*<div class="" style="padding:0px; margin:0px;">*@
-                    <!--@foreach (var resourceType in Model.resourceTypes)
-                            {
-                                //BEGIN TEMPORARY LOOP VARIABLES
-                                byte temp_resourceTypeID = resourceType.resourceTypeID;
-                                string temp_resourceType = resourceType.resourceType;
-                                string temp_description = resourceType.description;
-                                //string temp_rate = resourceType.description;
-                                //END TEMPORARY LOOP VARIABLES
-
-                                <div class="row tbl_returned-row">
-                                    <div class="col-md-2 tbl_returned-cell">
-                                        @temp_resourceType
-                                    </div>
-                                    <div class="col-md-8 tbl_returned-cell">
-                                        @temp_description
-                                    </div>
-                                    <div class="col-md-2 tbl_returned-cell">
-                                        rate
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </div>-->
+                    </div>                   
                 </div>
                 <div class="row">
                     <div class="col-md-3 col-form-label"><strong>Job Correspondents</strong></div>
