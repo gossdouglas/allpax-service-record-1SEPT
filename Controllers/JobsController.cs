@@ -213,22 +213,6 @@ namespace allpax_service_record.Controllers
         //    return Json(Url.Action("Index", "Customers"));
         //}
 
-        //[HttpPost]
-        //public ActionResult AddJob(tbl_Jobs customerAdd)
-        //{
-        //    db.Database.ExecuteSqlCommand("Insert into tbl_Jobs Values({0},{1},{2})",
-        //       customerAdd.customerCode, customerAdd.customerName, customerAdd.address);
-
-        //    return Json(Url.Action("Index", "Customers"));
-        //}
-
-        //public ActionResult DeleteCustomer(tbl_Jobs customerDelete)
-        //{
-        //    db.Database.ExecuteSqlCommand("DELETE FROM tbl_Jobs WHERE customerCode=({0})", customerDelete.customerCode);
-
-        //    return Json(Url.Action("Index", "Customers"));
-        //}
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

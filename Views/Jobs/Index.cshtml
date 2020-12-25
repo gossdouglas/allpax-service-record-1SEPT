@@ -395,9 +395,11 @@
                     success: function (data) {
                         $(data).each(function (index, item) {
                             var temp_resourceTypeID = item.resourceTypeID;
+                            var temp_rate = item.rate;
 
                             //store the subJobTypeIDs in the database to an array
                             jobResourceIDs_RtndRecs.push(temp_resourceTypeID);
+                            //jobResourceIDs_RtndRecs.push([temp_resourceTypeID, temp_rate]);
                         });
 
                         console.log("jobResourceIDs_RtndRecs:" + jobResourceIDs_RtndRecs);
@@ -428,8 +430,10 @@
                 console.log("_____________________")
                 console.log("Arrays upon modal save press.")
                 var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
+                var jobResourceIDs_SlctdRecs = [];//array which holds which jobResourceIDs are selected in the modal
                 var modal = $(this).parent().parent();
                 var temp_subJobTypeInput = modal.find('.sub-job-type_input');
+                var temp_resourceTypeInput = modal.find('.resource-type_input.resourceTypeID');
                 
                 //var temp_customerCode = modal.find('.customer-code').val()
                 //var temp_customerContact = modal.find('.customer-name').val()
@@ -448,10 +452,27 @@
 
                 });
 
-                console.log("subJobTypeIDs_RtndRecs:" + subJobTypeIDs_RtndRecs);
+                $(temp_resourceTypeInput).each(function (index, item) {
+
+                    var temp_val = $(this).val();
+                    var temp_rate = $(this).parent().parent().find(".resourceRate").val();
+                    //console.log((temp_rate).attr("class"));
+
+                    //if the the current sub-job type checkbox is checked...
+                    if ($(this).prop('checked')) {
+                        jobResourceIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs
+                        console.log("jobResourceID " + temp_val + " is selected with a rate of " + temp_rate);
+                    }
+
+                });
+
                 console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
                 console.log("subJobTypeIDs to add:" + _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs));
                 console.log("subJobTypeIDs to delete:" + _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs));
+
+                console.log("jobResourceIDs_SlctdRecs:" + jobResourceIDs_SlctdRecs);
+                console.log("jobResourceIDs to add:" + _.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs));
+                console.log("jobResourceIDs to delete:" + _.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs));
                     
             });
 
