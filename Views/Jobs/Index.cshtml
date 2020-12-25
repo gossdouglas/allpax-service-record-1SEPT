@@ -146,7 +146,6 @@
 
             var subJobTypeIDs_RtndRecs = [];//array which holds which subJobTypeIDs are stored in the database
             //var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
-            //var subJobTypeIDs_UnSlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
 
             var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
             var jobRates_RtndRecs = [];//array which holds which job resource rates are stored in the database
@@ -716,7 +715,8 @@
             }
             //END VALIDATION BEFORE SAVING SECTION
 
-            $(".Btn_add").click(function () {
+            //$(".Btn_add").click(function () {
+            $(".newJobCrspdtBtn_add").click(function () {
 
                 //if (fn_rowFilled($(this))) {
 
@@ -771,17 +771,17 @@
 
                 //if (fn_rowFilled($(this))) {
 
-                var currentRow = $(this).parent().parent();
-                //var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
-                //currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html
+                //var currentRow = $(this).parent().parent();
+                ////var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
+                ////currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html
 
-                $(this).hide();
-                $(currentRow).find(".Btn_edit").removeAttr("hidden");
-                $(currentRow).find(".Btn_edit").show();
+                //$(this).hide();
+                //$(currentRow).find(".Btn_edit").removeAttr("hidden");
+                //$(currentRow).find(".Btn_edit").show();
 
-                currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
-                currentRow.find(".email_input").attr("disabled", "true");//lock the name field for edits
-                $(currentRow).find(".name_input, .email_input").css("color", "black");
+                //currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
+                //currentRow.find(".email_input").attr("disabled", "true");//lock the name field for edits
+                //$(currentRow).find(".name_input, .email_input").css("color", "black");
 
                 //}
                 //else {
