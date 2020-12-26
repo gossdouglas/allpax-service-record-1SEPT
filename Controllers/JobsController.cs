@@ -106,6 +106,34 @@ namespace allpax_service_record.Controllers
             return Json(Url.Action("Index", "Jobs"));
         }
 
+        public ActionResult UpdateJob(vm_Jobs jobUpdate)
+        {
+            //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1})",
+            //    teamMemberAdd.dailyReportID, teamMemberAdd.userName);
+
+            db.Database.ExecuteSqlCommand(
+                "UPDATE tbl_Jobs " +
+                "SET " +
+
+                "description = {1}, " +
+                "customerCode = {2}, " +
+                "customerContact = {3}, " +
+                "active = {4}, " +
+                "nrmlHoursStart = {5}, " +
+                "nrmlHoursEnd = {6}, " +
+                "dblTimeHours = {7}, " +
+                "nrmlHoursDaily = {8} " +
+
+                "WHERE jobID = {0}",
+                jobUpdate.jobID, jobUpdate.description, jobUpdate.customerCode, jobUpdate.customerContact,
+                jobUpdate.active, jobUpdate.nrmlHoursStart, jobUpdate.nrmlHoursEnd,
+                jobUpdate.dblTimeHours, jobUpdate.nrmlHoursDaily);
+
+            //return new EmptyResult();
+            return Json(Url.Action("Index", "Jobs"));
+            //return Json("complete");
+        }
+
         //GET SUB JOB TYPES
         public List<tbl_subJobTypes> subJobTypesByJobID(string jobID)
         {

@@ -151,6 +151,8 @@
             var jobRates_RtndRecs = [];//array which holds which job resource rates are stored in the database
             //var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
 
+            var job_CustomerInfoChngd = 0;
+
             fn_enableSelect2();
             //fn_loadRtndRecs();
 
@@ -433,12 +435,26 @@
 
                 console.log("_____________________")
                 console.log("Arrays upon modal save press.")
+
+                var modal = $(this).parent().parent();
+                var temp_jobID = modal.find('.job-id').val();
+                var temp_active = modal.find('.job-active').prop('checked');
+                var temp_customerCode = modal.find('.customer-code').val();
+                var temp_customerContact = modal.find('.customer-contact').val();
+                var temp_nrmlHoursStart = modal.find('.normal-hours-start').val();
+                var temp_nrmlHoursEnd = modal.find('.normal-hours-end').val();
+                var temp_nrmlHoursDaily = modal.find('.normal-hours-daily').val();
+                var temp_dblTimeHours = modal.find('.double-time-hours').prop('checked');
+                var temp_description = modal.find('.job-description').val();
+
                 var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
                 var jobResourceIDs_SlctdRecs = [];//array which holds which jobResourceIDs are selected in the modal
                 //var jobRates_SlctdRecs = [];//array which holds which jobRates are selected in the modal
                 var modal = $(this).parent().parent();
                 var temp_subJobTypeInput = modal.find('.sub-job-type_input');
                 var temp_resourceTypeInput = modal.find('.resource-type_input.resourceTypeID');
+
+                var totalOpsToDo = job_CustomerInfoChngd;//stores the total number of types of ops to carry out
                 
                 //var temp_customerCode = modal.find('.customer-code').val()
                 //var temp_customerContact = modal.find('.customer-name').val()
@@ -468,6 +484,43 @@
                         //console.log("jobResourceID " + temp_val + " is selected with a rate of " + temp_rate);
                     }
                 });
+
+                //post edited job info to the controller
+                if (job_CustomerInfoChngd == 1) {
+                    
+                    console.log("Job/Customer info edited.")
+
+                    var data = {
+                        jobID: temp_jobID,
+                        description: temp_description,
+                        customerCode: temp_customerCode,
+                        customerContact: temp_customerContact,
+                        active: temp_active,
+                        nrmlHoursStart: temp_nrmlHoursStart,
+                        nrmlHoursEnd: temp_nrmlHoursEnd,
+                        dblTimeHours: temp_dblTimeHours,
+                        nrmlHoursDaily: temp_nrmlHoursDaily
+                    };
+
+                    $.ajax({
+                        url: '/Jobs/UpdateJob',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        success: function (response) {
+                            totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                            //console.log("edit daily log info success. total operations to complete is now: " + totalOpsToDo);
+                            serverResponseSuccess = response;
+                            //console.log("response is: " + response)
+                            if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                                window.location.href = serverResponseSuccess;
+                            }
+                        }
+                    });
+
+                }
 
                 console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
                 console.log("subJobTypeIDs to add:" + _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs));
@@ -735,15 +788,50 @@
 
                 indexJobCrspdtEntries_Add = indexJobCrspdtEntries_Add + 1;
 
-                $(".jobCrspdtLine_template_row_hidden").removeAttr("hidden");
+                $("#jobNewForm .jobCrspdtLine_template_row_hidden").removeAttr("hidden");
                 //currentRow.prop("id", "jobCrspdtLine_" + indexJobCrspdtEntries_Add).appendTo("#jobCrspdtLine_template");
                 currentRow.prop("id", "jobCrspdtLine_" + indexJobCrspdtEntries_Add).appendTo("#jobCrspdtLine_template_new");
                 $("#jobCrspdtLine_" + indexJobCrspdtEntries_Add).prop("class", " row addRecord jobCrspdtLine");
                 $("#jobCrspdtLine_" + indexJobCrspdtEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
                 //$(".jobCrspdtLine_template_row_hidden").clone(true).prop("class", "row entryRow jobCrspdtLine_template_row_active").appendTo("#jobCrspdtLine_template");
-                $(".jobCrspdtLine_template_row_hidden").clone(true).prop("class", "row entryRow jobCrspdtLine_template_row_active").appendTo("#jobCrspdtLine_template_new");
-                $(".jobCrspdtLine_template_row_hidden").attr("hidden", "true");
+                $("#jobNewForm .jobCrspdtLine_template_row_hidden").clone(true).prop("class", "row entryRow jobCrspdtLine_template_row_active").appendTo("#jobCrspdtLine_template_new");
+                $("#jobNewForm .jobCrspdtLine_template_row_hidden").attr("hidden", "true");
+
+
+                //fn_enableSelect2();
+                //enable_disableSave();
+                //}
+            });
+
+            $("#jobEditForm .newJobCrspdtBtn_add").click(function () {
+
+                //if (fn_rowFilled($(this))) {
+
+                var currentRow = $(this).parent().parent();
+                //console.log(currentRow.attr("class"));
+
+                //var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
+                //currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html
+
+                currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
+                currentRow.find(".email_input").attr("disabled", "true");//lock the name field for edits
+                currentRow.find(".Btn_add").hide();//remove the add button, only needed for new work descriptions
+                currentRow.find(".Btn_clear").hide();//remove the clear button, only needed for new work descriptions
+                currentRow.find(".Btn_edit").removeAttr("hidden");//show the edit button, only needed for work description line entries
+                currentRow.find(".Btn_delete").removeAttr("hidden");//show the delete button, only needed for work description line entries
+
+                indexJobCrspdtEntries_Add = indexJobCrspdtEntries_Add + 1;
+
+                $("#jobEditForm .jobCrspdtLine_template_row_hidden").removeAttr("hidden");
+                //currentRow.prop("id", "jobCrspdtLine_" + indexJobCrspdtEntries_Add).appendTo("#jobCrspdtLine_template");
+                currentRow.prop("id", "jobCrspdtLine_" + indexJobCrspdtEntries_Add).appendTo("#jobCrspdtLine_template_edit");
+                $("#jobCrspdtLine_" + indexJobCrspdtEntries_Add).prop("class", " row addRecord jobCrspdtLine");
+                $("#jobCrspdtLine_" + indexJobCrspdtEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
+
+                //$(".jobCrspdtLine_template_row_hidden").clone(true).prop("class", "row entryRow jobCrspdtLine_template_row_active").appendTo("#jobCrspdtLine_template");
+                $("#jobEditForm .jobCrspdtLine_template_row_hidden").clone(true).prop("class", "row entryRow jobCrspdtLine_template_row_active").appendTo("#jobCrspdtLine_template_edit");
+                $("#jobEditForm .jobCrspdtLine_template_row_hidden").attr("hidden", "true");
 
 
                 //fn_enableSelect2();
@@ -904,6 +992,16 @@
                 //END BUILD THE JOB RESOURCES JSON OBJECT
             }
 
+            $(".job-customer-info").on("change keypress", function () {
+                job_CustomerInfoChngd = true;
+                //enable_disableSave();
+            });
+
+            //$(".customer-info").on("change keypress", function () {
+            //    customerInfoChngd = true;
+            //    //enable_disableSave();
+            //});
+
         });//end document read jquery statements
     </script>
 </head>
@@ -1004,11 +1102,11 @@
                 <div class="row">
                     <div class="col-md-3"><strong>Job ID</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control job-id" maxlength="10" disabled>
+                        <input type="text" class="form-control job-customer-info job-id" maxlength="10" disabled>
                     </div>
                     <div class="col-sm-auto">
                         <div class="form-check">
-                            <input class="form-check-input job-active" type="checkbox">
+                            <input class="form-check-input job-customer-info job-active" type="checkbox">
                             <label class="form-check-label" for="job-active">
                                 <strong>Job Active</strong>
                             </label>
@@ -1019,7 +1117,7 @@
                 <div class="row">
                     <div class="col-md-3"><strong>Customer Code</strong></div>
                     <div class="col-md-3">
-                        <select class="customer-code" id="customer-code-edit">
+                        <select class="job-customer-info customer-code" id="customer-code-edit">
                             @foreach (var customer in Model.customers)
                             {
                                 //BEGIN TEMPORARY LOOP VARIABLES
@@ -1035,41 +1133,41 @@
                     </div>
                     <div class="col-md-3"><strong>Customer Name</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control customer-name" id="customer-name-edit" maxlength="50" disabled value="">
+                        <input type="text" class="form-control job-customer-info customer-name" id="customer-name-edit" maxlength="50" disabled value="">
                     </div>
                 </div>
                 <hr class="sectionSeparator">
                 <div class="row">
                     <div class="col-md-3 col-form-label"><strong>Customer Location</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control customer-location" id="customer-location-edit"
+                        <input type="text" class="form-control job-customer-info customer-location" id="customer-location-edit"
                                maxlength="50" disabled value="">
                     </div>
                     <div class="col-md-3 col-form-label"><strong>Customer Contact</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control customer-contact" maxlength="50">
+                        <input type="text" class="form-control job-customer-info customer-contact" maxlength="50">
                     </div>
                 </div>
                 <hr class="sectionSeparator">
                 <div class="row">
                     <div class="col-md-3"><strong>Normal Hours Start</strong></div>
                     <div class="col-md-3">
-                        <input type="time" class="form-control normal-hours-start">
+                        <input type="time" class="form-control job-customer-info normal-hours-start">
                     </div>
                     <div class="col-md-3"><strong>Normal Hours End</strong></div>
                     <div class="col-md-3">
-                        <input type="time" class="form-control normal-hours-end">
+                        <input type="time" class="form-control job-customer-info normal-hours-end">
                     </div>
                 </div>
                 <hr class="sectionSeparator">
                 <div class="row">
                     <div class="col-md-3 col-form-label"><strong>Normal Hours Daily</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control normal-hours-daily" maxlength="2" value="8">
+                        <input type="text" class="form-control job-customer-info normal-hours-daily" maxlength="2" value="8">
                     </div>
                     <div class="col-md-4">
                         <div class="form-check">
-                            <input class="form-check-input double-time-hours" type="checkbox">
+                            <input class="form-check-input job-customer-info double-time-hours" type="checkbox">
                             <label class="form-check-label" for="double-time-hours">
                                 <strong>Double Time Hours</strong>
                             </label>
@@ -1080,7 +1178,7 @@
                 <div class="row">
                     <div class="col-md-3 col-form-label"><strong>Job Description</strong></div>
                     <div class="col-md-9">
-                        <textarea class="form-control job-description" rows="3" style="resize: none;"></textarea>
+                        <textarea class="form-control job-customer-info job-description" rows="3" style="resize: none;"></textarea>
                     </div>
                 </div>
                 <hr class="sectionSeparator">
