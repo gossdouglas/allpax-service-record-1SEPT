@@ -455,12 +455,16 @@
 
                 var subJobTypeIDsAddStatus = 0;
                 var subJobTypeIDsAddArr = [];
+
                 var subJobTypeIDsDeleteStatus = 0;
                 var subJobTypeIDsDeleteArr = 0;
+
                 var jobResourceIDsAddStatus = 0;
                 var jobResourceIDsAddArr = 0;
+
                 var jobResourceIDsDeleteStatus = 0;
                 var jobResourceIDsDeleteArr = 0;
+
                 var totalOpsToDo = 0;
                 
                 $(temp_subJobTypeInput).each(function (index, item) {
@@ -552,10 +556,10 @@
                     });
                 }
 
-                //post edited job info to the controller
+                //post added subJobTypeIDs to the controller
                 if (subJobTypeIDsAddStatus == 1) {
 
-                    console.log("subJobTypeID added.")
+                    //console.log("subJobTypeID added.")
                     var data = {
                         jobID: temp_jobID,
                         description: temp_description,

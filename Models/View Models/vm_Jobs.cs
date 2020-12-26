@@ -44,8 +44,12 @@ namespace allpax_service_record.Models.View_Models
         public List<tbl_resourceTypes> resourceTypes { get; set; }
         public List<vm_jobCrspdtInfo> jobCrspdtInfo { get; set; }
 
-        //an array that holds which sub-job types are added on a job creation
+        //an array that holds which sub-job types are added
+        //should likely be changed to a list of tbl_jobSubJobs objects in the future
         public string[] subJobTypes_Add { get; set; }
+        //an array that holds which sub-job types are deleted
+        //should likely be changed to a list of tbl_jobSubJobs objects in the future
+        public string[] subJobTypes_Delete { get; set; }
 
     }
 }
