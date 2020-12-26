@@ -108,8 +108,6 @@ namespace allpax_service_record.Controllers
 
         public ActionResult UpdateJob(vm_Jobs jobUpdate)
         {
-            //db.Database.ExecuteSqlCommand("Insert into tbl_dailyReport Values({0},{1})",
-            //    teamMemberAdd.dailyReportID, teamMemberAdd.userName);
 
             db.Database.ExecuteSqlCommand(
                 "UPDATE tbl_Jobs " +
@@ -129,9 +127,7 @@ namespace allpax_service_record.Controllers
                 jobUpdate.active, jobUpdate.nrmlHoursStart, jobUpdate.nrmlHoursEnd,
                 jobUpdate.dblTimeHours, jobUpdate.nrmlHoursDaily);
 
-            //return new EmptyResult();
             return Json(Url.Action("Index", "Jobs"));
-            //return Json("complete");
         }
 
         //GET SUB JOB TYPES

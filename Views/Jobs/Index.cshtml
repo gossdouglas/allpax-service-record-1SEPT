@@ -266,7 +266,7 @@
 
                 fn_disableSelect2();//disable select2 so the selected option can be reached
 
-                var modal = $(this)                
+                var modal = $(this)
                 var button = $(event.relatedTarget) // Button that triggered the modal
                 var temp_jobID = button.data('job-id') // Extract info from data-* attributes
                 var temp_customerCode = button.data('customer-code') // Extract info from data-* attributes
@@ -281,7 +281,7 @@
 
                 //var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
                 //var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
-               
+
                 //var temp_jobDescription;
                 //var temp_customerCode;
                 //var temp_customerContact;
@@ -292,9 +292,9 @@
                 //var temp_dblTimeHours;
                 //var temp_nrmlHoursDaily;
                 //var temp_id;
-              
+
                 modal.find('.modal-title').text('Job Edit Form');
-                
+
                 //begin get job info by job id
                 $.ajax({
                     url: '/DataService.asmx/GetJobInfoByJobID',
@@ -303,12 +303,12 @@
                     data: { jobID: temp_jobID },
                     success: function (data) {
 
-                        $(data).each(function (index, item) {    
-                            
-                            modal.find('.job-id').val(temp_jobID);                                                       
-                            modal.find('.normal-hours-start').val(item.nrmlHoursStart); 
+                        $(data).each(function (index, item) {
+
+                            modal.find('.job-id').val(temp_jobID);
+                            modal.find('.normal-hours-start').val(item.nrmlHoursStart);
                             modal.find('.normal-hours-end').val(item.nrmlHoursEnd);
-                            modal.find('.normal-hours-daily').val(item.nrmlHoursDaily); 
+                            modal.find('.normal-hours-daily').val(item.nrmlHoursDaily);
                             modal.find('.job-description').text(item.description);
 
                             if (item.active) {
@@ -335,7 +335,7 @@
                     if ($(this).val() == temp_customerCode) {
                         $(this).prop('selected', true);
                     }
-                    
+
                 });
 
                 //begin get customer info by job id
@@ -385,7 +385,7 @@
                                 $(this).prop('checked', false);//...un-check the input box for the HTML element
                             }
                         });
-                    }                    
+                    }
                 });
                 //end get sub-job types by job id
 
@@ -427,7 +427,7 @@
                     }
                 });
                 //end get job resources by job id
-               
+
                 fn_enableSelect2();//re-enable select2 after affecting work to allow the selected option to be reached
             })
 
@@ -450,16 +450,14 @@
                 var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
                 var jobResourceIDs_SlctdRecs = [];//array which holds which jobResourceIDs are selected in the modal
                 //var jobRates_SlctdRecs = [];//array which holds which jobRates are selected in the modal
-                var modal = $(this).parent().parent();
                 var temp_subJobTypeInput = modal.find('.sub-job-type_input');
                 var temp_resourceTypeInput = modal.find('.resource-type_input.resourceTypeID');
 
-                var totalOpsToDo = job_CustomerInfoChngd;//stores the total number of types of ops to carry out
-                
-                //var temp_customerCode = modal.find('.customer-code').val()
-                //var temp_customerContact = modal.find('.customer-name').val()
-                //var temp_jobDescription = modal.find('.job-description').val()
-                //var temp_id = modal.find('.id').val()
+                var subJobTypeIDsAddStatus = 0;
+                var subJobTypeIDsDeleteStatus = 0;
+                var jobResourceIDsAddStatus = 0;
+                var jobResourceIDsDeleteStatus = 0;
+                var totalOpsToDo = 0;
                 
                 $(temp_subJobTypeInput).each(function (index, item) {
 
@@ -467,29 +465,50 @@
 
                     //if the the current sub-job type checkbox is checked...
                     if ($(this).prop('checked')) {
-                        subJobTypeIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs
+                        subJobTypeIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs for later comparison to _RtndRecs
                         //console.log(temp_val + " is selected.")
                     }
-
                 });
-
+                              
                 $(temp_resourceTypeInput).each(function (index, item) {
 
                     var temp_val = $(this).val();
-                    var temp_rate = $(this).parent().parent().find(".resourceRate").val();
+                    //var temp_rate = $(this).parent().parent().find(".resourceRate").val();
 
-                    //if the the current sub-job type checkbox is checked...
+                    //if the the current resource type checkbox is checked...
                     if ($(this).prop('checked')) {
-                        jobResourceIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs
+                        jobResourceIDs_SlctdRecs.push(temp_val);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
                         //console.log("jobResourceID " + temp_val + " is selected with a rate of " + temp_rate);
                     }
                 });
 
+                //if there are subJobTypeIDs to add, subJobTypeIDsAddStatus = 1
+                if (_.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs).length > 0) {
+                    subJobTypeIDsAddStatus = 1;
+                }
+
+                //if there are subJobTypeIDs to delete, subJobTypeIDsDeleteStatus = 1
+                if (_.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs).length > 0) {
+                    subJobTypeIDsDeleteStatus = 1;
+                }
+
+                //if there are jobResourceIDs to add, jobResourceIDsAddStatus = 1
+                if (_.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs).length > 0) {
+                    jobResourceIDsAddStatus = 1;
+                }
+               
+                //if there are jobResourceIDs to delete, jobResourceIDsDeleteStatus = 1
+                if (_.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs).length > 0) {
+                    jobResourceIDsDeleteStatus = 1;
+                }
+
+                //stores the total number operations to carry out.  this is used to track when to redirect to a given href.
+                totalOpsToDo = job_CustomerInfoChngd + subJobTypeIDsAddStatus + subJobTypeIDsDeleteStatus + jobResourceIDsAddStatus + jobResourceIDsDeleteStatus;
+
                 //post edited job info to the controller
                 if (job_CustomerInfoChngd == 1) {
-                    
-                    console.log("Job/Customer info edited.")
 
+                    console.log("Job/Customer info edited.")
                     var data = {
                         jobID: temp_jobID,
                         description: temp_description,
@@ -511,7 +530,7 @@
                         traditional: true,
                         success: function (response) {
                             totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                            //console.log("edit daily log info success. total operations to complete is now: " + totalOpsToDo);
+                            //console.log("edit success. total operations to complete is now: " + totalOpsToDo);
                             serverResponseSuccess = response;
                             //console.log("response is: " + response)
                             if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
@@ -519,22 +538,60 @@
                             }
                         }
                     });
+                }
 
+                //post edited job info to the controller
+                if (subJobTypeIDsAddStatus == 1) {
+
+                    console.log("subJobTypeID added.")
+                    var data = {
+                        jobID: temp_jobID,
+                        description: temp_description,
+                        customerCode: temp_customerCode,
+                        customerContact: temp_customerContact,
+                        active: temp_active,
+                        nrmlHoursStart: temp_nrmlHoursStart,
+                        nrmlHoursEnd: temp_nrmlHoursEnd,
+                        dblTimeHours: temp_dblTimeHours,
+                        nrmlHoursDaily: temp_nrmlHoursDaily
+                    };
+
+                    //$.ajax({
+                    //    url: '/Jobs/UpdateJob',
+                    //    method: 'post',
+                    //    contentType: 'application/json',
+                    //    dataType: 'json',
+                    //    data: JSON.stringify(data),
+                    //    traditional: true,
+                    //    success: function (response) {
+                    //        totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                    //        //console.log("edit success. total operations to complete is now: " + totalOpsToDo);
+                    //        serverResponseSuccess = response;
+                    //        //console.log("response is: " + response)
+                    //        if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                    //            window.location.href = serverResponseSuccess;
+                    //        }
+                    //    }
+                    //});
                 }
 
                 console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
+                console.log("subJobTypeIDsAddStatus:" + subJobTypeIDsAddStatus);
                 console.log("subJobTypeIDs to add:" + _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs));
+                console.log("subJobTypeIDsDeleteStatus:" + subJobTypeIDsDeleteStatus);
                 console.log("subJobTypeIDs to delete:" + _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs));
-
+                console.log("---------------------");
                 console.log("jobResourceIDs_SlctdRecs:" + jobResourceIDs_SlctdRecs);
+                console.log("jobResourceIDsAddStatus:" + jobResourceIDsAddStatus);
                 console.log("jobResourceIDs to add:" + _.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs));
+                console.log("jobResourceIDsDeleteStatus:" + jobResourceIDsDeleteStatus);
                 console.log("jobResourceIDs to delete:" + _.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs));
-                    
+
             });
 
             //if the check box or resource rate is changed..
             $("#jobEditForm .resourceRate, .resource-type_input").on("change", function () {
-            //$("#jobEditForm .resourceRate").on("change", function () {
+                //$("#jobEditForm .resourceRate").on("change", function () {
 
                 //var currentRow = $(this).parent().parent();
                 //var currentResourceTypeInput = currentRow.find(".resourceTypeID");
@@ -600,28 +657,28 @@
                 //    $("#customer-location-edit").val('');
                 //}
                 //else {
-                    $.ajax({
-                        url: '/DataService.asmx/GetAllCustomers',
-                        method: 'post',
-                        dataType: 'json',
-                        success: function (data) {
+                $.ajax({
+                    url: '/DataService.asmx/GetAllCustomers',
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
 
-                            $(data).each(function (index, item) {
+                        $(data).each(function (index, item) {
 
-                                if (item.customerCode == currCustomerCode) {
-                                    //console.log("Selected customerCode: " + item.customerCode)
-                                    //console.log("Selected customerName: " + item.customerName)
-                                    //console.log("Selected address: " + item.address)
-                                    $("#customer-name-edit").val(item.customerName);
-                                    $("#customer-location-edit").val(item.address);
-                                }
-                            });
-                        }
-                    });
+                            if (item.customerCode == currCustomerCode) {
+                                //console.log("Selected customerCode: " + item.customerCode)
+                                //console.log("Selected customerName: " + item.customerName)
+                                //console.log("Selected address: " + item.address)
+                                $("#customer-name-edit").val(item.customerName);
+                                $("#customer-location-edit").val(item.address);
+                            }
+                        });
+                    }
+                });
                 //}
             });
             //end customer code dropdown change
-           
+
             $(".jobEditForm.btn_delete").click(function () {
 
                 //var modal = $(this).parent().parent().parent();
@@ -838,7 +895,7 @@
                 //enable_disableSave();
                 //}
             });
-            
+
             //$(".Btn_edit").click(function () {
             $(".lineJobCrspdtBtn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
