@@ -454,9 +454,13 @@
                 var temp_resourceTypeInput = modal.find('.resource-type_input.resourceTypeID');
 
                 var subJobTypeIDsAddStatus = 0;
+                var subJobTypeIDsAddArr = [];
                 var subJobTypeIDsDeleteStatus = 0;
+                var subJobTypeIDsDeleteArr = 0;
                 var jobResourceIDsAddStatus = 0;
+                var jobResourceIDsAddArr = 0;
                 var jobResourceIDsDeleteStatus = 0;
+                var jobResourceIDsDeleteArr = 0;
                 var totalOpsToDo = 0;
                 
                 $(temp_subJobTypeInput).each(function (index, item) {
@@ -483,22 +487,30 @@
                 });
 
                 //if there are subJobTypeIDs to add, subJobTypeIDsAddStatus = 1
-                if (_.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs).length > 0) {
+                subJobTypeIDsAddArr = _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs);
+                //if (_.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs).length > 0) {
+                if (subJobTypeIDsAddArr.length > 0) {
                     subJobTypeIDsAddStatus = 1;
                 }
 
                 //if there are subJobTypeIDs to delete, subJobTypeIDsDeleteStatus = 1
-                if (_.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs).length > 0) {
+                subJobTypeIDsDeleteArr = _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs);
+                //if (_.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs).length > 0) {
+                if (subJobTypeIDsDeleteArr.length > 0) {
                     subJobTypeIDsDeleteStatus = 1;
                 }
 
                 //if there are jobResourceIDs to add, jobResourceIDsAddStatus = 1
-                if (_.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs).length > 0) {
+                jobResourceIDsAddArr = _.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs);
+                //if (_.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs).length > 0) {
+                if (jobResourceIDsAddArr.length > 0) {
                     jobResourceIDsAddStatus = 1;
                 }
                
                 //if there are jobResourceIDs to delete, jobResourceIDsDeleteStatus = 1
-                if (_.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs).length > 0) {
+                jobResourceIDsDeleteArr = _.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs);
+                //if (_.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs).length > 0) {
+                if (jobResourceIDsDeleteArr.length > 0) {
                     jobResourceIDsDeleteStatus = 1;
                 }
 
@@ -577,15 +589,19 @@
 
                 console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
                 console.log("subJobTypeIDsAddStatus:" + subJobTypeIDsAddStatus);
-                console.log("subJobTypeIDs to add:" + _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs));
+                //console.log("subJobTypeIDs to add:" + _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs));
+                console.log("subJobTypeIDs to add:" + subJobTypeIDsAddArr);
                 console.log("subJobTypeIDsDeleteStatus:" + subJobTypeIDsDeleteStatus);
-                console.log("subJobTypeIDs to delete:" + _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs));
+                //console.log("subJobTypeIDs to delete:" + _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs));
+                console.log("subJobTypeIDs to delete:" + subJobTypeIDsDeleteArr);
                 console.log("---------------------");
                 console.log("jobResourceIDs_SlctdRecs:" + jobResourceIDs_SlctdRecs);
                 console.log("jobResourceIDsAddStatus:" + jobResourceIDsAddStatus);
-                console.log("jobResourceIDs to add:" + _.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs));
+                //console.log("jobResourceIDs to add:" + _.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs));
+                console.log("jobResourceIDs to add:" + jobResourceIDsAddArr);
                 console.log("jobResourceIDsDeleteStatus:" + jobResourceIDsDeleteStatus);
-                console.log("jobResourceIDs to delete:" + _.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs));
+                //console.log("jobResourceIDs to delete:" + _.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs));
+                console.log("jobResourceIDs to delete:" + jobResourceIDsDeleteArr);
 
             });
 
