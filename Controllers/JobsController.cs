@@ -77,7 +77,7 @@ namespace allpax_service_record.Controllers
                jobAdd.location, jobAdd.nrmlHoursStart, jobAdd.nrmlHoursEnd, jobAdd.dblTimeHours, jobAdd.nrmlHoursDaily);
 
             //add sub-jobs to this job
-            foreach (string item in jobAdd.subJobTypes_Add)
+            foreach (string item in jobAdd.jobSubJobsAdd)
             {
                 db.Database.ExecuteSqlCommand("Insert into tbl_jobSubJobs Values({0},{1})",
                 jobAdd.jobID, item);
@@ -126,6 +126,64 @@ namespace allpax_service_record.Controllers
                 jobUpdate.jobID, jobUpdate.description, jobUpdate.customerCode, jobUpdate.customerContact,
                 jobUpdate.active, jobUpdate.nrmlHoursStart, jobUpdate.nrmlHoursEnd,
                 jobUpdate.dblTimeHours, jobUpdate.nrmlHoursDaily);
+
+            if (jobUpdate.jobSubJobsAdd != null)
+            {
+                foreach (string subJobID in jobUpdate.jobSubJobsAdd)
+                {
+                    //System.Diagnostics.Debug.WriteLine(subJobID);
+                    db.Database.ExecuteSqlCommand(
+
+                    "INSERT INTO tbl_jobSubJobs(jobID, subJobID) VALUES({0}, {01}) ",
+
+                    jobUpdate.jobID, subJobID);
+                }
+            }
+
+            if (jobUpdate.jobSubJobsDelete != null)
+            {
+                foreach (string subJobID in jobUpdate.jobSubJobsDelete)
+                {
+                    db.Database.ExecuteSqlCommand("DELETE FROM tbl_jobSubJobs " +
+                        "WHERE jobID= {0} AND subJobID = {1}", jobUpdate.jobID, subJobID);
+                }
+            }
+
+            if (jobUpdate.resourceTypesAdd != null)
+            {
+                //foreach (string resourceTypeID in jobUpdate.resourceTypesAdd)
+                //{
+                //    db.Database.ExecuteSqlCommand(
+
+                //    "INSERT INTO tbl_jobResourceTypes(jobID, resourceTypeID) VALUES({0}, {01}) ",
+
+                //    jobUpdate.jobID, resourceTypeID);
+                //}
+
+                foreach (tbl_jobResourceTypes item in jobUpdate.resourceTypesAdd)
+                {
+                    db.Database.ExecuteSqlCommand(
+
+                    "INSERT INTO tbl_jobResourceTypes VALUES({0}, {1}, {2}) ",
+
+                    item.jobID, item.resourceTypeID, item.rate);
+                }
+            }
+
+            if (jobUpdate.resourceTypesDelete != null)
+            {
+                //foreach (string resourceTypeID in jobUpdate.resourceTypesDelete)
+                //{
+                //    db.Database.ExecuteSqlCommand("DELETE FROM tbl_jobResourceTypes " +
+                //        "WHERE jobID= {0} AND resourceTypeID = {1}", jobUpdate.jobID, resourceTypeID);
+                //}
+
+                foreach (tbl_jobResourceTypes item in jobUpdate.resourceTypesDelete)
+                {
+                    db.Database.ExecuteSqlCommand("DELETE FROM tbl_jobResourceTypes " +
+                    "WHERE jobID= {0} AND resourceTypeID = {1}", jobUpdate.jobID, item.resourceTypeID);
+                }
+            }
 
             return Json(Url.Action("Index", "Jobs"));
         }
