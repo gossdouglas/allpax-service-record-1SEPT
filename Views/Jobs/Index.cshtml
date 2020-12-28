@@ -147,6 +147,7 @@
             var subJobTypeIDs_RtndRecs = [];//array which holds which subJobTypeIDs are stored in the database
             //var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
 
+            var jobResource_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
             var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
             var jobRates_RtndRecs = [];//array which holds which job resource rates are stored in the database
             //var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
@@ -399,27 +400,43 @@
                     success: function (data) {
                         $(data).each(function (index, item) {
                             var temp_resourceTypeID = item.resourceTypeID;
-                            var temp_rate = item.rate;
+                            var temp_rate = item.rate.toFixed(2);
 
-                            //store the subJobTypeIDs in the database to an array
-                            //jobResourceIDs_RtndRecs.push(temp_resourceTypeID);
+                            //store the job resource ids in the database to an array
                             jobResourceIDs_RtndRecs.push(temp_resourceTypeID);
-                            //jobRates_RtndRecs.push(temp_rate);
-                            //jobResourceIDs_RtndRecs.push([temp_resourceTypeID, temp_rate]);
+                            //store the resource rates in the database to an array
+                            jobRates_RtndRecs.push(temp_rate);
                         });
 
+                        //dump jobResourceIDs_RtndRecs array into index 0 of jobResource_RtndRecs
+                        jobResource_RtndRecs[0] = jobResourceIDs_RtndRecs;
+                        //dump jobRates_RtndRecs array into index 1 of jobResource_RtndRecs
+                        jobResource_RtndRecs[1] = jobRates_RtndRecs;
+
+                        console.log("jobResource_RtndRecs:" + jobResource_RtndRecs);
+                        console.log("jobResource_RtndRecs[0]:" + jobResource_RtndRecs[0]);
                         console.log("jobResourceIDs_RtndRecs:" + jobResourceIDs_RtndRecs);
-                        //console.log("jobRates_RtndRecs:" + jobRates_RtndRecs);
+                        console.log("jobResource_RtndRecs[1]:" + jobResource_RtndRecs[1]);                                              
+                        console.log("jobRates_RtndRecs:" + jobRates_RtndRecs);
 
                         //get the value of each sub-job type checkbox
                         $(temp_resourceTypeInput).each(function (index, item) {
 
-                            temp_resourceRateInput = $(this).parent().parent().find(".resourceRate")
+                            temp_resourceRateInput = $(this).parent().parent().find(".resourceRate");
+
                             //if the value of the current resource type checkbox is part of the jobResourceIDs_RtndRecs array...
-                            if ($.inArray($(this).val(), jobResourceIDs_RtndRecs) !== -1) {
-                                //console.log($(this).val() + " was found in the returned record array.");
+                            //if ($.inArray($(this).val(), jobResourceIDs_RtndRecs) !== -1) {
+                            if ($.inArray($(this).val(), jobResource_RtndRecs[0]) !== -1) {
+
+                                var temp_index = jobResourceIDs_RtndRecs.indexOf($(this).val());
+                               
                                 $(this).prop('checked', true);//...check the input box for the HTML element
-                                temp_resourceRateInput.val(temp_rate);
+                                temp_resourceRateInput.val(jobRates_RtndRecs[temp_index]);
+                                temp_resourceRateInput.removeAttr('disabled');
+
+                                //console.log("Index of jobResourceIDs_RtndRecs " + temp_index + " has a value of " + jobResourceIDs_RtndRecs[temp_index]);
+                                //console.log("Index of jobRates_RtndRecs " + temp_index + " has a value of " + jobRates_RtndRecs[temp_index]);
+                                //console.log($(this).val() + " was found in the returned record array.");
                             }
 
                             else {
@@ -543,72 +560,65 @@
                 }
 
                 console.log("jobResourcesSlctdArr:" + jobResourcesSlctdArr);
-
                 console.log("jobResourceIDs to add:" + jobResourceIDsAddArr);                
                 console.log("jobResourcesJson_Add:");
                 console.log(jobResourcesJson_Add);
-
                 console.log("jobResourceIDs to delete:" + jobResourceIDsDeleteArr);
                 console.log("jobResourcesJson_Delete:");
                 console.log(jobResourcesJson_Delete);
 
-                //stores the total number operations to carry out.  this is used to track when to redirect to a given href.
-                //totalOpsToDo = job_CustomerInfoChngd + subJobTypeIDsAddStatus + subJobTypeIDsDeleteStatus + jobResourceIDsAddStatus + jobResourceIDsDeleteStatus;
-
                 //post edited job info to the controller
                 //if (job_CustomerInfoChngd == 1) {
 
-                //console.log("Job/Customer info edited.")
-                var data = {
-                    jobID: temp_jobID,
-                    description: temp_description,
-                    customerCode: temp_customerCode,
-                    customerContact: temp_customerContact,
-                    active: temp_active,
-                    nrmlHoursStart: temp_nrmlHoursStart,
-                    nrmlHoursEnd: temp_nrmlHoursEnd,
-                    dblTimeHours: temp_dblTimeHours,
-                    nrmlHoursDaily: temp_nrmlHoursDaily,
-                    description: temp_description,
-                    jobSubJobsAdd: subJobTypeIDsAddArr,
-                    jobSubJobsDelete: subJobTypeIDsDeleteArr,
-                    //resourceTypesAdd: jobResourceIDsAddArr,
-                    //resourceTypesDelete: jobResourceIDsDeleteArr
-                    resourceTypesAdd: jobResourcesJson_Add,
-                    resourceTypesDelete: jobResourcesJson_Delete
-                };
+                    //console.log("Job/Customer info edited.")
+                    var data = {
+                        jobID: temp_jobID,
+                        description: temp_description,
+                        customerCode: temp_customerCode,
+                        customerContact: temp_customerContact,
+                        active: temp_active,
+                        nrmlHoursStart: temp_nrmlHoursStart,
+                        nrmlHoursEnd: temp_nrmlHoursEnd,
+                        dblTimeHours: temp_dblTimeHours,
+                        nrmlHoursDaily: temp_nrmlHoursDaily,
+                        description: temp_description,
+                        jobSubJobsAdd: subJobTypeIDsAddArr,
+                        jobSubJobsDelete: subJobTypeIDsDeleteArr,
+                        resourceTypesAdd: jobResourcesJson_Add,
+                        resourceTypesDelete: jobResourcesJson_Delete
+                    };
 
-                $.ajax({
-                    url: '/Jobs/UpdateJob',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function (response) {
-                        //totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                        //console.log("edit success. total operations to complete is now: " + totalOpsToDo);
-                        serverResponseSuccess = response;
-                        //console.log("response is: " + response)
-                        //if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                    $.ajax({
+                        url: '/Jobs/UpdateJob',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        success: function (response) {
+                            //totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                            //console.log("edit success. total operations to complete is now: " + totalOpsToDo);
+                            serverResponseSuccess = response;
+                            //console.log("response is: " + response)
+                            //if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
                             window.location.href = serverResponseSuccess;
-                        //}
-                    }
-                });
+                            //}
+                        }
+                    });
+                    //}
+
+                    //console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
+                    //console.log("subJobTypeIDsAddStatus:" + subJobTypeIDsAddStatus);
+                    //console.log("subJobTypeIDs to add:" + subJobTypeIDsAddArr);
+                    //console.log("subJobTypeIDsDeleteStatus:" + subJobTypeIDsDeleteStatus);
+                    //console.log("subJobTypeIDs to delete:" + subJobTypeIDsDeleteArr);
+                    //console.log("---------------------");
+                    //console.log("jobResourceIDs_SlctdRecs:" + jobResourceIDs_SlctdRecs);
+                    //console.log("jobResourceIDsAddStatus:" + jobResourceIDsAddStatus);
+                    //console.log("jobResourceIDs to add:" + jobResourceIDsAddArr);
+                    //console.log("jobResourceIDsDeleteStatus:" + jobResourceIDsDeleteStatus);
+                    //console.log("jobResourceIDs to delete:" + jobResourceIDsDeleteArr);
                 //}
-
-                //console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
-                //console.log("subJobTypeIDsAddStatus:" + subJobTypeIDsAddStatus);
-                //console.log("subJobTypeIDs to add:" + subJobTypeIDsAddArr);
-                //console.log("subJobTypeIDsDeleteStatus:" + subJobTypeIDsDeleteStatus);
-                //console.log("subJobTypeIDs to delete:" + subJobTypeIDsDeleteArr);
-                //console.log("---------------------");
-                //console.log("jobResourceIDs_SlctdRecs:" + jobResourceIDs_SlctdRecs);
-                //console.log("jobResourceIDsAddStatus:" + jobResourceIDsAddStatus);
-                //console.log("jobResourceIDs to add:" + jobResourceIDsAddArr);
-                //console.log("jobResourceIDsDeleteStatus:" + jobResourceIDsDeleteStatus);
-                //console.log("jobResourceIDs to delete:" + jobResourceIDsDeleteArr);
-
             });
 
             //if the check box or resource rate is changed..
@@ -1307,7 +1317,7 @@
                                         </div>
                                         <div class="col-md-3 resourceRate_div">
                                             <input type="text" class="form-control resource-type_input resourceRate"
-                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;">
+                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;" disabled>
                                         </div>
                                     </div>
                                 }
