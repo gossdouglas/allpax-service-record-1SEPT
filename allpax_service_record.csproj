@@ -2572,6 +2572,7 @@
     <Content Include="Views\resourceTypes\Index.cshtml" />
     <Content Include="Views\resourceTypes\Index-orig.cshtml" />
     <Content Include="Views\Jobs\Index-job_crspndts_not_wkng.cshtml" />
+    <Content Include="Views\Jobs\Index-update not working.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
