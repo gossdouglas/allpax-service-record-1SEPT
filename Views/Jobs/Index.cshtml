@@ -421,18 +421,21 @@
 
                         //get the value of each sub-job type checkbox
                         $(temp_resourceTypeInput).each(function (index, item) {
-
-                            temp_resourceRateInput = $(this).parent().parent().find(".resourceRate");
+                            var currentRow = $(this).parent().parent();
+                            //temp_resourceRateInput = $(this).parent().parent().find(".resourceRate");
+                            temp_resourceRateInput = currentRow.find(".resourceRate");
 
                             //if the value of the current resource type checkbox is part of the jobResourceIDs_RtndRecs array...
                             //if ($.inArray($(this).val(), jobResourceIDs_RtndRecs) !== -1) {
                             if ($.inArray($(this).val(), jobResource_RtndRecs[0]) !== -1) {
 
                                 var temp_index = jobResourceIDs_RtndRecs.indexOf($(this).val());
-                               
+
+                                currentRow.prop("class", " row returnedRecords jobResource_Line");
                                 $(this).prop('checked', true);//...check the input box for the HTML element
                                 temp_resourceRateInput.val(jobRates_RtndRecs[temp_index]);
                                 temp_resourceRateInput.removeAttr('disabled');
+                                temp_resourceRateInput.css("color", "black");
 
                                 //console.log("Index of jobResourceIDs_RtndRecs " + temp_index + " has a value of " + jobResourceIDs_RtndRecs[temp_index]);
                                 //console.log("Index of jobRates_RtndRecs " + temp_index + " has a value of " + jobRates_RtndRecs[temp_index]);
@@ -441,7 +444,10 @@
 
                             else {
                                 //console.log($(this).val() + " was not found in the returned record array.");
+                                currentRow.prop("class", " row jobResource_Line");
                                 $(this).prop('checked', false);//...un-check the input box for the HTML element
+                                temp_resourceRateInput.attr("disabled", "true");
+                                temp_resourceRateInput.css("color", "black");
                             }
                         });
                     }
@@ -1061,10 +1067,47 @@
                 //enable_disableSave();
             });
 
-            //$(".customer-info").on("change keypress", function () {
-            //    customerInfoChngd = true;
-            //    //enable_disableSave();
-            //});
+            //when the resource type is checked or un-checked...
+            $(".resourceTypeID").on("change", function () {
+                var currentRow = $(this).parent().parent();
+                temp_LineClass = $(currentRow).prop("class");
+                temp_resourceRateInput = currentRow.find(".resourceRate");
+
+                //console.log("currentRow:" + currentRow.attr("class"));
+
+                if ($(this).prop('checked')) {
+                    currentRow.find(".resourceRate").removeAttr('disabled');//un-lock the field for edits;
+                    //console.log("checked.")
+                    if (temp_LineClass.includes("returnedRecords edited")) {
+                        temp_resourceRateInput.css("color", "red");
+                    }
+                }
+
+                else {
+                    currentRow.find(".resourceRate").attr("disabled", "true");//lock the field for edits;
+                    temp_resourceRateInput.css("color", "black"); 
+                    //console.log("un-checked.")
+                }
+            });
+
+            $("#jobEditForm .resourceRate").on("change", function () {
+                var currentRow = $(this).parent().parent();
+                temp_LineClass = $(currentRow).prop("class");
+                temp_resourceRate = $(this);
+
+                console.log("temp_LineClass:" + temp_LineClass);
+                console.log("temp_resourceRate:" + temp_resourceRate.prop('checked'));
+
+                if (temp_LineClass.includes("returnedRecords")) {
+
+                    currentRow.prop("class", " row returnedRecords edited jobResource_Line");
+                    temp_resourceRate.css("color", "red");
+                }
+
+                else {
+                    temp_resourceRate.css("color", "black");    
+                }
+            });
 
         });//end document read jquery statements
     </script>
@@ -1292,7 +1335,7 @@
                                         </div>
                                         <div class="col-md-3 resourceRate_div">
                                             <input type="text" class="form-control resource-type_input resourceRate"
-                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;">
+                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;" disabled>
                                         </div>
                                     </div>
                                 }
@@ -1502,7 +1545,7 @@
                                             @temp_description
                                         </div>
                                         <div class="col-md-3 resourceRate_div">
-                                            <input type="text" class="form-control resource-type_input resourceRate" maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;">
+                                            <input type="text" class="form-control resource-type_input resourceRate" maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;" disabled>
                                         </div>
                                     </div>
                                 }
