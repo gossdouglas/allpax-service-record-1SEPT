@@ -413,11 +413,10 @@
                         //dump jobRates_RtndRecs array into index 1 of jobResource_RtndRecs
                         jobResource_RtndRecs[1] = jobRates_RtndRecs;
 
-                        console.log("jobResource_RtndRecs:" + jobResource_RtndRecs);
                         console.log("jobResource_RtndRecs[0]:" + jobResource_RtndRecs[0]);
-                        console.log("jobResourceIDs_RtndRecs:" + jobResourceIDs_RtndRecs);
+                        //console.log("jobResourceIDs_RtndRecs:" + jobResourceIDs_RtndRecs);
                         console.log("jobResource_RtndRecs[1]:" + jobResource_RtndRecs[1]);
-                        console.log("jobRates_RtndRecs:" + jobRates_RtndRecs);
+                        //console.log("jobRates_RtndRecs:" + jobRates_RtndRecs);
 
                         //get the value of each sub-job type checkbox
                         $(temp_resourceTypeInput).each(function (index, item) {
@@ -521,12 +520,9 @@
 
                     //if the the current resource type checkbox is checked...
                     if ($(this).prop('checked')) {
+
                         jobResourceIDs_SlctdRecs.push(temp_val);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
                         jobRates_SlctdRecs.push(temp_rate);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
-
-                        //jobResourcesSlctdArr.push([temp_val, temp_rate]);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
-                        //jobResourcesSlctdArr[0].push(temp_val);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
-                        //jobResourcesSlctdArr[1].push(temp_rate);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
 
                         //console.log("jobResourceID " + temp_val + " is selected with a rate of " + temp_rate);
 
@@ -542,41 +538,25 @@
                 console.log("jobResourcesSlctdArr[0]:" + jobResourcesSlctdArr[0]);
                 console.log("jobResourcesSlctdArr[1]:" + jobResourcesSlctdArr[1]);
 
-                $(temp_jobResource_Line).each(function (index, item) {
+                //$(temp_jobResource_Line).each(function (index, item) {
 
-                    var temp_val = $(this).val();
+                //    var temp_val = $(this).val();
 
-                    //if the the current sub-job type checkbox is checked...
-                    if ($(this).prop('checked')) {
-                        subJobTypeIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs for later comparison to _RtndRecs
-                        //console.log(temp_val + " is selected.")
-                    }
-                });
+                //    //if the the current sub-job type checkbox is checked...
+                //    if ($(this).prop('checked')) {
+                //        subJobTypeIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs for later comparison to _RtndRecs
+                //        //console.log(temp_val + " is selected.")
+                //    }
+                //});
 
                 subJobTypeIDsAddArr = _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs);
                 subJobTypeIDsDeleteArr = _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs);
                 jobResourceIDsAddArr = _.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs);
                 jobResourceIDsDeleteArr = _.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs);
 
-                //console.log("jobResourcesSlctdArr[i][0]:" + jobResourcesSlctdArr[0])
-                //console.log("jobResourcesSlctdArr.length:" + jobResourcesSlctdArr.length)
-                console.log("jobResourcesSlctdArr[0].length:" + jobResourcesSlctdArr[0].length)
-
-                //for (var i = 0; i < jobResourcesSlctdArr.length; i++) {
-                //for (var i = 0; i < jobResourceIDsAddArr.length; i++) {
                 for (var i = 0, j = 0; i < jobResourcesSlctdArr[0].length; i++) {
-                    //var j = 0;
 
                     if ($.inArray(jobResourcesSlctdArr[0][i], jobResourceIDsAddArr) !== -1) {
-                    //if ($.inArray(jobResourcesSlctdArr[i][0], jobResourceIDsAddArr) !== -1) {
-                    //if ($.inArray(jobResourceIDsAddArr, jobResourcesSlctdArr[i][0] ) !== -1) {
-                    //if ($.inArray(jobResourceIDsAddArr, jobResourcesSlctdArr[0]) !== -1) {
-
-                        //jobResourcesJson_Add[i] = {
-                        //    jobID: temp_jobID,
-                        //    resourceTypeID: jobResourcesSlctdArr[i][0],
-                        //    rate: jobResourcesSlctdArr[i][1],
-                        //};
 
                         jobResourcesJson_Add[j] = {
                             jobID: temp_jobID,
@@ -590,8 +570,6 @@
                         //console.log("Add id of:" + jobResourcesSlctdArr[0][i]);
                         //console.log("Add rate of:" + jobResourcesSlctdArr[1][i]);
                     }
-
-                    //console.log(jobResourcesSlctdArr[0][i]);
                 }
 
                 for (var i = 0; i < jobResourceIDsDeleteArr.length; i++) {
@@ -621,31 +599,30 @@
                     resourceTypesDelete: jobResourcesJson_Delete
                 };
 
-                //$.ajax({
-                //    url: '/Jobs/UpdateJob',
-                //    method: 'post',
-                //    contentType: 'application/json',
-                //    dataType: 'json',
-                //    data: JSON.stringify(data),
-                //    traditional: true,
-                //    success: function (response) {
-                //        //totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                //        //console.log("edit success. total operations to complete is now: " + totalOpsToDo);
-                //        serverResponseSuccess = response;
-                //        //console.log("response is: " + response)
-                //        //if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
-                //        window.location.href = serverResponseSuccess;
-                //        //}
-                //    }
-                //});
+                $.ajax({
+                    url: '/Jobs/UpdateJob',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        //totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                        //console.log("edit success. total operations to complete is now: " + totalOpsToDo);
+                        serverResponseSuccess = response;
+                        //console.log("response is: " + response)
+                        //if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                        window.location.href = serverResponseSuccess;
+                        //}
+                    }
+                });
 
                 //}
 
-                //console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
-                //console.log("subJobTypeIDs to add:" + subJobTypeIDsAddArr);
-                //console.log("subJobTypeIDs to delete:" + subJobTypeIDsDeleteArr);
+                console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
+                console.log("subJobTypeIDs to add:" + subJobTypeIDsAddArr);
+                console.log("subJobTypeIDs to delete:" + subJobTypeIDsDeleteArr);
                 console.log("---------------------");
-                //console.log("jobResourceIDs_SlctdRecs:" + jobResourceIDs_SlctdRecs);
                 console.log("jobResourceIDs to add:" + jobResourceIDsAddArr);
                 console.log("jobResourceIDs to delete:" + jobResourceIDsDeleteArr);
 
