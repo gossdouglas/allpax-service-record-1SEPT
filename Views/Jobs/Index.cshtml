@@ -492,7 +492,6 @@
                     //if the the current sub-job type checkbox is checked...
                     if ($(this).prop('checked')) {
                         subJobTypeIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs for later comparison to _RtndRecs
-                        //subJobTypeIDs_SlctdRecs.push([temp_jobID,temp_val]);//add it to array subJobTypeIDs_SlctdRecs for later comparison to _RtndRecs
                         //console.log(temp_val + " is selected.")
                     }
                 });
@@ -505,39 +504,15 @@
                     //if the the current resource type checkbox is checked...
                     if ($(this).prop('checked')) {
                         jobResourceIDs_SlctdRecs.push(temp_val);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
-                        //jobRates_SlctdRecs.push([temp_val, temp_rate]);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
                         jobResourcesSlctdArr.push([temp_val, temp_rate]);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
                         //console.log("jobResourceID " + temp_val + " is selected with a rate of " + temp_rate);
                     }
                 });
 
-                //if there are subJobTypeIDs to add, subJobTypeIDsAddStatus = 1
                 subJobTypeIDsAddArr = _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs);
-                //if (_.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs).length > 0) {
-                //if (subJobTypeIDsAddArr.length > 0) {
-                //    subJobTypeIDsAddStatus = 1;
-                //}
-
-                //if there are subJobTypeIDs to delete, subJobTypeIDsDeleteStatus = 1
                 subJobTypeIDsDeleteArr = _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs);
-                //if (_.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs).length > 0) {
-                //if (subJobTypeIDsDeleteArr.length > 0) {
-                //    subJobTypeIDsDeleteStatus = 1;
-                //}
-
-                //if there are jobResourceIDs to add, jobResourceIDsAddStatus = 1
                 jobResourceIDsAddArr = _.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs);
-                //if (_.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs).length > 0) {
-                //if (jobResourceIDsAddArr.length > 0) {
-                //    jobResourceIDsAddStatus = 1;
-                //}
-
-                //if there are jobResourceIDs to delete, jobResourceIDsDeleteStatus = 1
                 jobResourceIDsDeleteArr = _.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs);
-                //if (_.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs).length > 0) {
-                //if (jobResourceIDsDeleteArr.length > 0) {
-                //    jobResourceIDsDeleteStatus = 1;
-                //}
 
                 for (var i = 0; i < jobResourcesSlctdArr.length; i++) {
 
@@ -568,7 +543,7 @@
                 console.log(jobResourcesJson_Delete);
 
                 //post edited job info to the controller
-                //if (job_CustomerInfoChngd == 1) {
+                //if (allFieldsValid == 1) {
 
                     //console.log("Job/Customer info edited.")
                     var data = {
@@ -1317,7 +1292,7 @@
                                         </div>
                                         <div class="col-md-3 resourceRate_div">
                                             <input type="text" class="form-control resource-type_input resourceRate"
-                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;" disabled>
+                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;">
                                         </div>
                                     </div>
                                 }
