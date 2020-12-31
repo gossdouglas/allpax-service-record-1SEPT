@@ -55,6 +55,9 @@ namespace allpax_service_record.Models.View_Models
 
         //an array that holds which resource types are deleted
         public List<tbl_jobResourceTypes> resourceTypesDelete { get; set; }
+
+        //an array that holds which resource types are deleted
+        public List<tbl_jobResourceTypes> resourceTypesEdit { get; set; }
         //public string[] resourceTypesDelete { get; set; }
 
         //public List<tbl_jobSubJobs> jobSubJobsAdd { get; set; }

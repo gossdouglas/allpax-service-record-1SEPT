@@ -172,16 +172,31 @@ namespace allpax_service_record.Controllers
 
             if (jobUpdate.resourceTypesDelete != null)
             {
-                //foreach (string resourceTypeID in jobUpdate.resourceTypesDelete)
-                //{
-                //    db.Database.ExecuteSqlCommand("DELETE FROM tbl_jobResourceTypes " +
-                //        "WHERE jobID= {0} AND resourceTypeID = {1}", jobUpdate.jobID, resourceTypeID);
-                //}
-
                 foreach (tbl_jobResourceTypes item in jobUpdate.resourceTypesDelete)
                 {
                     db.Database.ExecuteSqlCommand("DELETE FROM tbl_jobResourceTypes " +
                     "WHERE jobID= {0} AND resourceTypeID = {1}", jobUpdate.jobID, item.resourceTypeID);
+                }
+            }
+
+            if (jobUpdate.resourceTypesEdit != null)
+            {
+                foreach (tbl_jobResourceTypes item in jobUpdate.resourceTypesEdit)
+                {
+                    //db.Database.ExecuteSqlCommand(
+                    //"UPDATE tbl_jobResourceTypes " +
+                    //"SET " +
+
+                    //"resourceTypeID = {1}, " +
+                    //"rate = {2} " +
+
+                    //"WHERE jobID = {0}",
+                    //jobUpdate.jobID, item.resourceTypeID, item.rate);
+
+                        db.Database.ExecuteSqlCommand("UPDATE tbl_jobResourceTypes " +
+                            "SET " +
+                            "rate = {2} " +
+                            "WHERE jobID= {0} AND resourceTypeID = {1}", jobUpdate.jobID, item.resourceTypeID, item.rate);
                 }
             }
 
