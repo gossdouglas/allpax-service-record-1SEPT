@@ -204,19 +204,6 @@
                 var temp_dblTimeHours = modal.find('.double-time-hours').prop('checked');
                 var temp_description = modal.find('.job-description').val();
 
-                //    console.log("Save button was pressed.")
-                //    console.log("temp_jobID: " + temp_jobID);
-                //    console.log("temp_active: " + temp_active);
-                //    console.log("temp_customerCode: " + temp_customerCode);
-                //    console.log("temp_customerName: " + temp_customerName);
-                //    console.log("temp_location: " + temp_location);
-                //    console.log("temp_customerContact: " + temp_customerContact);
-                //    console.log("temp_nrmlHoursStart: " + temp_nrmlHoursStart);
-                //    console.log("temp_nrmlHoursEnd: " + temp_nrmlHoursEnd);
-                //console.log("temp_nrmlHoursDaily: " + temp_nrmlHoursDaily);
-                //console.log("temp_dblTimeHours: " + temp_dblTimeHours);
-                //    console.log("temp_description: " + temp_description);
-
                 var data = {
                     jobID: temp_jobID,
                     active: temp_active,
@@ -283,17 +270,6 @@
 
                 //var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
                 //var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
-
-                //var temp_jobDescription;
-                //var temp_customerCode;
-                //var temp_customerContact;
-                //var temp_active;
-                //var temp_location;
-                //var temp_nrmlHoursStart;
-                //var temp_nrmlHoursEnd;
-                //var temp_dblTimeHours;
-                //var temp_nrmlHoursDaily;
-                //var temp_id;
 
                 modal.find('.modal-title').text('Job Edit Form');
 
@@ -1096,8 +1072,6 @@
                 else {
                     for (var i = 0; i < jobResources_Add.length; i++) {
                         jobResourcesJson_Add[i] = {
-                            //jobCrspdtName: jobCrspdtInfo_Add[i][0],
-                            //jobCrspdtEmail: jobCrspdtInfo_Add[i][1]
 
                             resourceTypeID: jobResources_Add[i][0],
                             rate: jobResources_Add[i][1]
