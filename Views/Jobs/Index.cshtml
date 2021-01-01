@@ -225,7 +225,7 @@
             $('#jobNewForm').on('show.bs.modal', function (event) {
 
                 fn_resetModalForm("#jobNewForm");//reset the modal for new inputs
-                $(".addRecord.jobCrspdtLine").remove();
+                $(".addRecord.jobCrspdtLine").remove();//remove any incomplete job correspondent lines
             })
 
             //reset the modal for new inputs
@@ -233,8 +233,8 @@
 
                 var allInputs = $(modalID).find(":input");
               
-                $(allInputs).val('');
-                $(allInputs).prop('checked', false);                
+                $(allInputs).val('');//reset text boxes and dropdowns
+                $(allInputs).prop('checked', false);  //reset check boxes            
             }
 
             $('#jobEditForm').on('show.bs.modal', function (event) {
@@ -435,7 +435,8 @@
                             //store the job resource ids in the database to an array
                             jobCrspdtID_RtndRecs.push(temp_jobCrspdtID);
                             jobCrspdt_template_row_active.clone(true).prop("id", "jobCrspdtLine_" + temp_jobCrspdtID).prependTo("#jobCrspdtLine_template_edit");
-                            $("#jobCrspdtLine_" + temp_jobCrspdtID).prop("class", "row returnedRecords jobCrspdts");
+                            //$("#jobCrspdtLine_" + temp_jobCrspdtID).prop("class", "row returnedRecords jobCrspdts");
+                            $("#jobCrspdtLine_" + temp_jobCrspdtID).prop("class", "row returnedRecords jobCrspdtLine");
                             $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".name_input").val(temp_jobCrspdtName);
                             $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".name_input").attr("disabled", "true");
                             $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".email_input").val(temp_jobCrspdtEmail);
@@ -931,7 +932,7 @@
             });
 
             //$(".Btn_edit").click(function () {
-            $("#jobNewForm .lineJobCrspdtBtn_edit").click(function () {
+            $("#jobNewForm, #jobEditForm .lineJobCrspdtBtn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
 
                 $(this).hide();
@@ -944,7 +945,7 @@
             });
 
             //$(".Btn_save").click(function () {
-            $("#jobNewForm .lineJobCrspdtBtn_save").click(function () {
+            $("#jobNewForm, #jobEditForm .lineJobCrspdtBtn_save").click(function () {
 
                 //if (fn_rowFilled($(this))) {
 
@@ -979,26 +980,15 @@
                 }
 
                 //if this line is a returned record, set its class to deletedRecords
-                //if (temp_LineClass.includes("returnedRecords")) {
+                if (temp_LineClass.includes("returnedRecords")) {
 
-                //    //used to change the class of a returned record to deleted record for later processing with a delete operation
-                //    if (temp_LineClass.includes("workDescLine")) {
-                //        if (currentNumValidRecs > 1) {//if there is at least one more work description entry, then go ahead and delete this entry
-                //            $($(currentRow)).prop("class", "row deletedRecords workDescLine");
-                //            $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
-                //            $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
-                //            $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
-                //            $($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
-                //            recordsToDeleteStatus = 1;
-                //        }
-                //        else {
-                //            $.alert({
-                //                title: 'Cannot Delete!',
-                //                content: 'Must have at least one copied record or added record in the work description section.',
-                //            });
-                //        }
-                //    }
-                //}
+                    //used to change the class of a returned record to deleted record for later processing with a delete operation
+                    $($(currentRow)).prop("class", "row returnedRecords delete jobCrspdtLine");
+                    //$($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
+                    //$($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+                    //$($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                    //$($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
+                }
             });
 
             function fn_loadEntries_Add() {
