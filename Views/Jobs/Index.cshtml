@@ -222,6 +222,21 @@
                 //}
             });
 
+            $('#jobNewForm').on('show.bs.modal', function (event) {
+
+                fn_resetModalForm("#jobNewForm");//reset the modal for new inputs
+                $(".addRecord.jobCrspdtLine").remove();
+            })
+
+            //reset the modal for new inputs
+            function fn_resetModalForm (modalID) {
+
+                var allInputs = $(modalID).find(":input");
+              
+                $(allInputs).val('');
+                $(allInputs).prop('checked', false);                
+            }
+
             $('#jobEditForm').on('show.bs.modal', function (event) {
 
                 console.clear();
@@ -916,7 +931,7 @@
             });
 
             //$(".Btn_edit").click(function () {
-            $(".lineJobCrspdtBtn_edit").click(function () {
+            $("#jobNewForm .lineJobCrspdtBtn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
 
                 $(this).hide();
@@ -928,13 +943,12 @@
                 $(currentRow).find(".name_input, .email_input").css("color", "red");
             });
 
-            $(".Btn_save").click(function () {
+            //$(".Btn_save").click(function () {
+            $("#jobNewForm .lineJobCrspdtBtn_save").click(function () {
 
                 //if (fn_rowFilled($(this))) {
 
                 var currentRow = $(this).parent().parent();
-                //var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
-                //currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html
 
                 $(this).hide();
                 $(currentRow).find(".Btn_edit").removeAttr("hidden");
