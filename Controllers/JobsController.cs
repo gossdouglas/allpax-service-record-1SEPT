@@ -68,39 +68,46 @@ namespace allpax_service_record.Controllers
         [HttpPost]
         public ActionResult AddJob(vm_Jobs jobAdd)
         {
-            //db.Database.ExecuteSqlCommand("Insert into tbl_Jobs Values({0},{1},{2},{3},{4},{5},{6},{7},{8}, {9})",
-            //   jobAdd.jobID, jobAdd.active, jobAdd.customerCode, jobAdd.location, jobAdd.customerContact,
-            //   jobAdd.nrmlHoursStart, jobAdd.nrmlHoursEnd, jobAdd.nrmlHoursDaily, jobAdd.dblTimeHours, jobAdd.description);
 
             db.Database.ExecuteSqlCommand("Insert into tbl_Jobs Values({0},{1},{2},{3},{4},{5},{6},{7},{8}, {9})",
                jobAdd.jobID, jobAdd.description, jobAdd.customerCode, jobAdd.customerContact, jobAdd.active,
                jobAdd.location, jobAdd.nrmlHoursStart, jobAdd.nrmlHoursEnd, jobAdd.dblTimeHours, jobAdd.nrmlHoursDaily);
 
-            //add sub-jobs to this job
-            foreach (string item in jobAdd.jobSubJobsAdd)
+            if (jobAdd.jobSubJobsAdd != null)
             {
-                db.Database.ExecuteSqlCommand("Insert into tbl_jobSubJobs Values({0},{1})",
-                jobAdd.jobID, item);
+                //add sub-jobs to this job
+                foreach (string item in jobAdd.jobSubJobsAdd)
+                {
+                    db.Database.ExecuteSqlCommand("Insert into tbl_jobSubJobs Values({0},{1})",
+                    jobAdd.jobID, item);
+                }
             }
 
-            //add resource types to this job
-            foreach (tbl_resourceTypes item in jobAdd.resourceTypes)
+            if (jobAdd.resourceTypes != null)
             {
-                db.Database.ExecuteSqlCommand(
+                //add resource types to this job
+                foreach (tbl_resourceTypes item in jobAdd.resourceTypes)
+                {
+                    db.Database.ExecuteSqlCommand(
 
-                "INSERT INTO tbl_jobResourceTypes VALUES({0}, {1}, {2}) ",
+                    "INSERT INTO tbl_jobResourceTypes VALUES({0}, {1}, {2}) ",
 
-                jobAdd.jobID, item.resourceTypeID, item.rate);
+                    jobAdd.jobID, item.resourceTypeID, item.rate);
+                }
             }
 
-            //add correspondents to this job
-            foreach (vm_jobCrspdtInfo item in jobAdd.jobCrspdtInfo)
+            if (jobAdd.jobCrspdtInfo != null)
             {
-                db.Database.ExecuteSqlCommand(
+                //add correspondents to this job
+                foreach (tbl_jobCorrespondents item in jobAdd.jobCrspdtInfo)
+                {
+                    db.Database.ExecuteSqlCommand(
 
-                "INSERT INTO tbl_jobCorrespondents VALUES({0}, {1}, {2}, {3}) ",
+                    "INSERT INTO tbl_jobCorrespondents VALUES({0}, {1}, {2}, {3}) ",
 
-                jobAdd.jobID, item.jobCrspdtName, item.jobCrspdtEmail, "1");
+                    //jobAdd.jobID, item.jobCrspdtName, item.jobCrspdtEmail, "1");
+                    jobAdd.jobID, item.name, item.email, "1");
+                }
             }
 
             return Json(Url.Action("Index", "Jobs"));
@@ -183,16 +190,6 @@ namespace allpax_service_record.Controllers
             {
                 foreach (tbl_jobResourceTypes item in jobUpdate.resourceTypesEdit)
                 {
-                    //db.Database.ExecuteSqlCommand(
-                    //"UPDATE tbl_jobResourceTypes " +
-                    //"SET " +
-
-                    //"resourceTypeID = {1}, " +
-                    //"rate = {2} " +
-
-                    //"WHERE jobID = {0}",
-                    //jobUpdate.jobID, item.resourceTypeID, item.rate);
-
                         db.Database.ExecuteSqlCommand("UPDATE tbl_jobResourceTypes " +
                             "SET " +
                             "rate = {2} " +
@@ -293,22 +290,6 @@ namespace allpax_service_record.Controllers
             }
             return customers;
         }
-
-        //public ActionResult UpdateJob(tbl_Jobs customerUpdate)
-        //{
-        //    db.Database.ExecuteSqlCommand(
-        //        "UPDATE tbl_Jobs " +
-        //        "SET " +
-
-        //        "customerCode = {0}, " +
-        //        "customerName = {1}, " +
-        //        "address = {2} " +
-
-        //        "WHERE id = {3}",
-        //        customerUpdate.customerCode, customerUpdate.customerName, customerUpdate.address, customerUpdate.id);
-
-        //    return Json(Url.Action("Index", "Customers"));
-        //}
 
         protected override void Dispose(bool disposing)
         {

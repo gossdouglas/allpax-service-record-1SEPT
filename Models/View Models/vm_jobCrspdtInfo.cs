@@ -11,5 +11,7 @@ namespace allpax_service_record.Models.View_Models
     {      
         public string jobCrspdtName { get; set; }
         public string jobCrspdtEmail { get; set; }
+        public bool jobCrspdtActive { get; set; }
+        public byte jobCrspdtID { get; set; }
     }
 }

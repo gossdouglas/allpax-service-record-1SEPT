@@ -160,30 +160,6 @@
             var customerCodeNew_dpdwn = $('#customer-code-new');
             var customerCodeEdit_dpdwn = $('#customer-code-edit');
 
-            $('#jobNewForm').on('show.bs.modal', function (event) {
-                //begin fill the jobs dropdown
-
-                var tempCustomerCodeArr = [];
-
-                //begin fill the customer code dropdown
-                //$.ajax({
-                //    url: '/DataService.asmx/GetCustomerInfoByJobID',
-                //    method: 'post',
-                //    dataType: 'json',
-                //    data: { jobID: '%' },
-                //    success: function (data) {
-                //        $(customerCodeNew_dpdwn).empty();
-                //        customerCodeNew_dpdwn.append($('<option/>', { value: -1, text: 'Select Customer Code' }));
-                //        $(data).each(function (index, item) {
-
-                //            tempCustomerCodeArr.push(item.customerCode);//is this really needed?
-                //            customerCodeNew_dpdwn.append($('<option/>', { value: item.customerCode, text: item.customerCode }));
-                //        });
-                //    }
-                //});
-                //end fill the customer code dropdown
-            })
-
             $(".jobNewForm.btn_save").click(function () {
 
                 fn_loadEntries_Add();//determine which list items need to be added
@@ -215,10 +191,13 @@
                     nrmlHoursDaily: temp_nrmlHoursDaily,
                     dblTimeHours: temp_dblTimeHours,
                     description: temp_description,
-                    subJobTypes_Add: subJobTypes_Add,
+                    //subJobTypes_Add: subJobTypes_Add,
+                    jobSubJobsAdd: subJobTypes_Add,
                     resourceTypes: jobResourcesJson_Add,
                     jobCrspdtInfo: jobCrspdtInfoJson_Add
                 };
+
+                console.log(data);
 
                 //fn_showSpinner();
 
@@ -239,6 +218,7 @@
                         });
                     }
                 });
+
                 //}
             });
 
@@ -249,6 +229,8 @@
                 subJobTypeIDs_RtndRecs.length = 0;
                 jobResourceIDs_RtndRecs.length = 0;
                 jobRates_RtndRecs.length = 0;
+
+                jobCrspdtID_RtndRecs = [];
 
                 //jobCrspdts_RtndRecs.length = 0;
 
@@ -262,16 +244,10 @@
                 var temp_subJobTypeInput = modal.find('.sub-job-type_input');
                 var temp_resourceTypeInput = modal.find('.resource-type_input.resourceTypeID');
                 var temp_resourceRateInput;
-
-                //console.log(temp_subJobTypeInput);
-
-                //var subJobTypeIDs_RtndRecs = [];//array which holds which subJobTypeIDs are stored in the database
-                //var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
-
-                //var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
-                //var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
+                var jobCrspdt_template_row_active = modal.find(".jobCrspdt_template_row_active");
 
                 modal.find('.modal-title').text('Job Edit Form');
+                modal.find(".returnedRecords").remove();
 
                 //begin get job info by job id
                 $.ajax({
@@ -397,7 +373,6 @@
                         //get the value of each sub-job type checkbox
                         $(temp_resourceTypeInput).each(function (index, item) {
                             var currentRow = $(this).parent().parent();
-                            //temp_resourceRateInput = $(this).parent().parent().find(".resourceRate");
                             temp_resourceRateInput = currentRow.find(".resourceRate");
 
                             //if the value of the current resource type checkbox is part of the jobResourceIDs_RtndRecs array...
@@ -428,6 +403,37 @@
                     }
                 });
                 //end get job resources by job id
+
+                //begin get job correspondents by job id
+                $.ajax({
+                    url: '/DataService.asmx/GetJobCrspdtInfoByJobID',
+                    method: 'post',
+                    dataType: 'json',
+                    data: { jobID: temp_jobID },
+                    success: function (data) {
+                        $(data).each(function (index, item) {
+                            var temp_jobCrspdtName = item.jobCrspdtName;
+                            var temp_jobCrspdtEmail = item.jobCrspdtEmail;
+                            var temp_jobCrspdtActive = item.jobCrspdtActive;
+                            var temp_jobCrspdtID = item.jobCrspdtID;
+
+                            //store the job resource ids in the database to an array
+                            jobCrspdtID_RtndRecs.push(temp_jobCrspdtID);
+                            jobCrspdt_template_row_active.clone(true).prop("id", "jobCrspdtLine_" + temp_jobCrspdtID).prependTo("#jobCrspdtLine_template_edit");
+                            $("#jobCrspdtLine_" + temp_jobCrspdtID).prop("class", "row returnedRecords jobCrspdts");
+                            $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".name_input").val(temp_jobCrspdtName);
+                            $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".name_input").attr("disabled", "true");
+                            $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".email_input").val(temp_jobCrspdtEmail);
+                            $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".email_input").attr("disabled", "true");
+                            $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".Btn_add").remove();
+                            $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".Btn_edit, .Btn_delete").removeAttr("hidden");
+
+                            //currentRow.prop("id", "workDescLine_" + indexWorkDescEntries_Add).appendTo("#workDescriptionLine_template");
+                        });
+
+                    }
+                });
+                //end get job correspondents by job id
 
                 fn_enableSelect2();//re-enable select2 after affecting work to allow the selected option to be reached
             })
@@ -624,30 +630,6 @@
                 console.log(jobResourcesJson_Edit);
 
                 //}
-            });
-
-            //if the check box or resource rate is changed..
-            $("#jobEditForm .resourceRate, .resource-type_input").on("change", function () {
-                //$("#jobEditForm .resourceRate").on("change", function () {
-
-                //var currentRow = $(this).parent().parent();
-                //var currentResourceTypeInput = currentRow.find(".resourceTypeID");
-                //var currentResourceRate = currentRow.find(".resourceRate");
-
-                ////... and the input is checked...
-                //if (currentResourceTypeInput.prop('checked')) {
-                //    //$(this).css("color", "red");
-                //    currentResourceRate.css("color", "red");
-                //    console.log("checked.")
-                //}
-
-                //if (!currentResourceTypeInput.prop('checked')) {
-                //    //$(this).css("color", "black");
-                //    currentResourceRate.css("color", "black");
-                //    console.log("un-checked.")
-                //}
-
-                //console.log("resource-type_input pressed.")
             });
 
             //begin customer code dropdown change
@@ -950,17 +932,17 @@
 
                 //if (fn_rowFilled($(this))) {
 
-                //var currentRow = $(this).parent().parent();
-                ////var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
-                ////currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html
+                var currentRow = $(this).parent().parent();
+                //var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
+                //currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html
 
-                //$(this).hide();
-                //$(currentRow).find(".Btn_edit").removeAttr("hidden");
-                //$(currentRow).find(".Btn_edit").show();
+                $(this).hide();
+                $(currentRow).find(".Btn_edit").removeAttr("hidden");
+                $(currentRow).find(".Btn_edit").show();
 
-                //currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
-                //currentRow.find(".email_input").attr("disabled", "true");//lock the name field for edits
-                //$(currentRow).find(".name_input, .email_input").css("color", "black");
+                currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
+                currentRow.find(".email_input").attr("disabled", "true");//lock the name field for edits
+                $(currentRow).find(".name_input, .email_input").css("color", "black");
 
                 //}
                 //else {
@@ -1054,8 +1036,10 @@
                 else {
                     for (var i = 0; i < jobCrspdtInfo_Add.length; i++) {
                         jobCrspdtInfoJson_Add[i] = {
-                            jobCrspdtName: jobCrspdtInfo_Add[i][0],
-                            jobCrspdtEmail: jobCrspdtInfo_Add[i][1]
+                            //jobCrspdtName: jobCrspdtInfo_Add[i][0],
+                            //jobCrspdtEmail: jobCrspdtInfo_Add[i][1]
+                            name: jobCrspdtInfo_Add[i][0],
+                            email: jobCrspdtInfo_Add[i][1]
                         };
                     }
                 }

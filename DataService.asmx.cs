@@ -103,6 +103,8 @@ namespace allpax_service_record
                     vm_jobCrspdtInfo jobCrspdtInfo = new vm_jobCrspdtInfo();
                     jobCrspdtInfo.jobCrspdtName = rdr["name"].ToString();
                     jobCrspdtInfo.jobCrspdtEmail = rdr["email"].ToString();
+                    jobCrspdtInfo.jobCrspdtActive = (bool) rdr["active"];
+                    jobCrspdtInfo.jobCrspdtID = (byte) rdr["jobCorrespondentID"];
                     jobCrspdtInfos.Add(jobCrspdtInfo);
                 }
             }
