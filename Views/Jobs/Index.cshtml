@@ -161,8 +161,6 @@
             var jobRates_RtndRecs = [];//array which holds which job resource rates are stored in the database
             //var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
 
-            var job_CustomerInfoChngd = 0;
-
             fn_enableSelect2();
             //fn_loadRtndRecs();
 
@@ -249,7 +247,7 @@
             $('#jobEditForm').on('show.bs.modal', function (event) {
 
                 console.clear();
-                console.log("Arrays upon modal load.")
+                //console.log("Arrays upon modal load.")
                 subJobTypeIDs_RtndRecs.length = 0;
                 jobResourceIDs_RtndRecs.length = 0;
                 jobRates_RtndRecs.length = 0;
@@ -347,7 +345,7 @@
                             subJobTypeIDs_RtndRecs.push(temp_subJobID);
                         });
 
-                        console.log("subJobTypeIDs_RtndRecs:" + subJobTypeIDs_RtndRecs);
+                        //console.log("subJobTypeIDs_RtndRecs:" + subJobTypeIDs_RtndRecs);
 
                         //get the value of each sub-job type checkbox
                         $(temp_subJobTypeInput).each(function (index, item) {
@@ -389,9 +387,9 @@
                         //dump jobRates_RtndRecs array into index 1 of jobResource_RtndRecs
                         jobResource_RtndRecs[1] = jobRates_RtndRecs;
 
-                        console.log("jobResource_RtndRecs[0]:" + jobResource_RtndRecs[0]);
+                        //console.log("jobResource_RtndRecs[0]:" + jobResource_RtndRecs[0]);
                         //console.log("jobResourceIDs_RtndRecs:" + jobResourceIDs_RtndRecs);
-                        console.log("jobResource_RtndRecs[1]:" + jobResource_RtndRecs[1]);
+                        //console.log("jobResource_RtndRecs[1]:" + jobResource_RtndRecs[1]);
                         //console.log("jobRates_RtndRecs:" + jobRates_RtndRecs);
 
                         //get the value of each sub-job type checkbox
@@ -442,18 +440,18 @@
                             var temp_jobCrspdtID = item.jobCrspdtID;
 
                             //store the job resource ids in the database to an array
-                            jobCrspdtID_RtndRecs.push(temp_jobCrspdtID);
+                            //jobCrspdtID_RtndRecs.push(temp_jobCrspdtID);
+
+                            //add the job correspondents from the database to the form
                             jobCrspdt_template_row_active.clone(true).prop("id", "jobCrspdtLine_" + temp_jobCrspdtID).prependTo("#jobCrspdtLine_template_edit");
-                            //$("#jobCrspdtLine_" + temp_jobCrspdtID).prop("class", "row returnedRecords jobCrspdts");
                             $("#jobCrspdtLine_" + temp_jobCrspdtID).prop("class", "row returnedRecords jobCrspdtLine");
                             $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".name_input").val(temp_jobCrspdtName);
                             $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".name_input").attr("disabled", "true");
                             $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".email_input").val(temp_jobCrspdtEmail);
                             $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".email_input").attr("disabled", "true");
+                            $("#jobCrspdtLine_" + temp_jobCrspdtID).attr("data-job-crspdt-id", temp_jobCrspdtID);
                             $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".Btn_add").remove();
                             $("#jobCrspdtLine_" + temp_jobCrspdtID).find(".Btn_edit, .Btn_delete").removeAttr("hidden");
-
-                            //currentRow.prop("id", "workDescLine_" + indexWorkDescEntries_Add).appendTo("#workDescriptionLine_template");
                         });
 
                     }
@@ -484,8 +482,7 @@
                 var jobRates_SlctdRecs = [];//array which holds which jobRates are selected in the modal
                 var temp_subJobTypeInput = modal.find('.sub-job-type_input');
                 var temp_resourceTypeInput = modal.find('.resource-type_input.resourceTypeID');
-                var temp_jobResource_Line = modal.find('.jobResource_Line');
-
+                
                 var subJobTypeIDsAddArr = [];
                 var subJobTypeIDsDeleteArr = [];
 
@@ -496,6 +493,13 @@
                 var jobResourcesJson_Delete = [];
 
                 var jobResourcesJson_Edit = [];
+
+                var temp_jobCrspdt_div_Add = modal.find('.addRecord.jobCrspdtLine');
+                var temp_jobCrspdt_div_Delete = modal.find('.returnedRecords.delete.jobCrspdtLine');
+                var temp_jobCrspdt_div_Edit = modal.find('.returnedRecords.edit.jobCrspdtLine');
+                var temp_jobCrspdtInfoJson_Add = [];
+                var temp_jobCrspdtInfoJson_Delete = [];
+                var temp_jobCrspdtInfoJson_Edit = [];
 
                 //var jobResourceIDsSlctdArr = [];
                 //var jobResourceRatesSlctdArr = [];
@@ -590,8 +594,43 @@
                         resourceTypeID: jobResourceIDsDeleteArr[i]
                     };
                 }             
-                //post edited job info to the controller
-                //if (allFieldsValid == 1) {
+
+                //BEGIN PACK UP JOB CORRESPONDENT ADD, EDITS AND DELETES
+                $(temp_jobCrspdt_div_Add).each(function (index) {
+
+                    var temp_name = $(this).find(".name_input").val();
+                    var temp_email = $(this).find(".email_input").val();
+
+                    temp_jobCrspdtInfoJson_Add[index] = {
+                        jobID: temp_jobID,
+                        name: temp_name,
+                        email: temp_email
+                    }
+                });
+
+                $(temp_jobCrspdt_div_Delete).each(function (index) {
+
+                    var temp_jobCrspdtID = $(this).attr("data-job-crspdt-id");
+
+                    temp_jobCrspdtInfoJson_Delete[index] = {
+                        jobCorrespondentID: temp_jobCrspdtID
+                    }
+                });
+
+                $(temp_jobCrspdt_div_Edit).each(function (index) {
+
+                    var temp_name = $(this).find(".name_input").val();
+                    var temp_email = $(this).find(".email_input").val();
+                    var temp_jobCrspdtID = $(this).attr("data-job-crspdt-id");
+
+                    temp_jobCrspdtInfoJson_Edit[index] = {
+                        jobID: temp_jobID,
+                        name: temp_name,
+                        email: temp_email,
+                        jobCorrespondentID: temp_jobCrspdtID
+                    }
+                });
+                //END PACK UP JOB CORRESPONDENT ADD, EDITS AND DELETES
 
                 var data = {
                     jobID: temp_jobID,
@@ -608,51 +647,63 @@
                     jobSubJobsDelete: subJobTypeIDsDeleteArr,
                     resourceTypesAdd: jobResourcesJson_Add,
                     resourceTypesDelete: jobResourcesJson_Delete,
-                    resourceTypesEdit: jobResourcesJson_Edit
+                    resourceTypesEdit: jobResourcesJson_Edit,
+                    jobCrspdtInfoAdd: temp_jobCrspdtInfoJson_Add,
+                    jobCrspdtInfoDelete: temp_jobCrspdtInfoJson_Delete,
+                    jobCrspdtInfoEdit: temp_jobCrspdtInfoJson_Edit
                 };
 
-                $.ajax({
-                    url: '/Jobs/UpdateJob',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function (response) {
-                        //totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                        //console.log("edit success. total operations to complete is now: " + totalOpsToDo);
-                        serverResponseSuccess = response;
-                        //console.log("response is: " + response)
-                        //if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
-                        window.location.href = serverResponseSuccess;
-                        //}
-                    }
-                });
+                //$.ajax({
+                //    url: '/Jobs/UpdateJob',
+                //    method: 'post',
+                //    contentType: 'application/json',
+                //    dataType: 'json',
+                //    data: JSON.stringify(data),
+                //    traditional: true,
+                //    success: function (response) {
+                //        serverResponseSuccess = response;
+                //        //console.log("response is: " + response)
+                //        window.location.href = serverResponseSuccess;
+                //        //}
+                //    }
+                //});
 
                 //}
 
-                console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
-                console.log("subJobTypeIDs to add:" + subJobTypeIDsAddArr);
-                console.log("subJobTypeIDs to delete:" + subJobTypeIDsDeleteArr);
-                console.log("---------------------");
-                console.log("jobResourceIDs to add:" + jobResourceIDsAddArr);
-                console.log("jobResourceIDs to delete:" + jobResourceIDsDeleteArr);
+                //console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
+                //console.log("subJobTypeIDs to add:" + subJobTypeIDsAddArr);
+                //console.log("subJobTypeIDs to delete:" + subJobTypeIDsDeleteArr);
+                //console.log("---------------------");
+                //console.log("jobResourceIDs to add:" + jobResourceIDsAddArr);
+                //console.log("jobResourceIDs to delete:" + jobResourceIDsDeleteArr);
+
+                //console.log("---------------------");
+                //console.log("jobResourcesSlctdArr[0]:" + jobResourcesSlctdArr[0]);
+                //console.log("jobResourcesSlctdArr[0][0]:" + jobResourcesSlctdArr[0][0]);
+                //console.log("jobResourcesSlctdArr[1]:" + jobResourcesSlctdArr[1]);
+
+                //console.log("jobResourceIDs to add:" + jobResourceIDsAddArr);
+                //console.log("jobResourcesJson_Add:");
+                //console.log(jobResourcesJson_Add);
+                //console.log("jobResourceIDs to delete:" + jobResourceIDsDeleteArr);
+                //console.log("jobResourcesJson_Delete:");
+                //console.log(jobResourcesJson_Delete);
+
+                //console.log("---------------------");
+                //console.log("jobResourcesJson_Edit:");
+                //console.log(jobResourcesJson_Edit);
 
                 console.log("---------------------");
-                console.log("jobResourcesSlctdArr[0]:" + jobResourcesSlctdArr[0]);
-                console.log("jobResourcesSlctdArr[0][0]:" + jobResourcesSlctdArr[0][0]);
-                console.log("jobResourcesSlctdArr[1]:" + jobResourcesSlctdArr[1]);
-
-                console.log("jobResourceIDs to add:" + jobResourceIDsAddArr);
-                console.log("jobResourcesJson_Add:");
-                console.log(jobResourcesJson_Add);
-                console.log("jobResourceIDs to delete:" + jobResourceIDsDeleteArr);
-                console.log("jobResourcesJson_Delete:");
-                console.log(jobResourcesJson_Delete);
+                console.log("temp_jobCrspdtInfoJson_Add:");
+                console.log(temp_jobCrspdtInfoJson_Add);
 
                 console.log("---------------------");
-                console.log("jobResourcesJson_Edit:");
-                console.log(jobResourcesJson_Edit);
+                console.log("temp_jobCrspdtInfoJson_Delete:");
+                console.log(temp_jobCrspdtInfoJson_Delete);
+
+                console.log("---------------------");
+                console.log("temp_jobCrspdtInfoJson_Edit:");
+                console.log(temp_jobCrspdtInfoJson_Edit);
 
                 //}
             });
@@ -959,6 +1010,7 @@
                 //if (fn_rowFilled($(this))) {
 
                 var currentRow = $(this).parent().parent();
+                temp_LineClass = $(currentRow).prop("class");
 
                 $(this).hide();
                 $(currentRow).find(".Btn_edit").removeAttr("hidden");
@@ -966,7 +1018,14 @@
 
                 currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
                 currentRow.find(".email_input").attr("disabled", "true");//lock the name field for edits
-                $(currentRow).find(".name_input, .email_input").css("color", "black");
+
+                if (temp_LineClass.includes("returnedRecords edit")) {
+
+                    $(currentRow).find(".name_input, .email_input").css("color", "red");
+                }
+                else {
+                    $(currentRow).find(".name_input, .email_input").css("color", "black");
+                }
 
                 //}
                 //else {
@@ -1103,13 +1162,25 @@
                 //console.log("jobResourcesJson_Add:");
                 //console.log(jobResourcesJson_Add);
 
-                //END BUILD THE JOB RESOURCES JSON OBJECT
-            }
+                //BEGIN BUILD THE JOB CORRESPONDENTS JSON OBJECT
+                //if there are none to add, set the json object to null
+                if (jobResources_Add.length < 1) {
+                    jobResourcesJson_Add = null
+                }
+                else {
+                    for (var i = 0; i < jobResources_Add.length; i++) {
+                        jobResourcesJson_Add[i] = {
 
-            $(".job-customer-info").on("change keypress", function () {
-                job_CustomerInfoChngd = true;
-                //enable_disableSave();
-            });
+                            resourceTypeID: jobResources_Add[i][0],
+                            rate: jobResources_Add[i][1]
+                        };
+                    }
+                }
+                //console.log("jobResourcesJson_Add:");
+                //console.log(jobResourcesJson_Add);
+
+                //END BUILD THE JOB CORRESPONDENTS JSON OBJECT
+            }
 
             //when the resource type is checked or un-checked...
             $(".resourceTypeID").on("change", function () {
@@ -1151,6 +1222,16 @@
                 else {
                     temp_resourceRateInput.css("color", "black");
                 }
+            });
+
+            $("#jobEditForm .job-crspdt_input").on("change", function () {
+                var currentRow = $(this).parent().parent();
+                temp_LineClass = $(currentRow).prop("class");
+
+                if (temp_LineClass.includes("row returnedRecords jobCrspdtLine")) {
+                    $($(currentRow)).prop("class", "row returnedRecords edit jobCrspdtLine");
+                    currentRow.find(".fa-edit").css("color", "red");
+                }              
             });
 
         });//end document read jquery statements
@@ -1396,13 +1477,13 @@
                 </div>
                 @*BEGIN NEW JOB CORRESPONDENT TEMPLATE*@
                 <div class="" id="jobCrspdtLine_template_edit" style="">
-                    <div class="row entryRow jobCrspdt_template_row_active">
+                    <div class="row entryRow jobCrspdt_template_row_active" data-job-crspdt-id="">
                         <div class="col-md-3" style=""></div>
                         <div class="col-md-3 name_div" style="padding:0px;">
-                            <input type="text" class="form-control name_input" style="padding:5px;">
+                            <input type="text" class="form-control job-crspdt_input name_input" style="padding:5px;">
                         </div>
                         <div class="col-md-3 email_div" style="padding:0px;">
-                            <input type="text" class="form-control email_input" style="padding:5px;">
+                            <input type="text" class="form-control job-crspdt_input email_input" style="padding:5px;">
                         </div>
                         <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
                             <button id="" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add">
@@ -1421,13 +1502,13 @@
                         </div>
                     </div>
 
-                    <div class="row entryRow jobCrspdtLine_template_row_hidden" id="" style="" hidden>
+                    <div class="row entryRow jobCrspdtLine_template_row_hidden" data-job-crspdt-id="" hidden>
                         <div class="col-md-3" style=""></div>
                         <div class="col-md-3 name_div" style="padding:0px;">
-                            <input type="text" class="form-control name_input" style="padding:5px;">
+                            <input type="text" class="form-control job-crspdt_input name_input" style="padding:5px;">
                         </div>
                         <div class="col-md-3 email_div" style="padding:0px;">
-                            <input type="text" class="form-control email_input" style="padding:5px;">
+                            <input type="text" class="form-control job-crspdt_input email_input" style="padding:5px;">
                         </div>
                         <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
                             <button id="" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add">
