@@ -197,6 +197,39 @@ namespace allpax_service_record.Controllers
                 }
             }
 
+            if (jobUpdate.jobCrspdtInfoAdd != null)
+            {
+                foreach (tbl_jobCorrespondents item in jobUpdate.jobCrspdtInfoAdd)
+                {
+                    db.Database.ExecuteSqlCommand(
+
+                    "INSERT INTO tbl_jobCorrespondents VALUES({0}, {1}, {2}, {3}) ",
+
+                    jobUpdate.jobID, item.name, item.email, "1");
+                }
+            }
+
+            if (jobUpdate.jobCrspdtInfoDelete != null)
+            {
+                foreach (tbl_jobCorrespondents item in jobUpdate.jobCrspdtInfoDelete)
+                {
+                    db.Database.ExecuteSqlCommand("DELETE FROM tbl_jobCorrespondents " +
+                    "WHERE jobCorrespondentID= {0} ", item.jobCorrespondentID);
+                }
+            }
+
+            if (jobUpdate.jobCrspdtInfoEdit != null)
+            {
+                foreach (tbl_jobCorrespondents item in jobUpdate.jobCrspdtInfoEdit)
+                {
+                    db.Database.ExecuteSqlCommand("UPDATE tbl_jobCorrespondents " +
+                            "SET " +
+                            "name = {1}, " +
+                            "email = {2} " +
+                            "WHERE jobCorrespondentID= {0} ", item.jobCorrespondentID, item.name, item.email);
+                }
+            }
+
             return Json(Url.Action("Index", "Jobs"));
         }
 

@@ -34,40 +34,18 @@ namespace allpax_service_record.Models.View_Models
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        //public virtual ICollection<tbl_jobCorrespondents> tbl_jobCorrespondents { get; set; }
-
         public List<tbl_Jobs> jobs { get; set; }
         public List<tbl_customers> customers { get; set; }
         public List<tbl_subJobTypes> subJobTypes { get; set; }
         public List<tbl_resourceTypes> resourceTypes { get; set; }
-        //public List<vm_jobCrspdtInfo> jobCrspdtInfo { get; set; }
         public List<tbl_jobCorrespondents> jobCrspdtInfo { get; set; }
-
-        //an array that holds which sub-job types are added
         public string[] jobSubJobsAdd { get; set; }
-        //an array that holds which sub-job types are deleted
         public string[] jobSubJobsDelete { get; set; }
-
-        //an array that holds which sresource types are added
         public List<tbl_jobResourceTypes> resourceTypesAdd { get; set; }
-        //public string[] resourceTypesAdd { get; set; }
-
-        //an array that holds which resource types are deleted
         public List<tbl_jobResourceTypes> resourceTypesDelete { get; set; }
-
-        //an array that holds which resource types are deleted
         public List<tbl_jobResourceTypes> resourceTypesEdit { get; set; }
-        //public string[] resourceTypesDelete { get; set; }
-
         public List<tbl_jobCorrespondents> jobCrspdtInfoAdd { get; set; }
         public List<tbl_jobCorrespondents> jobCrspdtInfoDelete { get; set; }
         public List<tbl_jobCorrespondents> jobCrspdtInfoEdit{ get; set; }
-
-        //public List<tbl_jobSubJobs> jobSubJobsAdd { get; set; }
-        //public List<tbl_jobSubJobs> jobSubJobsDelete { get; set; }
-        //public List<tbl_resourceTypes> resourceTypesAdd { get; set; }
-        //public List<tbl_resourceTypes> resourceTypesDelete { get; set; }
     }
 }

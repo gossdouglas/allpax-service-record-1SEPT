@@ -653,20 +653,20 @@
                     jobCrspdtInfoEdit: temp_jobCrspdtInfoJson_Edit
                 };
 
-                //$.ajax({
-                //    url: '/Jobs/UpdateJob',
-                //    method: 'post',
-                //    contentType: 'application/json',
-                //    dataType: 'json',
-                //    data: JSON.stringify(data),
-                //    traditional: true,
-                //    success: function (response) {
-                //        serverResponseSuccess = response;
-                //        //console.log("response is: " + response)
-                //        window.location.href = serverResponseSuccess;
-                //        //}
-                //    }
-                //});
+                $.ajax({
+                    url: '/Jobs/UpdateJob',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        serverResponseSuccess = response;
+                        //console.log("response is: " + response)
+                        window.location.href = serverResponseSuccess;
+                        //}
+                    }
+                });
 
                 //}
 
@@ -1010,14 +1010,14 @@
 
                 if (temp_LineClass.includes("returnedRecords edit")) {
 
-                    //used to change the class of a deleted record back to a returned record
+                    //used to change the class of an edited record to a deleted record
                     $($(currentRow)).prop("class", "row returnedRecords delete jobCrspdtLine");
 
                     currentRow.find(".name_input, .email_input").css("text-decoration", "line-through");
                     currentRow.find(".name_input, .email_input").css("color", "red");
                     currentRow.find(".fa-edit").css("color", "black");
                     $(this).find(".fa-minus-square").css("color", "red");
-                    currentRow.find(".Btn_edit").removeAttr("disabled");
+                    currentRow.find(".Btn_edit").attr("disabled", "disabled");
                 }
             });
 
