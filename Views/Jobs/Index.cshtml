@@ -94,6 +94,15 @@
             min-width: 300px;
         }*/
 
+        span.b {
+            display: inline-block;
+            /*width: 100px;
+  height: 100px;
+  padding: 5px;
+  border: 1px solid blue;    
+  background-color: yellow;*/
+        }
+
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
             /* Force table to not be like tables anymore */
@@ -752,35 +761,35 @@
 
             $(".returnedRecords .Btn_delete").click(function () {
 
-                var currentRow = $(this).parent().parent();
-                var temp_customerCode = currentRow.find('.customerCode_div').html()
+                //var currentRow = $(this).parent().parent();
+                //var temp_customerCode = currentRow.find('.customerCode_div').html()
 
-                var data = {
-                    customerCode: temp_customerCode,
-                };
+                //var data = {
+                //    customerCode: temp_customerCode,
+                //};
 
-                $.confirm({
-                    title: 'Delete Customer ' + temp_customerCode + '?',
-                    content: '',
-                    buttons: {
-                        confirm: function () {
-                            fn_showSpinner();
-                            $.ajax({
-                                url: '/Customers/DeleteCustomer',
-                                method: 'post',
-                                contentType: 'application/json',
-                                dataType: 'json',
-                                data: JSON.stringify(data),
-                                traditional: true,
-                                success: function (response) {
-                                    window.location.href = response;
-                                }
-                            });
-                        },
-                        cancel: function () {
-                        }
-                    }
-                });
+                //$.confirm({
+                //    title: 'Delete Customer ' + temp_customerCode + '?',
+                //    content: '',
+                //    buttons: {
+                //        confirm: function () {
+                //            fn_showSpinner();
+                //            $.ajax({
+                //                url: '/Customers/DeleteCustomer',
+                //                method: 'post',
+                //                contentType: 'application/json',
+                //                dataType: 'json',
+                //                data: JSON.stringify(data),
+                //                traditional: true,
+                //                success: function (response) {
+                //                    window.location.href = response;
+                //                }
+                //            });
+                //        },
+                //        cancel: function () {
+                //        }
+                //    }
+                //});
             });
 
             function fn_showSpinner() {
@@ -984,6 +993,32 @@
 
                     //used to change the class of a returned record to deleted record for later processing with a delete operation
                     $($(currentRow)).prop("class", "row returnedRecords delete jobCrspdtLine");
+
+                    //console.log(currentRow.find(".name_input").val());
+                    currentRow.find(".name_input, .email_input").css("text-decoration", "line-through");
+                    currentRow.find(".name_input, .email_input").css("color", "red");
+                    $(this).find(".fa-minus-square").css("color", "red");
+                    currentRow.find(".Btn_edit").attr("disabled", "true");
+                    //console.log($(this));
+
+                    //$($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
+                    //$($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+                    //$($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                    //$($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
+                }
+
+                if (temp_LineClass.includes("returnedRecords delete")) {
+
+                    //used to change the class of a returned record to deleted record for later processing with a delete operation
+                    $($(currentRow)).prop("class", "row returnedRecords jobCrspdtLine");
+
+                    //console.log(currentRow.find(".name_input").val());
+                    currentRow.find(".name_input, .email_input").css("text-decoration", "none");
+                    currentRow.find(".name_input, .email_input").css("color", "black");
+                    $(this).find(".fa-minus-square").css("color", "black");
+                    currentRow.find(".Btn_edit").removeAttr("disabled");
+                    //console.log($(this));
+
                     //$($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
                     //$($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
                     //$($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
@@ -1354,13 +1389,24 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3 col-form-label"><strong>Job Correspondents</strong></div>
-                    <div class="col-md-3 col-form-label" style="padding:5px;">Name</div>
+                    <div class="col-md-auto name_div" style="padding:0px;">
+                        <input class="" type="checkbox" id="" name="" value="" style="vertical-align:middle" hidden>
+                    </div>
+                    <div class="col-md-2 col-form-label" style="padding:5px;">Name</div>
                     <div class="col-md-3 col-form-label" style="padding:5px;">E-mail</div>
                 </div>
                 @*BEGIN NEW JOB CORRESPONDENT TEMPLATE*@
                 <div class="" id="jobCrspdtLine_template_edit" style="">
                     <div class="row entryRow jobCrspdt_template_row_active">
                         <div class="col-md-3" style=""></div>
+
+                        @*<div class="col-md-auto retain_div" style="padding:0px;">
+                            <input class="" type="checkbox" id="" name="" value="" style="">
+                        </div>
+                        <div class="col-md-2 name_div" style="padding:0px;">
+                            <input type="text" class="form-control name_input" style="padding:5px; margin:auto">
+                        </div>*@
+
                         <div class="col-md-3 name_div" style="padding:0px;">
                             <input type="text" class="form-control name_input" style="padding:5px;">
                         </div>
