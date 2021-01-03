@@ -654,7 +654,6 @@
                         serverResponseSuccess = response;
                         //console.log("response is: " + response)
                         window.location.href = serverResponseSuccess;
-                        //}
                     }
                 });
 
@@ -729,7 +728,7 @@
                     });
                 }
             });
-        //end customer code dropdown change
+            //end customer code dropdown change
 
             //begin customer code dropdown change
             customerCodeEdit_dpdwn.change(function () {
@@ -762,7 +761,7 @@
                 });
                 //}
             });
-        //end customer code dropdown change
+            //end customer code dropdown change
 
             function fn_showSpinner() {
                 $.LoadingOverlay("show", {
@@ -797,7 +796,7 @@
                 $('#customer-code-new').select2('destroy')
             }
 
-        //END MISCELLANEOUS SECTION
+            //END MISCELLANEOUS SECTION
 
             //BEGIN VALIDATION BEFORE SAVING SECTION
             function fn_rowFilled(button) {
@@ -839,7 +838,7 @@
                 }
                 return rowFilled;
             }
-        //END VALIDATION BEFORE SAVING SECTION
+            //END VALIDATION BEFORE SAVING SECTION
 
             //$(".Btn_add").click(function () {
             $("#jobNewForm .newJobCrspdtBtn_add").click(function () {
@@ -913,7 +912,6 @@
             });
 
             $("#jobNewForm .lineJobCrspdtBtn_edit, #jobEditForm .lineJobCrspdtBtn_edit").click(function () {
-            //$("#jobNewForm, #jobEditForm .lineJobCrspdtBtn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
                 console.log("yo")
 
@@ -1052,115 +1050,122 @@
 
                 }
 
-                function fn_buildJsonObjects() {
-                    //BEGIN BUILD THE JOB CORRESPONDENT JSON OBJECT
-                    //if there are none to add, set the json object to null
-                    if (jobCrspdtInfo_Add.length < 1) {
-                        jobCrspdtInfoJson_Add = null
-                    }
-                    else {
-                        for (var i = 0; i < jobCrspdtInfo_Add.length; i++) {
-                            jobCrspdtInfoJson_Add[i] = {
-                                //jobCrspdtName: jobCrspdtInfo_Add[i][0],
-                                //jobCrspdtEmail: jobCrspdtInfo_Add[i][1]
-                                name: jobCrspdtInfo_Add[i][0],
-                                email: jobCrspdtInfo_Add[i][1]
-                            };
-                        }
-                    }
-                    //console.log("jobCrspdtInfoJson_Add:");
-                    //console.log(jobCrspdtInfoJson_Add);
-
-                    //END BUILD THE JOB CORRESPONDENT JSON OBJECT
-
-                    //BEGIN BUILD THE JOB RESOURCES JSON OBJECT
-                    //if there are none to add, set the json object to null
-                    if (jobResources_Add.length < 1) {
-                        jobResourcesJson_Add = null
-                    }
-                    else {
-                        for (var i = 0; i < jobResources_Add.length; i++) {
-                            jobResourcesJson_Add[i] = {
-
-                                resourceTypeID: jobResources_Add[i][0],
-                                rate: jobResources_Add[i][1]
-                            };
-                        }
-                    }
-                    //console.log("jobResourcesJson_Add:");
-                    //console.log(jobResourcesJson_Add);
-
-                    //BEGIN BUILD THE JOB CORRESPONDENTS JSON OBJECT
-                    //if there are none to add, set the json object to null
-                    if (jobResources_Add.length < 1) {
-                        jobResourcesJson_Add = null
-                    }
-                    else {
-                        for (var i = 0; i < jobResources_Add.length; i++) {
-                            jobResourcesJson_Add[i] = {
-
-                                resourceTypeID: jobResources_Add[i][0],
-                                rate: jobResources_Add[i][1]
-                            };
-                        }
-                    }
-                    //console.log("jobResourcesJson_Add:");
-                    //console.log(jobResourcesJson_Add);
-
-                    //END BUILD THE JOB CORRESPONDENTS JSON OBJECT
+            function fn_buildJsonObjects() {
+                //BEGIN BUILD THE JOB CORRESPONDENT JSON OBJECT
+                //if there are none to add, set the json object to null
+                if (jobCrspdtInfo_Add.length < 1) {
+                    jobCrspdtInfoJson_Add = null
                 }
-
-                //when the resource type is checked or un-checked...
-                $(".resourceTypeID").on("change", function () {
-                    var currentRow = $(this).parent().parent();
-                    temp_LineClass = $(currentRow).prop("class");
-                    temp_resourceRateInput = currentRow.find(".resourceRate");
-
-                    //console.log("currentRow:" + currentRow.attr("class"));
-
-                    if ($(this).prop('checked')) {
-                        currentRow.find(".resourceRate").removeAttr('disabled');//un-lock the field for edits;
-                        //console.log("checked.")
-                        if (temp_LineClass.includes("returnedRecords edited")) {
-                            temp_resourceRateInput.css("color", "red");
-                        }
+                else {
+                    for (var i = 0; i < jobCrspdtInfo_Add.length; i++) {
+                        jobCrspdtInfoJson_Add[i] = {
+                            //jobCrspdtName: jobCrspdtInfo_Add[i][0],
+                            //jobCrspdtEmail: jobCrspdtInfo_Add[i][1]
+                            name: jobCrspdtInfo_Add[i][0],
+                            email: jobCrspdtInfo_Add[i][1]
+                        };
                     }
+                }
+                //console.log("jobCrspdtInfoJson_Add:");
+                //console.log(jobCrspdtInfoJson_Add);
 
-                    else {
-                        currentRow.find(".resourceRate").attr("disabled", "true");//lock the field for edits;
-                        temp_resourceRateInput.css("color", "black");
-                        //console.log("un-checked.")
+                //END BUILD THE JOB CORRESPONDENT JSON OBJECT
+
+                //BEGIN BUILD THE JOB RESOURCES JSON OBJECT
+                //if there are none to add, set the json object to null
+                if (jobResources_Add.length < 1) {
+                    jobResourcesJson_Add = null
+                }
+                else {
+                    for (var i = 0; i < jobResources_Add.length; i++) {
+                        jobResourcesJson_Add[i] = {
+
+                            resourceTypeID: jobResources_Add[i][0],
+                            rate: jobResources_Add[i][1]
+                        };
                     }
-                });
+                }
+                //console.log("jobResourcesJson_Add:");
+                //console.log(jobResourcesJson_Add);
 
-                $("#jobEditForm .resourceRate").on("change", function () {
-                    var currentRow = $(this).parent().parent();
-                    temp_LineClass = $(currentRow).prop("class");
-                    temp_resourceRateInput = $(this);
+                //BEGIN BUILD THE JOB CORRESPONDENTS JSON OBJECT
+                //if there are none to add, set the json object to null
+                if (jobResources_Add.length < 1) {
+                    jobResourcesJson_Add = null
+                }
+                else {
+                    for (var i = 0; i < jobResources_Add.length; i++) {
+                        jobResourcesJson_Add[i] = {
 
-                    //console.log("temp_LineClass:" + temp_LineClass);
-                    //console.log("temp_resourceRate:" + temp_resourceRateInput.prop('checked'));
+                            resourceTypeID: jobResources_Add[i][0],
+                            rate: jobResources_Add[i][1]
+                        };
+                    }
+                }
+                //console.log("jobResourcesJson_Add:");
+                //console.log(jobResourcesJson_Add);
 
-                    if (temp_LineClass.includes("returnedRecords")) {
+                //END BUILD THE JOB CORRESPONDENTS JSON OBJECT
+            }
 
-                        currentRow.prop("class", " row returnedRecords edited jobResource_Line");
+            
+            $(".resourceTypeID").on("change", function () {
+                var currentRow = $(this).parent().parent();
+                temp_LineClass = $(currentRow).prop("class");
+                temp_resourceRateInput = currentRow.find(".resourceRate");
+
+                //console.log("currentRow:" + currentRow.attr("class"));
+
+                if ($(this).prop('checked')) {
+                    currentRow.find(".resourceRate").removeAttr('disabled');//un-lock the field for edits;
+                    //console.log("checked.")
+                    if (temp_LineClass.includes("returnedRecords edited")) {
                         temp_resourceRateInput.css("color", "red");
                     }
+                }
 
-                    else {
-                        temp_resourceRateInput.css("color", "black");
-                    }
-                });
+                else {
+                    currentRow.find(".resourceRate").attr("disabled", "true");//lock the field for edits;
+                    temp_resourceRateInput.css("color", "black");
+                    //console.log("un-checked.")
+                }
+            });
 
-                $("#jobEditForm .job-crspdt_input").on("change", function () {
-                    var currentRow = $(this).parent().parent();
-                    temp_LineClass = $(currentRow).prop("class");
+            //BEGIN THE EDIT MODAL SECTION
 
-                    if (temp_LineClass.includes("row returnedRecords jobCrspdtLine")) {
-                        $($(currentRow)).prop("class", "row returnedRecords edit jobCrspdtLine");
-                        currentRow.find(".fa-edit").css("color", "red");
-                    }
-                });
+            //Begin when a resource rate on the edit page is checked or unchecked...
+            $("#jobEditForm .resourceRate").on("change", function () {
+                var currentRow = $(this).parent().parent();
+                temp_LineClass = $(currentRow).prop("class");
+                temp_resourceRateInput = $(this);
+
+                //if editing the resource rate of a record stored in the database...
+                if (temp_LineClass.includes("returnedRecords")) {
+
+                    //...change the class of that resource line to edited
+                    currentRow.prop("class", " row returnedRecords edited jobResource_Line");
+                    //...and make the text red to indicate so
+                    temp_resourceRateInput.css("color", "red");
+                }
+
+                //...otherwise, simply enforce the text to be black if you are adding a resource to the database
+                else {
+                    temp_resourceRateInput.css("color", "black");
+                }
+            });
+            //End when a resource type on the edit page is checked or unchecked...
+
+            //END THE EDIT MODAL SECTION
+
+            $("#jobEditForm .job-crspdt_input").on("change", function () {
+                var currentRow = $(this).parent().parent();
+                temp_LineClass = $(currentRow).prop("class");
+
+                if (temp_LineClass.includes("row returnedRecords jobCrspdtLine")) {
+                    $($(currentRow)).prop("class", "row returnedRecords edit jobCrspdtLine");
+                    currentRow.find(".fa-edit").css("color", "red");
+                }
+            });
 
         });//end document read jquery statements
 
