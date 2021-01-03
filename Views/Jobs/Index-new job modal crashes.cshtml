@@ -220,11 +220,11 @@
                 //}
             });
 
-            //$('#jobNewForm').on('show.bs.modal', function (event) {
+            $('#jobNewForm').on('show.bs.modal', function (event) {
 
-            //    fn_resetModalForm("#jobNewForm");//reset the modal for new inputs
-            //    $(".addRecord.jobCrspdtLine").remove();//remove any incomplete job correspondent lines
-            //})
+                fn_resetModalForm("#jobNewForm");//reset the modal for new inputs
+                $(".addRecord.jobCrspdtLine").remove();//remove any incomplete job correspondent lines
+            })
 
             //reset the modal for new inputs
             function fn_resetModalForm (modalID) {
@@ -1675,10 +1675,10 @@
     </div>
 </div>
 
-    @*END NEW CUSTOMER MODAL TEMPLATE*@
+@*END NEW CUSTOMER MODAL TEMPLATE*@
 
-    @*END CUSTOMER SECTION*@
+@*END CUSTOMER SECTION*@
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
