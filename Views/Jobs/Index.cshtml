@@ -151,7 +151,7 @@
             var jobRates_RtndRecs = [];//array which holds which job resource rates are stored in the database
             //var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
 
-            //fn_enableSelect2();
+            fn_enableSelect2();
             //fn_loadRtndRecs();
 
             var customerCodeNew_dpdwn = $('#customer-code-new');
@@ -912,9 +912,10 @@
                 //}
             });
 
-            $("#jobNewForm.lineJobCrspdtBtn_edit, #jobEditForm.lineJobCrspdtBtn_edit").click(function () {
+            $("#jobNewForm .lineJobCrspdtBtn_edit, #jobEditForm .lineJobCrspdtBtn_edit").click(function () {
             //$("#jobNewForm, #jobEditForm .lineJobCrspdtBtn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
+                console.log("yo")
 
                 $(this).hide();
                 $(currentRow).find(".Btn_save").removeAttr("hidden");
@@ -925,9 +926,10 @@
                 $(currentRow).find(".name_input, .email_input").css("color", "red");
             });
 
-            $("#jobNewForm.lineJobCrspdtBtn_save, #jobEditForm.lineJobCrspdtBtn_save").click(function () {
+            $("#jobNewForm .lineJobCrspdtBtn_save, #jobEditForm .lineJobCrspdtBtn_save").click(function () {
 
                 //if (fn_rowFilled($(this))) {
+                
 
                 var currentRow = $(this).parent().parent();
                 temp_LineClass = $(currentRow).prop("class");
@@ -1159,20 +1161,6 @@
                         currentRow.find(".fa-edit").css("color", "red");
                     }
                 });
-
-                ////$(".Btn_edit").click(function () {
-                //$("#jobNewForm, #jobEditForm .lineJobCrspdtBtn_edit").click(function () {
-                //    var currentRow = $(this).parent().parent();
-
-                //    $(this).hide();
-                //    $(currentRow).find(".Btn_save").removeAttr("hidden");
-                //    $(currentRow).find(".Btn_save").show();
-
-                //    currentRow.find(".name_input").removeAttr("disabled");//
-                //    currentRow.find(".email_input").removeAttr("disabled");//
-                //    $(currentRow).find(".name_input, .email_input").css("color", "red");
-                //});
-
 
         });//end document read jquery statements
 

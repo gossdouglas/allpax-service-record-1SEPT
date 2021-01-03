@@ -2571,6 +2571,7 @@
     <Content Include="Views\resourceTypes\Index.cshtml" />
     <Content Include="Views\resourceTypes\Index-orig.cshtml" />
     <Content Include="Views\Jobs\Index-master-3jan21.cshtml" />
+    <Content Include="Views\Jobs\Index-new job modal crashes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
