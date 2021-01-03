@@ -421,21 +421,18 @@
 
                         //get the value of each sub-job type checkbox
                         $(temp_resourceTypeInput).each(function (index, item) {
-                            var currentRow = $(this).parent().parent();
-                            //temp_resourceRateInput = $(this).parent().parent().find(".resourceRate");
-                            temp_resourceRateInput = currentRow.find(".resourceRate");
+
+                            temp_resourceRateInput = $(this).parent().parent().find(".resourceRate");
 
                             //if the value of the current resource type checkbox is part of the jobResourceIDs_RtndRecs array...
                             //if ($.inArray($(this).val(), jobResourceIDs_RtndRecs) !== -1) {
                             if ($.inArray($(this).val(), jobResource_RtndRecs[0]) !== -1) {
 
                                 var temp_index = jobResourceIDs_RtndRecs.indexOf($(this).val());
-
-                                currentRow.prop("class", " row returnedRecords jobResource_Line");
+                               
                                 $(this).prop('checked', true);//...check the input box for the HTML element
                                 temp_resourceRateInput.val(jobRates_RtndRecs[temp_index]);
                                 temp_resourceRateInput.removeAttr('disabled');
-                                temp_resourceRateInput.css("color", "black");
 
                                 //console.log("Index of jobResourceIDs_RtndRecs " + temp_index + " has a value of " + jobResourceIDs_RtndRecs[temp_index]);
                                 //console.log("Index of jobRates_RtndRecs " + temp_index + " has a value of " + jobRates_RtndRecs[temp_index]);
@@ -444,10 +441,7 @@
 
                             else {
                                 //console.log($(this).val() + " was not found in the returned record array.");
-                                currentRow.prop("class", " row jobResource_Line");
                                 $(this).prop('checked', false);//...un-check the input box for the HTML element
-                                temp_resourceRateInput.attr("disabled", "true");
-                                temp_resourceRateInput.css("color", "black");
                             }
                         });
                     }
@@ -478,7 +472,6 @@
                 //var jobRates_SlctdRecs = [];//array which holds which jobRates are selected in the modal
                 var temp_subJobTypeInput = modal.find('.sub-job-type_input');
                 var temp_resourceTypeInput = modal.find('.resource-type_input.resourceTypeID');
-                var temp_jobResource_Line = modal.find('.jobResource_Line');
 
                 var subJobTypeIDsAddArr = [];
                 var subJobTypeIDsDeleteArr = [];
@@ -489,54 +482,32 @@
                 var jobResourcesJson_Delete = [];
                 var jobResourcesSlctdArr = [];
 
-                //var totalOpsToDo = 0;
+
+                var totalOpsToDo = 0;
 
                 $(temp_subJobTypeInput).each(function (index, item) {
 
                     var temp_val = $(this).val();
-                    //var currentRow = $(this).parent().parent();
-                    //var temp_resourceRateInput = currentRow.find(".resourceRate");
 
                     //if the the current sub-job type checkbox is checked...
                     if ($(this).prop('checked')) {
                         subJobTypeIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs for later comparison to _RtndRecs
                         //console.log(temp_val + " is selected.")
-
-                        //if (currentRow.includes("returnedRecords edited")) {
-                        //    console.log("temp_resourceRateInput value to be edited:" + temp_resourceRateInput.val());
-                        //}
                     }
                 });
 
                 $(temp_resourceTypeInput).each(function (index, item) {
 
                     var temp_val = $(this).val();
-                    var currentRow = $(this).parent().parent();
-                    //var temp_rate = $(this).parent().parent().find(".resourceRate").val();
-                    var temp_rate = currentRow.find(".resourceRate").val();
+                    var temp_rate = $(this).parent().parent().find(".resourceRate").val();
 
                     //if the the current resource type checkbox is checked...
                     if ($(this).prop('checked')) {
                         jobResourceIDs_SlctdRecs.push(temp_val);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
                         jobResourcesSlctdArr.push([temp_val, temp_rate]);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
                         //console.log("jobResourceID " + temp_val + " is selected with a rate of " + temp_rate);
-
-                        if (currentRow.attr("class").includes("returnedRecords edited")) {
-                            console.log("temp_rate value to be edited:" + temp_rate);
-                        }
                     }
                 });
-
-                //$(temp_jobResource_Line).each(function (index, item) {
-
-                //    var temp_val = $(this).val();
-
-                //    //if the the current sub-job type checkbox is checked...
-                //    if ($(this).prop('checked')) {
-                //        subJobTypeIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs for later comparison to _RtndRecs
-                //        //console.log(temp_val + " is selected.")
-                //    }
-                //});
 
                 subJobTypeIDsAddArr = _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs);
                 subJobTypeIDsDeleteArr = _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs);
@@ -563,13 +534,13 @@
                         };
                 }
 
-                //console.log("jobResourcesSlctdArr:" + jobResourcesSlctdArr);
-                //console.log("jobResourceIDs to add:" + jobResourceIDsAddArr);                
-                //console.log("jobResourcesJson_Add:");
-                //console.log(jobResourcesJson_Add);
-                //console.log("jobResourceIDs to delete:" + jobResourceIDsDeleteArr);
-                //console.log("jobResourcesJson_Delete:");
-                //console.log(jobResourcesJson_Delete);
+                console.log("jobResourcesSlctdArr:" + jobResourcesSlctdArr);
+                console.log("jobResourceIDs to add:" + jobResourceIDsAddArr);                
+                console.log("jobResourcesJson_Add:");
+                console.log(jobResourcesJson_Add);
+                console.log("jobResourceIDs to delete:" + jobResourceIDsDeleteArr);
+                console.log("jobResourcesJson_Delete:");
+                console.log(jobResourcesJson_Delete);
 
                 //post edited job info to the controller
                 //if (allFieldsValid == 1) {
@@ -1090,47 +1061,10 @@
                 //enable_disableSave();
             });
 
-            //when the resource type is checked or un-checked...
-            $(".resourceTypeID").on("change", function () {
-                var currentRow = $(this).parent().parent();
-                temp_LineClass = $(currentRow).prop("class");
-                temp_resourceRateInput = currentRow.find(".resourceRate");
-
-                //console.log("currentRow:" + currentRow.attr("class"));
-
-                if ($(this).prop('checked')) {
-                    currentRow.find(".resourceRate").removeAttr('disabled');//un-lock the field for edits;
-                    //console.log("checked.")
-                    if (temp_LineClass.includes("returnedRecords edited")) {
-                        temp_resourceRateInput.css("color", "red");
-                    }
-                }
-
-                else {
-                    currentRow.find(".resourceRate").attr("disabled", "true");//lock the field for edits;
-                    temp_resourceRateInput.css("color", "black"); 
-                    //console.log("un-checked.")
-                }
-            });
-
-            $("#jobEditForm .resourceRate").on("change", function () {
-                var currentRow = $(this).parent().parent();
-                temp_LineClass = $(currentRow).prop("class");
-                temp_resourceRateInput = $(this);
-
-                //console.log("temp_LineClass:" + temp_LineClass);
-                //console.log("temp_resourceRate:" + temp_resourceRateInput.prop('checked'));
-
-                if (temp_LineClass.includes("returnedRecords")) {
-
-                    currentRow.prop("class", " row returnedRecords edited jobResource_Line");
-                    temp_resourceRateInput.css("color", "red");
-                }
-
-                else {
-                    temp_resourceRateInput.css("color", "black");    
-                }
-            });
+            //$(".customer-info").on("change keypress", function () {
+            //    customerInfoChngd = true;
+            //    //enable_disableSave();
+            //});
 
         });//end document read jquery statements
     </script>
@@ -1358,7 +1292,7 @@
                                         </div>
                                         <div class="col-md-3 resourceRate_div">
                                             <input type="text" class="form-control resource-type_input resourceRate"
-                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;" disabled>
+                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;">
                                         </div>
                                     </div>
                                 }
@@ -1568,7 +1502,7 @@
                                             @temp_description
                                         </div>
                                         <div class="col-md-3 resourceRate_div">
-                                            <input type="text" class="form-control resource-type_input resourceRate" maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;" disabled>
+                                            <input type="text" class="form-control resource-type_input resourceRate" maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;">
                                         </div>
                                     </div>
                                 }
