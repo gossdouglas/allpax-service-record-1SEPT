@@ -194,7 +194,7 @@
                     jobCrspdtInfo: jobCrspdtInfoJson_Add
                 };
 
-                console.log(data);
+                //console.log(data);
 
                 //fn_showSpinner();
 
@@ -218,20 +218,31 @@
 
                 //}
             });
-
-            
-
+          
             //reset the modal for new inputs
             function fn_resetModalForm(modalID) {
 
-                var allInputs = $(modalID).find(":input");
+                fn_disableSelect2();
 
-                $(allInputs).val('');//reset text boxes and dropdowns
-                $(allInputs).prop('checked', false);  //reset check boxes            
+                var allJobCustomerInputs = $(modalID).find(".job-customer-info");
+                var allCheckInputs = $(modalID).find("input:checkbox");
+                var allTextAreaInputs = $(modalID).find("textarea");
+                var allSelectInputs = $(modalID).find("select");
+                var startTimeInput = $(modalID).find(".normal-hours-start");
+                var endTimeInput = $(modalID).find(".normal-hours-end");
+                var normalHoursInput = $(modalID).find(".normal-hours-daily");
+
+                $(allJobCustomerInputs).val('');//reset text boxes
+                $(allCheckInputs).prop('checked', false);//reset check boxes 
+                $(allTextAreaInputs).val('');//reset text areas
+                $(allSelectInputs).val(-1);//reset select boxes
+                $(startTimeInput).val('06:00');//reset time 
+                $(endTimeInput).val('18:00');//reset time
+                $(normalHoursInput).val('8');//reset normal hours
+
+                fn_enableSelect2();
             }
-
-            
-
+           
             $(".jobEditForm.btn_save").click(function () {
 
                 console.log("_____________________")
@@ -315,8 +326,8 @@
 
                         if (currentRow.attr("class").includes("returnedRecords edited")) {
 
-                            console.log("temp_val value to be edited:" + temp_val);
-                            console.log("temp_rate value to be edited:" + temp_rate);
+                            //console.log("temp_val value to be edited:" + temp_val);
+                            //console.log("temp_rate value to be edited:" + temp_rate);
 
                             jobResourcesJson_Edit[generalCounter] = {
                                 jobID: temp_jobID,
@@ -324,7 +335,7 @@
                                 rate: temp_rate,
                             };
 
-                            console.log("general counter:" + generalCounter);
+                            //console.log("general counter:" + generalCounter);
                             generalCounter++;
                         }
                     }
@@ -463,17 +474,17 @@
                 //console.log("jobResourcesJson_Edit:");
                 //console.log(jobResourcesJson_Edit);
 
-                console.log("---------------------");
-                console.log("temp_jobCrspdtInfoJson_Add:");
-                console.log(temp_jobCrspdtInfoJson_Add);
+                //console.log("---------------------");
+                //console.log("temp_jobCrspdtInfoJson_Add:");
+                //console.log(temp_jobCrspdtInfoJson_Add);
 
-                console.log("---------------------");
-                console.log("temp_jobCrspdtInfoJson_Delete:");
-                console.log(temp_jobCrspdtInfoJson_Delete);
+                //console.log("---------------------");
+                //console.log("temp_jobCrspdtInfoJson_Delete:");
+                //console.log(temp_jobCrspdtInfoJson_Delete);
 
-                console.log("---------------------");
-                console.log("temp_jobCrspdtInfoJson_Edit:");
-                console.log(temp_jobCrspdtInfoJson_Edit);
+                //console.log("---------------------");
+                //console.log("temp_jobCrspdtInfoJson_Edit:");
+                //console.log(temp_jobCrspdtInfoJson_Edit);
 
                 //}
             });
@@ -1018,9 +1029,13 @@
 
             function fn_loadEntries_Add() {
 
-                var subJobTypes_div_Add = $(".subJobTypes_div").find(".sub-job-type_input");
+                //var subJobTypes_div_Add = $(".subJobTypes_div").find(".sub-job-type_input");
+                var subJobTypes_div_Add = $("#jobNewForm .subJobTypes_div").find(".sub-job-type_input");
                 var jobResources_div_Add = $(".jobResourceTypes_div").find(".jobResource_Line");
                 var jobCrspdt_div_Add = $(".addRecord.jobCrspdtLine");
+
+                console.log("subJobTypes_div_Add");
+                console.log(subJobTypes_div_Add.length);
 
                 $(subJobTypes_div_Add).each(function (index) {
 
@@ -1031,6 +1046,7 @@
                         subJobTypes_Add.push(temp_subJobTypeID)//...push it to the array
                     }
                 });
+                console.log("subJobTypes_Add");
                 console.log(subJobTypes_Add);
 
                 $(jobResources_div_Add).each(function (index) {
@@ -1043,7 +1059,8 @@
                         jobResources_Add.push([temp_resourceTypeID, temp_resourceTypeRate])//...push it to the array
                     }
                 });
-                console.log(jobResources_Add);
+                //console.log("jobResources_Add");
+                //console.log(jobResources_Add);
 
                 $(jobCrspdt_div_Add).each(function (index) {
 
@@ -1052,7 +1069,8 @@
 
                     jobCrspdtInfo_Add.push([temp_name, temp_email]);
                 });
-                console.log(jobCrspdtInfo_Add);
+                //console.log("jobCrspdtInfo_Add");
+                //console.log(jobCrspdtInfo_Add);
 
                 }
 
@@ -1177,9 +1195,7 @@
             //End when a field in the job correspondent is changed for a returned record...
 
             //END THE EDIT MODAL SECTION
-
             
-
         });//end document read jquery statements
 
     </script>
