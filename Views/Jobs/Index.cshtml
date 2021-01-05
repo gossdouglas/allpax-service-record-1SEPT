@@ -158,7 +158,7 @@
 
             $(".newJobCrspdtBtn_add").click(function () {
 
-                //if (fn_modalValidate($(this))) {
+                if (fn_jobCrspdtValidate($(this))) {
 
                 var currentRow = $(this).parent().parent();
                 var currentFormID = "#" + currentRow.parents().eq(4).attr("id");
@@ -193,7 +193,7 @@
                 $(currentFormID + " .jobCrspdtLine_template_row_hidden").attr("hidden", "true");
 
                 //enable_disableSave();
-                //}
+                }
             });
 
             $("#jobNewForm .lineJobCrspdtBtn_edit, #jobEditForm .lineJobCrspdtBtn_edit").click(function () {
@@ -211,7 +211,7 @@
 
             $("#jobNewForm .lineJobCrspdtBtn_save, #jobEditForm .lineJobCrspdtBtn_save").click(function () {
 
-                //if (fn_modalValidate($(this))) {
+                if (fn_jobCrspdtValidate($(this))) {
 
 
                 var currentRow = $(this).parent().parent();
@@ -231,15 +231,7 @@
                 else {
                     $(currentRow).find(".name_input, .email_input").css("color", "black");
                 }
-
-                //}
-                //else {
-
-                //    $.alert({
-                //        title: 'Error!',
-                //        content: 'One or more row entries incorrect.  Narrative section must 10 or greater, at least one team member must be added and hours must be of form H.0, H.25, H.5, or H.75.',
-                //    });
-                //}
+                }
             });
 
             $(".Btn_delete").click(function () {
@@ -375,10 +367,10 @@
                 var normalHoursInput = $(modalID).find(".normal-hours-daily");
 
                 $(allJobCustomerInputs).val('');//reset text boxes
-                $(allCheckInputs).prop('checked', false);//reset check boxes 
+                $(allCheckInputs).prop('checked', false);//reset check boxes
                 $(allTextAreaInputs).val('');//reset text areas
                 $(allSelectInputs).val(-1);//reset select boxes
-                $(startTimeInput).val('06:00');//reset time 
+                $(startTimeInput).val('06:00');//reset time
                 $(endTimeInput).val('18:00');//reset time
                 $(normalHoursInput).val('8');//reset normal hours
 
@@ -396,7 +388,7 @@
 
                 fn_loadEntries_Add();//determine which list items need to be added
                 fn_buildJsonObjects();
-                
+
 
                 if (fn_modalValidate($(this))) {
 
@@ -1013,7 +1005,7 @@
                     jobCrspdtInfoEdit: temp_jobCrspdtInfoJson_Edit
                 };
 
-                
+
 
                 $.ajax({
                     url: '/Jobs/UpdateJob',
@@ -1190,8 +1182,40 @@
             }
             //Begin validation
 
+            //Begin validation
+            function fn_jobCrspdtValidate(button) {
+
+                var currentRow = button.parent().parent();
+                var jobCrspdtValid = true;
+
+                var temp_name = currentRow.find(".name_input").val();
+                var temp_email = currentRow.find(".email_input").val();
+                var temp_emailMatch = temp_email.match(/\w+([-+.']\w+)*@@\w+([-.]\w+)*\.\w+([-.]\w+)*$/);//
+
+                if (temp_name.length < 1) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Name must not be empty.',
+                    });
+                    jobCrspdtValid = false;
+                    return jobCrspdtValid;
+                }
+
+                if (!temp_emailMatch) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'E-mail format is not valid.',
+                    });
+                    jobCrspdtValid = false;
+                    return jobCrspdtValid;
+                }
+
+                return jobCrspdtValid;
+            }
+            //Begin validation
+
             //////////////////END MISCELLANEOUS SECTION
-            
+
         });//end document read jquery statements
 
     </script>
