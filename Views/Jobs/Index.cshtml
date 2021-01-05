@@ -158,7 +158,7 @@
 
             $(".newJobCrspdtBtn_add").click(function () {
 
-                //if (fn_rowFilled($(this))) {
+                //if (fn_modalValidate($(this))) {
 
                 var currentRow = $(this).parent().parent();
                 var currentFormID = "#" + currentRow.parents().eq(4).attr("id");
@@ -211,7 +211,7 @@
 
             $("#jobNewForm .lineJobCrspdtBtn_save, #jobEditForm .lineJobCrspdtBtn_save").click(function () {
 
-                //if (fn_rowFilled($(this))) {
+                //if (fn_modalValidate($(this))) {
 
 
                 var currentRow = $(this).parent().parent();
@@ -396,8 +396,11 @@
 
                 fn_loadEntries_Add();//determine which list items need to be added
                 fn_buildJsonObjects();
+                
 
-                //if (fn_rowFilled($(this))) {
+                if (fn_modalValidate($(this))) {
+
+                fn_showSpinner();
 
                 var modal = $(this).parent().parent();
                 var temp_jobID = modal.find('.job-id').val();
@@ -423,7 +426,6 @@
                     nrmlHoursDaily: temp_nrmlHoursDaily,
                     dblTimeHours: temp_dblTimeHours,
                     description: temp_description,
-                    //subJobTypes_Add: subJobTypes_Add,
                     jobSubJobsAdd: subJobTypes_Add,
                     resourceTypes: jobResourcesJson_Add,
                     jobCrspdtInfo: jobCrspdtInfoJson_Add
@@ -431,27 +433,25 @@
 
                 //console.log(data);
 
-                //fn_showSpinner();
+                //$.ajax({
+                //    url: '/Jobs/AddJob',
+                //    method: 'post',
+                //    contentType: 'application/json',
+                //    dataType: 'json',
+                //    data: JSON.stringify(data),
+                //    traditional: true,
+                //    success: function (response) {
+                //        window.location.href = response;
+                //    },
+                //    error: function (response) {
+                //        console.log("an error!");
+                //        $(response).each(function (index, item) {
+                //            console.log(item.name)
+                //        });
+                //    }
+                //});
 
-                $.ajax({
-                    url: '/Jobs/AddJob',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function (response) {
-                        window.location.href = response;
-                    },
-                    error: function (response) {
-                        console.log("an error!");
-                        $(response).each(function (index, item) {
-                            console.log(item.name)
-                        });
-                    }
-                });
-
-                //}
+                }
             });
 
             function fn_loadEntries_Add() {
@@ -865,8 +865,6 @@
 
                 var generalCounter = 0;
 
-                //var totalOpsToDo = 0;
-
                 $(temp_subJobTypeInput).each(function (index, item) {
 
                     var temp_val = $(this).val();
@@ -1011,6 +1009,8 @@
                     jobCrspdtInfoEdit: temp_jobCrspdtInfoJson_Edit
                 };
 
+                fn_showSpinner();
+
                 $.ajax({
                     url: '/Jobs/UpdateJob',
                     method: 'post',
@@ -1098,44 +1098,82 @@
             }
 
             //Begin validation
-            function fn_rowFilled(button) {
+            function fn_modalValidate(button) {
                 var currentRow = button.parent().parent();
-                var rowFilled = true;
+                var modalValid = true;
+
+                var temp_jobID = currentRow.find(".job-id").val();
                 var temp_customerCode = currentRow.find(".customer-code").val();
-                var temp_customerContact = currentRow.find(".customer-name").val();
+                var temp_customerContact = currentRow.find(".customer-contact").val();
+                var temp_nrmlHoursStart = currentRow.find(".normal-hours-start").val();
+                var temp_nrmlHoursEnd = currentRow.find(".normal-hours-end").val();
+                var temp_nrmlHoursDaily = currentRow.find(".normal-hours-daily").val();
                 var temp_jobDescription = currentRow.find(".job-description").val();
 
-                var temp_customerCodeMatch = temp_customerCode.match(/^([A-Z]{3})$/);//maches the form ABC
-                var temp_jobDescriptionMatch = temp_jobDescription.match(/([A-Za-z ]+), ([A-Za-z]{2}$)/);//maches the form LAS VEGAS, NV
-
-                //if (temp_customerCode.length < 3) {
-                if (!temp_customerCodeMatch) {
+                if (temp_jobID.length < 1) {
                     $.alert({
                         title: 'Error!',
-                        content: 'Customer code must be at least 3 letters.',
+                        content: 'Job ID must not be empty.',
                     });
-                    rowFilled = false;
-                    return rowFilled;
+                    modalValid = false;
+                    return modalValid;
+                }
+
+                if (temp_customerCode == -1) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'A customer code must be selected.',
+                    });
+                    modalValid = false;
+                    return modalValid;
                 }
 
                 if (temp_customerContact.length < 1) {
                     $.alert({
                         title: 'Error!',
-                        content: 'Customer name must not be empty.',
+                        content: 'Customer contact must not be empty.',
                     });
-                    rowFilled = false;
-                    return rowFilled;
+                    modalValid = false;
+                    return modalValid;
                 }
 
-                if (!temp_jobDescriptionMatch) {
+                if (temp_jobDescription.length < 10) {
                     $.alert({
                         title: 'Error!',
-                        content: 'Location must not be empty and must match the form City, ST.',
+                        content: 'Description must contain at least ten characters.',
                     });
-                    rowFilled = false;
-                    return rowFilled;
+                    modalValid = false;
+                    return modalValid;
                 }
-                return rowFilled;
+
+                if (temp_nrmlHoursStart.length < 1) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'A start time must be entered.',
+                    });
+                    modalValid = false;
+                    return modalValid;
+                }
+
+                if (temp_nrmlHoursEnd.length < 1) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'An end time must be entered.',
+                    });
+                    modalValid = false;
+                    return modalValid;
+                }
+
+                if (temp_nrmlHoursEnd < temp_nrmlHoursStart ) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'The end time must not be earlier than the start time.',
+                    });
+                    modalValid = false;
+                    return modalValid;
+                }
+
+                return modalValid;
             }
             //Begin validation
 
@@ -1243,7 +1281,7 @@
                 <div class="row">
                     <div class="col-md-3"><strong>Job ID</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control job-customer-info job-id" maxlength="10" disabled>
+                        <input type="text" class="form-control job-customer-info job-id" maxlength="8" disabled>
                     </div>
                     <div class="col-sm-auto">
                         <div class="form-check">
@@ -1460,7 +1498,7 @@
                 <div class="row">
                     <div class="col-md-3"><strong>Job ID</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control job-id" maxlength="10">
+                        <input type="text" class="form-control job-id" maxlength="8">
                     </div>
                     <div class="col-sm-auto">
                         <div class="form-check">
