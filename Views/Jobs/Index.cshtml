@@ -821,6 +821,10 @@
             //Begin when the save button on the edit job modal is pressed
             $(".jobEditForm.btn_save").click(function () {
 
+                if (fn_modalValidate($(this))) {
+
+                fn_showSpinner();
+
                 console.log("_____________________")
                 console.log("Arrays upon modal save press.")
 
@@ -1009,7 +1013,7 @@
                     jobCrspdtInfoEdit: temp_jobCrspdtInfoJson_Edit
                 };
 
-                fn_showSpinner();
+                
 
                 $.ajax({
                     url: '/Jobs/UpdateJob',
@@ -1062,7 +1066,7 @@
                 //console.log("temp_jobCrspdtInfoJson_Edit:");
                 //console.log(temp_jobCrspdtInfoJson_Edit);
 
-                //}
+                }
             });
             //End when the save button on the edit job modal is pressed
 
@@ -1168,6 +1172,15 @@
                     $.alert({
                         title: 'Error!',
                         content: 'The end time must not be earlier than the start time.',
+                    });
+                    modalValid = false;
+                    return modalValid;
+                }
+
+                if (temp_nrmlHoursDaily.length < 1) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Normal hours daily must not be empty.',
                     });
                     modalValid = false;
                     return modalValid;
