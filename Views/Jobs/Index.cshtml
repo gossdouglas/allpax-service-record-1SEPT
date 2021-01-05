@@ -154,88 +154,7 @@
             fn_enableSelect2();
             //fn_loadRtndRecs();
 
-            //begin customer code dropdown change
-            $(".customer-code").change(function () {
-
-                var modal = $(this).parents().eq(2);
-                var currCustomerCode = $(this).val();
-                var currCustomerName = modal.find(".customer-name");
-                var currCustomerLocation = modal.find(".customer-location");
-
-                if (currCustomerCode == '-1') {
-                    $("#customer-name-new").val('');
-                    $("#customer-location-new").val('');
-                }
-                else {
-                    $.ajax({
-                        url: '/DataService.asmx/GetAllCustomers',
-                        method: 'post',
-                        dataType: 'json',
-                        success: function (data) {
-
-                            $(data).each(function (index, item) {
-
-                                if (item.customerCode == currCustomerCode) {
-                                    //console.log("Selected customerCode: " + item.customerCode)
-                                    //console.log("Selected customerName: " + item.customerName)
-                                    //console.log("Selected address: " + item.address)
-
-                                    currCustomerName.val(item.customerName);
-                                    currCustomerLocation.val(item.address);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-            //end customer code dropdown change
-
-            //BEGIN VALIDATION BEFORE SAVING SECTION
-            function fn_rowFilled(button) {
-                var currentRow = button.parent().parent();
-                var rowFilled = true;
-                var temp_customerCode = currentRow.find(".customer-code").val();
-                var temp_customerContact = currentRow.find(".customer-name").val();
-                var temp_jobDescription = currentRow.find(".job-description").val();
-
-                var temp_customerCodeMatch = temp_customerCode.match(/^([A-Z]{3})$/);//maches the form ABC
-                var temp_jobDescriptionMatch = temp_jobDescription.match(/([A-Za-z ]+), ([A-Za-z]{2}$)/);//maches the form LAS VEGAS, NV
-
-                //if (temp_customerCode.length < 3) {
-                if (!temp_customerCodeMatch) {
-                    $.alert({
-                        title: 'Error!',
-                        content: 'Customer code must be at least 3 letters.',
-                    });
-                    rowFilled = false;
-                    return rowFilled;
-                }
-
-                if (temp_customerContact.length < 1) {
-                    $.alert({
-                        title: 'Error!',
-                        content: 'Customer name must not be empty.',
-                    });
-                    rowFilled = false;
-                    return rowFilled;
-                }
-
-                if (!temp_jobDescriptionMatch) {
-                    $.alert({
-                        title: 'Error!',
-                        content: 'Location must not be empty and must match the form City, ST.',
-                    });
-                    rowFilled = false;
-                    return rowFilled;
-                }
-                return rowFilled;
-            }
-            //END VALIDATION BEFORE SAVING SECTION
-
-            
-
-            
-            //BEGIN THE COMMON NEW JOB AND EDIT JOB MODAL SECTION
+            //////////////////BEGIN THE COMMON NEW JOB AND EDIT JOB MODAL SECTION
 
             $(".newJobCrspdtBtn_add").click(function () {
 
@@ -402,9 +321,45 @@
                 $(this).val($(this).val().toUpperCase());
             });
 
-            //END THE COMMON NEW JOB AND EDIT JOB MODAL SECTION
+            //begin customer code dropdown change
+            $(".customer-code").change(function () {
 
-            //BEGIN THE NEW JOB MODAL SECTION
+                var modal = $(this).parents().eq(2);
+                var currCustomerCode = $(this).val();
+                var currCustomerName = modal.find(".customer-name");
+                var currCustomerLocation = modal.find(".customer-location");
+
+                if (currCustomerCode == '-1') {
+                    $("#customer-name-new").val('');
+                    $("#customer-location-new").val('');
+                }
+                else {
+                    $.ajax({
+                        url: '/DataService.asmx/GetAllCustomers',
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+
+                            $(data).each(function (index, item) {
+
+                                if (item.customerCode == currCustomerCode) {
+                                    //console.log("Selected customerCode: " + item.customerCode)
+                                    //console.log("Selected customerName: " + item.customerName)
+                                    //console.log("Selected address: " + item.address)
+
+                                    currCustomerName.val(item.customerName);
+                                    currCustomerLocation.val(item.address);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+            //end customer code dropdown change
+
+            //////////////////END THE COMMON NEW JOB AND EDIT JOB MODAL SECTION
+
+            //////////////////BEGIN THE NEW JOB MODAL SECTION
 
             //reset the new job modal for new inputs
             function fn_resetModalForm(modalID) {
@@ -604,9 +559,9 @@
                 //END BUILD THE JOB CORRESPONDENTS JSON OBJECT
             }
 
-            //END THE NEW JOB MODAL SECTION
+            //////////////////END THE NEW JOB MODAL SECTION
 
-            //BEGIN THE EDIT JOB MODAL SECTION
+            //////////////////BEGIN THE EDIT JOB MODAL SECTION
 
             $('#jobEditForm').on('show.bs.modal', function (event) {
                 indexJobCrspdtEntries_Add = 0;
@@ -1111,9 +1066,9 @@
             });
             //End when the save button on the edit job modal is pressed
 
-            //END THE EDIT JOB MODAL SECTION
+            //////////////////END THE EDIT JOB MODAL SECTION
 
-            //BEGIN MISCELLANEOUS SECTION
+            //////////////////BEGIN MISCELLANEOUS SECTION
 
             //enable the select2 add-on
             function fn_enableSelect2() {
@@ -1142,7 +1097,49 @@
                 });
             }
 
-            //END MISCELLANEOUS SECTION
+            //Begin validation
+            function fn_rowFilled(button) {
+                var currentRow = button.parent().parent();
+                var rowFilled = true;
+                var temp_customerCode = currentRow.find(".customer-code").val();
+                var temp_customerContact = currentRow.find(".customer-name").val();
+                var temp_jobDescription = currentRow.find(".job-description").val();
+
+                var temp_customerCodeMatch = temp_customerCode.match(/^([A-Z]{3})$/);//maches the form ABC
+                var temp_jobDescriptionMatch = temp_jobDescription.match(/([A-Za-z ]+), ([A-Za-z]{2}$)/);//maches the form LAS VEGAS, NV
+
+                //if (temp_customerCode.length < 3) {
+                if (!temp_customerCodeMatch) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Customer code must be at least 3 letters.',
+                    });
+                    rowFilled = false;
+                    return rowFilled;
+                }
+
+                if (temp_customerContact.length < 1) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Customer name must not be empty.',
+                    });
+                    rowFilled = false;
+                    return rowFilled;
+                }
+
+                if (!temp_jobDescriptionMatch) {
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Location must not be empty and must match the form City, ST.',
+                    });
+                    rowFilled = false;
+                    return rowFilled;
+                }
+                return rowFilled;
+            }
+            //Begin validation
+
+            //////////////////END MISCELLANEOUS SECTION
             
         });//end document read jquery statements
 
