@@ -425,23 +425,23 @@
 
                 //console.log(data);
 
-                //$.ajax({
-                //    url: '/Jobs/AddJob',
-                //    method: 'post',
-                //    contentType: 'application/json',
-                //    dataType: 'json',
-                //    data: JSON.stringify(data),
-                //    traditional: true,
-                //    success: function (response) {
-                //        window.location.href = response;
-                //    },
-                //    error: function (response) {
-                //        console.log("an error!");
-                //        $(response).each(function (index, item) {
-                //            console.log(item.name)
-                //        });
-                //    }
-                //});
+                $.ajax({
+                    url: '/Jobs/AddJob',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        window.location.href = response;
+                    },
+                    error: function (response) {
+                        console.log("an error!");
+                        $(response).each(function (index, item) {
+                            console.log(item.name)
+                        });
+                    }
+                });
 
                 }
             });
@@ -1535,11 +1535,11 @@
                 <div class="row">
                     <div class="col-md-3"><strong>Job ID</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control job-id" maxlength="8">
+                        <input type="text" class="form-control job-customer-info job-id" maxlength="8">
                     </div>
                     <div class="col-sm-auto">
                         <div class="form-check">
-                            <input class="form-check-input job-active" type="checkbox">
+                            <input class="form-check-input job-customer-info job-active" type="checkbox">
                             <label class="form-check-label" for="job-active">
                                 <strong>Job Active</strong>
                             </label>
@@ -1566,19 +1566,19 @@
                     </div>
                     <div class="col-md-3"><strong>Customer Name</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control customer-name" id="customer-name-new" maxlength="50"
+                        <input type="text" class="form-control job-customer-info customer-name" id="customer-name-new" maxlength="50"
                                disabled value="">
                     </div>
                 </div><hr class="sectionSeparator">
                 <div class="row">
                     <div class="col-md-3 col-form-label"><strong>Customer Location</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control customer-location" id="customer-location-new"
+                        <input type="text" class="form-control job-customer-info customer-location" id="customer-location-new"
                                maxlength="50" disabled value="">
                     </div>
                     <div class="col-md-3 col-form-label"><strong>Customer Contact</strong></div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control customer-contact" maxlength="50">
+                        <input type="text" class="form-control job-customer-info customer-contact" maxlength="50">
                     </div>
                 </div><hr class="sectionSeparator">
                 <div class="row">
@@ -1674,10 +1674,10 @@
                     <div class="row entryRow jobCrspdt_template_row_active">
                         <div class="col-md-3" style=""></div>
                         <div class="col-md-3 name_div" style="padding:0px;">
-                            <input type="text" class="form-control name_input" style="padding:5px;">
+                            <input type="text" class="form-control job-customer-info name_input" style="padding:5px;">
                         </div>
                         <div class="col-md-3 email_div" style="padding:0px;">
-                            <input type="text" class="form-control email_input" style="padding:5px;">
+                            <input type="text" class="form-control job-customer-info email_input" style="padding:5px;">
                         </div>
                         <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
                             <button id="" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add">
@@ -1699,10 +1699,10 @@
                     <div class="row entryRow jobCrspdtLine_template_row_hidden" id="" style="" hidden>
                         <div class="col-md-3" style=""></div>
                         <div class="col-md-3 name_div" style="padding:0px;">
-                            <input type="text" class="form-control name_input" style="padding:5px;">
+                            <input type="text" class="form-control job-customer-info name_input" style="padding:5px;">
                         </div>
                         <div class="col-md-3 email_div" style="padding:0px;">
-                            <input type="text" class="form-control email_input" style="padding:5px;">
+                            <input type="text" class="form-control job-customer-info email_input" style="padding:5px;">
                         </div>
                         <div class="col-md-3 button_div jobCrspdt_button_div" style="padding:0px;">
                             <button id="" class="btn btn-light btn-sm Btn_add newJobCrspdtBtn_add">
