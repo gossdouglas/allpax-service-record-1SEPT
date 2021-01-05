@@ -382,6 +382,7 @@
                 indexJobCrspdtEntries_Add = 0;
                 fn_resetModalForm("#jobNewForm");//reset the modal for new inputs
                 $(".addRecord.jobCrspdtLine").remove();//remove any incomplete job correspondent lines
+
             })
 
             $(".jobNewForm.btn_save").click(function () {
@@ -448,13 +449,13 @@
 
             function fn_loadEntries_Add() {
 
-                //var subJobTypes_div_Add = $(".subJobTypes_div").find(".sub-job-type_input");
-                var subJobTypes_div_Add = $("#jobNewForm .subJobTypes_div").find(".sub-job-type_input");
-                var jobResources_div_Add = $(".jobResourceTypes_div").find(".jobResource_Line");
-                var jobCrspdt_div_Add = $(".addRecord.jobCrspdtLine");
+                subJobTypes_Add.length = 0;
+                jobResources_Add.length = 0;
+                jobCrspdtInfo_Add.length = 0;
 
-                console.log("subJobTypes_div_Add");
-                console.log(subJobTypes_div_Add.length);
+                var subJobTypes_div_Add = $("#jobNewForm .subJobTypes_div").find(".sub-job-type_input");
+                var jobResources_div_Add = $("#jobNewForm .jobResourceTypes_div").find(".jobResource_Line");
+                var jobCrspdt_div_Add = $("#jobNewForm .addRecord.jobCrspdtLine");
 
                 $(subJobTypes_div_Add).each(function (index) {
 
@@ -465,8 +466,8 @@
                         subJobTypes_Add.push(temp_subJobTypeID)//...push it to the array
                     }
                 });
-                console.log("subJobTypes_Add");
-                console.log(subJobTypes_Add);
+                //console.log("subJobTypes_Add");
+                //console.log(subJobTypes_Add);
 
                 $(jobResources_div_Add).each(function (index) {
 
@@ -475,7 +476,7 @@
                     var temp_resourceTypeRate = $(this).find(".resource-type_input.resourceRate").val();
 
                     if (temp_resourceTypeStatus) {//if this resource type is selected..
-                        jobResources_Add.push([temp_resourceTypeID, temp_resourceTypeRate])//...push it to the array
+                        jobResources_Add.push([temp_resourceTypeID, temp_resourceTypeRate]);//...push it to the array
                     }
                 });
                 //console.log("jobResources_Add");
@@ -494,6 +495,26 @@
             }
 
             function fn_buildJsonObjects() {
+                
+                //BEGIN BUILD THE JOB RESOURCES JSON OBJECT
+                //if there are none to add, set the json object to null
+                if (jobResources_Add.length < 1) {
+                    jobResourcesJson_Add = null
+                }
+                else {
+                    for (var i = 0; i < jobResources_Add.length; i++) {
+                        jobResourcesJson_Add[i] = {
+
+                            resourceTypeID: jobResources_Add[i][0],
+                            rate: jobResources_Add[i][1]
+                        };
+                    }
+                }
+                //console.log("jobResourcesJson_Add:");
+                //console.log(jobResourcesJson_Add);
+
+                //END BUILD THE JOB RESOURCES JSON OBJECT
+
                 //BEGIN BUILD THE JOB CORRESPONDENT JSON OBJECT
                 //if there are none to add, set the json object to null
                 if (jobCrspdtInfo_Add.length < 1) {
@@ -513,42 +534,6 @@
                 //console.log(jobCrspdtInfoJson_Add);
 
                 //END BUILD THE JOB CORRESPONDENT JSON OBJECT
-
-                //BEGIN BUILD THE JOB RESOURCES JSON OBJECT
-                //if there are none to add, set the json object to null
-                if (jobResources_Add.length < 1) {
-                    jobResourcesJson_Add = null
-                }
-                else {
-                    for (var i = 0; i < jobResources_Add.length; i++) {
-                        jobResourcesJson_Add[i] = {
-
-                            resourceTypeID: jobResources_Add[i][0],
-                            rate: jobResources_Add[i][1]
-                        };
-                    }
-                }
-                //console.log("jobResourcesJson_Add:");
-                //console.log(jobResourcesJson_Add);
-
-                //BEGIN BUILD THE JOB CORRESPONDENTS JSON OBJECT
-                //if there are none to add, set the json object to null
-                if (jobResources_Add.length < 1) {
-                    jobResourcesJson_Add = null
-                }
-                else {
-                    for (var i = 0; i < jobResources_Add.length; i++) {
-                        jobResourcesJson_Add[i] = {
-
-                            resourceTypeID: jobResources_Add[i][0],
-                            rate: jobResources_Add[i][1]
-                        };
-                    }
-                }
-                //console.log("jobResourcesJson_Add:");
-                //console.log(jobResourcesJson_Add);
-
-                //END BUILD THE JOB CORRESPONDENTS JSON OBJECT
             }
 
             //////////////////END THE NEW JOB MODAL SECTION
