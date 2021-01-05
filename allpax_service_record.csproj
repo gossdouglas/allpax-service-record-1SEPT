@@ -203,6 +203,7 @@
     <Compile Include="Controllers\JobsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\resourceTypesController.cs" />
+    <Compile Include="Controllers\subJobTypesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DataService.asmx.cs">
       <DependentUpon>DataService.asmx</DependentUpon>
@@ -223,8 +224,6 @@
     <Compile Include="Models\Dropdown Models\dpdwn_jobID.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\MODEL TESTING\Model1.cs" />
-    <Compile Include="Models\MODEL TESTING\tbl_resourceTypes.cs" />
     <Compile Include="Models\tbl_jobCorrespondents.cs" />
     <Compile Include="Models\tbl_jobResourceTypes.cs" />
     <Compile Include="Models\tbl_Jobs.cs" />
@@ -2572,9 +2571,11 @@
     <Content Include="Views\resourceTypes\Index-orig.cshtml" />
     <Content Include="Views\Jobs\Index-master-3jan21.cshtml" />
     <Content Include="Views\Jobs\Index-new job modal crashes.cshtml" />
+    <Content Include="Views\subJobTypes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\MODEL TESTING\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

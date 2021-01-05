@@ -164,9 +164,9 @@
                 var currentFormID = "#" + currentRow.parents().eq(4).attr("id");
                 var jobCrspdtLine_templateID = "#" + currentRow.parent().attr("id");
 
-                console.log(currentRow);
-                console.log(jobCrspdtLine_templateID);
-                console.log(currentFormID);
+                //console.log(currentRow);
+                //console.log(jobCrspdtLine_templateID);
+                //console.log(currentFormID);
 
                 currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
                 currentRow.find(".email_input").attr("disabled", "true");//lock the email field for edits
@@ -198,7 +198,6 @@
 
             $("#jobNewForm .lineJobCrspdtBtn_edit, #jobEditForm .lineJobCrspdtBtn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
-                console.log("yo")
 
                 $(this).hide();
                 $(currentRow).find(".Btn_save").removeAttr("hidden");
@@ -423,25 +422,25 @@
                     jobCrspdtInfo: jobCrspdtInfoJson_Add
                 };
 
-                //console.log(data);
+                console.log(data);
 
-                //$.ajax({
-                //    url: '/Jobs/AddJob',
-                //    method: 'post',
-                //    contentType: 'application/json',
-                //    dataType: 'json',
-                //    data: JSON.stringify(data),
-                //    traditional: true,
-                //    success: function (response) {
-                //        window.location.href = response;
-                //    },
-                //    error: function (response) {
-                //        console.log("an error!");
-                //        $(response).each(function (index, item) {
-                //            console.log(item.name)
-                //        });
-                //    }
-                //});
+                $.ajax({
+                    url: '/Jobs/AddJob',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        window.location.href = response;
+                    },
+                    error: function (response) {
+                        console.log("an error!");
+                        $(response).each(function (index, item) {
+                            console.log(item.name)
+                        });
+                    }
+                });
 
                 }
             });
@@ -453,8 +452,12 @@
                 var jobResources_div_Add = $(".jobResourceTypes_div").find(".jobResource_Line");
                 var jobCrspdt_div_Add = $(".addRecord.jobCrspdtLine");
 
-                console.log("subJobTypes_div_Add");
-                console.log(subJobTypes_div_Add.length);
+                subJobTypes_Add.length = 0;
+                jobResources_Add.length = 0;
+                //jobResourcesJson_Add.length = 0;
+                jobCrspdtInfo_Add.length = 0;
+                //jobCrspdtInfoJson_Add.length = 0;
+                
 
                 $(subJobTypes_div_Add).each(function (index) {
 
@@ -465,8 +468,8 @@
                         subJobTypes_Add.push(temp_subJobTypeID)//...push it to the array
                     }
                 });
-                console.log("subJobTypes_Add");
-                console.log(subJobTypes_Add);
+                //console.log("subJobTypes_Add");
+                //console.log(subJobTypes_Add);
 
                 $(jobResources_div_Add).each(function (index) {
 
@@ -478,8 +481,8 @@
                         jobResources_Add.push([temp_resourceTypeID, temp_resourceTypeRate])//...push it to the array
                     }
                 });
-                //console.log("jobResources_Add");
-                //console.log(jobResources_Add);
+                console.log("jobResources_Add");
+                console.log(jobResources_Add);
 
                 $(jobCrspdt_div_Add).each(function (index) {
 
@@ -496,6 +499,9 @@
             function fn_buildJsonObjects() {
                 //BEGIN BUILD THE JOB CORRESPONDENT JSON OBJECT
                 //if there are none to add, set the json object to null
+
+                jobCrspdtInfoJson_Add.length = 0;
+
                 if (jobCrspdtInfo_Add.length < 1) {
                     jobCrspdtInfoJson_Add = null
                 }
@@ -509,13 +515,16 @@
                         };
                     }
                 }
-                //console.log("jobCrspdtInfoJson_Add:");
-                //console.log(jobCrspdtInfoJson_Add);
+                console.log("jobCrspdtInfoJson_Add:");
+                console.log(jobCrspdtInfoJson_Add);
 
                 //END BUILD THE JOB CORRESPONDENT JSON OBJECT
 
                 //BEGIN BUILD THE JOB RESOURCES JSON OBJECT
                 //if there are none to add, set the json object to null
+
+                jobResourcesJson_Add.length = 0;
+
                 if (jobResources_Add.length < 1) {
                     jobResourcesJson_Add = null
                 }
