@@ -78,7 +78,7 @@
                         description: temp_description
                     };
 
-                    //fn_showSpinner();
+                    fn_showSpinner();
                 //console.log(data);
 
                     $.ajax({
@@ -115,25 +115,24 @@
 
             $(".subJobTypeEditForm.btn_save").click(function () {
 
-                if (fn_rowFilled($(this))) {
+                console.clear();
+
+                //if (fn_rowFilled($(this))) {
 
                     var modal = $(this).parent().parent();
-                    var temp_subJobTypeID = modal.find('.sub-job-type-id').val()
-                    var temp_resourceType = modal.find('.sub-job-type').val()
+                    var temp_subJobID = modal.find('.sub-job-type-id').val()
                     var temp_description = modal.find('.description').val()
-                    var temp_rate = modal.find('.rate').val()
 
-                    var data = {
-                        subJobTypeID: temp_subJobTypeID,
-                        resourceType: temp_resourceType,
+                    var data = {                        
                         description: temp_description,
-                        rate: temp_rate
+                        subJobID: temp_subJobID
                     };
 
                     fn_showSpinner();
+                //console.log(data);
 
                     $.ajax({
-                        url: '/ResourceTypes/UpdateResourceType',
+                        url: '/SubJobTypes/UpdateSubJobType',
                         method: 'post',
                         contentType: 'application/json',
                         dataType: 'json',
@@ -149,7 +148,7 @@
                             });
                         }
                     });
-                }
+                //}
             });
 
             $(".subJobTypeEditForm.btn_delete").click(function () {
@@ -195,8 +194,10 @@
                 var temp_description = currentRow.find('.description_div').html();
 
                 var data = {
-                    subJobTypeID: temp_subJobTypeID,
+                    subJobID: temp_subJobTypeID,
                 };
+
+                console.log(data);
 
                 $.confirm({
                     title: "Delete Sub-job Type: " + temp_description + "?",
@@ -204,17 +205,17 @@
                     buttons: {
                         confirm: function () {
                             //fn_showSpinner();
-                            //$.ajax({
-                            //    url: '/ResourceTypes/DeleteResourceType',
-                            //    method: 'post',
-                            //    contentType: 'application/json',
-                            //    dataType: 'json',
-                            //    data: JSON.stringify(data),
-                            //    traditional: true,
-                            //    success: function (response) {
-                            //        window.location.href = response;
-                            //    }
-                            //});
+                            $.ajax({
+                                url: '/SubJobTypes/DeleteSubJobType',
+                                method: 'post',
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                data: JSON.stringify(data),
+                                traditional: true,
+                                success: function (response) {
+                                    window.location.href = response;
+                                }
+                            });
                         },
                         cancel: function () {
                         }
@@ -320,7 +321,7 @@
                             <i class="far fa-edit fa-2x" style="color:black;">
                             </i>
                         </button>
-                        <button class="btn btn-light btn-sm Btn_delete" disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                        <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                     </td>
                     </tr>
                 }

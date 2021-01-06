@@ -69,6 +69,13 @@ namespace allpax_service_record.Controllers
             return Json(Url.Action("Index", "SubJobTypes"));
         }
 
+        public ActionResult DeleteSubJobType(tbl_subJobTypes subJobTypeDelete)
+        {
+            db.Database.ExecuteSqlCommand("DELETE FROM tbl_subJobTypes WHERE subJobID=({0})", subJobTypeDelete.subJobID);
+
+            return Json(Url.Action("Index", "SubJobTypes"));
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
