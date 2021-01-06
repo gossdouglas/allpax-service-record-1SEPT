@@ -69,25 +69,20 @@
 
             $(".subJobTypeNewForm.btn_save").click(function () {
 
-                if (fn_rowFilled($(this))) {
+                //if (fn_rowFilled($(this))) {
 
                     var modal = $(this).parent().parent();
-                    var temp_subJobTypeID = modal.find('.resource-type-id').val();
-                    var temp_resourceType = modal.find('.resource-type').val();
                     var temp_description = modal.find('.description').val();
-                    var temp_rate = modal.find('.rate').val()
 
                     var data = {
-                        subJobTypeID: 'null',
-                        resourceType: temp_resourceType,
-                        description: temp_description,
-                        rate: temp_rate
+                        description: temp_description
                     };
 
-                    fn_showSpinner();
+                    //fn_showSpinner();
+                //console.log(data);
 
                     $.ajax({
-                        url: '/ResourceTypes/AddResourceType',
+                        url: '/SubJobTypes/AddSubJobType',
                         method: 'post',
                         contentType: 'application/json',
                         dataType: 'json',
@@ -103,23 +98,19 @@
                             });
                         }
                     });
-                }
+                //}
             });
 
             $('#subJobTypeEditForm').on('show.bs.modal', function (event) {
 
                 var button = $(event.relatedTarget) // Button that triggered the modal
-                var temp_subJobTypeID = button.data('resource-type-id') // Extract info from data-* attributes
-                var temp_resourceType = button.data('resource-type') // Extract info from data-* attributes
                 var temp_description = button.data('description') // Extract info from data-* attributes
-                var temp_rate = button.data('rate') // Extract info from data-* attributes
+                var temp_subJobTypeID = button.data('sub-job-type-id') // Extract info from data-* attributes
 
                 var modal = $(this)
-                modal.find('.modal-title').text('Resource Edit Form');
-                modal.find('.resource-type-id').val(temp_subJobTypeID);
-                modal.find('.resource-type').val(temp_resourceType);
+                modal.find('.modal-title').text('Sub-job Edit Form');
+                modal.find('.sub-job-type-id').val(temp_subJobTypeID);
                 modal.find('.description').val(temp_description);
-                modal.find('.rate').val(temp_rate);
             })
 
             $(".subJobTypeEditForm.btn_save").click(function () {
@@ -128,7 +119,7 @@
 
                     var modal = $(this).parent().parent();
                     var temp_subJobTypeID = modal.find('.sub-job-type-id').val()
-                    var temp_resourceType = modal.find('.resource-type').val()
+                    var temp_resourceType = modal.find('.sub-job-type').val()
                     var temp_description = modal.find('.description').val()
                     var temp_rate = modal.find('.rate').val()
 
@@ -165,7 +156,7 @@
 
                 var modal = $(this).parent().parent().parent();
                 var temp_subJobTypeID = modal.find('.sub-job-type-id').val();
-                var temp_resourceType = modal.find('.resource-type').val();
+                var temp_resourceType = modal.find('.sub-job-type').val();
                 var temp_description = modal.find('.description').val();
                 var temp_rate = modal.find('.rate').val();
 
@@ -238,16 +229,12 @@
                 });
             }
 
-            $('.resource-type, .description').keyup(function () {
-                $(this).val($(this).val().toUpperCase());
-            });
-
             //BEGIN VALIDATION BEFORE SAVING SECTION
 
             function fn_rowFilled(button) {
                 var currentRow = button.parent().parent();
                 var rowFilled = true;
-                var temp_resourceType = currentRow.find(".resource-type").val();
+                var temp_resourceType = currentRow.find(".sub-job-type").val();
                 var temp_description = currentRow.find(".description").val();
                 var temp_rate = currentRow.find(".rate").val();
 
@@ -320,29 +307,20 @@
                 {
                     //BEGIN TEMPORARY LOOP VARIABLES
                     byte temp_subJobTypeID = item.subJobID;
-                    //string temp_resourceType = item.resourceType;
                     string temp_description = item.description;
-                    //decimal temp_rate = item.rate;
                     //END TEMPORARY LOOP VARIABLES
 
                     @*<hr class="sectionSeparator">*@
                     <tr class="returnedRecords" id="" style="">
                         <td class="subJobTypeID_div" hidden>@temp_subJobTypeID</td>
-                        @*<td class="resourceType_div">@temp_resourceType</td>*@
                         <td class="description_div">@temp_description</td>
-                        @*<td class="rate_div">@temp_rate</td>*@
                     <td class="button_div" style="padding:0px;">
-                        @*<button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#resourceEditForm" data-sub-job-type-id="@temp_subJobTypeID"
-               data-description="@temp_description">
-            <i class="far fa-edit fa-2x" style="color:black;">
-            </i>
-        </button>*@
                         <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#subJobTypeEditForm" data-sub-job-type-id="@temp_subJobTypeID"
                                 data-description="@temp_description">
                             <i class="far fa-edit fa-2x" style="color:black;">
                             </i>
                         </button>
-                        <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                        <button class="btn btn-light btn-sm Btn_delete" disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                     </td>
                     </tr>
                 }
@@ -374,20 +352,10 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-6">
-                                <label for="resource-type" class="col-form-label">Resource Type:</label>
-                                <input type="text" class="form-control resource-type" maxlength="50">
-                            </div>
-                            <div class="col-6">
                                 <label for="description" class="col-form-label">Description:</label>
                                 <input type="text" class="form-control description">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <label for="rate" class="col-form-label">Rate:</label>
-                                <input type="text" class="form-control rate">
-                                <label for="resource-type-id" class="col-form-label" hidden>Resource Type ID:</label>
-                                <input type="text" class="form-control resource-type-id" maxlength="3" hidden>
+                                <label for="sub-job-type-id" class="col-form-label">Resource Type ID:</label>
+                                <input type="text" class="form-control sub-job-type-id">
                             </div>
                         </div>
                     </div>
@@ -407,7 +375,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="subJobTypeNewForm">Add Resource</h5>
+                <h5 class="modal-title" id="subJobTypeNewForm">Add Sub-job Type</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -419,22 +387,8 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-6">
-                                <label for="resource-type" class="col-form-label">Resource Type:</label>
-                                <input type="text" class="form-control resource-type" maxlength="50">
-                            </div>
-                            <div class="col-6">
-                                <label for="description" class="col-form-label">Description:</label>
-                                <input type="text" class="form-control description">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <label for="rate" class="col-form-label">Rate:</label>
-                                <input type="text" class="form-control rate">
-                            </div>
-                            <div class="col-6">
-                                <label for="resource-type-id" class="col-form-label" hidden>Resource Type ID:</label>
-                                <input type="text" class="form-control resource-type-id" maxlength="3" hidden>
+                                <label for="description" class="col-form-label">Sub-job Type Description:</label>
+                                <input type="text" class="form-control description" maxlength="25">
                             </div>
                         </div>
                     </div>

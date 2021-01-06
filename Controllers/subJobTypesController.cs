@@ -7,7 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using allpax_service_record.Models;
-
+using System.Configuration;
+using System.Data.SqlClient;
 namespace allpax_service_record.Controllers
 {
     public class subJobTypesController : Controller
@@ -17,102 +18,55 @@ namespace allpax_service_record.Controllers
         // GET: subJobTypes
         public ActionResult Index()
         {
-            return View(db.tbl_subJobTypes.ToList());
-        }
+            List<tbl_subJobTypes> subJobTypes = new List<tbl_subJobTypes>();
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
 
-        // GET: subJobTypes/Details/5
-        public ActionResult Details(byte? id)
-        {
-            if (id == null)
+            sqlconn.Open();
+
+            string sqlquery1 =
+                "SELECT tbl_subJobTypes.subJobID, tbl_subJobTypes.description " +
+                "FROM tbl_subJobTypes";
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                tbl_subJobTypes subJobType = new tbl_subJobTypes();
+
+                subJobType.subJobID = (byte)dr1[0];
+                subJobType.description = dr1[1].ToString();
+                subJobTypes.Add(subJobType);
             }
-            tbl_subJobTypes tbl_subJobTypes = db.tbl_subJobTypes.Find(id);
-            if (tbl_subJobTypes == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tbl_subJobTypes);
+            sqlconn.Close();
+            return View(subJobTypes);
+
+            //return View(db.tbl_subJobTypes.ToList());
         }
 
-        // GET: subJobTypes/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: subJobTypes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "subJobID,description")] tbl_subJobTypes tbl_subJobTypes)
+        public ActionResult AddSubJobType(tbl_subJobTypes subJobTypeAdd)
         {
-            if (ModelState.IsValid)
-            {
-                db.tbl_subJobTypes.Add(tbl_subJobTypes);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            db.Database.ExecuteSqlCommand("Insert into tbl_subJobTypes Values({0})",
+               subJobTypeAdd.description);
 
-            return View(tbl_subJobTypes);
+            return Json(Url.Action("Index", "SubJobTypes"));
         }
 
-        // GET: subJobTypes/Edit/5
-        public ActionResult Edit(byte? id)
+        public ActionResult UpdateSubJobType(tbl_subJobTypes subJobTypeUpdate)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            tbl_subJobTypes tbl_subJobTypes = db.tbl_subJobTypes.Find(id);
-            if (tbl_subJobTypes == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tbl_subJobTypes);
-        }
+            db.Database.ExecuteSqlCommand(
+                "UPDATE tbl_subJobTypes " +
+                "SET " +
 
-        // POST: subJobTypes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "subJobID,description")] tbl_subJobTypes tbl_subJobTypes)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(tbl_subJobTypes).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(tbl_subJobTypes);
-        }
+                "description = {0} " +
 
-        // GET: subJobTypes/Delete/5
-        public ActionResult Delete(byte? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            tbl_subJobTypes tbl_subJobTypes = db.tbl_subJobTypes.Find(id);
-            if (tbl_subJobTypes == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tbl_subJobTypes);
-        }
+                "WHERE subJobID = {1}",
+                subJobTypeUpdate.description, subJobTypeUpdate.subJobID);
 
-        // POST: subJobTypes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(byte id)
-        {
-            tbl_subJobTypes tbl_subJobTypes = db.tbl_subJobTypes.Find(id);
-            db.tbl_subJobTypes.Remove(tbl_subJobTypes);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            return Json(Url.Action("Index", "SubJobTypes"));
         }
 
         protected override void Dispose(bool disposing)
