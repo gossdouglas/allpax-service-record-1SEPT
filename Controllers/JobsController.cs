@@ -233,6 +233,21 @@ namespace allpax_service_record.Controllers
             return Json(Url.Action("Index", "Jobs"));
         }
 
+        public ActionResult DeleteJob(vm_Jobs jobDelete)
+        {
+            try
+            {
+                db.Database.ExecuteSqlCommand("DELETE FROM tbl_Jobs WHERE jobID=({0})", jobDelete.jobID);
+                return Json(Url.Action("Index", "Jobs"));
+            }
+            catch (Exception e)
+            {
+                //System.Diagnostics.Debug.WriteLine(e.Message);;
+
+                return Content(e.Message);
+            }
+        }
+
         //GET SUB JOB TYPES
         public List<tbl_subJobTypes> subJobTypesByJobID(string jobID)
         {

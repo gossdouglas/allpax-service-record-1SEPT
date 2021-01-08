@@ -2563,12 +2563,7 @@
     <Content Include="Views\customers\Index.cshtml" />
     <Content Include="Views\Jobs\Index.cshtml" />
     <Content Include="Views\jobCorrespondents\Index.cshtml" />
-    <Content Include="Views\resourceTypes\Create.cshtml" />
-    <Content Include="Views\resourceTypes\Delete.cshtml" />
-    <Content Include="Views\resourceTypes\Details.cshtml" />
-    <Content Include="Views\resourceTypes\Edit.cshtml" />
     <Content Include="Views\resourceTypes\Index.cshtml" />
-    <Content Include="Views\resourceTypes\Index-orig.cshtml" />
     <Content Include="Views\Jobs\Index-master-3jan21.cshtml" />
     <Content Include="Views\Jobs\Index-new job modal crashes.cshtml" />
     <Content Include="Views\subJobTypes\Index.cshtml" />

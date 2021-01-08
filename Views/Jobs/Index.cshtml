@@ -233,9 +233,8 @@
                 }
             });
 
-            $(".Btn_delete").click(function () {
+            $(".jobCrspdt_button_div .Btn_delete").click(function () {
                 var currentRow = $(this).parent().parent();
-                //var currentNumValidRecs = $(".returnedRecords.workDescLine").length + indexWorkDescEntries_Add;
                 temp_LineClass = $(currentRow).prop("class");
 
                 //if this line is a new record, simply remove it
@@ -249,17 +248,10 @@
                     //used to change the class of a returned record to deleted record for later processing with a delete operation
                     $($(currentRow)).prop("class", "row returnedRecords delete jobCrspdtLine");
 
-                    //console.log(currentRow.find(".name_input").val());
                     currentRow.find(".name_input, .email_input").css("text-decoration", "line-through");
                     currentRow.find(".name_input, .email_input").css("color", "red");
                     $(this).find(".fa-minus-square").css("color", "red");
                     currentRow.find(".Btn_edit").attr("disabled", "true");
-                    //console.log($(this));
-
-                    //$($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
-                    //$($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
-                    //$($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
-                    //$($(currentRow)).find(".Btn_deletedRecord").removeAttr("hidden");
                 }
 
                 if (temp_LineClass.includes("returnedRecords delete")) {
@@ -1080,6 +1072,10 @@
                 });
             }
 
+            function fn_hideSpinner() {
+                $.LoadingOverlay("hide");
+            }
+
             //Begin validation
             function fn_modalValidate(button) {
                 var currentRow = button.parent().parent();
@@ -1202,6 +1198,53 @@
             //Begin validation
 
             //////////////////END MISCELLANEOUS SECTION
+
+            $(".returnedRecords .Btn_delete").click(function () {
+
+                var currentRow = $(this).parent().parent();
+                var temp_jobID = currentRow.find('.jobID_div').html();
+                //var temp_resourceType = currentRow.find('.jobID_div').html();
+                //var temp_description = currentRow.find('.description_div').html();
+
+                //console.log("Delete temp_resourceTypeID: " + temp_resourceTypeID);
+
+                var data = {
+                    jobID: temp_jobID
+                };
+
+                //console.log(data);
+
+                $.confirm({
+                    title: "Delete Job: " + temp_jobID + "?",
+                    content: '',
+                    buttons: {
+                        confirm: function () {
+                            fn_showSpinner();
+                            $.ajax({
+                                url: '/Jobs/DeleteJob',
+                                method: 'post',
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                data: JSON.stringify(data),
+                                traditional: true,
+                                success: function (response) {
+                                    window.location.href = response;
+                                },
+                                error: function (response) {
+                                    fn_hideSpinner();
+                                    var alertContent = "An error has occurred. \n" + response.responseText;
+                                    $.alert({
+                                        title: 'Alert!',
+                                        content: alertContent,
+                                    });
+                                }
+                            });
+                        },
+                        cancel: function () {
+                        }
+                    }
+                });
+            });
 
         });//end document read jquery statements
 
