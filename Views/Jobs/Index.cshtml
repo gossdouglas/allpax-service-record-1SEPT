@@ -428,9 +428,11 @@
                         window.location.href = response;
                     },
                     error: function (response) {
-                        console.log("an error!");
-                        $(response).each(function (index, item) {
-                            console.log(item.name)
+                        fn_hideSpinner();
+                        var alertContent = "An error has occurred. \n" + response.responseText;
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
                         });
                     }
                 });
@@ -997,6 +999,14 @@
                         serverResponseSuccess = response;
                         //console.log("response is: " + response)
                         window.location.href = serverResponseSuccess;
+                    },
+                    error: function (response) {
+                        fn_hideSpinner();
+                        var alertContent = "An error has occurred. \n" + response.responseText;
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
+                        });
                     }
                 });
 

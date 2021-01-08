@@ -49,15 +49,24 @@ namespace allpax_service_record.Controllers
         [HttpPost]
         public ActionResult AddResourceType(tbl_resourceTypes resourceTypeAdd)
         {
-            db.Database.ExecuteSqlCommand("Insert into tbl_resourceTypes Values({0},{1},{2})",
+            try
+            {
+                db.Database.ExecuteSqlCommand("Insert into tbl_resourceTypes Values({0},{1},{2})",
                resourceTypeAdd.resourceType, resourceTypeAdd.description, resourceTypeAdd.rate);
 
-            return Json(Url.Action("Index", "ResourceTypes"));
+                return Json(Url.Action("Index", "ResourceTypes"));
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }            
         }
 
         public ActionResult UpdateResourceType(tbl_resourceTypes resourceUpdate)
         {
-            db.Database.ExecuteSqlCommand(
+            try
+            {
+                db.Database.ExecuteSqlCommand(
                 "UPDATE tbl_resourceTypes " +
                 "SET " +
 
@@ -68,14 +77,26 @@ namespace allpax_service_record.Controllers
                 "WHERE resourceTypeID = {3}",
                 resourceUpdate.resourceType, resourceUpdate.description, resourceUpdate.rate, resourceUpdate.resourceTypeID);
 
-            return Json(Url.Action("Index", "ResourceTypes"));
+                return Json(Url.Action("Index", "ResourceTypes"));
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }            
         }
 
         public ActionResult DeleteResourceType(tbl_resourceTypes resourceTypeDelete)
         {
-            db.Database.ExecuteSqlCommand("DELETE FROM tbl_resourceTypes WHERE resourceTypeID=({0})", resourceTypeDelete.resourceTypeID);
+            try
+            {
+                db.Database.ExecuteSqlCommand("DELETE FROM tbl_resourceTypes WHERE resourceTypeID=({0})", resourceTypeDelete.resourceTypeID);
 
-            return Json(Url.Action("Index", "ResourceTypes"));
+                return Json(Url.Action("Index", "ResourceTypes"));
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }            
         }
 
         protected override void Dispose(bool disposing)

@@ -49,15 +49,24 @@ namespace allpax_service_record.Controllers
         [HttpPost]
         public ActionResult AddSubJobType(tbl_subJobTypes subJobTypeAdd)
         {
-            db.Database.ExecuteSqlCommand("Insert into tbl_subJobTypes Values({0})",
+            try
+            {
+                db.Database.ExecuteSqlCommand("Insert into tbl_subJobTypes Values({0})",
                subJobTypeAdd.description);
 
-            return Json(Url.Action("Index", "SubJobTypes"));
+                return Json(Url.Action("Index", "SubJobTypes"));
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }           
         }
 
         public ActionResult UpdateSubJobType(tbl_subJobTypes subJobTypeUpdate)
         {
-            db.Database.ExecuteSqlCommand(
+            try
+            {
+                db.Database.ExecuteSqlCommand(
                 "UPDATE tbl_subJobTypes " +
                 "SET " +
 
@@ -66,14 +75,26 @@ namespace allpax_service_record.Controllers
                 "WHERE subJobID = {1}",
                 subJobTypeUpdate.description, subJobTypeUpdate.subJobID);
 
-            return Json(Url.Action("Index", "SubJobTypes"));
+                return Json(Url.Action("Index", "SubJobTypes"));
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }           
         }
 
         public ActionResult DeleteSubJobType(tbl_subJobTypes subJobTypeDelete)
         {
-            db.Database.ExecuteSqlCommand("DELETE FROM tbl_subJobTypes WHERE subJobID=({0})", subJobTypeDelete.subJobID);
+            try
+            {
+                db.Database.ExecuteSqlCommand("DELETE FROM tbl_subJobTypes WHERE subJobID=({0})", subJobTypeDelete.subJobID);
 
-            return Json(Url.Action("Index", "SubJobTypes"));
+                return Json(Url.Action("Index", "SubJobTypes"));
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }            
         }
 
         protected override void Dispose(bool disposing)

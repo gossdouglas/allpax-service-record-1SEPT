@@ -48,7 +48,9 @@ namespace allpax_service_record.Controllers
 
         public ActionResult UpdateCustomer(tbl_customers customerUpdate)
         {
-            db.Database.ExecuteSqlCommand(
+            try
+            {
+                db.Database.ExecuteSqlCommand(
                 "UPDATE tbl_customers " +
                 "SET " +
 
@@ -59,23 +61,43 @@ namespace allpax_service_record.Controllers
                 "WHERE id = {3}",
                 customerUpdate.customerCode, customerUpdate.customerName, customerUpdate.address, customerUpdate.id);
 
-            return Json(Url.Action("Index", "Customers"));
+                return Json(Url.Action("Index", "Customers"));
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }           
         }
 
         [HttpPost]
         public ActionResult AddCustomer(tbl_customers customerAdd)
         {
-            db.Database.ExecuteSqlCommand("Insert into tbl_customers Values({0},{1},{2})",
+            try
+            {
+               db.Database.ExecuteSqlCommand("Insert into tbl_customers Values({0},{1},{2})",
                customerAdd.customerCode, customerAdd.customerName, customerAdd.address);
 
-            return Json(Url.Action("Index", "Customers"));
+                return Json(Url.Action("Index", "Customers"));
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }           
         }
 
         public ActionResult DeleteCustomer(tbl_customers customerDelete)
         {
-            db.Database.ExecuteSqlCommand("DELETE FROM tbl_customers WHERE customerCode=({0})", customerDelete.customerCode);
+            try
+            {
+                db.Database.ExecuteSqlCommand("DELETE FROM tbl_customers WHERE customerCode=({0})", customerDelete.customerCode);
 
-            return Json(Url.Action("Index", "Customers"));
+                return Json(Url.Action("Index", "Customers"));
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }
+           
         }
 
         protected override void Dispose(bool disposing)

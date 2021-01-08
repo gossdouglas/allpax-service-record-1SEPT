@@ -96,9 +96,11 @@
                         window.location.href = response;
                     },
                     error: function (response) {
-                        console.log("an error!");
-                        $(response).each(function (index, item) {
-                            console.log(item.name)
+                        fn_hideSpinner();
+                        var alertContent = "An error has occurred. \n" + response.responseText;
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
                         });
                     }
                 });
@@ -151,14 +153,11 @@
                             window.location.href = response;
                         },
                         error: function (response) {
-                            console.log("an error!");
-                            $(response).each(function (index, item) {
-
-                                //var modelErrors = item.ModelErrors
-                                //console.log(item.name)
-                                //console.log(item.Email)
-                                //console.log(item.ModelErrors)
-                                console.log(item.name)
+                            fn_hideSpinner();
+                            var alertContent = "An error has occurred. \n" + response.responseText;
+                            $.alert({
+                                title: 'Alert!',
+                                content: alertContent,
                             });
                         }
                     });
@@ -190,6 +189,14 @@
                                 traditional: true,
                                 success: function (response) {
                                     window.location.href = response;
+                                },
+                                error: function (response) {
+                                    fn_hideSpinner();
+                                    var alertContent = "An error has occurred. \n" + response.responseText;
+                                    $.alert({
+                                        title: 'Alert!',
+                                        content: alertContent,
+                                    });
                                 }
                             });
                         },
@@ -225,6 +232,14 @@
                                 traditional: true,
                                 success: function (response) {
                                     window.location.href = response;
+                                },
+                                error: function (response) {
+                                    fn_hideSpinner();
+                                    var alertContent = "An error has occurred. \n" + response.responseText;
+                                    $.alert({
+                                        title: 'Alert!',
+                                        content: alertContent,
+                                    });
                                 }
                             });
                         },
@@ -239,6 +254,10 @@
                     image: "",
                     fontawesome: "fa fa-cog fa-spin"
                 });
+            }
+
+            function fn_hideSpinner() {
+                $.LoadingOverlay("hide");
             }
 
             $('.customer-code, .customer-name, .address').keyup(function () {

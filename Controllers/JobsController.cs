@@ -68,55 +68,62 @@ namespace allpax_service_record.Controllers
         [HttpPost]
         public ActionResult AddJob(vm_Jobs jobAdd)
         {
-
-            db.Database.ExecuteSqlCommand("Insert into tbl_Jobs Values({0},{1},{2},{3},{4},{5},{6},{7},{8}, {9})",
+            try
+            {
+                db.Database.ExecuteSqlCommand("Insert into tbl_Jobs Values({0},{1},{2},{3},{4},{5},{6},{7},{8}, {9})",
                jobAdd.jobID, jobAdd.description, jobAdd.customerCode, jobAdd.customerContact, jobAdd.active,
                jobAdd.location, jobAdd.nrmlHoursStart, jobAdd.nrmlHoursEnd, jobAdd.dblTimeHours, jobAdd.nrmlHoursDaily);
 
-            if (jobAdd.jobSubJobsAdd != null)
-            {
-                //add sub-jobs to this job
-                foreach (string item in jobAdd.jobSubJobsAdd)
+                if (jobAdd.jobSubJobsAdd != null)
                 {
-                    db.Database.ExecuteSqlCommand("Insert into tbl_jobSubJobs Values({0},{1})",
-                    jobAdd.jobID, item);
+                    //add sub-jobs to this job
+                    foreach (string item in jobAdd.jobSubJobsAdd)
+                    {
+                        db.Database.ExecuteSqlCommand("Insert into tbl_jobSubJobs Values({0},{1})",
+                        jobAdd.jobID, item);
+                    }
                 }
-            }
 
-            if (jobAdd.resourceTypes != null)
-            {
-                //add resource types to this job
-                foreach (tbl_resourceTypes item in jobAdd.resourceTypes)
+                if (jobAdd.resourceTypes != null)
                 {
-                    db.Database.ExecuteSqlCommand(
+                    //add resource types to this job
+                    foreach (tbl_resourceTypes item in jobAdd.resourceTypes)
+                    {
+                        db.Database.ExecuteSqlCommand(
 
-                    "INSERT INTO tbl_jobResourceTypes VALUES({0}, {1}, {2}) ",
+                        "INSERT INTO tbl_jobResourceTypes VALUES({0}, {1}, {2}) ",
 
-                    jobAdd.jobID, item.resourceTypeID, item.rate);
+                        jobAdd.jobID, item.resourceTypeID, item.rate);
+                    }
                 }
-            }
 
-            if (jobAdd.jobCrspdtInfo != null)
-            {
-                //add correspondents to this job
-                foreach (tbl_jobCorrespondents item in jobAdd.jobCrspdtInfo)
+                if (jobAdd.jobCrspdtInfo != null)
                 {
-                    db.Database.ExecuteSqlCommand(
+                    //add correspondents to this job
+                    foreach (tbl_jobCorrespondents item in jobAdd.jobCrspdtInfo)
+                    {
+                        db.Database.ExecuteSqlCommand(
 
-                    "INSERT INTO tbl_jobCorrespondents VALUES({0}, {1}, {2}, {3}) ",
+                        "INSERT INTO tbl_jobCorrespondents VALUES({0}, {1}, {2}, {3}) ",
 
-                    //jobAdd.jobID, item.jobCrspdtName, item.jobCrspdtEmail, "1");
-                    jobAdd.jobID, item.name, item.email, "1");
+                        //jobAdd.jobID, item.jobCrspdtName, item.jobCrspdtEmail, "1");
+                        jobAdd.jobID, item.name, item.email, "1");
+                    }
                 }
-            }
 
-            return Json(Url.Action("Index", "Jobs"));
+                return Json(Url.Action("Index", "Jobs"));
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }           
         }
 
         public ActionResult UpdateJob(vm_Jobs jobUpdate)
         {
-
-            db.Database.ExecuteSqlCommand(
+            try
+            {
+                db.Database.ExecuteSqlCommand(
                 "UPDATE tbl_Jobs " +
                 "SET " +
 
@@ -134,103 +141,108 @@ namespace allpax_service_record.Controllers
                 jobUpdate.active, jobUpdate.nrmlHoursStart, jobUpdate.nrmlHoursEnd,
                 jobUpdate.dblTimeHours, jobUpdate.nrmlHoursDaily);
 
-            if (jobUpdate.jobSubJobsAdd != null)
-            {
-                foreach (string subJobID in jobUpdate.jobSubJobsAdd)
+                if (jobUpdate.jobSubJobsAdd != null)
                 {
-                    //System.Diagnostics.Debug.WriteLine(subJobID);
-                    db.Database.ExecuteSqlCommand(
+                    foreach (string subJobID in jobUpdate.jobSubJobsAdd)
+                    {
+                        //System.Diagnostics.Debug.WriteLine(subJobID);
+                        db.Database.ExecuteSqlCommand(
 
-                    "INSERT INTO tbl_jobSubJobs(jobID, subJobID) VALUES({0}, {01}) ",
+                        "INSERT INTO tbl_jobSubJobs(jobID, subJobID) VALUES({0}, {01}) ",
 
-                    jobUpdate.jobID, subJobID);
+                        jobUpdate.jobID, subJobID);
+                    }
                 }
-            }
 
-            if (jobUpdate.jobSubJobsDelete != null)
-            {
-                foreach (string subJobID in jobUpdate.jobSubJobsDelete)
+                if (jobUpdate.jobSubJobsDelete != null)
                 {
-                    db.Database.ExecuteSqlCommand("DELETE FROM tbl_jobSubJobs " +
-                        "WHERE jobID= {0} AND subJobID = {1}", jobUpdate.jobID, subJobID);
+                    foreach (string subJobID in jobUpdate.jobSubJobsDelete)
+                    {
+                        db.Database.ExecuteSqlCommand("DELETE FROM tbl_jobSubJobs " +
+                            "WHERE jobID= {0} AND subJobID = {1}", jobUpdate.jobID, subJobID);
+                    }
                 }
-            }
 
-            if (jobUpdate.resourceTypesAdd != null)
-            {
-                //foreach (string resourceTypeID in jobUpdate.resourceTypesAdd)
-                //{
-                //    db.Database.ExecuteSqlCommand(
-
-                //    "INSERT INTO tbl_jobResourceTypes(jobID, resourceTypeID) VALUES({0}, {01}) ",
-
-                //    jobUpdate.jobID, resourceTypeID);
-                //}
-
-                foreach (tbl_jobResourceTypes item in jobUpdate.resourceTypesAdd)
+                if (jobUpdate.resourceTypesAdd != null)
                 {
-                    db.Database.ExecuteSqlCommand(
+                    //foreach (string resourceTypeID in jobUpdate.resourceTypesAdd)
+                    //{
+                    //    db.Database.ExecuteSqlCommand(
 
-                    "INSERT INTO tbl_jobResourceTypes VALUES({0}, {1}, {2}) ",
+                    //    "INSERT INTO tbl_jobResourceTypes(jobID, resourceTypeID) VALUES({0}, {01}) ",
 
-                    item.jobID, item.resourceTypeID, item.rate);
+                    //    jobUpdate.jobID, resourceTypeID);
+                    //}
+
+                    foreach (tbl_jobResourceTypes item in jobUpdate.resourceTypesAdd)
+                    {
+                        db.Database.ExecuteSqlCommand(
+
+                        "INSERT INTO tbl_jobResourceTypes VALUES({0}, {1}, {2}) ",
+
+                        item.jobID, item.resourceTypeID, item.rate);
+                    }
                 }
-            }
 
-            if (jobUpdate.resourceTypesDelete != null)
-            {
-                foreach (tbl_jobResourceTypes item in jobUpdate.resourceTypesDelete)
+                if (jobUpdate.resourceTypesDelete != null)
                 {
-                    db.Database.ExecuteSqlCommand("DELETE FROM tbl_jobResourceTypes " +
-                    "WHERE jobID= {0} AND resourceTypeID = {1}", jobUpdate.jobID, item.resourceTypeID);
+                    foreach (tbl_jobResourceTypes item in jobUpdate.resourceTypesDelete)
+                    {
+                        db.Database.ExecuteSqlCommand("DELETE FROM tbl_jobResourceTypes " +
+                        "WHERE jobID= {0} AND resourceTypeID = {1}", jobUpdate.jobID, item.resourceTypeID);
+                    }
                 }
-            }
 
-            if (jobUpdate.resourceTypesEdit != null)
-            {
-                foreach (tbl_jobResourceTypes item in jobUpdate.resourceTypesEdit)
+                if (jobUpdate.resourceTypesEdit != null)
                 {
+                    foreach (tbl_jobResourceTypes item in jobUpdate.resourceTypesEdit)
+                    {
                         db.Database.ExecuteSqlCommand("UPDATE tbl_jobResourceTypes " +
                             "SET " +
                             "rate = {2} " +
                             "WHERE jobID= {0} AND resourceTypeID = {1}", jobUpdate.jobID, item.resourceTypeID, item.rate);
+                    }
                 }
-            }
 
-            if (jobUpdate.jobCrspdtInfoAdd != null)
-            {
-                foreach (tbl_jobCorrespondents item in jobUpdate.jobCrspdtInfoAdd)
+                if (jobUpdate.jobCrspdtInfoAdd != null)
                 {
-                    db.Database.ExecuteSqlCommand(
+                    foreach (tbl_jobCorrespondents item in jobUpdate.jobCrspdtInfoAdd)
+                    {
+                        db.Database.ExecuteSqlCommand(
 
-                    "INSERT INTO tbl_jobCorrespondents VALUES({0}, {1}, {2}, {3}) ",
+                        "INSERT INTO tbl_jobCorrespondents VALUES({0}, {1}, {2}, {3}) ",
 
-                    jobUpdate.jobID, item.name, item.email, "1");
+                        jobUpdate.jobID, item.name, item.email, "1");
+                    }
                 }
-            }
 
-            if (jobUpdate.jobCrspdtInfoDelete != null)
-            {
-                foreach (tbl_jobCorrespondents item in jobUpdate.jobCrspdtInfoDelete)
+                if (jobUpdate.jobCrspdtInfoDelete != null)
                 {
-                    db.Database.ExecuteSqlCommand("DELETE FROM tbl_jobCorrespondents " +
-                    "WHERE jobCorrespondentID= {0} ", item.jobCorrespondentID);
+                    foreach (tbl_jobCorrespondents item in jobUpdate.jobCrspdtInfoDelete)
+                    {
+                        db.Database.ExecuteSqlCommand("DELETE FROM tbl_jobCorrespondents " +
+                        "WHERE jobCorrespondentID= {0} ", item.jobCorrespondentID);
+                    }
                 }
-            }
 
-            if (jobUpdate.jobCrspdtInfoEdit != null)
-            {
-                foreach (tbl_jobCorrespondents item in jobUpdate.jobCrspdtInfoEdit)
+                if (jobUpdate.jobCrspdtInfoEdit != null)
                 {
-                    db.Database.ExecuteSqlCommand("UPDATE tbl_jobCorrespondents " +
-                            "SET " +
-                            "name = {1}, " +
-                            "email = {2} " +
-                            "WHERE jobCorrespondentID= {0} ", item.jobCorrespondentID, item.name, item.email);
+                    foreach (tbl_jobCorrespondents item in jobUpdate.jobCrspdtInfoEdit)
+                    {
+                        db.Database.ExecuteSqlCommand("UPDATE tbl_jobCorrespondents " +
+                                "SET " +
+                                "name = {1}, " +
+                                "email = {2} " +
+                                "WHERE jobCorrespondentID= {0} ", item.jobCorrespondentID, item.name, item.email);
+                    }
                 }
-            }
 
-            return Json(Url.Action("Index", "Jobs"));
+                return Json(Url.Action("Index", "Jobs"));
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }            
         }
 
         public ActionResult DeleteJob(vm_Jobs jobDelete)

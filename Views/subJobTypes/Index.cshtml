@@ -92,9 +92,11 @@
                             window.location.href = response;
                         },
                         error: function (response) {
-                            console.log("an error!");
-                            $(response).each(function (index, item) {
-                                console.log(item.name)
+                            fn_hideSpinner();
+                            var alertContent = "An error has occurred. \n" + response.responseText;
+                            $.alert({
+                                title: 'Alert!',
+                                content: alertContent,
                             });
                         }
                     });
@@ -142,9 +144,11 @@
                             window.location.href = response;
                         },
                         error: function (response) {
-                            console.log("an error!");
-                            $(response).each(function (index, item) {
-                                console.log(item.name)
+                            fn_hideSpinner();
+                            var alertContent = "An error has occurred. \n" + response.responseText;
+                            $.alert({
+                                title: 'Alert!',
+                                content: alertContent,
                             });
                         }
                     });
@@ -155,22 +159,23 @@
 
                 var modal = $(this).parent().parent().parent();
                 var temp_subJobTypeID = modal.find('.sub-job-type-id').val();
-                var temp_resourceType = modal.find('.sub-job-type').val();
                 var temp_description = modal.find('.description').val();
-                var temp_rate = modal.find('.rate').val();
+
+                console.log(temp_subJobTypeID)
+                console.log(temp_description)
 
                 var data = {
-                    subJobTypeID: temp_subJobTypeID,
+                    subJobID: temp_subJobTypeID,
                 };
 
                 $.confirm({
-                    title: 'Delete Resource ' + temp_resourceType + ': ' + temp_description + '?',
+                    title: 'Delete Sub-job Type: ' + temp_description + '?',
                     content: '',
                     buttons: {
                         confirm: function () {
                             fn_showSpinner();
                             $.ajax({
-                                url: '/ResourceTypes/DeleteResourceType',
+                                url: '/SubJobTypes/DeleteSubJobType',
                                 method: 'post',
                                 contentType: 'application/json',
                                 dataType: 'json',
@@ -178,6 +183,14 @@
                                 traditional: true,
                                 success: function (response) {
                                     window.location.href = response;
+                                },
+                                error: function (response) {
+                                    fn_hideSpinner();
+                                    var alertContent = "An error has occurred. \n" + response.responseText;
+                                    $.alert({
+                                        title: 'Alert!',
+                                        content: alertContent,
+                                    });
                                 }
                             });
                         },
@@ -204,7 +217,7 @@
                     content: '',
                     buttons: {
                         confirm: function () {
-                            //fn_showSpinner();
+                            fn_showSpinner();
                             $.ajax({
                                 url: '/SubJobTypes/DeleteSubJobType',
                                 method: 'post',
@@ -214,6 +227,14 @@
                                 traditional: true,
                                 success: function (response) {
                                     window.location.href = response;
+                                },
+                                error: function (response) {
+                                    fn_hideSpinner();
+                                    var alertContent = "An error has occurred. \n" + response.responseText;
+                                    $.alert({
+                                        title: 'Alert!',
+                                        content: alertContent,
+                                    });
                                 }
                             });
                         },
@@ -228,6 +249,10 @@
                     image: "",
                     fontawesome: "fa fa-cog fa-spin"
                 });
+            }
+
+            function fn_hideSpinner() {
+                $.LoadingOverlay("hide");
             }
 
             //BEGIN VALIDATION BEFORE SAVING SECTION
@@ -339,7 +364,7 @@
                     <h5 class="modal-title" id="subJobTypeEditForm">Edit Resource</h5>
                 </div>
                 <div class="float-none">
-                    <button type="button" class="btn btn-light btn-sm subJobTypeEditForm" data-toggle="modal" data-target="#resourceNewForm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                    <button type="button" class="btn btn-light btn-sm subJobTypeEditForm" data-toggle="modal" data-target="#subJobTypeNewForm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
                     <button type="button" class="btn btn-light btn-sm subJobTypeEditForm btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -355,8 +380,8 @@
                             <div class="col-6">
                                 <label for="description" class="col-form-label">Description:</label>
                                 <input type="text" class="form-control description">
-                                <label for="sub-job-type-id" class="col-form-label">Resource Type ID:</label>
-                                <input type="text" class="form-control sub-job-type-id">
+                                <label for="sub-job-type-id" class="col-form-label" hidden>Sub-job Type ID:</label>
+                                <input type="text" class="form-control sub-job-type-id" hidden>
                             </div>
                         </div>
                     </div>
