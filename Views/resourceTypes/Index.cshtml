@@ -66,9 +66,16 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
+            //////////////////BEGIN THE COMMON NEW RESOURCE TYPE AND EDIT RESOURCE TYPE MODAL SECTION
+
+            //////////////////END THE COMMON NEW RESOURCE TYPE AND EDIT RESOURCE TYPE MODAL SECTION
+
+            //////////////////BEGIN THE NEW RESOURCE TYPE MODAL SECTION
+
             $(".resourceNewForm.btn_save").click(function () {
 
-                if (fn_rowFilled($(this))) {
+                //if all inputs for this modal are valid...
+                if (fn_modalValidate($(this))) {
 
                     var modal = $(this).parent().parent();
                     var temp_resourceTypeID = modal.find('.resource-type-id').val();
@@ -83,8 +90,7 @@
                         rate: temp_rate
                     };
 
-                    fn_showSpinner();
-
+                    fn_showSpinner();//display the spinner to demonstrate an operation is underway
                     $.ajax({
                         url: '/ResourceTypes/AddResourceType',
                         method: 'post',
@@ -92,12 +98,18 @@
                         dataType: 'json',
                         data: JSON.stringify(data),
                         traditional: true,
+                        //if successful, redirect the page returned by the controller
                         success: function (response) {
                             window.location.href = response;
                         },
+                        //if un-successful...
                         error: function (response) {
-                            fn_hideSpinner();
+                            fn_hideSpinner();//hide spinner
+
+                            //build an error string based on the error returned from the controller...
                             var alertContent = "An error has occurred. \n" + response.responseText;
+
+                            //and display that error in an alert box
                             $.alert({
                                 title: 'Alert!',
                                 content: alertContent,
@@ -106,6 +118,9 @@
                     });
                 }
             });
+            //////////////////END THE NEW RESOURCE TYPE MODAL SECTION
+
+            //////////////////BEGIN THE EDIT RESOURCE TYPE MODAL SECTION
 
             $('#resourceEditForm').on('show.bs.modal', function (event) {
 
@@ -123,9 +138,11 @@
                 modal.find('.rate').val(temp_rate);
             })
 
+            //Begin when the save button on the edit resource type modal is pressed
             $(".resourceEditForm.btn_save").click(function () {
 
-                if (fn_rowFilled($(this))) {
+                //if all inputs for this modal are valid...
+                if (fn_modalValidate($(this))) {
 
                     var modal = $(this).parent().parent();
                     var temp_resourceTypeID = modal.find('.resource-type-id').val()
@@ -140,8 +157,7 @@
                         rate: temp_rate
                     };
 
-                    fn_showSpinner();
-
+                    fn_showSpinner();//display the spinner to demonstrate an operation is underway
                     $.ajax({
                         url: '/ResourceTypes/UpdateResourceType',
                         method: 'post',
@@ -149,12 +165,18 @@
                         dataType: 'json',
                         data: JSON.stringify(data),
                         traditional: true,
+                        //if successful, redirect the page returned by the controller
                         success: function (response) {
                             window.location.href = response;
                         },
+                        //if un-successful...
                         error: function (response) {
-                            fn_hideSpinner();
+                            fn_hideSpinner();//hide the spinner
+
+                            //build an error string based on the error returned from the controller...
                             var alertContent = "An error has occurred. \n" + response.responseText;
+
+                            //and display that error in an alert box
                             $.alert({
                                 title: 'Alert!',
                                 content: alertContent,
@@ -181,7 +203,7 @@
                     content: '',
                     buttons: {
                         confirm: function () {
-                            fn_showSpinner();
+                            fn_showSpinner();//display the spinner to demonstrate an operation is underway
                             $.ajax({
                                 url: '/ResourceTypes/DeleteResourceType',
                                 method: 'post',
@@ -189,12 +211,18 @@
                                 dataType: 'json',
                                 data: JSON.stringify(data),
                                 traditional: true,
+                                //if successful, redirect the page returned by the controller
                                 success: function (response) {
                                     window.location.href = response;
                                 },
+                                //if un-successful...
                                 error: function (response) {
-                                    fn_hideSpinner();
+                                    fn_hideSpinner();//hide the spinner
+
+                                    //build an error string based on the error returned from the controller...
                                     var alertContent = "An error has occurred. \n" + response.responseText;
+
+                                    //and display that error in an alert box
                                     $.alert({
                                         title: 'Alert!',
                                         content: alertContent,
@@ -208,14 +236,16 @@
                 });
             });
 
+            //////////////////END THE EDIT RESOURCE TYPE MODAL SECTION
+
+            //////////////////BEGIN RETURNED RECORDS SECTION
+
             $(".returnedRecords .Btn_delete").click(function () {
 
                 var currentRow = $(this).parent().parent();
                 var temp_resourceTypeID = currentRow.find('.resourceTypeID_div').html();
                 var temp_resourceType = currentRow.find('.resourceType_div').html();
                 var temp_description = currentRow.find('.description_div').html();
-
-                //console.log("Delete temp_resourceTypeID: " + temp_resourceTypeID);
 
                 var data = {
                     resourceTypeID: temp_resourceTypeID,
@@ -226,7 +256,7 @@
                     content: '',
                     buttons: {
                         confirm: function () {
-                            fn_showSpinner();
+                            fn_showSpinner();//display the spinner to demonstrate an operation is underway
                             $.ajax({
                                 url: '/ResourceTypes/DeleteResourceType',
                                 method: 'post',
@@ -234,12 +264,18 @@
                                 dataType: 'json',
                                 data: JSON.stringify(data),
                                 traditional: true,
+                                //if successful, redirect the page returned by the controller
                                 success: function (response) {
                                     window.location.href = response;
                                 },
+                                //if un-successful...
                                 error: function (response) {
-                                    fn_hideSpinner();
+                                    fn_hideSpinner();//hide the spinner
+
+                                    //build an error string based on the error returned from the controller...
                                     var alertContent = "An error has occurred. \n" + response.responseText;
+
+                                    //and display that error in an alert box
                                     $.alert({
                                         title: 'Alert!',
                                         content: alertContent,
@@ -252,6 +288,10 @@
                     }
                 });
             });
+
+            //////////////////END RETURNED RECORDS SECTION
+
+            //////////////////BEGIN MISCELLANEOUS SECTION
 
             function fn_showSpinner() {
                 $.LoadingOverlay("show", {
@@ -268,11 +308,9 @@
                 $(this).val($(this).val().toUpperCase());
             });
 
-            //BEGIN VALIDATION BEFORE SAVING SECTION
-
-            function fn_rowFilled(button) {
+            function fn_modalValidate(button) {
                 var currentRow = button.parent().parent();
-                var rowFilled = true;
+                var modalValid = true;
                 var temp_resourceType = currentRow.find(".resource-type").val();
                 var temp_description = currentRow.find(".description").val();
                 var temp_rate = currentRow.find(".rate").val();
@@ -286,8 +324,8 @@
                         title: 'Error!',
                         content: 'Resource type must not be empty and begin with at least 3 capital letters.',
                     });
-                    rowFilled = false;
-                    return rowFilled;
+                    modalValid = false;
+                    return modalValid;
                 }
 
                 if (!temp_descriptionMatch) {
@@ -295,8 +333,8 @@
                         title: 'Error!',
                         content: 'Description must not be empty and contain at least 3 capital letters.',
                     });
-                    rowFilled = false;
-                    return rowFilled;
+                    modalValid = false;
+                    return modalValid;
                 }
 
                 if (!temp_rateMatch) {
@@ -304,13 +342,13 @@
                         title: 'Error!',
                         content: 'Charge rate must not be empty and be of the form ###.##.',
                     });
-                    rowFilled = false;
-                    return rowFilled;
+                    modalValid = false;
+                    return modalValid;
                 }
-                return rowFilled;
+                return modalValid;
             }
 
-            //END VALIDATION BEFORE SAVING SECTION
+            //////////////////END MISCELLANEOUS SECTION
 
         });//end document read jquery statements
     </script>
