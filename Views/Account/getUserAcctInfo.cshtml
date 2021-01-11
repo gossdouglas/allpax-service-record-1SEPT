@@ -164,35 +164,43 @@
                         active: temp_active
                     };
 
-                    //console.log(data);
+                    fn_showSpinner();//display the spinner to demonstrate an operation is underway
+                    $.ajax({
+                        url: '/Account/UpdateUserAcctInfo',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        //if successful, redirect the page returned by the controller
+                        success: function (response) {
+                            window.location.href = response;
+                        },
+                        //if un-successful...
+                        error: function (response) {
+                            fn_hideSpinner();//hide the spinner
 
-                    //fn_showSpinner();
+                            //build an error string based on the error returned from the controller...
+                            var alertContent = "An error has occurred. \n" + response.responseText;
 
-                    //$.ajax({
-                    //    url: '/Account/UpdateUserAcctInfo',
-                    //    method: 'post',
-                    //    contentType: 'application/json',
-                    //    dataType: 'json',
-                    //    data: JSON.stringify(data),
-                    //    traditional: true,
-                    //    success: function (response) {
-                    //        //console.log(response);
-                    //        window.location.href = response;
-                    //    },
-                    //    error: function (response) {
+                            //and display that error in an alert box
+                            $.alert({
+                                title: 'Alert!',
+                                content: alertContent,
+                            });
 
-                    //        console.log("an error!");
-                    //        //console.log(response);
-                    //        $(response).each(function (index, item) {
+                            //console.log("an error!");
+                            ////console.log(response);
+                            //$(response).each(function (index, item) {
 
-                    //            //var modelErrors = item.ModelErrors
-                    //            //console.log(item.name)
-                    //            //console.log(item.Email)
-                    //            //console.log(item.ModelErrors)
-                    //            console.log(item.name)
-                    //        });
-                    //    }
-                    //});
+                            //    //var modelErrors = item.ModelErrors
+                            //    //console.log(item.name)
+                            //    //console.log(item.Email)
+                            //    //console.log(item.ModelErrors)
+                            //    console.log(item.name)
+                            //});
+                        }
+                    });
                 }
                 });
 
