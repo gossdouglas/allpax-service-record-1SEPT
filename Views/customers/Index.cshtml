@@ -68,9 +68,19 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
+            //////////////////BEGIN THE COMMON NEW CUSTOMER AND EDIT CUSTOMER MODAL SECTION
+
+            $('.customer-code, .customer-name, .address').keyup(function () {
+                $(this).val($(this).val().toUpperCase());
+            });
+
+            //////////////////END THE COMMON NEW CUSTOMER AND EDIT CUSTOMER MODAL SECTION
+
+            //////////////////BEGIN THE NEW CUSTOMER MODAL SECTION
+
             $(".customerNewForm.btn_save").click(function () {
 
-                if (fn_rowFilled($(this))) {
+                if (fn_modalValidate($(this))) {
 
                     var modal = $(this).parent().parent();
                     var temp_customerCode = modal.find('.customer-code').val()
@@ -83,29 +93,33 @@
                         address: temp_address
                     };
 
-                fn_showSpinner();
+                    fn_showSpinner();
 
-                $.ajax({
-                    url: '/Customers/AddCustomer',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function (response) {
-                        window.location.href = response;
-                    },
-                    error: function (response) {
-                        fn_hideSpinner();
-                        var alertContent = "An error has occurred. \n" + response.responseText;
-                        $.alert({
-                            title: 'Alert!',
-                            content: alertContent,
-                        });
-                    }
-                });
-                }               
+                    $.ajax({
+                        url: '/Customers/AddCustomer',
+                        method: 'post',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        traditional: true,
+                        success: function (response) {
+                            window.location.href = response;
+                        },
+                        error: function (response) {
+                            fn_hideSpinner();
+                            var alertContent = "An error has occurred. \n" + response.responseText;
+                            $.alert({
+                                title: 'Alert!',
+                                content: alertContent,
+                            });
+                        }
+                    });
+                }
             });
+
+            //////////////////END THE NEW CUSTOMER MODAL SECTION
+
+            //////////////////BEGIN THE EDIT CUSTOMER MODAL SECTION
 
             $('#customerEditForm').on('show.bs.modal', function (event) {
 
@@ -125,7 +139,7 @@
 
             $(".customerEditForm.btn_save").click(function () {
 
-                if (fn_rowFilled($(this))) {
+                if (fn_modalValidate($(this))) {
 
                     var modal = $(this).parent().parent();
                     var temp_customerCode = modal.find('.customer-code').val()
@@ -163,7 +177,7 @@
                     });
                 }
             });
-           
+
             $(".customerEditForm.btn_delete").click(function () {
 
                 var modal = $(this).parent().parent().parent();
@@ -206,19 +220,22 @@
                 });
             });
 
+            //////////////////END THE EDIT CUSTOMER MODAL SECTION
+
+            //////////////////BEGIN RETURNED RECORDS SECTION
+
             $(".returnedRecords .Btn_delete").click(function () {
 
                 var currentRow = $(this).parent().parent();
                 var temp_customerCode = currentRow.find('.customerCode_div').html()
-
-                console.log("Delete temp_customerCode: " + temp_customerCode);
+                var temp_customerName = currentRow.find('.customerName_div').html()
 
                 var data = {
                     customerCode: temp_customerCode,
                 };
 
                 $.confirm({
-                    title: 'Delete Customer ' + temp_customerCode + '?',
+                    title: 'Delete Customer ' + temp_customerName + ': ' + temp_customerCode + '?',
                     content: '',
                     buttons: {
                         confirm: function () {
@@ -246,8 +263,12 @@
                         cancel: function () {
                         }
                     }
-                });
+                });;
             });
+
+            //////////////////END RETURNED RECORDS SECTION
+
+            //////////////////BEGIN MISCELLANEOUS SECTION
 
             function fn_showSpinner() {
                 $.LoadingOverlay("show", {
@@ -260,14 +281,7 @@
                 $.LoadingOverlay("hide");
             }
 
-            $('.customer-code, .customer-name, .address').keyup(function () {
-                $(this).val($(this).val().toUpperCase());
-            });
-
-            //BEGIN VALIDATION BEFORE SAVING SECTION
-
-            //cloned to new daily report
-            function fn_rowFilled(button) {
+            function fn_modalValidate(button) {
                 var currentRow = button.parent().parent();
                 var rowFilled = true;
                 var temp_customerCode = currentRow.find(".customer-code").val();
@@ -277,7 +291,6 @@
                 var temp_customerCodeMatch = temp_customerCode.match(/^([A-Z]{3})$/);//maches the form ABC
                 var temp_addressMatch = temp_address.match(/([A-Za-z ]+), ([A-Za-z]{2}$)/);//maches the form LAS VEGAS, NV
 
-                //if (temp_customerCode.length < 3) {
                 if (!temp_customerCodeMatch) {
                     $.alert({
                         title: 'Error!',
@@ -307,13 +320,13 @@
                 return rowFilled;
             }
 
-            //END VALIDATION BEFORE SAVING SECTION  
-
+            //////////////////END MISCELLANEOUS SECTION
+           
         });//end document read jquery statements
     </script>
 </head>
 
-@*BEGIN USER SECTION*@
+@*BEGIN CUSTOMER SECTION*@
 <hr class="sectionSeparator">
 <div class="col-12" style="padding:0px;">
     <span><strong>Add a New Customer</strong></span>
@@ -354,7 +367,6 @@
                     int temp_id = item.id;
                     //END TEMPORARY LOOP VARIABLES
 
-                    @*<hr class="sectionSeparator">*@
                     <tr class="returnedRecords" id="" style="">
                         <td class="customerCode_div">@temp_customerCode</td>
                         <td class="customerName_div">@temp_customerName</td>

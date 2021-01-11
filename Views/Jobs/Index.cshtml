@@ -1053,6 +1053,57 @@
 
             //////////////////END THE EDIT JOB MODAL SECTION
 
+            //////////////////BEGIN RETURNED RECORDS SECTION
+
+            $(".returnedRecords .Btn_delete").click(function () {
+
+                var currentRow = $(this).parent().parent();
+                var temp_jobID = currentRow.find('.jobID_div').html();
+                //var temp_resourceType = currentRow.find('.jobID_div').html();
+                //var temp_description = currentRow.find('.description_div').html();
+
+                //console.log("Delete temp_resourceTypeID: " + temp_resourceTypeID);
+
+                var data = {
+                    jobID: temp_jobID
+                };
+
+                //console.log(data);
+
+                $.confirm({
+                    title: "Delete Job: " + temp_jobID + "?",
+                    content: '',
+                    buttons: {
+                        confirm: function () {
+                            fn_showSpinner();
+                            $.ajax({
+                                url: '/Jobs/DeleteJob',
+                                method: 'post',
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                data: JSON.stringify(data),
+                                traditional: true,
+                                success: function (response) {
+                                    window.location.href = response;
+                                },
+                                error: function (response) {
+                                    fn_hideSpinner();
+                                    var alertContent = "An error has occurred. \n" + response.responseText;
+                                    $.alert({
+                                        title: 'Alert!',
+                                        content: alertContent,
+                                    });
+                                }
+                            });
+                        },
+                        cancel: function () {
+                        }
+                    }
+                });
+            });
+
+            //////////////////END RETURNED RECORDS SECTION
+
             //////////////////BEGIN MISCELLANEOUS SECTION
 
             //enable the select2 add-on
@@ -1207,54 +1258,7 @@
             }
             //Begin validation
 
-            //////////////////END MISCELLANEOUS SECTION
-
-            $(".returnedRecords .Btn_delete").click(function () {
-
-                var currentRow = $(this).parent().parent();
-                var temp_jobID = currentRow.find('.jobID_div').html();
-                //var temp_resourceType = currentRow.find('.jobID_div').html();
-                //var temp_description = currentRow.find('.description_div').html();
-
-                //console.log("Delete temp_resourceTypeID: " + temp_resourceTypeID);
-
-                var data = {
-                    jobID: temp_jobID
-                };
-
-                //console.log(data);
-
-                $.confirm({
-                    title: "Delete Job: " + temp_jobID + "?",
-                    content: '',
-                    buttons: {
-                        confirm: function () {
-                            fn_showSpinner();
-                            $.ajax({
-                                url: '/Jobs/DeleteJob',
-                                method: 'post',
-                                contentType: 'application/json',
-                                dataType: 'json',
-                                data: JSON.stringify(data),
-                                traditional: true,
-                                success: function (response) {
-                                    window.location.href = response;
-                                },
-                                error: function (response) {
-                                    fn_hideSpinner();
-                                    var alertContent = "An error has occurred. \n" + response.responseText;
-                                    $.alert({
-                                        title: 'Alert!',
-                                        content: alertContent,
-                                    });
-                                }
-                            });
-                        },
-                        cancel: function () {
-                        }
-                    }
-                });
-            });
+            //////////////////END MISCELLANEOUS SECTION           
 
         });//end document read jquery statements
 
