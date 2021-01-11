@@ -76,8 +76,35 @@
             //determine the screen size on load
             //fn_checkScreenSize();
 
+            //////////////////BEGIN THE COMMON NEW USER AND EDIT USER MODAL SECTION
+
+            //////////////////END THE COMMON NEW USER AND EDIT USER MODAL SECTION
+
+
+            //////////////////BEGIN THE NEW USER MODAL SECTION
+
+            //reset the new job modal for new inputs
+            function fn_resetModalForm(modalID) {
+
+                var allTextInputs = $(modalID).find("input:text");
+                var allPasswordInputs = $(modalID).find("input:password");
+                var allCheckInputs = $(modalID).find("input:checkbox");
+
+                $(allTextInputs).val('');//reset text boxes
+                $(allPasswordInputs).val('');//reset text boxes
+                $(allCheckInputs).prop('checked', false);//reset check boxes
+            }
+
+            $('#userNewForm').on('show.bs.modal', function (event) {
+
+                fn_resetModalForm("#userNewForm");//reset the modal for new inputs
+            })
+
+            //////////////////END THE NEW USER MODAL SECTION
+
+            //////////////////BEGIN THE EDIT USER MODAL SECTION
+
             $('#userEditForm').on('show.bs.modal', function (event) {
-                console.clear();
 
                 var button = $(event.relatedTarget) // Button that triggered the modal
                 var temp_aspNetId = button.data('asp-net-id') // Extract info from data-* attributes
@@ -99,7 +126,6 @@
                 modal.find('.active').val(temp_active)
 
                 if (temp_admin == "True") {
-                    console.log("temp_admin is true.")
                     modal.find('.admin').prop('checked', true);
                 }
                 else {
@@ -107,7 +133,6 @@
                 }
 
                 if (temp_active == "True") {
-                    console.log("temp_active is true.")
                     modal.find('.active').prop('checked', true);
                 }
                 else {
@@ -116,67 +141,60 @@
             })
 
             $(".userEditForm.btn_save").click(function () {
-                console.clear();
 
-                var modal = $(this).parent().parent();
+                //if all inputs for this modal are valid...
+                if (fn_modalValidate($(this))) {
 
-                var temp_aspNetId = modal.find('.asp-net-id').val()
-                var temp_fullName = modal.find('.full-name').val()
-                var temp_shortName = modal.find('.short-name').val()
-                var temp_userName = modal.find('.user-name').val()
-                var temp_email = modal.find('.email').val()
-                var temp_admin = modal.find('.admin').prop('checked')
-                var temp_active = modal.find('.active').prop('checked')
+                    var modal = $(this).parent().parent();
+                    var temp_aspNetId = modal.find('.asp-net-id').val()
+                    var temp_fullName = modal.find('.full-name').val()
+                    var temp_shortName = modal.find('.short-name').val()
+                    var temp_userName = modal.find('.user-name').val()
+                    var temp_email = modal.find('.email').val()
+                    var temp_admin = modal.find('.admin').prop('checked')
+                    var temp_active = modal.find('.active').prop('checked')
 
-                console.log("Save button was pressed.")
-                console.log("temp_aspNetId: " + temp_aspNetId)
-                console.log("temp_fullName: " + temp_fullName)
-                console.log("temp_shortName: " + temp_shortName)
-                console.log("temp_userName: " + temp_userName)
-                console.log("temp_email: " + temp_email)
-                console.log("temp_admin: " + temp_admin)
-                console.log("temp_active: " + temp_active)
+                    var data = {
+                        aspNetId: temp_aspNetId,
+                        name: temp_fullName,
+                        ShortName: temp_shortName,
+                        UserName: temp_userName,
+                        Email: temp_email,
+                        admin: temp_admin,
+                        active: temp_active
+                    };
 
-                var data = {
-                    aspNetId: temp_aspNetId,
-                    name: temp_fullName,
-                    ShortName: temp_shortName,
-                    UserName: temp_userName,
-                    Email: temp_email,
-                    admin: temp_admin,
-                    active: temp_active
-                };
+                    //console.log(data);
 
-                //console.log(data);
+                    //fn_showSpinner();
 
-                fn_showSpinner();
+                    //$.ajax({
+                    //    url: '/Account/UpdateUserAcctInfo',
+                    //    method: 'post',
+                    //    contentType: 'application/json',
+                    //    dataType: 'json',
+                    //    data: JSON.stringify(data),
+                    //    traditional: true,
+                    //    success: function (response) {
+                    //        //console.log(response);
+                    //        window.location.href = response;
+                    //    },
+                    //    error: function (response) {
 
-                $.ajax({
-                    url: '/Account/UpdateUserAcctInfo',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function (response) {
-                        //console.log(response);
-                        window.location.href = response;
-                    },
-                    error: function (response) {
+                    //        console.log("an error!");
+                    //        //console.log(response);
+                    //        $(response).each(function (index, item) {
 
-                        console.log("an error!");
-                        //console.log(response);
-                        $(response).each(function (index, item) {
-
-                            //var modelErrors = item.ModelErrors
-                            //console.log(item.name)
-                            //console.log(item.Email)
-                            //console.log(item.ModelErrors)
-                            console.log(item.name)
-                        });
-                    }
+                    //            //var modelErrors = item.ModelErrors
+                    //            //console.log(item.name)
+                    //            //console.log(item.Email)
+                    //            //console.log(item.ModelErrors)
+                    //            console.log(item.name)
+                    //        });
+                    //    }
+                    //});
+                }
                 });
-            });
 
             $(".userEditForm.btn_delete").click(function () {
                 console.clear();
@@ -214,6 +232,10 @@
                     }
                 });
             });
+
+            //////////////////END THE EDIT USER MODAL SECTION
+
+            //////////////////BEGIN RETURNED RECORDS SECTION
 
             $(".returnedRecords .Btn_delete").click(function () {
                 console.clear();
@@ -258,49 +280,9 @@
             //set the bottom border of the last row of returned records
             $(".returnedRecords:last div").css('border-bottom', 'solid 1px black');
 
-            //determine the screen size on any change
-            $(window).resize(function () {
-                fn_checkScreenSize();
-            });
+            //////////////////END RETURNED RECORDS SECTION
 
-            function fn_checkScreenSize() {
-
-                ////this is the monitor size
-                //if ($(window).width() >= 992) {
-                //    $(".fullName_div").css('border-right', 'none');
-                //    $(".shortName_div").css('border-right', 'none');
-                //    $(".userName_div").css('border-right', 'none');
-                //    $(".email_div").css('border-right', 'none');
-                //    $(".admin_div").css('border-right', 'none');
-                //    $(".active_div").css('border-right', 'none');
-                //    $(".button_div").css('border-bottom', 'none');
-
-                //    $(".returnedRecords:last div").css('border-bottom', 'solid 1px black');
-
-                //    $("#header_userData").show();
-
-                //    $("hr.mobile").hide();
-                //    $("hr.mobile").attr("hidden", "true");
-                //}
-                ////this and below are the mobile sizes
-                //else if ($(window).width() < 992) {
-                //    $(".fullName_div").css('border-right', 'solid 1px black');
-                //    $(".shortName_div").css('border-right', 'solid 1px black');
-                //    $(".userName_div").css('border-right', 'solid 1px black');
-                //    $(".email_div").css('border-right', 'solid 1px black');
-                //    $(".admin_div").css('border-right', 'solid 1px black');
-                //    $(".active_div").css('border-right', 'solid 1px black');
-
-
-                //    $(".returnedRecords:last div").css('border-bottom', 'none');
-                //    $(".button_div").css('border-bottom', 'solid 1px black');
-
-                //    $("#header_userData").hide();
-
-                //    $("hr.mobile").show();
-                //    $("hr.mobile").removeAttr("hidden");
-                //}
-            }
+            //////////////////BEGIN MISCELLANEOUS SECTION            
 
             function fn_showSpinner() {
                 $.LoadingOverlay("show", {
@@ -311,10 +293,44 @@
                 //$('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
             }
 
+            function fn_hideSpinner() {
+                $.LoadingOverlay("hide");
+            }
+
+            function fn_modalValidate(button) {
+                var currentRow = button.parent().parent();
+                var modalValid = true;
+                var temp_fullName = currentRow.find(".full-name").val();
+                var temp_shortName = currentRow.find(".short-name").val();
+                var temp_userName = currentRow.find(".user-name").val();
+                var temp_email = currentRow.find(".email").val();
+                
+                console.log(temp_fullName)
+                console.log(temp_shortName)
+                console.log(temp_userName)
+                console.log(temp_userName)
+                console.log(temp_email)
+
+                //var temp_descriptionMatch = temp_description.match(/(.*[A-Z]){3,}/);//maches the form three or more letters
+
+                //if (temp_description.length < 1) {
+                //    $.alert({
+                //        title: 'Error!',
+                //        content: 'Sub-job description must not be empty.',
+                //    });
+                //    modalValid = false;
+                //    return modalValid;
+                //}
+
+                return modalValid;
+            }
+
             $('.short-name').keyup(function () {
                 $(this).val($(this).val().toUpperCase());
             });
 
+            //////////////////END MISCELLANEOUS SECTION
+            
         });//end document read jquery statements
     </script>
 </head>
