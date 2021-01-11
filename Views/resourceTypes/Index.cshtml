@@ -72,6 +72,19 @@
 
             //////////////////BEGIN THE NEW RESOURCE TYPE MODAL SECTION
 
+            //reset the new job modal for new inputs
+            function fn_resetModalForm(modalID) {
+
+               var allTextInputs = $(modalID).find("input:text");
+
+               $(allTextInputs).val('');//reset text boxes
+            }
+
+            $('#resourceNewForm').on('show.bs.modal', function (event) {
+
+                fn_resetModalForm("#resourceNewForm");//reset the modal for new inputs
+            })
+
             $(".resourceNewForm.btn_save").click(function () {
 
                 //if all inputs for this modal are valid...
@@ -118,6 +131,7 @@
                     });
                 }
             });
+
             //////////////////END THE NEW RESOURCE TYPE MODAL SECTION
 
             //////////////////BEGIN THE EDIT RESOURCE TYPE MODAL SECTION
