@@ -75,6 +75,7 @@
 
             $(".subJobTypeNewForm.btn_save").click(function () {
 
+                //if all inputs for this modal are valid...
                 if (fn_modalValidate($(this))) {
 
                 var modal = $(this).parent().parent();
@@ -84,9 +85,9 @@
                     description: temp_description
                 };
 
-                fn_showSpinner();
                 //console.log(data);
 
+                fn_showSpinner();//display the spinner to demonstrate an operation is underway
                 $.ajax({
                     url: '/SubJobTypes/AddSubJobType',
                     method: 'post',
@@ -94,12 +95,18 @@
                     dataType: 'json',
                     data: JSON.stringify(data),
                     traditional: true,
+                    //if successful, redirect the page returned by the controller
                     success: function (response) {
                         window.location.href = response;
                     },
+                    //if un-successful...
                     error: function (response) {
                         fn_hideSpinner();
+
+                        //build an error string based on the error returned from the controller...
                         var alertContent = "An error has occurred. \n" + response.responseText;
+
+                        //and display that error in an alert box
                         $.alert({
                             title: 'Alert!',
                             content: alertContent,
@@ -125,10 +132,10 @@
                 modal.find('.description').val(temp_description);
             })
 
+            //Begin when the save button on the edit sub-job type modal is pressed
             $(".subJobTypeEditForm.btn_save").click(function () {
 
-                console.clear();
-
+                //if all inputs for this modal are valid...
                 if (fn_modalValidate($(this))) {
 
                 var modal = $(this).parent().parent();
@@ -139,10 +146,10 @@
                     description: temp_description,
                     subJobID: temp_subJobID
                 };
-
-                fn_showSpinner();
+                
                 //console.log(data);
 
+                fn_showSpinner();
                 $.ajax({
                     url: '/SubJobTypes/UpdateSubJobType',
                     method: 'post',
@@ -150,12 +157,18 @@
                     dataType: 'json',
                     data: JSON.stringify(data),
                     traditional: true,
+                    //if successful, redirect the page returned by the controller
                     success: function (response) {
                         window.location.href = response;
                     },
+                    //if un-successful...
                     error: function (response) {
-                        fn_hideSpinner();
+                        fn_hideSpinner();//hide the spinner
+
+                        //build an error string based on the error returned from the controller...
                         var alertContent = "An error has occurred. \n" + response.responseText;
+
+                        //and display that error in an alert box
                         $.alert({
                             title: 'Alert!',
                             content: alertContent,
@@ -171,9 +184,6 @@
                 var temp_subJobTypeID = modal.find('.sub-job-type-id').val();
                 var temp_description = modal.find('.description').val();
 
-                console.log(temp_subJobTypeID)
-                console.log(temp_description)
-
                 var data = {
                     subJobID: temp_subJobTypeID,
                 };
@@ -183,7 +193,7 @@
                     content: '',
                     buttons: {
                         confirm: function () {
-                            fn_showSpinner();
+                            fn_showSpinner();//display the spinner to demonstrate an operation is underway
                             $.ajax({
                                 url: '/SubJobTypes/DeleteSubJobType',
                                 method: 'post',
@@ -191,12 +201,18 @@
                                 dataType: 'json',
                                 data: JSON.stringify(data),
                                 traditional: true,
+                                //if successful, redirect the page returned by the controller
                                 success: function (response) {
                                     window.location.href = response;
                                 },
+                                //if un-successful...
                                 error: function (response) {
-                                    fn_hideSpinner();
+                                    fn_hideSpinner();//hide the spinner
+
+                                    //build an error string based on the error returned from the controller...
                                     var alertContent = "An error has occurred. \n" + response.responseText;
+
+                                    //and display that error in an alert box
                                     $.alert({
                                         title: 'Alert!',
                                         content: alertContent,
@@ -224,14 +240,12 @@
                     subJobID: temp_subJobTypeID,
                 };
 
-                console.log(data);
-
                 $.confirm({
                     title: "Delete Sub-job Type: " + temp_description + "?",
                     content: '',
                     buttons: {
                         confirm: function () {
-                            fn_showSpinner();
+                            fn_showSpinner();//display the spinner to demonstrate an operation is underway
                             $.ajax({
                                 url: '/SubJobTypes/DeleteSubJobType',
                                 method: 'post',
@@ -239,12 +253,18 @@
                                 dataType: 'json',
                                 data: JSON.stringify(data),
                                 traditional: true,
+                                //if successful, redirect the page returned by the controller
                                 success: function (response) {
                                     window.location.href = response;
                                 },
+                                //if un-successful...
                                 error: function (response) {
-                                    fn_hideSpinner();
+                                    fn_hideSpinner();//hide the spinner
+
+                                    //build an error string based on the error returned from the controller...
                                     var alertContent = "An error has occurred. \n" + response.responseText;
+
+                                    //and display that error in an alert box
                                     $.alert({
                                         title: 'Alert!',
                                         content: alertContent,
@@ -275,42 +295,21 @@
 
             function fn_modalValidate(button) {
                 var currentRow = button.parent().parent();
-                var rowFilled = true;
-                var temp_resourceType = currentRow.find(".sub-job-type").val();
+                var modalValid = true;
                 var temp_description = currentRow.find(".description").val();
-                var temp_rate = currentRow.find(".rate").val();
 
-                var temp_resourceTypeMatch = temp_resourceType.match(/(.*[A-Z]){2,}/);//maches the form two or more letters
-                var temp_descriptionMatch = temp_description.match(/(.*[A-Z]){3,}/);//maches the form three or more letters
-                var temp_rateMatch = temp_rate.match(/^(\d{1,3})\.(00)$/);//maches the form 125.00
+                //var temp_descriptionMatch = temp_description.match(/(.*[A-Z]){3,}/);//maches the form three or more letters
 
-                if (!temp_resourceTypeMatch) {
+                if (temp_description.length < 1) {
                     $.alert({
                         title: 'Error!',
-                        content: 'Resource type must not be empty and begin with at least 3 capital letters.',
+                        content: 'Sub-job description must not be empty.',
                     });
-                    rowFilled = false;
-                    return rowFilled;
+                    modalValid = false;
+                    return modalValid;
                 }
 
-                if (!temp_descriptionMatch) {
-                    $.alert({
-                        title: 'Error!',
-                        content: 'Description must not be empty and contain at least 3 capital letters.',
-                    });
-                    rowFilled = false;
-                    return rowFilled;
-                }
-
-                if (!temp_rateMatch) {
-                    $.alert({
-                        title: 'Error!',
-                        content: 'Charge rate must not be empty and be of the form ###.##.',
-                    });
-                    rowFilled = false;
-                    return rowFilled;
-                }
-                return rowFilled;
+                return modalValid;
             }
 
             //////////////////END MISCELLANEOUS SECTION          
@@ -319,7 +318,7 @@
     </script>
 </head>
 
-@*BEGIN RESOURCE SECTION*@
+@*BEGIN SUB-JOB TYPE SECTION*@
 <hr class="sectionSeparator">
 <div class="col-12" style="padding:0px;">
     <span><strong>Add a New Sub-job Type</strong></span>
@@ -352,7 +351,6 @@
                     string temp_description = item.description;
                     //END TEMPORARY LOOP VARIABLES
 
-                    @*<hr class="sectionSeparator">*@
                     <tr class="returnedRecords" id="" style="">
                         <td class="subJobTypeID_div" hidden>@temp_subJobTypeID</td>
                         <td class="description_div">@temp_description</td>
@@ -371,13 +369,13 @@
         </table>
     </div>
 </div>
-@*BEGIN EDIT RESOURCE MODAL TEMPLATE*@
+@*BEGIN EDIT SUB-JOB TYPE MODAL TEMPLATE*@
 <div class="modal fade" id="subJobTypeEditForm" tabindex="-1" role="dialog" aria-labelledby="subJobTypeEditForm" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="float-left">
-                    <h5 class="modal-title" id="subJobTypeEditForm">Edit Resource</h5>
+                    <h5 class="modal-title" id="subJobTypeEditForm">Edit Sub-job Type</h5>
                 </div>
                 <div class="float-none">
                     <button type="button" class="btn btn-light btn-sm subJobTypeEditForm" data-toggle="modal" data-target="#subJobTypeNewForm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
@@ -410,9 +408,9 @@
         </div>
     </div>
 </div>
-@*END EDIT RESOURCE MODAL TEMPLATE*@
+@*END EDIT SUB-JOB TYPE MODAL TEMPLATE*@
 
-@*BEGIN NEW RESOURCE MODAL TEMPLATE*@
+@*BEGIN NEW SUB-JOB TYPE MODAL TEMPLATE*@
 <div class="modal fade" id="subJobTypeNewForm" tabindex="-1" role="dialog" aria-labelledby="subJobTypeNewForm" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -429,7 +427,7 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-6">
-                                <label for="description" class="col-form-label">Sub-job Type Description:</label>
+                                <label for="description" class="col-form-label">Description:</label>
                                 <input type="text" class="form-control description" maxlength="25">
                             </div>
                         </div>
@@ -443,8 +441,8 @@
         </div>
     </div>
 </div>
-@*END NEW RESOURCE MODAL TEMPLATE*@
-@*END RESOURCE SECTION*@
+@*END NEW SUB-JOB TYPE MODAL TEMPLATE*@
+@*END SUB-JOB TYPE SECTION*@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

@@ -283,7 +283,7 @@
 
             function fn_modalValidate(button) {
                 var currentRow = button.parent().parent();
-                var rowFilled = true;
+                var modalValid = true;
                 var temp_customerCode = currentRow.find(".customer-code").val();
                 var temp_customerName = currentRow.find(".customer-name").val();
                 var temp_address = currentRow.find(".address").val();
@@ -296,8 +296,8 @@
                         title: 'Error!',
                         content: 'Customer code must be at least 3 letters.',
                     });
-                    rowFilled = false;
-                    return rowFilled;
+                    modalValid = false;
+                    return modalValid;
                 }
 
                 if (temp_customerName.length < 1) {
@@ -305,8 +305,8 @@
                         title: 'Error!',
                         content: 'Customer name must not be empty.',
                     });
-                    rowFilled = false;
-                    return rowFilled;
+                    modalValid = false;
+                    return modalValid;
                 }
 
                 if (!temp_addressMatch) {
@@ -314,10 +314,10 @@
                         title: 'Error!',
                         content: 'Location must not be empty and must match the form City, ST.',
                     });
-                    rowFilled = false;
-                    return rowFilled;
+                    modalValid = false;
+                    return modalValid;
                 }
-                return rowFilled;
+                return modalValid;
             }
 
             //////////////////END MISCELLANEOUS SECTION
