@@ -1,7 +1,5 @@
 ﻿@model allpax_service_record.Models.View_Models.vm_Jobs
 
-@*@model IEnumerable<allpax_service_record.Models.View_Models.vm_Jobs>*@
-
 @{
     ViewBag.Title = "Jobs";
 }
@@ -134,25 +132,21 @@
     </style>
     <script>
         $(document).ready(function () {//begin document read jquery statements
-            var indexJobCrspdtEntries_Add = 0;
+            
             var subJobTypes_Add = [];
-
-            var jobResources_Add = [];
-            var jobResourcesJson_Add = [];
-
-            var jobCrspdtInfo_Add = [];
-            var jobCrspdtInfoJson_Add = [];
-
             var subJobTypeIDs_RtndRecs = [];//array which holds which subJobTypeIDs are stored in the database
-            //var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
 
             var jobResource_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
             var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
             var jobRates_RtndRecs = [];//array which holds which job resource rates are stored in the database
-            //var jobCrspdts_RtndRecs = [];//array which holds which jobCrspdts are stored in the database
+            var jobResources_Add = [];
+            var jobResourcesJson_Add = [];
+
+            var indexJobCrspdtEntries_Add = 0;
+            var jobCrspdtInfo_Add = [];
+            var jobCrspdtInfoJson_Add = [];
 
             fn_enableSelect2();
-            //fn_loadRtndRecs();
 
             //////////////////BEGIN THE COMMON NEW JOB AND EDIT JOB MODAL SECTION
 
@@ -164,10 +158,6 @@
                 var currentFormID = "#" + currentRow.parents().eq(4).attr("id");
                 var jobCrspdtLine_templateID = "#" + currentRow.parent().attr("id");
 
-                //console.log(currentRow);
-                //console.log(jobCrspdtLine_templateID);
-                //console.log(currentFormID);
-
                 currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
                 currentRow.find(".email_input").attr("disabled", "true");//lock the email field for edits
                 currentRow.find(".Btn_add").hide();//hide the add button
@@ -176,58 +166,53 @@
 
                 indexJobCrspdtEntries_Add = indexJobCrspdtEntries_Add + 1;
 
-                //$("#jobNewForm .jobCrspdtLine_template_row_hidden").removeAttr("hidden");
                 $(currentFormID + " .jobCrspdtLine_template_row_hidden").removeAttr("hidden");
 
-                //currentRow.prop("id", "jobCrspdtLine_" + indexJobCrspdtEntries_Add).appendTo("#jobCrspdtLine_template_new");
                 currentRow.prop("id", "jobCrspdtLine_" + indexJobCrspdtEntries_Add).appendTo(jobCrspdtLine_templateID);
 
                 $("#jobCrspdtLine_" + indexJobCrspdtEntries_Add).prop("class", " row addRecord jobCrspdtLine");
                 $("#jobCrspdtLine_" + indexJobCrspdtEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
-                //$("#jobNewForm .jobCrspdtLine_template_row_hidden").clone(true).prop("class", "row entryRow jobCrspdtLine_template_row_active").appendTo("#jobCrspdtLine_template_new");
-                //$("#jobNewForm .jobCrspdtLine_template_row_hidden").clone(true).prop("class", "row entryRow jobCrspdtLine_template_row_active").appendTo(jobCrspdtLine_templateID);
                 $(currentFormID + " .jobCrspdtLine_template_row_hidden").clone(true).prop("class", "row entryRow jobCrspdtLine_template_row_active").appendTo(jobCrspdtLine_templateID);
 
-                //$("#jobNewForm .jobCrspdtLine_template_row_hidden").attr("hidden", "true");
                 $(currentFormID + " .jobCrspdtLine_template_row_hidden").attr("hidden", "true");
 
-                //enable_disableSave();
                 }
             });
 
-            $("#jobNewForm .lineJobCrspdtBtn_edit, #jobEditForm .lineJobCrspdtBtn_edit").click(function () {
+            $(".lineJobCrspdtBtn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
 
-                $(this).hide();
-                $(currentRow).find(".Btn_save").removeAttr("hidden");
-                $(currentRow).find(".Btn_save").show();
+                $(this).hide();//hide the job correspondent line edit button
+                $(currentRow).find(".Btn_save").removeAttr("hidden");//show the job correspondent line save button
+                $(currentRow).find(".Btn_save").show();//show the job correspondent line save button
 
-                currentRow.find(".name_input").removeAttr("disabled");//
-                currentRow.find(".email_input").removeAttr("disabled");//
-                $(currentRow).find(".name_input, .email_input").css("color", "red");
+                currentRow.find(".name_input").removeAttr("disabled");//enable the job correspondent line name field for edits
+                currentRow.find(".email_input").removeAttr("disabled");//enable the job correspondent line email field for edits
+                $(currentRow).find(".name_input, .email_input").css("color", "red");//set the text color of these fields to red to indicate edits have been added
             });
 
-            $("#jobNewForm .lineJobCrspdtBtn_save, #jobEditForm .lineJobCrspdtBtn_save").click(function () {
+            $(".lineJobCrspdtBtn_save").click(function () {
 
                 if (fn_jobCrspdtValidate($(this))) {
-
 
                 var currentRow = $(this).parent().parent();
                 temp_LineClass = $(currentRow).prop("class");
 
-                $(this).hide();
-                $(currentRow).find(".Btn_edit").removeAttr("hidden");
-                $(currentRow).find(".Btn_edit").show();
+                $(this).hide();//hide the job correspondent line save button
+                $(currentRow).find(".Btn_edit").removeAttr("hidden");//show the job correspondent line edit button
+                $(currentRow).find(".Btn_edit").show();//show the job correspondent line edit button
 
                 currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
                 currentRow.find(".email_input").attr("disabled", "true");//lock the name field for edits
 
                 if (temp_LineClass.includes("returnedRecords edit")) {
 
+                    //if editing a job correspondent returned from the database, set the text colors to red to indicate an edit operation
                     $(currentRow).find(".name_input, .email_input").css("color", "red");
                 }
                 else {
+                    //if this is a new a job correspondent to be added to the database, set the text colors to black
                     $(currentRow).find(".name_input, .email_input").css("color", "black");
                 }
                 }
@@ -248,33 +233,35 @@
                     //used to change the class of a returned record to deleted record for later processing with a delete operation
                     $($(currentRow)).prop("class", "row returnedRecords delete jobCrspdtLine");
 
-                    currentRow.find(".name_input, .email_input").css("text-decoration", "line-through");
-                    currentRow.find(".name_input, .email_input").css("color", "red");
-                    $(this).find(".fa-minus-square").css("color", "red");
-                    currentRow.find(".Btn_edit").attr("disabled", "true");
+                    currentRow.find(".name_input, .email_input").css("text-decoration", "line-through");//set these field to strike-through to indicate it is a record to be deleted
+                    currentRow.find(".name_input, .email_input").css("color", "red");//set these fields to red to indicate it is a record to be deleted
+                    $(this).find(".fa-minus-square").css("color", "red");//set the delete icon to red to indicate delete is the operation to be carried out
+                    currentRow.find(".Btn_edit").attr("disabled", "true");//disable the edit button so an edit operation cannot be invoked
                 }
 
+                //if this line is a returned record that was previously set to be delete, set its class back to returnedRecords
                 if (temp_LineClass.includes("returnedRecords delete")) {
 
                     //used to change the class of a deleted record back to a returned record
                     $($(currentRow)).prop("class", "row returnedRecords jobCrspdtLine");
 
-                    currentRow.find(".name_input, .email_input").css("text-decoration", "none");
-                    currentRow.find(".name_input, .email_input").css("color", "black");
-                    $(this).find(".fa-minus-square").css("color", "black");
-                    currentRow.find(".Btn_edit").removeAttr("disabled");
+                    currentRow.find(".name_input, .email_input").css("text-decoration", "none");//remove the strike-through css to indicate it is no longer meant to be deleted
+                    currentRow.find(".name_input, .email_input").css("color", "black");//set these fields to blac to indicate it is no longer a record to be deleted
+                    $(this).find(".fa-minus-square").css("color", "black");//set the delete icon to black to indicate delete is not the operation to be carried out
+                    currentRow.find(".Btn_edit").removeAttr("disabled");//enable the edit button so an edit operation can be invoked
                 }
 
+                //if this line is a returned record that was previously set to be edited, set its class to deletedRecords
                 if (temp_LineClass.includes("returnedRecords edit")) {
 
                     //used to change the class of an edited record to a deleted record
                     $($(currentRow)).prop("class", "row returnedRecords delete jobCrspdtLine");
 
-                    currentRow.find(".name_input, .email_input").css("text-decoration", "line-through");
-                    currentRow.find(".name_input, .email_input").css("color", "red");
-                    currentRow.find(".fa-edit").css("color", "black");
-                    $(this).find(".fa-minus-square").css("color", "red");
-                    currentRow.find(".Btn_edit").attr("disabled", "disabled");
+                    currentRow.find(".name_input, .email_input").css("text-decoration", "line-through");//set these field to strike-through to indicate it is a record to be deleted
+                    currentRow.find(".name_input, .email_input").css("color", "red");//set these fields to red to indicate it is a record to be deleted
+                    currentRow.find(".fa-edit").css("color", "black");//set the edit icon to black to indicate edit is not the operation to be carried out
+                    $(this).find(".fa-minus-square").css("color", "red");//set the delete icon to red to indicate delete is the operation to be carried out
+                    currentRow.find(".Btn_edit").attr("disabled", "true");//disable the edit button so an edit operation cannot be invoked
                 }
             });
 
@@ -283,23 +270,24 @@
                 temp_LineClass = $(currentRow).prop("class");
                 temp_resourceRateInput = currentRow.find(".resourceRate");
 
-                //console.log("currentRow:" + currentRow.attr("class"));
-
+                //if a resource type is changed to selected...
                 if ($(this).prop('checked')) {
                     currentRow.find(".resourceRate").removeAttr('disabled');//un-lock the field for edits;
                     //console.log("checked.")
-                    if (temp_LineClass.includes("returnedRecords edited")) {
-                        temp_resourceRateInput.css("color", "red");
+                    if (temp_LineClass.includes("returnedRecords edited")) {//if this resource type is also a record returned from the database...
+                        temp_resourceRateInput.css("color", "red");//set the resource rate input field to red to indicate an edit is pending
                     }
                 }
 
+                //if a resource type is changed to un-selected...
                 else {
                     currentRow.find(".resourceRate").attr("disabled", "true");//lock the field for edits;
-                    temp_resourceRateInput.css("color", "black");
+                    temp_resourceRateInput.css("color", "black");//set the resource rate input field to black to indicate an no operation is pending
                     //console.log("un-checked.")
                 }
             });
 
+            //force these inputs to uppercase
             $('.job-id').keyup(function () {
                 $(this).val($(this).val().toUpperCase());
             });
@@ -312,10 +300,13 @@
                 var currCustomerName = modal.find(".customer-name");
                 var currCustomerLocation = modal.find(".customer-location");
 
+                //if the instruction option is selected, clear out the customer name and location.  only applies to the new job modal.
                 if (currCustomerCode == '-1') {
                     $("#customer-name-new").val('');
                     $("#customer-location-new").val('');
                 }
+
+                //get all customer data through ajax
                 else {
                     $.ajax({
                         url: '/DataService.asmx/GetAllCustomers',
@@ -325,13 +316,14 @@
 
                             $(data).each(function (index, item) {
 
+                                //when the customer selected is found in the returned ajax data...
                                 if (item.customerCode == currCustomerCode) {
                                     //console.log("Selected customerCode: " + item.customerCode)
                                     //console.log("Selected customerName: " + item.customerName)
                                     //console.log("Selected address: " + item.address)
 
-                                    currCustomerName.val(item.customerName);
-                                    currCustomerLocation.val(item.address);
+                                    currCustomerName.val(item.customerName);//fill the modal with the proper data from the ajax call
+                                    currCustomerLocation.val(item.address);//fill the modal with the proper data from the ajax call
                                 }
                             });
                         }
@@ -347,7 +339,7 @@
             //reset the new job modal for new inputs
             function fn_resetModalForm(modalID) {
 
-                fn_disableSelect2();
+                fn_disableSelect2();//disable the select 2 add-on
 
                 var allJobCustomerInputs = $(modalID).find(".job-customer-info");
                 var allCheckInputs = $(modalID).find("input:checkbox");
@@ -356,6 +348,7 @@
                 var startTimeInput = $(modalID).find(".normal-hours-start");
                 var endTimeInput = $(modalID).find(".normal-hours-end");
                 var normalHoursInput = $(modalID).find(".normal-hours-daily");
+                var resourceRateInput = $(modalID).find(".resourceRate");
 
                 $(allJobCustomerInputs).val('');//reset text boxes
                 $(allCheckInputs).prop('checked', false);//reset check boxes
@@ -364,8 +357,9 @@
                 $(startTimeInput).val('06:00');//reset time
                 $(endTimeInput).val('18:00');//reset time
                 $(normalHoursInput).val('8');//reset normal hours
+                $(resourceRateInput).prop('disabled', true);//disable all resource rate inputs
 
-                fn_enableSelect2();
+                fn_enableSelect2();//enable the select 2 add-on
             }
 
             $('#jobNewForm').on('show.bs.modal', function (event) {
@@ -373,7 +367,6 @@
                 indexJobCrspdtEntries_Add = 0;
                 fn_resetModalForm("#jobNewForm");//reset the modal for new inputs
                 $(".addRecord.jobCrspdtLine").remove();//remove any incomplete job correspondent lines
-
             })
 
             $(".jobNewForm.btn_save").click(function () {
@@ -381,10 +374,8 @@
                 fn_loadEntries_Add();//determine which list items need to be added
                 fn_buildJsonObjects();
 
-
+                //if all inputs for this modal are valid...
                 if (fn_modalValidate($(this))) {
-
-                fn_showSpinner();
 
                 var modal = $(this).parent().parent();
                 var temp_jobID = modal.find('.job-id').val();
@@ -416,7 +407,7 @@
                 };
 
                 //console.log(data);
-
+                fn_showSpinner();//display the spinner to demonstrate an operation is underway
                 $.ajax({
                     url: '/Jobs/AddJob',
                     method: 'post',
@@ -424,19 +415,24 @@
                     dataType: 'json',
                     data: JSON.stringify(data),
                     traditional: true,
+                    //if successful, redirect the page returned by the controller
                     success: function (response) {
                         window.location.href = response;
                     },
+                    //if un-successful...
                     error: function (response) {
-                        fn_hideSpinner();
+                        fn_hideSpinner();//hide the spinner
+
+                        //build an error string based on the error returned from the controller...
                         var alertContent = "An error has occurred. \n" + response.responseText;
+
+                        //and display that error in an alert box
                         $.alert({
                             title: 'Alert!',
                             content: alertContent,
                         });
                     }
                 });
-
                 }
             });
 
@@ -546,8 +542,6 @@
                 jobRates_RtndRecs.length = 0;
 
                 jobCrspdtID_RtndRecs = [];
-
-                //jobCrspdts_RtndRecs.length = 0;
 
                 fn_disableSelect2();//disable select2 so the selected option can be reached
 
@@ -794,12 +788,13 @@
             //Begin when the save button on the edit job modal is pressed
             $(".jobEditForm.btn_save").click(function () {
 
+                //if all inputs for this modal are valid...
                 if (fn_modalValidate($(this))) {
 
-                fn_showSpinner();
+                
 
-                console.log("_____________________")
-                console.log("Arrays upon modal save press.")
+                //console.log("_____________________")
+                //console.log("Arrays upon modal save press.")
 
                 var modal = $(this).parent().parent();
                 var temp_jobID = modal.find('.job-id').val();
@@ -986,8 +981,7 @@
                     jobCrspdtInfoEdit: temp_jobCrspdtInfoJson_Edit
                 };
 
-
-
+                fn_showSpinner();//display the spinner to demonstrate an operation is underway
                 $.ajax({
                     url: '/Jobs/UpdateJob',
                     method: 'post',
@@ -1009,8 +1003,6 @@
                         });
                     }
                 });
-
-                //}
 
                 //console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
                 //console.log("subJobTypeIDs to add:" + subJobTypeIDsAddArr);
@@ -1059,10 +1051,6 @@
 
                 var currentRow = $(this).parent().parent();
                 var temp_jobID = currentRow.find('.jobID_div').html();
-                //var temp_resourceType = currentRow.find('.jobID_div').html();
-                //var temp_description = currentRow.find('.description_div').html();
-
-                //console.log("Delete temp_resourceTypeID: " + temp_resourceTypeID);
 
                 var data = {
                     jobID: temp_jobID
@@ -1075,7 +1063,7 @@
                     content: '',
                     buttons: {
                         confirm: function () {
-                            fn_showSpinner();
+                            fn_showSpinner();//display the spinner to demonstrate an operation is underway
                             $.ajax({
                                 url: '/Jobs/DeleteJob',
                                 method: 'post',
@@ -1083,12 +1071,18 @@
                                 dataType: 'json',
                                 data: JSON.stringify(data),
                                 traditional: true,
+                                //if successful, redirect the page returned by the controller
                                 success: function (response) {
                                     window.location.href = response;
                                 },
+                                //if un-successful...
                                 error: function (response) {
-                                    fn_hideSpinner();
+                                    fn_hideSpinner();//hide the spinner
+
+                                    //build an error string based on the error returned from the controller...
                                     var alertContent = "An error has occurred. \n" + response.responseText;
+
+                                    //and display that error in an alert box
                                     $.alert({
                                         title: 'Alert!',
                                         content: alertContent,
@@ -1304,7 +1298,7 @@
                 </tr>
             </thead>
             <tbody>
-
+                @*BEGIN RETURNED RECORDS*@
                 @foreach (var job in Model.jobs)
                 {
                     //BEGIN TEMPORARY LOOP VARIABLES
@@ -1343,6 +1337,7 @@
                         </td>
                     </tr>
                 }
+                @*END RETURNED RECORDS*@
             </tbody>
         </table>
     </div>
@@ -1691,8 +1686,6 @@
                                     @*<div class="col-md-3" style="border:1px solid black; padding:0px; margin:0px;">*@
                                     <div class="col-md-3 resourceTypeID_div">
                                         <input class="resource-type_input resourceTypeID" type="checkbox" id="resource-type_@temp_resourceTypeID"
-                                               @*name="resource-type_@temp_resourceTypeID" value="@temp_resourceTypeID"
-                style="border:1px solid black; padding:0px; margin:0px;">*@
                                                name="resource-type_@temp_resourceTypeID" value="@temp_resourceTypeID" style="padding:0px; margin:0px;">
                                         <label class="resource-type_label" for="resource-type_@temp_resourceTypeID"
                                                style="padding:0px; margin:0px;">@temp_resourceType</label>
@@ -1775,10 +1768,10 @@
     </div>
 </div>
 
-    @*END NEW CUSTOMER MODAL TEMPLATE*@
+@*END NEW CUSTOMER MODAL TEMPLATE*@
 
-    @*END CUSTOMER SECTION*@
+@*END CUSTOMER SECTION*@
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
