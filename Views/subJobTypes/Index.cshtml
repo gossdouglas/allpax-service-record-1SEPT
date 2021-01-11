@@ -73,6 +73,19 @@
 
             //////////////////BEGIN THE NEW SUB-JOB TYPE MODAL SECTION
 
+            //reset the new job modal for new inputs
+            function fn_resetModalForm(modalID) {
+
+                var allTextInputs = $(modalID).find("input:text");
+
+                $(allTextInputs).val('');//reset text boxes
+            }
+
+            $('#subJobTypeNewForm').on('show.bs.modal', function (event) {
+
+                fn_resetModalForm("#subJobTypeNewForm");//reset the modal for new inputs
+            })
+
             $(".subJobTypeNewForm.btn_save").click(function () {
 
                 //if all inputs for this modal are valid...

@@ -78,6 +78,19 @@
 
             //////////////////BEGIN THE NEW CUSTOMER MODAL SECTION
 
+            //reset the new job modal for new inputs
+            function fn_resetModalForm(modalID) {
+
+                var allTextInputs = $(modalID).find("input:text");
+
+                $(allTextInputs).val('');//reset text boxes
+            }
+
+            $('#customerNewForm').on('show.bs.modal', function (event) {
+
+                fn_resetModalForm("#customerNewForm");//reset the modal for new inputs
+            })
+
             $(".customerNewForm.btn_save").click(function () {
 
                 if (fn_modalValidate($(this))) {
