@@ -67,41 +67,51 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
+            //////////////////BEGIN THE COMMON NEW SUB-JOB TYPE AND EDIT SUB-JOB TYPE MODAL SECTION
+
+            //////////////////END THE COMMON NEW SUB-JOB TYPE AND EDIT SUB-JOB TYPE MODAL SECTION
+
+            //////////////////BEGIN THE NEW SUB-JOB TYPE MODAL SECTION
+
             $(".subJobTypeNewForm.btn_save").click(function () {
 
-                //if (fn_rowFilled($(this))) {
+                if (fn_modalValidate($(this))) {
 
-                    var modal = $(this).parent().parent();
-                    var temp_description = modal.find('.description').val();
+                var modal = $(this).parent().parent();
+                var temp_description = modal.find('.description').val();
 
-                    var data = {
-                        description: temp_description
-                    };
+                var data = {
+                    description: temp_description
+                };
 
-                    fn_showSpinner();
+                fn_showSpinner();
                 //console.log(data);
 
-                    $.ajax({
-                        url: '/SubJobTypes/AddSubJobType',
-                        method: 'post',
-                        contentType: 'application/json',
-                        dataType: 'json',
-                        data: JSON.stringify(data),
-                        traditional: true,
-                        success: function (response) {
-                            window.location.href = response;
-                        },
-                        error: function (response) {
-                            fn_hideSpinner();
-                            var alertContent = "An error has occurred. \n" + response.responseText;
-                            $.alert({
-                                title: 'Alert!',
-                                content: alertContent,
-                            });
-                        }
-                    });
-                //}
+                $.ajax({
+                    url: '/SubJobTypes/AddSubJobType',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        window.location.href = response;
+                    },
+                    error: function (response) {
+                        fn_hideSpinner();
+                        var alertContent = "An error has occurred. \n" + response.responseText;
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
+                        });
+                    }
+                });
+                }
             });
+
+            //////////////////END THE NEW SUB-JOB TYPE MODAL SECTION
+
+            //////////////////BEGIN THE EDIT SUB-JOB TYPE MODAL SECTION
 
             $('#subJobTypeEditForm').on('show.bs.modal', function (event) {
 
@@ -119,40 +129,40 @@
 
                 console.clear();
 
-                //if (fn_rowFilled($(this))) {
+                if (fn_modalValidate($(this))) {
 
-                    var modal = $(this).parent().parent();
-                    var temp_subJobID = modal.find('.sub-job-type-id').val()
-                    var temp_description = modal.find('.description').val()
+                var modal = $(this).parent().parent();
+                var temp_subJobID = modal.find('.sub-job-type-id').val()
+                var temp_description = modal.find('.description').val()
 
-                    var data = {                        
-                        description: temp_description,
-                        subJobID: temp_subJobID
-                    };
+                var data = {
+                    description: temp_description,
+                    subJobID: temp_subJobID
+                };
 
-                    fn_showSpinner();
+                fn_showSpinner();
                 //console.log(data);
 
-                    $.ajax({
-                        url: '/SubJobTypes/UpdateSubJobType',
-                        method: 'post',
-                        contentType: 'application/json',
-                        dataType: 'json',
-                        data: JSON.stringify(data),
-                        traditional: true,
-                        success: function (response) {
-                            window.location.href = response;
-                        },
-                        error: function (response) {
-                            fn_hideSpinner();
-                            var alertContent = "An error has occurred. \n" + response.responseText;
-                            $.alert({
-                                title: 'Alert!',
-                                content: alertContent,
-                            });
-                        }
-                    });
-                //}
+                $.ajax({
+                    url: '/SubJobTypes/UpdateSubJobType',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        window.location.href = response;
+                    },
+                    error: function (response) {
+                        fn_hideSpinner();
+                        var alertContent = "An error has occurred. \n" + response.responseText;
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
+                        });
+                    }
+                });
+                }
             });
 
             $(".subJobTypeEditForm.btn_delete").click(function () {
@@ -200,6 +210,10 @@
                 });
             });
 
+            //////////////////END THE EDIT SUB-JOB TYPE MODAL SECTION
+
+            //////////////////BEGIN RETURNED RECORDS SECTION
+
             $(".returnedRecords .Btn_delete").click(function () {
 
                 var currentRow = $(this).parent().parent();
@@ -244,6 +258,10 @@
                 });
             });
 
+            //////////////////END RETURNED RECORDS SECTION
+
+            //////////////////BEGIN MISCELLANEOUS SECTION
+
             function fn_showSpinner() {
                 $.LoadingOverlay("show", {
                     image: "",
@@ -255,9 +273,7 @@
                 $.LoadingOverlay("hide");
             }
 
-            //BEGIN VALIDATION BEFORE SAVING SECTION
-
-            function fn_rowFilled(button) {
+            function fn_modalValidate(button) {
                 var currentRow = button.parent().parent();
                 var rowFilled = true;
                 var temp_resourceType = currentRow.find(".sub-job-type").val();
@@ -297,7 +313,7 @@
                 return rowFilled;
             }
 
-            //END VALIDATION BEFORE SAVING SECTION
+            //////////////////END MISCELLANEOUS SECTION          
 
         });//end document read jquery statements
     </script>
