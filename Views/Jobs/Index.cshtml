@@ -749,6 +749,68 @@
             })
 
             //Begin when a resource rate on the edit page is checked or unchecked...
+            $("#jobEditForm .resourceTypeID").on("change", function () {
+                var currentRow = $(this).parent().parent();
+                var temp_LineClass = $(currentRow).prop("class");
+                var temp_resourceTypeID = $(this);
+                var temp_checked = temp_resourceTypeID.prop('checked');
+
+                //console.log(temp_LineClass);
+                //console.log(temp_checked);
+
+                if (temp_LineClass.includes("returnedRecords") && (!temp_checked)) {
+
+                    //...change the class of that resource line to edited
+                    currentRow.prop("class", " row returnedRecords deleted jobResource_Line");
+                    //...and make the text red to indicate so
+                    currentRow.find("label, .description_div, .resourceRate").css("text-decoration", "line-through");//set these field to strike-through to indicate it is a record to be deleted
+                    currentRow.find("label, .description_div, .resourceRate").css("color", "red");                   
+                }
+
+                if (temp_LineClass.includes("returnedRecords deleted") && (temp_checked)) {
+
+                    //...change the class of that resource line to edited
+                    currentRow.prop("class", " row returnedRecords jobResource_Line");
+                    //...and make the text red to indicate so
+                    currentRow.find("label, .description_div, .resourceRate").css("text-decoration", "none");//set these field to strike-through to indicate it is a record to be deleted
+                    currentRow.find("label, .description_div, .resourceRate").css("color", "black");
+                }
+
+                if (!temp_LineClass.includes("returnedRecords") && (temp_checked)) {
+
+                    //...change the class of that resource line to edited
+                    currentRow.prop("class", " row addRecord jobResource_Line");
+                    //...and make the text red to indicate so
+                    //currentRow.find("label, .description_div, .resourceRate").css("text-decoration", "none");//set these field to strike-through to indicate it is a record to be deleted
+                    //currentRow.find("label, .description_div, .resourceRate").css("color", "black");
+                }
+
+                if (temp_LineClass.includes("addRecord") && (!temp_checked)) {
+
+                    //...change the class of that resource line to edited
+                    currentRow.prop("class", " row jobResource_Line");
+                    //...and make the text red to indicate so
+                    //currentRow.find("label, .description_div, .resourceRate").css("text-decoration", "none");//set these field to strike-through to indicate it is a record to be deleted
+                    //currentRow.find("label, .description_div, .resourceRate").css("color", "black");
+                }
+
+                ////if editing the resource rate of a record stored in the database...
+                //if (temp_LineClass.includes("returnedRecords")) {
+
+                //    //...change the class of that resource line to edited
+                //    currentRow.prop("class", " row returnedRecords edited jobResource_Line");
+                //    //...and make the text red to indicate so
+                //    temp_resourceRateInput.css("color", "red");
+                //}
+
+                ////...otherwise, simply enforce the text to be black if you are adding a resource to the database
+                //else {
+                //    temp_resourceRateInput.css("color", "black");
+                //}
+            });
+            //End when a resource type on the edit page is checked or unchecked...
+
+            //Begin when a resource rate on the edit page is checked or unchecked...
             $("#jobEditForm .resourceRate").on("change", function () {
                 var currentRow = $(this).parent().parent();
                 temp_LineClass = $(currentRow).prop("class");
@@ -769,6 +831,7 @@
                 }
             });
             //End when a resource type on the edit page is checked or unchecked...
+
 
             //Begin when a field in the job correspondent is changed...
             $("#jobEditForm .job-crspdt_input").on("change", function () {
@@ -835,11 +898,12 @@
 
                 var generalCounter = 0;
 
+                var jobResource_Lines = modal.find('.jobResource_Line');
+
                 $(temp_subJobTypeInput).each(function (index, item) {
 
                     var temp_val = $(this).val();
                     //var currentRow = $(this).parent().parent();
-                    //var temp_resourceRateInput = currentRow.find(".resourceRate");
 
                     //if the the current sub-job type checkbox is checked...
                     if ($(this).prop('checked')) {
@@ -854,72 +918,112 @@
 
                 //console.log("generalCounter:" + generalCounter);
 
-                $(temp_resourceTypeInput).each(function (index, item) {
+                $(jobResource_Lines).each(function (index, item) {
 
-                    var temp_val = $(this).val();
-                    var currentRow = $(this).parent().parent();
+                    var currentRow = $(this);
+                    var temp_resourceTypeID = currentRow.find(".resourceTypeID").val();
                     var temp_rate = currentRow.find(".resourceRate").val();
+                    //var counter_Json = 0;
 
-                    //if the the current resource type checkbox is checked...
-                    if ($(this).prop('checked')) {
+                    console.log(currentRow.prop("class"));
 
-                        jobResourceIDs_SlctdRecs.push(temp_val);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
-                        jobRates_SlctdRecs.push(temp_rate);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
+                    if (currentRow.attr("class").includes("addRecord")) {
 
-                        //console.log("jobResourceID " + temp_val + " is selected with a rate of " + temp_rate);
+                        console.log("jobResourcesJson_Add.length");
+                        console.log(jobResourcesJson_Add.length);
 
-                        if (currentRow.attr("class").includes("returnedRecords edited")) {
-
-                            //console.log("temp_val value to be edited:" + temp_val);
-                            //console.log("temp_rate value to be edited:" + temp_rate);
-
-                            jobResourcesJson_Edit[generalCounter] = {
-                                jobID: temp_jobID,
-                                resourceTypeID: temp_val,
-                                rate: temp_rate,
-                            };
-
-                            //console.log("general counter:" + generalCounter);
-                            generalCounter++;
-                        }
+                        jobResourcesJson_Add[generalCounter] = {
+                            jobID: temp_jobID,
+                            resourceTypeID: temp_resourceTypeID,
+                            rate: temp_rate,
+                        };
+                        generalCounter++;
+                        //console.log(generalCounter)
                     }
+                  
+                    //generalCounter = 0;
+
+                    //if (currentRow.attr("class").includes("deleted")) {
+
+                    //    jobResourcesJson_Delete[generalCounter] = {
+                    //        jobID: temp_jobID,
+                    //        resourceTypeID: temp_resourceTypeID,
+                    //    };
+                    //    generalCounter++;
+                    //    console.log(generalCounter)
+                    //}
                 });
 
-                generalCounter = 0;
+                    console.log("jobResourcesJson_Add");
+                    console.log(jobResourcesJson_Add);
+                    console.log(jobResourcesJson_Add.length);
 
-                jobResourcesSlctdArr[0] = jobResourceIDs_SlctdRecs;
-                jobResourcesSlctdArr[1] = jobRates_SlctdRecs;
+                //$(temp_resourceTypeInput).each(function (index, item) {
 
-                subJobTypeIDsAddArr = _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs);
-                subJobTypeIDsDeleteArr = _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs);
-                jobResourceIDsAddArr = _.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs);
-                jobResourceIDsDeleteArr = _.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs);
+                //    var temp_val = $(this).val();
+                //    var currentRow = $(this).parent().parent();
+                //    var temp_rate = currentRow.find(".resourceRate").val();
 
-                for (var i = 0, j = 0; i < jobResourcesSlctdArr[0].length; i++) {
+                //    //if the the current resource type checkbox is checked...
+                //    if ($(this).prop('checked')) {
 
-                    if ($.inArray(jobResourcesSlctdArr[0][i], jobResourceIDsAddArr) !== -1) {
+                //        jobResourceIDs_SlctdRecs.push(temp_val);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
+                //        jobRates_SlctdRecs.push(temp_rate);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
 
-                        jobResourcesJson_Add[j] = {
-                            jobID: temp_jobID,
-                            resourceTypeID: jobResourcesSlctdArr[0][i],
-                            rate: jobResourcesSlctdArr[1][i],
-                        };
+                //        //console.log("jobResourceID " + temp_val + " is selected with a rate of " + temp_rate);
 
-                        j++;
+                //        if (currentRow.attr("class").includes("returnedRecords edited")) {
 
-                        //console.log("jobResourcesSlctdArr[i][" + i + "] found in jobResourceIDsAddArr.")
-                        //console.log("Add id of:" + jobResourcesSlctdArr[0][i]);
-                        //console.log("Add rate of:" + jobResourcesSlctdArr[1][i]);
-                    }
-                }
+                //            //console.log("temp_val value to be edited:" + temp_val);
+                //            //console.log("temp_rate value to be edited:" + temp_rate);
 
-                for (var i = 0; i < jobResourceIDsDeleteArr.length; i++) {
+                //            jobResourcesJson_Edit[generalCounter] = {
+                //                jobID: temp_jobID,
+                //                resourceTypeID: temp_val,
+                //                rate: temp_rate,
+                //            };
 
-                    jobResourcesJson_Delete[i] = {
-                        jobID: temp_jobID,
-                        resourceTypeID: jobResourceIDsDeleteArr[i]
-                    };
-                }
+                //            //console.log("general counter:" + generalCounter);
+                //            generalCounter++;
+                //        }
+                //    }
+                //});
+
+                //generalCounter = 0;
+
+                //jobResourcesSlctdArr[0] = jobResourceIDs_SlctdRecs;
+                //jobResourcesSlctdArr[1] = jobRates_SlctdRecs;
+
+                //subJobTypeIDsAddArr = _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs);
+                //subJobTypeIDsDeleteArr = _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs);
+                //jobResourceIDsAddArr = _.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs);
+                //jobResourceIDsDeleteArr = _.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs);
+
+                //for (var i = 0, j = 0; i < jobResourcesSlctdArr[0].length; i++) {
+
+                //    if ($.inArray(jobResourcesSlctdArr[0][i], jobResourceIDsAddArr) !== -1) {
+
+                //        jobResourcesJson_Add[j] = {
+                //            jobID: temp_jobID,
+                //            resourceTypeID: jobResourcesSlctdArr[0][i],
+                //            rate: jobResourcesSlctdArr[1][i],
+                //        };
+
+                //        j++;
+
+                //        //console.log("jobResourcesSlctdArr[i][" + i + "] found in jobResourceIDsAddArr.")
+                //        //console.log("Add id of:" + jobResourcesSlctdArr[0][i]);
+                //        //console.log("Add rate of:" + jobResourcesSlctdArr[1][i]);
+                //    }
+                //}
+
+                //for (var i = 0; i < jobResourceIDsDeleteArr.length; i++) {
+
+                //    jobResourcesJson_Delete[i] = {
+                //        jobID: temp_jobID,
+                //        resourceTypeID: jobResourceIDsDeleteArr[i]
+                //    };
+                //}
 
                 //BEGIN PACK UP JOB CORRESPONDENT ADD, EDITS AND DELETES
                 $(temp_jobCrspdt_div_Add).each(function (index) {
@@ -979,28 +1083,28 @@
                     jobCrspdtInfoEdit: temp_jobCrspdtInfoJson_Edit
                 };
 
-                fn_showSpinner();//display the spinner to demonstrate an operation is underway
-                $.ajax({
-                    url: '/Jobs/UpdateJob',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    success: function (response) {
-                        serverResponseSuccess = response;
-                        //console.log("response is: " + response)
-                        window.location.href = serverResponseSuccess;
-                    },
-                    error: function (response) {
-                        fn_hideSpinner();
-                        var alertContent = "An error has occurred. \n" + response.responseText;
-                        $.alert({
-                            title: 'Alert!',
-                            content: alertContent,
-                        });
-                    }
-                });
+                //fn_showSpinner();//display the spinner to demonstrate an operation is underway
+                //$.ajax({
+                //    url: '/Jobs/UpdateJob',
+                //    method: 'post',
+                //    contentType: 'application/json',
+                //    dataType: 'json',
+                //    data: JSON.stringify(data),
+                //    traditional: true,
+                //    success: function (response) {
+                //        serverResponseSuccess = response;
+                //        //console.log("response is: " + response)
+                //        window.location.href = serverResponseSuccess;
+                //    },
+                //    error: function (response) {
+                //        fn_hideSpinner();
+                //        var alertContent = "An error has occurred. \n" + response.responseText;
+                //        $.alert({
+                //            title: 'Alert!',
+                //            content: alertContent,
+                //        });
+                //    }
+                //});
 
                 //console.log("subJobTypeIDs_SlctdRecs:" + subJobTypeIDs_SlctdRecs);
                 //console.log("subJobTypeIDs to add:" + subJobTypeIDsAddArr);
@@ -1481,7 +1585,7 @@
                                         </div>
                                         <div class="col-md-3 resourceRate_div">
                                             <input type="text" class="form-control resource-type_input resourceRate"
-                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;" disabled>
+                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;" data-resource-rate-rtnd="" disabled>
                                         </div>
                                     </div>
                                 }
