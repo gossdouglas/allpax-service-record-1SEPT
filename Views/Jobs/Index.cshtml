@@ -897,18 +897,16 @@
                 $(temp_subJobTypeInput).each(function (index, item) {
 
                     var temp_val = $(this).val();
-                    //var currentRow = $(this).parent().parent();
 
                     //if the the current sub-job type checkbox is checked...
                     if ($(this).prop('checked')) {
                         subJobTypeIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs for later comparison to _RtndRecs
                         //console.log(temp_val + " is selected.")
-
-                        //if (currentRow.includes("returnedRecords edit")) {
-                        //    console.log("temp_resourceRateInput value to be edited:" + temp_resourceRateInput.val());
-                        //}
                     }
                 });
+
+                subJobTypeIDsAddArr = _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs);
+                subJobTypeIDsDeleteArr = _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs);
 
                 $(jobResourceAdd_Lines).each(function (index, item) {
 
@@ -1012,7 +1010,7 @@
                     jobCrspdtInfoAdd: temp_jobCrspdtInfoJson_Add,
                     jobCrspdtInfoDelete: temp_jobCrspdtInfoJson_Delete,
                     jobCrspdtInfoEdit: temp_jobCrspdtInfoJson_Edit
-                };
+                    };
 
                 fn_showSpinner();//display the spinner to demonstrate an operation is underway
                 $.ajax({
@@ -1510,15 +1508,15 @@
                                                style="padding:0px; margin:0px;">
                                         <label class="resource-type_label" for="resource-type_@temp_resourceTypeID"
                                                style="padding:0px; margin:0px;">@temp_resourceType</label>
-                                        </div>
-                                        <div class="col-md-6 description_div">
-                                            @temp_description
-                                        </div>
-                                        <div class="col-md-3 resourceRate_div">
-                                            <input type="text" class="form-control resource-type_input resourceRate"
-                                                   maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;" data-resource-rate-rtnd="88" disabled>
-                                        </div>
                                     </div>
+                                    <div class="col-md-6 description_div">
+                                        @temp_description
+                                    </div>
+                                    <div class="col-md-3 resourceRate_div">
+                                        <input type="text" class="form-control resource-type_input resourceRate"
+                                                maxlength="6" value="@temp_rate" style="padding:0px; margin:0px;" data-resource-rate-rtnd="88" disabled>
+                                    </div>
+                                </div>
                                 }
                         </div>
                     </div>
