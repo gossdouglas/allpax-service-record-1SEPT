@@ -16,3 +16,7 @@ obj/Debug/allpax_service_record.dll
 obj/Debug/allpax_service_record.pdb
 *.dll
 *.pdb
+bin/allpax_service_record.dll
+bin/allpax_service_record.pdb
+obj/Debug/allpax_service_record.dll
+obj/Debug/allpax_service_record.pdb
