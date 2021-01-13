@@ -685,7 +685,6 @@
                             temp_resourceRateInput = currentRow.find(".resourceRate");
 
                             //if the value of the current resource type checkbox is part of the jobResourceIDs_RtndRecs array...
-                            //if ($.inArray($(this).val(), jobResourceIDs_RtndRecs) !== -1) {
                             if ($.inArray($(this).val(), jobResource_RtndRecs[0]) !== -1) {
 
                                 var temp_index = jobResourceIDs_RtndRecs.indexOf($(this).val());
@@ -694,9 +693,7 @@
                                 $(this).prop('checked', true);//...check the input box for the HTML element
                                 temp_resourceRateInput.val(jobRates_RtndRecs[temp_index]);
 
-                                //$(this).attr("data-resource-rate-rtnd", "99");
                                 $(this).attr("data-resource-rate-rtnd", jobRates_RtndRecs[temp_index]);
-                                //$(this).data('resource-rate-rtnd', jobRates_RtndRecs[temp_index]); //
 
                                 temp_resourceRateInput.removeAttr('disabled');
                                 temp_resourceRateInput.css("color", "black");
@@ -704,8 +701,9 @@
                                 //console.log("Index of jobResourceIDs_RtndRecs " + temp_index + " has a value of " + jobResourceIDs_RtndRecs[temp_index]);
                                 //console.log("Index of jobRates_RtndRecs " + temp_index + " has a value of " + jobRates_RtndRecs[temp_index]);
                                 //console.log($(this).val() + " was found in the returned record array.");
-                                console.log($(this));
-                                console.log($(this).attr("data-resource-rate-rtnd"));
+
+                                //console.log($(this));
+                                //console.log($(this).attr("data-resource-rate-rtnd"));
                             }
 
                             else {
@@ -876,20 +874,15 @@
                 var temp_description = modal.find('.job-description').val();
 
                 var subJobTypeIDs_SlctdRecs = [];//array which holds which subJobTypeIDs are selected in the modal
-                var jobResourceIDs_SlctdRecs = [];//array which holds which jobResourceIDs are selected in the modal
-                var jobRates_SlctdRecs = [];//array which holds which jobRates are selected in the modal
                 var temp_subJobTypeInput = modal.find('.sub-job-type_input');
-                var temp_resourceTypeInput = modal.find('.resource-type_input.resourceTypeID');
-
                 var subJobTypeIDsAddArr = [];
                 var subJobTypeIDsDeleteArr = [];
 
-                var jobResourceIDsAddArr = [];
+                var jobResourceAdd_Lines = modal.find('.addRecord.jobResource_Line');
+                var jobResourceDelete_Lines = modal.find('.returnedRecords.deleted.jobResource_Line');
+                var jobResourceEdit_Lines = modal.find('.returnedRecords.edited.jobResource_Line');
                 var jobResourcesJson_Add = [];
-
-                var jobResourceIDsDeleteArr = [];
                 var jobResourcesJson_Delete = [];
-
                 var jobResourcesJson_Edit = [];
 
                 var temp_jobCrspdt_div_Add = modal.find('.addRecord.jobCrspdtLine');
@@ -899,18 +892,7 @@
                 var temp_jobCrspdtInfoJson_Delete = [];
                 var temp_jobCrspdtInfoJson_Edit = [];
 
-                //var jobResourceIDsSlctdArr = [];
-                //var jobResourceRatesSlctdArr = [];
-                var jobResourcesSlctdArr = [];
-
                 var generalCounter = 0;
-
-                    var jobResourceAdd_Lines = modal.find('.addRecord.jobResource_Line');
-                    var jobResourceDelete_Lines = modal.find('.deleted.jobResource_Line');
-                    var jobResourceEdit_Lines = modal.find('.edited.jobResource_Line');
-
-                    console.log("jobResourceAdd_Lines");
-                    console.log(jobResourceAdd_Lines);
 
                 $(temp_subJobTypeInput).each(function (index, item) {
 
@@ -928,14 +910,11 @@
                     }
                 });
 
-                //console.log("generalCounter:" + generalCounter);
-
                 $(jobResourceAdd_Lines).each(function (index, item) {
 
                 var currentRow = $(this);
                 var temp_resourceTypeID = currentRow.find(".resourceTypeID").val();
                 var temp_rate = currentRow.find(".resourceRate").val();
-                //var counter_Json = 0;
 
                     jobResourcesJson_Add[generalCounter] = {
                         jobID: temp_jobID,
@@ -946,10 +925,6 @@
                 });
 
                     generalCounter = 0;
-
-                console.log("jobResourcesJson_Add");
-                console.log(jobResourcesJson_Add);
-                console.log(jobResourcesJson_Add.length);
 
                 $(jobResourceDelete_Lines).each(function (index, item) {
 
@@ -965,96 +940,21 @@
 
                     generalCounter = 0;
 
-                console.log("jobResourcesJson_Delete");
-                console.log(jobResourcesJson_Delete);
-                    console.log(jobResourcesJson_Delete.length);
+                $(jobResourceEdit_Lines).each(function (index, item) {
 
-                    $(jobResourceEdit_Lines).each(function (index, item) {
+                    var currentRow = $(this);
+                    var temp_resourceTypeID = currentRow.find(".resourceTypeID").val();
+                    var temp_rate = currentRow.find(".resourceRate").val();
 
-                        var currentRow = $(this);
-                        var temp_resourceTypeID = currentRow.find(".resourceTypeID").val();
-                        var temp_rate = currentRow.find(".resourceRate").val();
-
-                        jobResourcesJson_Edit[generalCounter] = {
-                            jobID: temp_jobID,
-                            resourceTypeID: temp_resourceTypeID,
-                            rate: temp_rate,
-                        };
-                        generalCounter++;
-                    });
-
-                    console.log("jobResourcesJson_Edit");
-                    console.log(jobResourcesJson_Edit);
-                    console.log(jobResourcesJson_Edit.length);
+                    jobResourcesJson_Edit[generalCounter] = {
+                        jobID: temp_jobID,
+                        resourceTypeID: temp_resourceTypeID,
+                        rate: temp_rate,
+                    };
+                    generalCounter++;
+                });
 
                     generalCounter = 0;
-
-                //$(temp_resourceTypeInput).each(function (index, item) {
-
-                //    var temp_val = $(this).val();
-                //    var currentRow = $(this).parent().parent();
-                //    var temp_rate = currentRow.find(".resourceRate").val();
-
-                //    //if the the current resource type checkbox is checked...
-                //    if ($(this).prop('checked')) {
-
-                //        jobResourceIDs_SlctdRecs.push(temp_val);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
-                //        jobRates_SlctdRecs.push(temp_rate);//add it to array jobResourceIDs_SlctdRecs for later comparison to _RtndRecs
-
-                //        //console.log("jobResourceID " + temp_val + " is selected with a rate of " + temp_rate);
-
-                //        if (currentRow.attr("class").includes("returnedRecords edited")) {
-
-                //            //console.log("temp_val value to be edited:" + temp_val);
-                //            //console.log("temp_rate value to be edited:" + temp_rate);
-
-                //            jobResourcesJson_Edit[generalCounter] = {
-                //                jobID: temp_jobID,
-                //                resourceTypeID: temp_val,
-                //                rate: temp_rate,
-                //            };
-
-                //            //console.log("general counter:" + generalCounter);
-                //            generalCounter++;
-                //        }
-                //    }
-                //});
-
-                //generalCounter = 0;
-
-                //jobResourcesSlctdArr[0] = jobResourceIDs_SlctdRecs;
-                //jobResourcesSlctdArr[1] = jobRates_SlctdRecs;
-
-                //subJobTypeIDsAddArr = _.difference(subJobTypeIDs_SlctdRecs, subJobTypeIDs_RtndRecs);
-                //subJobTypeIDsDeleteArr = _.difference(subJobTypeIDs_RtndRecs, subJobTypeIDs_SlctdRecs);
-                //jobResourceIDsAddArr = _.difference(jobResourceIDs_SlctdRecs, jobResourceIDs_RtndRecs);
-                //jobResourceIDsDeleteArr = _.difference(jobResourceIDs_RtndRecs, jobResourceIDs_SlctdRecs);
-
-                //for (var i = 0, j = 0; i < jobResourcesSlctdArr[0].length; i++) {
-
-                //    if ($.inArray(jobResourcesSlctdArr[0][i], jobResourceIDsAddArr) !== -1) {
-
-                //        jobResourcesJson_Add[j] = {
-                //            jobID: temp_jobID,
-                //            resourceTypeID: jobResourcesSlctdArr[0][i],
-                //            rate: jobResourcesSlctdArr[1][i],
-                //        };
-
-                //        j++;
-
-                //        //console.log("jobResourcesSlctdArr[i][" + i + "] found in jobResourceIDsAddArr.")
-                //        //console.log("Add id of:" + jobResourcesSlctdArr[0][i]);
-                //        //console.log("Add rate of:" + jobResourcesSlctdArr[1][i]);
-                //    }
-                //}
-
-                //for (var i = 0; i < jobResourceIDsDeleteArr.length; i++) {
-
-                //    jobResourcesJson_Delete[i] = {
-                //        jobID: temp_jobID,
-                //        resourceTypeID: jobResourceIDsDeleteArr[i]
-                //    };
-                //}
 
                 //BEGIN PACK UP JOB CORRESPONDENT ADD, EDITS AND DELETES
                 $(temp_jobCrspdt_div_Add).each(function (index) {
