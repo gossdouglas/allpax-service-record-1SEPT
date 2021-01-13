@@ -274,7 +274,7 @@
                 if ($(this).prop('checked')) {
                     currentRow.find(".resourceRate").removeAttr('disabled');//un-lock the field for edits;
                     //console.log("checked.")
-                    if (temp_LineClass.includes("returnedRecords edited")) {//if this resource type is also a record returned from the database...
+                    if (temp_LineClass.includes("returnedRecords edit")) {//if this resource type is also a record returned from the database...
                         temp_resourceRateInput.css("color", "red");//set the resource rate input field to red to indicate an edit is pending
                     }
                 }
@@ -766,13 +766,13 @@
                 if (temp_LineClass.includes("returnedRecords") && (!temp_checked)) {
 
                     //...change the class of that resource line to edited
-                    currentRow.prop("class", " row returnedRecords deleted jobResource_Line");
+                    currentRow.prop("class", " row returnedRecords delete jobResource_Line");
                     //...and make the text red to indicate so
-                    currentRow.find("label, .description_div, .resourceRate").css("text-decoration", "line-through");//set these field to strike-through to indicate it is a record to be deleted
+                    currentRow.find("label, .description_div, .resourceRate").css("text-decoration", "line-through");//set these field to strike-through to indicate it is a record to be delete
                     currentRow.find("label, .description_div, .resourceRate").css("color", "red");                   
                 }
 
-                if (temp_LineClass.includes("returnedRecords deleted") && (temp_checked)) {
+                if (temp_LineClass.includes("returnedRecords delete") && (temp_checked)) {
 
                     //...change the class of that resource line to edited
                     currentRow.prop("class", " row returnedRecords jobResource_Line");
@@ -825,7 +825,7 @@
                 if (temp_LineClass.includes("returnedRecords")) {
 
                     //...change the class of that resource line to edited
-                    currentRow.prop("class", " row returnedRecords edited jobResource_Line");
+                    currentRow.prop("class", " row returnedRecords edit jobResource_Line");
                     //...and make the text red to indicate so
                     temp_resourceRateInput.css("color", "red");
                 }
@@ -879,8 +879,8 @@
                 var subJobTypeIDsDeleteArr = [];
 
                 var jobResourceAdd_Lines = modal.find('.addRecord.jobResource_Line');
-                var jobResourceDelete_Lines = modal.find('.returnedRecords.deleted.jobResource_Line');
-                var jobResourceEdit_Lines = modal.find('.returnedRecords.edited.jobResource_Line');
+                var jobResourceDelete_Lines = modal.find('.returnedRecords.delete.jobResource_Line');
+                var jobResourceEdit_Lines = modal.find('.returnedRecords.edit.jobResource_Line');
                 var jobResourcesJson_Add = [];
                 var jobResourcesJson_Delete = [];
                 var jobResourcesJson_Edit = [];
@@ -904,7 +904,7 @@
                         subJobTypeIDs_SlctdRecs.push(temp_val);//add it to array subJobTypeIDs_SlctdRecs for later comparison to _RtndRecs
                         //console.log(temp_val + " is selected.")
 
-                        //if (currentRow.includes("returnedRecords edited")) {
+                        //if (currentRow.includes("returnedRecords edit")) {
                         //    console.log("temp_resourceRateInput value to be edited:" + temp_resourceRateInput.val());
                         //}
                     }
