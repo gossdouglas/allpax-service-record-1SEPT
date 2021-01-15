@@ -146,5 +146,7 @@ namespace allpax_service_record.Models
         }
 
         public System.Data.Entity.DbSet<allpax_service_record.Models.View_Models.vm_workDesc> vm_workDesc { get; set; }
+
+        public System.Data.Entity.DbSet<allpax_service_record.Models.View_Models.vm_dailyReportViewActive> vm_dailyReportViewActive { get; set; }
     }
 }

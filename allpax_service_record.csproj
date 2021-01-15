@@ -198,6 +198,7 @@
     <Compile Include="Controllers\dailyReportByReportIDPrintController.cs" />
     <Compile Include="Controllers\dailyReportByReportIDController.cs" />
     <Compile Include="Controllers\dailyReportController.cs" />
+    <Compile Include="Controllers\dailyReportViewActiveController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\jobCorrespondentsController.cs" />
     <Compile Include="Controllers\JobsController.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="Models\tbl_dailyReportUsers.cs" />
     <Compile Include="Models\tbl_customers.cs" />
     <Compile Include="Models\tbl_dailyReport.cs" />
+    <Compile Include="Models\View Models\vm_dailyReportActiveView.cs" />
     <Compile Include="Models\View Models\vm_resourceTypes.cs" />
     <Compile Include="Models\View Models\vm_Jobs.cs" />
     <Compile Include="Models\View Models\vm_userAcctInfo.cs" />
@@ -2567,6 +2569,7 @@
     <Content Include="Views\Jobs\Index-master-3jan21.cshtml" />
     <Content Include="Views\Jobs\Index-new job modal crashes.cshtml" />
     <Content Include="Views\subJobTypes\Index.cshtml" />
+    <Content Include="Views\dailyReportViewActive\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
