@@ -31,17 +31,7 @@ namespace allpax_service_record.Controllers
                 "SELECT tbl_dailyReport.date, tbl_dailyReport.jobID, tbl_dailyReport.startTime, tbl_dailyReport.endTime, tbl_dailyReport.lunchHours, " +
                 "tbl_subJobTypes.description, tbl_Jobs.active, " +
 
-                "(SELECT SUM(hours) " +
-                        "FROM tbl_dailyReportTimeEntry " +
-                        "WHERE tbl_dailyReportTimeEntry.dailyReportID = tbl_dailyReport.dailyReportID AND " +
-
-                        "tbl_dailyReportTimeEntry.workDescriptionCategory = '2') + " +
-                "(SELECT SUM(hours) " +
-                        "FROM tbl_dailyReportTimeEntry " +
-                        "WHERE tbl_dailyReportTimeEntry.dailyReportID = tbl_dailyReport.dailyReportID AND " +
-
-                        "tbl_dailyReportTimeEntry.workDescriptionCategory = '3') " +
-                        "- tbl_dailyReport.lunchHours AS totalHours, " +
+                "(SELECT convert(decimal(3,1), DATEDIFF ( mi, tbl_dailyReport.startTime , tbl_dailyReport.endTime ) / 60.0) - tbl_dailyReport.lunchHours) as totalHours, " +
                 "(SELECT SUM(hours) " +
                        "FROM tbl_dailyReportTimeEntry " +
                        "WHERE tbl_dailyReportTimeEntry.dailyReportID = tbl_dailyReport.dailyReportID AND " +
@@ -73,9 +63,9 @@ namespace allpax_service_record.Controllers
                 vm_dailyReportViewActive dailyReportViewActive = new vm_dailyReportViewActive();
 
                 dailyReportViewActive.date = String.Format("{0:yyyy-MM-dd}", dr1[0]);
-                dailyReportViewActive.jobID = dr1[1].ToString(); ;
-                dailyReportViewActive.startTime = dr1[2].ToString();
-                dailyReportViewActive.endTime = dr1[3].ToString();
+                dailyReportViewActive.jobID = dr1[1].ToString();
+                dailyReportViewActive.startTime = (TimeSpan)dr1[2];
+                dailyReportViewActive.endTime = (TimeSpan)dr1[3];
                 dailyReportViewActive.lunchHours = (int)dr1[4];
                 dailyReportViewActive.subJobDescription = dr1[5].ToString();
                 dailyReportViewActive.active = (Boolean)dr1[6];
@@ -92,7 +82,77 @@ namespace allpax_service_record.Controllers
             sqlconn.Close();
             return View(dailyReportViewActives);
         }
-       
+
+        public ActionResult Filtered(string startDate, string endDate)
+        {
+            List<vm_dailyReportViewActive> dailyReportViewActives = new List<vm_dailyReportViewActive>();
+            string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            SqlConnection sqlconn = new SqlConnection(mainconn);
+
+            sqlconn.Open();
+
+            string sqlquery1 =
+                "SELECT tbl_dailyReport.date, tbl_dailyReport.jobID, tbl_dailyReport.startTime, tbl_dailyReport.endTime, tbl_dailyReport.lunchHours, " +
+                "tbl_subJobTypes.description, tbl_Jobs.active, " +
+
+                "(SELECT convert(decimal(3,1), DATEDIFF ( mi, tbl_dailyReport.startTime , tbl_dailyReport.endTime ) / 60.0) - tbl_dailyReport.lunchHours) as totalHours, " +
+                "(SELECT SUM(hours) " +
+                       "FROM tbl_dailyReportTimeEntry " +
+                       "WHERE tbl_dailyReportTimeEntry.dailyReportID = tbl_dailyReport.dailyReportID AND " +
+
+                       "tbl_dailyReportTimeEntry.workDescriptionCategory = '2') as delayHours, " +
+                "(SELECT SUM(hours) " +
+                        "FROM tbl_dailyReportTimeEntry " +
+                        "WHERE tbl_dailyReportTimeEntry.dailyReportID = tbl_dailyReport.dailyReportID AND " +
+
+                        "tbl_dailyReportTimeEntry.workDescriptionCategory = '3') as wntyDelayHours, " +
+                "tbl_dailyReport.dailyReportID " +
+
+                "FROM tbl_dailyReport " +
+
+                "INNER JOIN tbl_subJobTypes ON " +
+                "tbl_subJobTypes.subJobID = tbl_dailyReport.subJobID " +
+                "INNER JOIN tbl_Jobs ON " +
+                "tbl_Jobs.jobID = tbl_dailyReport.jobID " +
+
+                "WHERE " +
+                "tbl_dailyReport.date >= @startDate " +
+                "AND " +
+                "tbl_dailyReport.date <= @endDate " +
+                "AND " +
+                "tbl_Jobs.active = '1'";
+
+            SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
+            sqlcomm1.Parameters.AddWithValue("@startDate", startDate);
+            sqlcomm1.Parameters.AddWithValue("@endDate", endDate);
+            SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
+            DataTable dt1 = new DataTable();
+            sda1.Fill(dt1);
+            foreach (DataRow dr1 in dt1.Rows)
+            {
+                vm_dailyReportViewActive dailyReportViewActive = new vm_dailyReportViewActive();
+
+                dailyReportViewActive.date = String.Format("{0:yyyy-MM-dd}", dr1[0]);
+                dailyReportViewActive.jobID = dr1[1].ToString(); ;
+                dailyReportViewActive.startTime = (TimeSpan)dr1[2];
+                dailyReportViewActive.endTime = (TimeSpan)dr1[3];
+                dailyReportViewActive.lunchHours = (int)dr1[4];
+                dailyReportViewActive.subJobDescription = dr1[5].ToString();
+                dailyReportViewActive.active = (Boolean)dr1[6];
+                dailyReportViewActive.totalHours = (decimal)dr1[7];
+                dailyReportViewActive.delayHours = (decimal)dr1[8];
+                dailyReportViewActive.wntyDelayHours = (decimal)dr1[9];
+                dailyReportViewActive.dailyReportID = (int)dr1[10];
+                dailyReportViewActive.teamUserNames = TeamUserNamesByDailyReportID(dailyReportViewActive.dailyReportID);
+                dailyReportViewActive.teamNames = TeamNamesByDailyReportID(dailyReportViewActive.dailyReportID);
+                dailyReportViewActive.teamShortNames = TeamShortNamesByDailyReportID(dailyReportViewActive.dailyReportID);
+
+                dailyReportViewActives.Add(dailyReportViewActive);
+            }
+            sqlconn.Close();
+            return View(dailyReportViewActives);
+        }
+
         public List<string> TeamUserNamesByDailyReportID(int dailyReportID)
         {
             List<string> teamUserNames = new List<string>();

@@ -2570,6 +2570,7 @@
     <Content Include="Views\Jobs\Index-new job modal crashes.cshtml" />
     <Content Include="Views\subJobTypes\Index.cshtml" />
     <Content Include="Views\dailyReportViewActive\Index.cshtml" />
+    <Content Include="Views\dailyReportViewActive\Filtered.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

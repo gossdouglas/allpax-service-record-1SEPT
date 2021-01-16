@@ -92,23 +92,9 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            //$('#dt_dailyRptAll').DataTable({
-
-            //    "columnDefs": [
-            //        { targets: [0], width: "7%" },
-            //        { targets: [1, 3], width: "5%" },
-            //        { targets: [2, 5,], width: "7%" },
-            //        { targets: [4, 6], width: "10%" },
-            //        { targets: [7], autowidth: "true" },
-            //        { targets: [8], width: "15%" },
-            //    ],
-            //    "paging": false,
-            //    "searching": false
-            //});
-
             //begin when a record class is clicked...
             $(".record").on('click mouseover', function () {
-                selectedItem0 = $(this).attr("id");//works
+                selectedItem0 = $(this).attr("id");//
                 selectedItem1 = $(this).find("#record_item1").html();//works valid for inner html only
                 selectedItem2 = $(this).find("#record_item2").html();//works valid for inner html only
                 selectedItem3 = $(this).find("#record_item3").html();//works valid for inner html only
@@ -136,15 +122,13 @@
 
             });
             //end when a record class is clicked...
-            //$(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked...
-            $("#dt_dailyRptAll tbody").on("click", ".editButton", function () {
 
-                //console.log('edit button clicked. ' + selectedItem0);
+            $("#dt_dailyRptAll tbody").on("click", ".editButton", function () {//when a record's edit button is clicked...
+
                 window.location = '/DailyReportByReportID?reportID=' + selectedItem0;
             });
 
-            //$(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked...
-            $("#dt_dailyRptAll tbody").on("click", ".deleteButton", function () {
+            $("#dt_dailyRptAll tbody").on("click", ".deleteButton", function () {//when a record's delete button is clicked...
 
                 $.confirm({
                     title: 'Delete Daily Report ' + selectedItem0 + '?',
@@ -170,18 +154,17 @@
                 });
             });
 
-            //$(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked...
-            $("#dt_dailyRptAll tbody").on("click", ".copyButton", function () {
+            $("#dt_dailyRptAll tbody").on("click", ".copyButton", function () {//when a record's edit button is clicked...
                 window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
                     + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9 + "&customerContact=" + selectedItem10
                     + "&equipment=" + selectedItem11 + "&copiedDailyReportID=" + selectedItem0;
             });
 
-            //begin
+            //begin when the filter reset button is clicked
             $("#filterResetDateBtn").on('click', function () {
                 window.location = '/dailyReportAll';
             });
-            //end
+            //end when the filter reset button is clicked
 
             //BEGIN HIDE THE FILTER ROW AFTER PAGE LOAD
             $(".fltrow").css("display", "none");
@@ -267,7 +250,6 @@
                     List<string> temp_team = item.teamShortNames;
                     List<string> temp_workDescription = item.workDescription;
                     Boolean temp_active = item.active;
-                    //string userLoggedIn = Regex.Replace(User.Identity.GetUserName(), "@.*", "");
                     string userLoggedIn = @User.Identity.GetUserName();
                     Boolean userAuthorized = false;
                     string temp_author = item.dailyReportAuthor;

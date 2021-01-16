@@ -9,17 +9,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@*DAILY REPORT ALL*@
-
+@*FILTERED DAILY REPORTS*@
 <head>
     <style>
         .container {
             border: 2px solid black;
         }
 
-        /*table {
+        table {
             table-layout: fixed;
-        }*/
+        }
 
         #record_item8 {
             overflow: hidden;
@@ -27,7 +26,7 @@
             text-overflow: ellipsis;
         }
 
-        #filterDateBtn {
+        #filterResetDateBtn {
             background-color: #D7D8D6;
             border-style: solid;
             border-color: black;
@@ -80,53 +79,6 @@
             font-family: Tahoma;
             color: black;
         }
-
-        table {
-            table-layout: auto !important;
-        }
-
-        thead th, tbody td, tfoot td, tfoot th {
-            /*width: auto !important;*/
-            white-space: nowrap;
-        }
-
-        /*BEGIN CHANGE LAYOUT FOR MOBILE*/
-        @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
-            /* Force table to not be like tables anymore */
-            table, thead, tbody, th, td, tr {
-                display: block;
-            }
-                /* Hide table headers (but not display: none;, for accessibility) */
-                thead tr {
-                    position: absolute;
-                    top: -9999px;
-                    left: -9999px;
-                }
-
-            tr {
-                border: 1px solid #ccc;
-            }
-
-            td {
-                /* Behave  like a "row" */
-                border: none;
-                border-bottom: 1px solid #eee;
-                position: relative;
-                padding-left: 50%;
-            }
-
-                td:before {
-                    /* Now like a table header */
-                    position: absolute;
-                    /* Top/left values mimic padding */
-                    top: 6px;
-                    left: 6px;
-                    width: 45%;
-                    padding-right: 10px;
-                    white-space: nowrap;
-                }
-            /*END CHANGE LAYOUT FOR MOBILE*/
-        }
     </style>
 
     @*BEGIN TABLE FILTER*@
@@ -141,8 +93,7 @@
         $(document).ready(function () {//begin document read jquery statements
 
             //begin when a record class is clicked...
-            $("#dt_dailyRptActive tbody").on("click mouseover", ".record", function () {
-
+            $(".record").on('click mouseover', function () {
                 selectedItem0 = $(this).attr("id");//works
 
                 $("#slctd_reportID").val(selectedItem0);
@@ -150,20 +101,17 @@
             });
             //end when a record class is clicked...
 
-            $("#dt_dailyRptActive tbody").on("click", ".editButton", function () {//when a record's edit button is clicked...
+            $("#dt_dailyRptAll tbody").on("click", ".editButton", function () {//when a record's edit button is clicked...
 
+                //console.log('edit button clicked. ' + selectedItem0);
                 window.location = '/DailyReportByReportID?reportID=' + selectedItem0;
             });
 
-            //begin when the filter date button is pressed
-            $("#filterDateBtn").on('click', function () {
-
-                var startDate = $("#startDateInput").val();
-                var endDate = $("#endDateInput").val();
-
-                window.location.href = '/dailyReportViewActive/filtered?startDate=' + startDate + "&" + "endDate=" + endDate;
+            //begin when the filter reset button is clicked
+            $("#filterResetDateBtn").on('click', function () {
+                window.location = '/dailyReportViewActive';
             });
-            //end when the filter date button is pressed
+            //end when the filter reset button is clicked
 
             //BEGIN HIDE THE FILTER ROW AFTER PAGE LOAD
             $(".fltrow").css("display", "none");
@@ -192,8 +140,11 @@
         <div class="md-col-2" style="padding:5px">
             <input type="date" class="form-control form-control-sm" id="endDateInput" placeholder="" value="">
         </div>
-        <div class="md-col-1" style="padding:5px">
+        @*<div class="md-col-1" style="padding:5px">
             <button class="btn btn-light btn-sm" id="filterDateBtn">Apply Date Filter</button>
+        </div>*@
+        <div class="md-col-1" style="padding:5px">
+            <button class="btn btn-primary btn-sm" id="filterResetDateBtn">Reset Date Filter</button>
         </div>
         <div class="md-col-1" style="padding:5px">
             <div id="filtersToggle"></div>
@@ -243,7 +194,7 @@
                         //BEGIN TEMPORARY LOOP VARIABLES
                         string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
                         string temp_jobID = item.jobID;
-                        string temp_startTime =string.Format("{0:00}:{1:00}", item.startTime.Hours, item.startTime.Minutes);
+                        string temp_startTime = string.Format("{0:00}:{1:00}", item.startTime.Hours, item.startTime.Minutes);
                         string temp_endTime = string.Format("{0:00}:{1:00}", item.endTime.Hours, item.endTime.Minutes);
                         int temp_lunchHours = item.lunchHours;
                         string temp_subJobDesc = item.subJobDescription;
@@ -260,38 +211,38 @@
                         Boolean userAuthorized = false;
                         //END TEMPORARY LOOP VARIABLES
 
-                    <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
-                        <td id="record_item0" style="width:auto" @Html.DisplayFor(modelItem => item.date)>@Html.DisplayFor(modelItem => item.date)</td>
-                        <td id="record_item1" value=@temp_jobID>@temp_jobID</td>
-                        <td id="record_item2" value=@Html.DisplayFor(modelItem => item.subJobDescription)>@Html.DisplayFor(modelItem => item.subJobDescription)</td>
-                        <td id="record_item3" value=>
-                            <span>
-                                @for (var i = 0; i < (temp_teamNames.Count); i++)
+                        <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
+                            <td id="record_item0" style="width:auto" @Html.DisplayFor(modelItem => item.date)>@Html.DisplayFor(modelItem => item.date)</td>
+                            <td id="record_item1" value=@temp_jobID>@temp_jobID</td>
+                            <td id="record_item2" value=@Html.DisplayFor(modelItem => item.subJobDescription)>@Html.DisplayFor(modelItem => item.subJobDescription)</td>
+                            <td id="record_item3" value=>
+                                <span>
+                                    @for (var i = 0; i < (temp_teamNames.Count); i++)
+                                    {
+                                        <span class="" id="" style="">@temp_teamNames[@i]|</span>
+                                    }
+                                </span>
+                            </td>
+                            <td id="record_item4" value=@Html.DisplayFor(modelItem => @temp_startTime)>@Html.DisplayFor(modelItem => @temp_startTime)</td>
+                            <td id="record_item5" value=@Html.DisplayFor(modelItem => @temp_endTime)>@Html.DisplayFor(modelItem => @temp_endTime)</td>
+                            <td id="record_item6" value=@Html.DisplayFor(modelItem => item.totalHours)>@Html.DisplayFor(modelItem => item.totalHours)</td>
+                            <td id="record_item7" value=@Html.DisplayFor(modelItem => item.delayHours)>@Html.DisplayFor(modelItem => item.delayHours)</td>
+                            <td id="record_item8" value=@Html.DisplayFor(modelItem => item.wntyDelayHours)>@Html.DisplayFor(modelItem => item.wntyDelayHours)</td>
+                            <td>
+                                @if (User.IsInRole("Admin"))
                                 {
-                                    <span class="" id="" style="">@temp_teamNames[@i]|</span>
+                                    userAuthorized = true;
                                 }
-                            </span>
-                        </td>
-                        <td id="record_item4" value=@Html.DisplayFor(modelItem => @temp_startTime)>@Html.DisplayFor(modelItem => @temp_startTime)</td>
-                        <td id="record_item5" value=@Html.DisplayFor(modelItem => @temp_endTime)>@Html.DisplayFor(modelItem => @temp_endTime)</td>
-                        <td id="record_item6" value=@Html.DisplayFor(modelItem => item.totalHours)>@Html.DisplayFor(modelItem => item.totalHours)</td>
-                        <td id="record_item7" value=@Html.DisplayFor(modelItem => item.delayHours)>@Html.DisplayFor(modelItem => item.delayHours)</td>
-                        <td id="record_item8" value=@Html.DisplayFor(modelItem => item.wntyDelayHours)>@Html.DisplayFor(modelItem => item.wntyDelayHours)</td>
-                        <td>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                userAuthorized = true;
-                            }
-                            @if (userAuthorized == true)
-                            {
-                                <button class="btn btn-light btn-sm editButton">View Report @temp_dailyReportID</button>
-                            }
-                            else
-                            {
-                                <button class="btn btn-light btn-sm editButton" disabled>View Report @temp_dailyReportID</button>
-                            }
-                        </td>
-                    </tr>
+                                @if (userAuthorized == true)
+                                {
+                                    <button class="btn btn-light btn-sm editButton">View Report @temp_dailyReportID</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-light btn-sm editButton" disabled>View Report @temp_dailyReportID</button>
+                                }
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -364,13 +315,6 @@
     });
     tf.init();//initialize this instance of TableFilter
 </script>
-
-
-
-
-
-
-
 
 
 
