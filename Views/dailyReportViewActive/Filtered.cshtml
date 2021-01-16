@@ -16,27 +16,8 @@
             border: 2px solid black;
         }
 
-        table {
-            table-layout: fixed;
-        }
-
-        #record_item8 {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
         #filterResetDateBtn {
             background-color: #D7D8D6;
-            border-style: solid;
-            border-color: black;
-            border-radius: 0px;
-            font-family: Tahoma;
-            color: black;
-        }
-
-        #newDailyRptBtn {
-            background-color: #83B6CC;
             border-style: solid;
             border-color: black;
             border-radius: 0px;
@@ -62,22 +43,56 @@
             color: white;
         }
 
-        .deleteButton {
-            background-color: #83B6CC;
-            border-style: solid;
-            border-color: black;
-            border-radius: 0px;
-            font-family: Tahoma;
-            color: black;
+        table {
+            /*table-layout: auto !important;*/
+            table-layout: fixed !important;
         }
 
-        .copyButton {
-            background-color: #D7D8D6;
-            border-style: solid;
-            border-color: black;
-            border-radius: 0px;
-            font-family: Tahoma;
-            color: black;
+        thead th, tbody td, tfoot td, tfoot th {
+            /*width: auto !important;*/
+            white-space: nowrap;
+        }
+
+        td {
+            overflow: auto;
+        }
+
+        /*BEGIN CHANGE LAYOUT FOR MOBILE*/
+        @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+            /* Force table to not be like tables anymore */
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+                /* Hide table headers (but not display: none;, for accessibility) */
+                thead tr {
+                    position: absolute;
+                    top: -9999px;
+                    left: -9999px;
+                }
+
+            tr {
+                border: 1px solid #ccc;
+            }
+
+            td {
+                /* Behave  like a "row" */
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 50%;
+            }
+
+                td:before {
+                    /* Now like a table header */
+                    position: absolute;
+                    /* Top/left values mimic padding */
+                    top: 6px;
+                    left: 6px;
+                    width: 45%;
+                    padding-right: 10px;
+                    white-space: nowrap;
+                }
+            /*END CHANGE LAYOUT FOR MOBILE*/
         }
     </style>
 
@@ -101,7 +116,7 @@
             });
             //end when a record class is clicked...
 
-            $("#dt_dailyRptAll tbody").on("click", ".editButton", function () {//when a record's edit button is clicked...
+            $("#dt_dailyRptActive tbody").on("click", ".editButton", function () {//when a record's edit button is clicked...
 
                 //console.log('edit button clicked. ' + selectedItem0);
                 window.location = '/DailyReportByReportID?reportID=' + selectedItem0;
@@ -259,9 +274,9 @@
         col_3: 'none',//team
         col_4: 'none',//start time
         col_5: 'none',//end time
-        //col_6: 'number',//total hours
-        //col_7: 'string',//delay hours
-        //col_8: 'string',//warranty delay hours
+        col_6: 'none',//total hours
+        col_7: 'none',//delay hours
+        col_8: 'none',//warranty delay hours
         col_9: 'none',//action
         toolbar: {
             target_id: 'filtersStatusBar'//the id of the html element in which the status bar lives
@@ -278,8 +293,8 @@
         col_widths: [
             "120px",//date
             "120px",//job
-            "120px",//subJob
-            "120px",//team
+            "200px",//subJob
+            "250px",//team
             "170px",//start time
             "170px",//end time
             "170px",//total hours

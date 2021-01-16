@@ -143,26 +143,10 @@ Layout = "~/Views/Shared/_Layout.cshtml";
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            //$('#dt_dailyRptAll').DataTable({
-
-            //    "columnDefs": [
-            //        { targets: [0], width: "7%" },
-            //        { targets: [1, 3], width: "5%" },
-            //        { targets: [2, 5,], width: "7%" },
-            //        { targets: [4, 6], width: "10%" },
-            //        { targets: [7], autowidth: "true" },
-            //        { targets: [8], width: "15%" },
-            //    ],
-            //    "paging": false,
-            //    "searching": false
-            //});
-
             //begin when a record class is clicked...
-            //$(".record").on('click mouseover', function () {
-            //$("#dt_dailyRptAll").on("click mouseover", ".record", function () {
             $("#dt_dailyRptAll tbody").on("click mouseover", ".record", function () {
 
-                selectedItem0 = $(this).attr("id");//works
+                selectedItem0 = $(this).attr("id");//
                 selectedItem1 = $(this).find("#record_item1").html();//works valid for inner html only
                 selectedItem2 = $(this).find("#record_item2").html();//works valid for inner html only
                 selectedItem3 = $(this).find("#record_item3").html();//works valid for inner html only
@@ -190,15 +174,12 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             });
             //end when a record class is clicked...
 
-            //$(".btn.btn-primary.editButton").click(function () {//when a record's edit button is clicked...
-            $("#dt_dailyRptAll tbody").on("click", ".editButton", function () {
+            $("#dt_dailyRptAll tbody").on("click", ".editButton", function () {//when a record's edit button is clicked...
 
-                //console.log('edit button clicked. ' + selectedItem0);
                 window.location = '/DailyReportByReportID?reportID=' + selectedItem0;
             });
 
-            //$(".btn.btn-primary.deleteButton").click(function () {//when a record's edit button is clicked...
-            $("#dt_dailyRptAll tbody").on("click", ".deleteButton", function () {
+            $("#dt_dailyRptAll tbody").on("click", ".deleteButton", function () {//when a record's delete button is clicked...
 
                 $.confirm({
                     title: 'Delete Daily Report ' + selectedItem0 + '?',
@@ -226,34 +207,19 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                 });
             });
 
-            //$(".btn.btn-primary.copyButton").click(function () {//when a record's edit button is clicked...
-            $("#dt_dailyRptAll tbody").on("click", ".copyButton", function () {
-                //window.location = '/DailyReport/copyDailyreport?jobID=' + selectedItem3 + "&description=" + selectedItem4 + "&subJobID=" + selectedItem4_1
-                //    + "&customerName=" + selectedItem5 + "&location=" + selectedItem6 + "&customerCode=" + selectedItem9
-                //    + "&customerContact=" + selectedItem10 + "&equipment=" + selectedItem11 + "&copiedDailyReportID=" + selectedItem0;
+            $("#dt_dailyRptAll tbody").on("click", ".copyButton", function () {//when a record's copy button is clicked...
 
                 window.location = '/dailyReportByReportID/copyDailyReport?reportID=' + selectedItem0;
-                //window.location = '/dailyReport/copyDailyReport';
               
             });
 
-            //begin when the line save button is pressed
-            $("#filterDateBtn").on('click', function () {
+            $("#filterDateBtn").on('click', function () {//...when the line save button is pressed
 
                 var startDate = $("#startDateInput").val();
                 var endDate = $("#endDateInput").val();
 
                 window.location.href = '/dailyReportAll/filtered?startDate=' + startDate + "&" + "endDate=" + endDate;
             });
-            //end when the line save button is pressed.
-
-            //BEGIN ADJUST THE HEIGHT OF THE TEAM FILTER BOX
-            //var fltrRowHeight = $(".fltrow").height();
-            //var fltrItemHeight = $("#chkdiv_6_dt_dailyRptAll").height();          
-            //var workDescInnerHtml = $("#flt8_dt_dailyRptAll").parent().html;
-            //$("#flt8_dt_dailyRptAll").height(fltrItemHeight);
-            //$("#flt8_dt_dailyRptAll").parent().html("<textarea id='flt8_dt_dailyRptAll' ct='8' class='flt' style='height: 90px; resize: none;'></textarea>");
-            //END ADJUST THE HEIGHT OF THE TEAM FILTER BOX
 
             //BEGIN HIDE THE FILTER ROW AFTER PAGE LOAD
             $(".fltrow").css("display", "none");
@@ -354,7 +320,6 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                         List<string> temp_team = item.teamShortNames;
                         List<string> temp_workDescription = item.workDescription;
                         Boolean temp_active = item.active;
-                        //string userLoggedIn = Regex.Replace(User.Identity.GetUserName(), "@.*", "");
                         string userLoggedIn = @User.Identity.GetUserName();
                         Boolean userAuthorized = false;
                         string temp_author = item.dailyReportAuthor;                      

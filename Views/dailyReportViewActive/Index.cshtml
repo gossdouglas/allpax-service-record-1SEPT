@@ -17,27 +17,8 @@
             border: 2px solid black;
         }
 
-        /*table {
-            table-layout: fixed;
-        }*/
-
-        #record_item8 {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
         #filterDateBtn {
             background-color: #D7D8D6;
-            border-style: solid;
-            border-color: black;
-            border-radius: 0px;
-            font-family: Tahoma;
-            color: black;
-        }
-
-        #newDailyRptBtn {
-            background-color: #83B6CC;
             border-style: solid;
             border-color: black;
             border-radius: 0px;
@@ -63,31 +44,18 @@
             color: white;
         }
 
-        .deleteButton {
-            background-color: #83B6CC;
-            border-style: solid;
-            border-color: black;
-            border-radius: 0px;
-            font-family: Tahoma;
-            color: black;
-        }
-
-        .copyButton {
-            background-color: #D7D8D6;
-            border-style: solid;
-            border-color: black;
-            border-radius: 0px;
-            font-family: Tahoma;
-            color: black;
-        }
-
         table {
-            table-layout: auto !important;
+            /*table-layout: auto !important;*/
+            table-layout: fixed !important;
         }
 
         thead th, tbody td, tfoot td, tfoot th {
             /*width: auto !important;*/
             white-space: nowrap;
+        }
+
+        td {
+            overflow-x: auto;
         }
 
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
@@ -308,9 +276,9 @@
         col_3: 'none',//team
         col_4: 'none',//start time
         col_5: 'none',//end time
-        //col_6: 'number',//total hours
-        //col_7: 'string',//delay hours
-        //col_8: 'string',//warranty delay hours
+        col_6: 'none',//total hours
+        col_7: 'none',//delay hours
+        col_8: 'none',//warranty delay hours
         col_9: 'none',//action
         toolbar: {
             target_id: 'filtersStatusBar'//the id of the html element in which the status bar lives
@@ -327,8 +295,8 @@
         col_widths: [
             "120px",//date
             "120px",//job
-            "120px",//subJob
-            "120px",//team
+            "200px",//subJob
+            "250px",//team
             "170px",//start time
             "170px",//end time
             "170px",//total hours

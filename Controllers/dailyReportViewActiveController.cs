@@ -70,8 +70,27 @@ namespace allpax_service_record.Controllers
                 dailyReportViewActive.subJobDescription = dr1[5].ToString();
                 dailyReportViewActive.active = (Boolean)dr1[6];
                 dailyReportViewActive.totalHours = (decimal)dr1[7];
-                dailyReportViewActive.delayHours = (decimal)dr1[8];
-                dailyReportViewActive.wntyDelayHours = (decimal)dr1[9];
+
+                try
+                {
+                    dailyReportViewActive.delayHours = (decimal)dr1[8];
+                }
+
+                catch (Exception)
+                {
+                    dailyReportViewActive.delayHours = 0;
+                }
+
+                try
+                {
+                    dailyReportViewActive.wntyDelayHours = (decimal)dr1[9];
+                }
+
+                catch (Exception)
+                {
+                    dailyReportViewActive.wntyDelayHours = 0;
+                }
+
                 dailyReportViewActive.dailyReportID = (int)dr1[10];
                 dailyReportViewActive.teamUserNames = TeamUserNamesByDailyReportID(dailyReportViewActive.dailyReportID);
                 dailyReportViewActive.teamNames = TeamNamesByDailyReportID(dailyReportViewActive.dailyReportID);
@@ -140,8 +159,29 @@ namespace allpax_service_record.Controllers
                 dailyReportViewActive.subJobDescription = dr1[5].ToString();
                 dailyReportViewActive.active = (Boolean)dr1[6];
                 dailyReportViewActive.totalHours = (decimal)dr1[7];
-                dailyReportViewActive.delayHours = (decimal)dr1[8];
-                dailyReportViewActive.wntyDelayHours = (decimal)dr1[9];
+
+                try
+                {
+                    dailyReportViewActive.delayHours = (decimal)dr1[8];
+                }
+
+                catch (Exception)
+                {
+                    dailyReportViewActive.delayHours = 0;
+                }
+
+                try
+                {
+                    dailyReportViewActive.wntyDelayHours = (decimal)dr1[9];
+                }
+
+                catch (Exception)
+                {
+                    dailyReportViewActive.wntyDelayHours = 0;
+                }
+
+                //dailyReportViewActive.delayHours = (decimal)dr1[8];
+                //dailyReportViewActive.wntyDelayHours = (decimal)dr1[9];
                 dailyReportViewActive.dailyReportID = (int)dr1[10];
                 dailyReportViewActive.teamUserNames = TeamUserNamesByDailyReportID(dailyReportViewActive.dailyReportID);
                 dailyReportViewActive.teamNames = TeamNamesByDailyReportID(dailyReportViewActive.dailyReportID);

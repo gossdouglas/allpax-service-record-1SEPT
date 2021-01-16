@@ -1388,18 +1388,18 @@
             });
 
             function okToCloseBrowser(e) {
-                if (!e) e = window.event;
-                //e.cancelBubble is supported by IE - this will kill the bubbling process.
-                e.cancelBubble = true;
-                e.returnValue = 'You sure you want to leave?';
+                //if (!e) e = window.event;
+                ////e.cancelBubble is supported by IE - this will kill the bubbling process.
+                //e.cancelBubble = true;
+                //e.returnValue = 'You sure you want to leave?';
 
-                //e.stopPropagation works in Firefox.
-                if (e.stopPropagation) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                }
+                ////e.stopPropagation works in Firefox.
+                //if (e.stopPropagation) {
+                //    e.stopPropagation();
+                //    e.preventDefault();
+                //}
             }
-            window.onbeforeunload = okToCloseBrowser; 
+            //window.onbeforeunload = okToCloseBrowser; 
 
             //END MISCELLANEOUS SECTION
 
@@ -1499,7 +1499,6 @@
 
             //END VALIDATION BEFORE SAVING SECTION             
 
-            console.log(dailyRptTeamUserIDArr)
         });//end document read jquery statements
     </script>
 </head>
@@ -2046,7 +2045,7 @@
             <button type="button" class="btn btn-primary btn-sm" id="saveAndSubmit_btn" style="width: 100%">Save & Submit</button>
         </div>
         <div class="col-md-4" style="padding:5px">
-            <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%">E-mail Daily Report Test</button>
+            <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%" disabled>E-mail Daily Report Test</button>
         </div>
     </div>
 </div>
