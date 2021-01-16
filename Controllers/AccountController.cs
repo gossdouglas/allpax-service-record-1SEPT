@@ -192,8 +192,6 @@ namespace allpax_service_record.Controllers
                     ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
                                     + "before you can log in.";
 
-
-
                     //if user is selected as an administrator...
                     if (model.admin)
                     {
