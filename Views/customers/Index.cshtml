@@ -70,7 +70,7 @@
 
             //////////////////BEGIN THE COMMON NEW CUSTOMER AND EDIT CUSTOMER MODAL SECTION
 
-            $('.customer-code, .customer-name, .address').keyup(function () {
+            $('.customer-code').keyup(function () {
                 $(this).val($(this).val().toUpperCase());
             });
 
@@ -120,7 +120,7 @@
                         },
                         error: function (response) {
                             fn_hideSpinner();
-                            var alertContent = "An error has occurred. \n" + response.responseText;
+                            var alertContent = "An error has occurred.";
                             $.alert({
                                 title: 'Alert!',
                                 content: alertContent,
@@ -181,7 +181,7 @@
                         },
                         error: function (response) {
                             fn_hideSpinner();
-                            var alertContent = "An error has occurred. \n" + response.responseText;
+                            var alertContent = "An error has occurred.";
                             $.alert({
                                 title: 'Alert!',
                                 content: alertContent,
@@ -219,7 +219,7 @@
                                 },
                                 error: function (response) {
                                     fn_hideSpinner();
-                                    var alertContent = "An error has occurred. \n" + response.responseText;
+                                    var alertContent = "An error has occurred.";
                                     $.alert({
                                         title: 'Alert!',
                                         content: alertContent,
@@ -265,7 +265,7 @@
                                 },
                                 error: function (response) {
                                     fn_hideSpinner();
-                                    var alertContent = "An error has occurred. \n" + response.responseText;
+                                    var alertContent = "An error has occurred.";
                                     $.alert({
                                         title: 'Alert!',
                                         content: alertContent,
@@ -302,7 +302,7 @@
                 var temp_address = currentRow.find(".address").val();
 
                 var temp_customerCodeMatch = temp_customerCode.match(/^([A-Z]{3})$/);//maches the form ABC
-                var temp_addressMatch = temp_address.match(/([A-Za-z ]+), ([A-Za-z]{2}$)/);//maches the form LAS VEGAS, NV
+                //var temp_addressMatch = temp_address.match(/([A-Za-z ]+), ([A-Za-z]{2}$)/);//maches the form LAS VEGAS, NV
 
                 if (!temp_customerCodeMatch) {
                     $.alert({
@@ -322,10 +322,10 @@
                     return modalValid;
                 }
 
-                if (!temp_addressMatch) {
+                if (temp_address < 1) {
                     $.alert({
                         title: 'Error!',
-                        content: 'Location must not be empty and must match the form City, ST.',
+                        content: 'Location must not be empty.',
                     });
                     modalValid = false;
                     return modalValid;

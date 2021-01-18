@@ -73,13 +73,9 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
-            //determine the screen size on load
-            //fn_checkScreenSize();
-
             //////////////////BEGIN THE COMMON NEW USER AND EDIT USER MODAL SECTION
 
             //////////////////END THE COMMON NEW USER AND EDIT USER MODAL SECTION
-
 
             //////////////////BEGIN THE NEW USER MODAL SECTION
 
@@ -181,7 +177,7 @@
                             fn_hideSpinner();//hide the spinner
 
                             //build an error string based on the error returned from the controller...
-                            var alertContent = "An error has occurred. \n" + response.responseText;
+                            var alertContent = "An error has occurred.";
 
                             //and display that error in an alert box
                             $.alert({
@@ -396,7 +392,6 @@
                     bool temp_active = item.active;
                     //END TEMPORARY LOOP VARIABLES
 
-                    @*<hr class="sectionSeparator">*@
                     <tr class="returnedRecords" id="" data-time-Entry-ID="" style="">
                         <td class="aspNetId_div" hidden>@temp_aspNetId</td>
                         <td class="block fullName_div">@temp_name</td>
