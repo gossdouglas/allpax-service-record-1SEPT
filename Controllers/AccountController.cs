@@ -140,11 +140,17 @@ namespace allpax_service_record.Controllers
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+
+                    //BEGIN COMMENT OUT EMAIL CONFIRMATION
+                    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    //END COMMENT OUT EMAIL CONFIRMATION
+
                     //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");+
 
-                    SmtpClient smtp = new SmtpClient();
+                    //BEGIN COMMENT OUT EMAIL CONFIRMATION
+                    //SmtpClient smtp = new SmtpClient();
+                    //END COMMENT OUT EMAIL CONFIRMATION
 
                     //BEGIN LOCAL SERVER HOSTED VERSION
                     //smtp.Host = "smtp.gmail.com";
@@ -165,32 +171,36 @@ namespace allpax_service_record.Controllers
                     //}
                     //END LOCAL SERVER HOSTED VERSION
 
+                    //BEGIN COMMENT OUT EMAIL CONFIRMATION
                     //BEGIN WEB SERVER HOSTED VERSION
-                    smtp.Host = "relay-hosting.secureserver.net";
-                    smtp.Port = 25;
-                    smtp.EnableSsl = false;
-                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    smtp.UseDefaultCredentials = false;
-                    smtp.Credentials = new NetworkCredential("ph14185669651", "Allpax_1");
+                    //smtp.Host = "relay-hosting.secureserver.net";
+                    //smtp.Port = 25;
+                    //smtp.EnableSsl = false;
+                    //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    //smtp.UseDefaultCredentials = false;
+                    //smtp.Credentials = new NetworkCredential("ph14185669651", "Allpax_1");
 
-                    string body = "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
+                    //string body = "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
 
-                    using (var message = new MailMessage("ph14185669651@secureserver.net", model.Email))
-                    {
-                        message.Subject = "Confirm your e-mail address.";
-                        message.Body = body;
-                        message.IsBodyHtml = true;
-                        smtp.Send(message);
-                    }
+                    //using (var message = new MailMessage("ph14185669651@secureserver.net", model.Email))
+                    //{
+                    //    message.Subject = "Confirm your e-mail address.";
+                    //    message.Body = body;
+                    //    message.IsBodyHtml = true;
+                    //    smtp.Send(message);
+                    //}
                     //END WEB SERVER HOSTED VERSION
+                    //BEGIN COMMENT OUT EMAIL CONFIRMATION
 
                     //need to remove the password field from tbl_Users because the password is handled by ASP.net Identity
 
                     // Uncomment to debug locally 
                     // TempData["ViewBagLink"] = callbackUrl;
 
-                    ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
-                                    + "before you can log in.";
+                    //BEGIN COMMENT OUT EMAIL CONFIRMATION
+                    //ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
+                    //                + "before you can log in.";
+                    //END COMMENT OUT EMAIL CONFIRMATION
 
                     //if user is selected as an administrator...
                     if (model.admin)
@@ -199,13 +209,20 @@ namespace allpax_service_record.Controllers
                         //System.Diagnostics.Debug.WriteLine(user.Id);
                     }
 
+                    db.Database.ExecuteSqlCommand(
+                    "UPDATE AspNetUsers " +
+                    "SET " +
+
+                    "name = {1}, shortName = {2}, admin = {3}, active = {4}, EmailConfirmed = {5} " +
+
+                    "WHERE UserName = {0}",
+                    model.UserName, model.name, model.ShortName, model.admin, model.active, "1");
+
                     //update the application table
-                    db.Database.ExecuteSqlCommand("Insert into tbl_Users (userName, password, name, shortName, admin, active) " +
-                        "Values({0}, {1}, {2}, {3}, {4}, {5})", model.UserName, "password", model.name, model.ShortName, model.admin, model.active);
+                    //db.Database.ExecuteSqlCommand("Insert into tbl_Users (userName, password, name, shortName, admin, active) " +
+                    //    "Values({0}, {1}, {2}, {3}, {4}, {5})", model.UserName, "password", model.name, model.ShortName, model.admin, model.active);
 
                     return RedirectToAction("GetUserAcctInfo", "Account");
-                    //return RedirectToAction("Index", "Home");
-                    //return View("Info");
                 }
                 AddErrors(result);
             }
@@ -227,12 +244,9 @@ namespace allpax_service_record.Controllers
             sqlconn.Open();
 
             string sqlquery1 =
-                "SELECT tbl_Users.name, tbl_Users.shortName, AspNetUsers.UserName, AspNetUsers.email, tbl_Users.admin, tbl_Users.active, AspNetUsers.Id " +
+                "SELECT AspNetUsers.name, AspNetUsers.shortName, AspNetUsers.UserName, AspNetUsers.email, AspNetUsers.admin, AspNetUsers.active, AspNetUsers.Id " +
 
-                "FROM [allpax_service_record].[dbo].[AspNetUsers] " +
-
-                "INNER JOIN " +
-                "tbl_Users ON tbl_Users.userName = AspNetUsers.UserName"; 
+                "FROM [allpax_service_record].[dbo].[AspNetUsers]";
 
             SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
             SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
@@ -264,11 +278,9 @@ namespace allpax_service_record.Controllers
         //UPDATE A USER'S ACCOUNT INFORMATION
         [Authorize(Roles = "Admin")]//added by Goss
         public ActionResult UpdateUserAcctInfo(vm_userAcctInfo userAcctInfoUpdate)
-        //public async Task<ActionResult> UpdateUserAcctInfo(vm_userAcctInfo userAcctInfoUpdate)
         {
             if (ModelState.IsValid)
             {
-
                 //load the roles held by this user into a list for later comparison
                 List<string> roles = UserManager.GetRoles(userAcctInfoUpdate.aspNetId).ToList();
                 bool currentlyAdmin = roles.Contains("Admin");//determine if this user is currently an admin
@@ -288,23 +300,11 @@ namespace allpax_service_record.Controllers
                     "UPDATE AspNetUsers " +
                     "SET " +
 
-                    "UserName = {1}," +
-                    "Email = {2} " +
+                    "Email = {1}, UserName = {2}, name = {3}, shortName = {4}, admin = {5}, active = {6} " +
 
                     "WHERE Id = {0}",
-                    userAcctInfoUpdate.aspNetId, userAcctInfoUpdate.UserName, userAcctInfoUpdate.Email);
-
-                db.Database.ExecuteSqlCommand(
-                    "UPDATE tbl_Users " +
-                    "SET " +
-
-                    "name = {1}, " +
-                    "ShortName = {2}, " +
-                    "admin = {3}, " +
-                    "active = {4} " +
-
-                    "WHERE userName = {0}",
-                    userAcctInfoUpdate.UserName, userAcctInfoUpdate.name, userAcctInfoUpdate.ShortName, userAcctInfoUpdate.admin, userAcctInfoUpdate.active);
+                    userAcctInfoUpdate.aspNetId, userAcctInfoUpdate.Email, userAcctInfoUpdate.UserName, userAcctInfoUpdate.name, userAcctInfoUpdate.ShortName,
+                    userAcctInfoUpdate.admin, userAcctInfoUpdate.active);
 
                 return Json(Url.Action("GetUserAcctInfo", "Account"));
                 //return Json("complete");  
@@ -324,8 +324,6 @@ namespace allpax_service_record.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(userAcctInfoUpdate);
-            //return View(userAcctInfoUpdate.ModelErrors);
-
             //return View("got it");
         }
 
