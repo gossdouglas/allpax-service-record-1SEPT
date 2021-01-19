@@ -149,11 +149,19 @@ namespace allpax_service_record.Controllers
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
-            string sqlquery1 = "SELECT tbl_Users.userName " +
+            //string sqlquery1 = "SELECT tbl_Users.userName " +
+            //"FROM " +
+            //"tbl_Users " +
+            //"INNER JOIN " +
+            //"tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = tbl_Users.userName " +
+            //"WHERE " +
+            //"tbl_dailyReportUsers.dailyReportID = @dailyReportID";
+
+            string sqlquery1 = "SELECT AspNetUsers.userName " +
             "FROM " +
-            "tbl_Users " +
+            "AspNetUsers " +
             "INNER JOIN " +
-            "tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = tbl_Users.userName " +
+            "tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = AspNetUsers.userName " +
             "WHERE " +
             "tbl_dailyReportUsers.dailyReportID = @dailyReportID";
 
@@ -175,11 +183,19 @@ namespace allpax_service_record.Controllers
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
-            string sqlquery1 = "SELECT tbl_Users.name " +
+            //string sqlquery1 = "SELECT tbl_Users.name " +
+            //"FROM " +
+            //"tbl_Users " +
+            //"INNER JOIN " +
+            //"tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = tbl_Users.userName " +
+            //"WHERE " +
+            //"tbl_dailyReportUsers.dailyReportID = @dailyReportID";
+
+            string sqlquery1 = "SELECT AspNetUsers.name " +
             "FROM " +
-            "tbl_Users " +
+            "AspNetUsers " +
             "INNER JOIN " +
-            "tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = tbl_Users.userName " +
+            "tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = AspNetUsers.userName " +
             "WHERE " +
             "tbl_dailyReportUsers.dailyReportID = @dailyReportID";
 
@@ -201,11 +217,19 @@ namespace allpax_service_record.Controllers
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
-            string sqlquery1 = "SELECT tbl_Users.shortName " +
+            //string sqlquery1 = "SELECT tbl_Users.shortName " +
+            //"FROM " +
+            //"tbl_Users " +
+            //"INNER JOIN " +
+            //"tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = tbl_Users.userName " +
+            //"WHERE " +
+            //"tbl_dailyReportUsers.dailyReportID = @dailyReportID";
+
+            string sqlquery1 = "SELECT AspNetUsers.shortName " +
             "FROM " +
-            "tbl_Users " +
+            "AspNetUsers " +
             "INNER JOIN " +
-            "tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = tbl_Users.userName " +
+            "tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = AspNetUsers.userName " +
             "WHERE " +
             "tbl_dailyReportUsers.dailyReportID = @dailyReportID";
 
@@ -232,8 +256,8 @@ namespace allpax_service_record.Controllers
             "FROM " +
             "tbl_dailyReportTimeEntry " +
             "WHERE " +
-            "tbl_dailyReportTimeEntry.dailyReportID = @dailyReportID "+
-            "AND "+
+            "tbl_dailyReportTimeEntry.dailyReportID = @dailyReportID " +
+            "AND " +
             "tbl_dailyReportTimeEntry.workDescriptionCategory = '1'";
 
             SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
