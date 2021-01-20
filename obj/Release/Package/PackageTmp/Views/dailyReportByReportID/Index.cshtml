@@ -1442,6 +1442,11 @@
                     filled = false;
                 }
 
+                if ($("#input_endTime").val() < $("#input_startTime").val()) {
+                    //console.log("The end time must not be earlier than the start time.")
+                    filled = false;
+                }
+
                 return filled;
             }
 
@@ -1456,13 +1461,68 @@
 
             //cloned to new daily report
             function fn_rowFilled(button) {
+                //var currentRow = button.parent().parent();
+                //var rowFilled = true;
+                //var narrDiv = currentRow.find(".narr_div").html();
+                //var teamDiv = currentRow.find(".select2-selection__rendered").html();
+                //var hoursDiv = currentRow.find(".hours_div").html();
+                //var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
+
+                //if (narrDiv.length < 10) {
+                //    //console.log("Narr div is empty.")
+                //    $.alert({
+                //        title: 'Error!',
+                //        content: 'Narrative must be greater than 10 characters.',
+                //    });
+                //    rowFilled = false;
+                //    return rowFilled;
+                //}
+
+                //if (teamDiv.length < 1) {
+                //    //console.log("dpdwn_div div is empty.")
+                //    $.alert({
+                //        title: 'Error!',
+                //        content: 'Must have at least one team member',
+                //    });
+                //    rowFilled = false;
+                //    return rowFilled;
+                //}
+
+                //if (endTime < startTime) {
+                //    $.alert({
+                //        title: 'Error!',
+                //        content: 'The end time must not be earlier than the start time.',
+                //    });
+                //    rowFilled = false;
+                //    return rowFilled;
+                //}
+
+                //if (hoursDiv == "" || !hoursDivMatch) {
+                //    //console.log("Hours div is empty or the hours do match the pattern.")
+                //    $.alert({
+                //        title: 'Error!',
+                //        content: 'Hours must be of form H.0, H.25, H.5, or H.75.',
+                //    });
+                //    rowFilled = false;
+                //    return rowFilled;
+                //}
+
+                //return rowFilled;
+
                 var currentRow = button.parent().parent();
                 var rowFilled = true;
                 var narrDiv = currentRow.find(".narr_div").html();
                 var teamDiv = currentRow.find(".select2-selection__rendered").html();
                 var hoursDiv = currentRow.find(".hours_div").html();
                 var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
-                //console.clear();
+                var delayHours = $(".addRecord, .editedRecords , .returnedRecords").find(".delaysTeam_hours_div, .wntyDelaysTeam_hours_div");
+
+                console.clear();
+
+                var startTime = $("#input_startTime").val();
+                var endTime = $("#input_endTime").val();
+                var totalDayHours = calcStartStopTimeDiff();
+                var totalDelayHours = 0.0;
 
                 if (narrDiv.length < 10) {
                     //console.log("Narr div is empty.")
@@ -1494,8 +1554,58 @@
                     return rowFilled;
                 }
 
+                delayHours.each(function (index) {
+                    //console.log("delaysHours: " + $(this).html());
+                    totalDelayHours = totalDelayHours + parseFloat($(this).html());
+                });
+
+                console.log("Total day hours: " + totalDayHours);
+                console.log("Total present delay hours: " + totalDelayHours);
+                console.log("Line delay hours: " + parseFloat(hoursDiv));
+
+                //newly added delay hours are disallowed if the entered value exceeds the day's total possible hours
+                if ((parseFloat(hoursDiv) + totalDelayHours) > totalDayHours) {
+
+                    $.alert({
+                        title: 'Error!',
+                        content: 'Total delay hours must not exceed the total day hours of ' + totalDayHours,
+                    });
+                    rowFilled = false;
+                    return rowFilled;
+                }
+
                 return rowFilled;
             }
+
+            function calcStartStopTimeDiff() {
+                // Get values.
+                var valuestart = $("#input_startTime").val();
+                var valuestop = $("#input_endTime").val();
+
+                // Create date format.          
+                var timeStart = new Date("01/01/2021 " + valuestart);
+                var timeEnd = new Date("01/01/2021 " + valuestop);
+
+                // Subtract.
+                var difference = timeEnd - timeStart;
+                var time = msToTime(difference);
+                //console.log("Decimal hours is: " + time);
+
+                return time;
+            }
+
+            //time is passed in as milliseconds
+            function msToTime(s) {
+                var ms = s % 1000;
+                s = (s - ms) / 1000;
+                var secs = s % 60;
+                s = (s - secs) / 60;
+                var mins = s / 60;
+
+                return mins.toFixed(1);
+            }
+
+            $("#input_startTime, #input_endTime").change(calcStartStopTimeDiff);
 
             //END VALIDATION BEFORE SAVING SECTION             
 
@@ -1700,7 +1810,7 @@
                     }
                 </div>
 
-                <div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>
+                <div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>0.0</div>
 
                 <div class="col-md-2 button_div workDescTeam_button_div" style="padding:0px;">
                     <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
@@ -1732,7 +1842,7 @@
 
             </div>
 
-            <div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>
+            <div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>0.0</div>
 
             <div class="col-md-2 button_div workDescTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
@@ -1759,7 +1869,7 @@
 
             </div>
 
-            <div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>
+            <div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>0.0</div>
 
             <div class="col-md-2 button_div workDescTeam_button_div" style="padding:0px;">
                 <button class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>

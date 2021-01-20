@@ -453,7 +453,7 @@
                 var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
                 console.log("total operations to complete on entry is: " + totalOpsToDo);
 
-                fn_showSpinner();
+                //fn_showSpinner();
 
                 var data = {
                     dailyReportID: 0,
@@ -796,6 +796,12 @@
                     filled = false;
                 }
 
+                if ($("#input_endTime").val() < $("#input_startTime").val()) {
+                    console.log("The end time must not be earlier than the start time.")
+
+                    filled = false;
+                }
+
                 return filled;
             }
 
@@ -816,16 +822,12 @@
                 var teamDiv = currentRow.find(".select2-selection__rendered").html();
                 var hoursDiv = currentRow.find(".hours_div").html();
                 var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
-                //var delayHours = $(".addRecord").find(".hours_div");
                 var delayHours = $(".addRecord").find(".delaysTeam_hours_div, .wntyDelaysTeam_hours_div");
 
                 console.clear();
                 
-                var startTime = $("#input_startTime").val();
-                var endTime = $("#input_endTime").val();
                 var totalDayHours = calcStartStopTimeDiff();
                 var totalDelayHours = 0.0;
-                //console.clear();
 
                 if (narrDiv.length < 10) {
                     //console.log("Narr div is empty.")
@@ -846,16 +848,7 @@
                     rowFilled = false;
                     return rowFilled;
                 }
-
-                if (endTime < startTime) {
-                    $.alert({
-                        title: 'Error!',
-                        content: 'The end time must not be earlier than the start time.',
-                    });
-                    rowFilled = false;
-                    return rowFilled;
-                }
-              
+             
                 if (hoursDiv == "" || !hoursDivMatch) {
                     //console.log("Hours div is empty or the hours do match the pattern.")
                     $.alert({
@@ -867,13 +860,12 @@
                 }
               
                 delayHours.each(function (index) {
-                    //console.log("delaysHours: " + $(this).html());
                     totalDelayHours = totalDelayHours + parseFloat($(this).html());
                 });
 
-                console.log("Total day hours: " + totalDayHours);
-                console.log("Total present delay hours: " + totalDelayHours);
-                console.log("Line delay hours: " + parseFloat(hoursDiv));
+                //console.log("Total day hours: " + totalDayHours);
+                //console.log("Total present delay hours: " + totalDelayHours);
+                //console.log("Line delay hours: " + parseFloat(hoursDiv));
 
                 //newly added delay hours are disallowed if the entered value exceeds the day's total possible hours
                 if ((parseFloat(hoursDiv) + totalDelayHours) > totalDayHours) {
