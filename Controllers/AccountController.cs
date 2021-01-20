@@ -130,7 +130,7 @@ namespace allpax_service_record.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, name = model.name, shortName = model.ShortName, admin = model.admin, active = model.active };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -209,18 +209,14 @@ namespace allpax_service_record.Controllers
                         //System.Diagnostics.Debug.WriteLine(user.Id);
                     }
 
-                    db.Database.ExecuteSqlCommand(
-                    "UPDATE AspNetUsers " +
-                    "SET " +
+                    //db.Database.ExecuteSqlCommand(
+                    //"UPDATE AspNetUsers " +
+                    //"SET " +
 
-                    "name = {1}, shortName = {2}, admin = {3}, active = {4}, EmailConfirmed = {5} " +
+                    //"name = {1}, shortName = {2}, admin = {3}, active = {4}, EmailConfirmed = {5} " +
 
-                    "WHERE UserName = {0}",
-                    model.UserName, model.name, model.ShortName, model.admin, model.active, "1");
-
-                    //update the application table
-                    //db.Database.ExecuteSqlCommand("Insert into tbl_Users (userName, password, name, shortName, admin, active) " +
-                    //    "Values({0}, {1}, {2}, {3}, {4}, {5})", model.UserName, "password", model.name, model.ShortName, model.admin, model.active);
+                    //"WHERE UserName = {0}",
+                    //model.UserName, model.name, model.ShortName, model.admin, model.active, "1");
 
                     return RedirectToAction("GetUserAcctInfo", "Account");
                 }
