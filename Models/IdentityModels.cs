@@ -16,6 +16,11 @@ namespace allpax_service_record.Models
             // Add custom user claims here
             return userIdentity;
         }
+        //add custom properties here   
+        public string name { get; set; }
+        public string shortName { get; set; }
+        public bool admin { get; set; }
+        public bool active { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

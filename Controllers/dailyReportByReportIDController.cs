@@ -727,19 +727,29 @@ namespace allpax_service_record.Controllers
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
-            //begin query for kits available but not installed by machine
-            string sqlquery1 = "SELECT tbl_Users.shortName " +
+            //string sqlquery1 = "SELECT tbl_Users.shortName " +
+
+            //"FROM " +
+            //"tbl_Users " +
+
+            //"INNER JOIN " +
+            //"tbl_dailyReportTimeEntryUsers ON " +
+            //"tbl_Users.userName = tbl_dailyReportTimeEntryUsers.userName " +
+
+            //"WHERE " +
+            //"tbl_dailyReportTimeEntryUsers.timeEntryID = @timeEntryID";
+
+            string sqlquery1 = "SELECT AspNetUsers.shortName " +
 
             "FROM " +
-            "tbl_Users " +
+            "AspNetUsers " +
 
             "INNER JOIN " +
             "tbl_dailyReportTimeEntryUsers ON " +
-            "tbl_Users.userName = tbl_dailyReportTimeEntryUsers.userName " +
+            "AspNetUsers.userName = tbl_dailyReportTimeEntryUsers.userName " +
 
             "WHERE " +
             "tbl_dailyReportTimeEntryUsers.timeEntryID = @timeEntryID";
-            //end query for kits available but not installed by machine
 
             SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
             sqlcomm1.Parameters.Add(new SqlParameter("timeEntryID", timeEntryID));
