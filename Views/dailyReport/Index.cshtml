@@ -292,6 +292,18 @@
             //cloned to new daily report
             $(".Btn_edit").click(function () {
                 var currentRow = $(this).parent().parent();
+                var currentRowClass = currentRow.attr("class");
+                var currentRowClassSwap;
+
+                console.log(currentRowClass);
+
+                if (currentRowClass.includes("addRecord")) {
+                    currentRowClassSwap = currentRowClass.replace(/addRecord/, "addRecordInEdit");//chop off the domain
+                    $(currentRow).prop("class", currentRowClassSwap);
+                }
+
+                console.log(".Btn_edit:" + currentRow.attr("class"));
+                console.log(".Btn_edit" + currentRowClassSwap);
 
                 $(this).hide();
                 $(currentRow).find(".Btn_save").removeAttr("hidden");
@@ -312,9 +324,29 @@
             //cloned to new daily report
             $(".Btn_save").click(function () {
 
+                //var currentRow = $(this).parent().parent();
+                //var currentRowClass = currentRow.attr("class");
+                //var currentRowClassSwap;
+
+                //if (currentRowClass.includes("addRecordInEdit")) {
+                //    currentRowClassSwap = currentRowClass.replace(/addRecord inEdit/, "addRecord");//chop off the domain
+                //}
+
+                //console.log(currentRowClass);
+                //console.log(currentRowClassSwap);
+
                 if (fn_rowFilled($(this))) {
 
                     var currentRow = $(this).parent().parent();
+
+                    if (currentRowClass.includes("addRecordInEdit")) {
+                        currentRowClassSwap = currentRowClass.replace(/addRecord inEdit/, "addRecord");//chop off the domain
+                        $(currentRow).prop("class", currentRowClassSwap);
+                    }
+
+                    console.log(".Btn_save:" + currentRow.attr("class"));
+                    console.log(".Btn_save" + currentRowClassSwap);
+
                     var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
                     currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html
 
