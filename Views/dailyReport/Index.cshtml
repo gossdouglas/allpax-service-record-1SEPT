@@ -453,7 +453,7 @@
                 var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
                 console.log("total operations to complete on entry is: " + totalOpsToDo);
 
-                //fn_showSpinner();
+                fn_showSpinner();
 
                 var data = {
                     dailyReportID: 0,
@@ -472,23 +472,23 @@
                     wntyDelaysArr: wntyDelaysArrJson_Add
                 };
 
-                //$.ajax({
-                //    url: '/dailyReport/AddDailyReport',
-                //    method: 'post',
-                //    contentType: 'application/json',
-                //    dataType: 'json',
-                //    data: JSON.stringify(data),
-                //    traditional: true,
-                //    success: function (response) {
-                //        totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                //        console.log("add record success. total operations to complete is now: " + totalOpsToDo);
-                //        serverResponseSuccess = response;
-                //        console.log("response is: " + response)
-                //        if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
-                //            window.location.href = serverResponseSuccess;
-                //        }
-                //    }
-                //});
+                $.ajax({
+                    url: '/dailyReport/AddDailyReport',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                        console.log("add record success. total operations to complete is now: " + totalOpsToDo);
+                        serverResponseSuccess = response;
+                        console.log("response is: " + response)
+                        if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                            window.location.href = serverResponseSuccess;
+                        }
+                    }
+                });
             }
 
             //cloned to new daily report
