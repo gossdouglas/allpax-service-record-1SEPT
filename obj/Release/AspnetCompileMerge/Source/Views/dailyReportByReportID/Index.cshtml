@@ -1461,54 +1461,6 @@
 
             //cloned to new daily report
             function fn_rowFilled(button) {
-                //var currentRow = button.parent().parent();
-                //var rowFilled = true;
-                //var narrDiv = currentRow.find(".narr_div").html();
-                //var teamDiv = currentRow.find(".select2-selection__rendered").html();
-                //var hoursDiv = currentRow.find(".hours_div").html();
-                //var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
-
-                //if (narrDiv.length < 10) {
-                //    //console.log("Narr div is empty.")
-                //    $.alert({
-                //        title: 'Error!',
-                //        content: 'Narrative must be greater than 10 characters.',
-                //    });
-                //    rowFilled = false;
-                //    return rowFilled;
-                //}
-
-                //if (teamDiv.length < 1) {
-                //    //console.log("dpdwn_div div is empty.")
-                //    $.alert({
-                //        title: 'Error!',
-                //        content: 'Must have at least one team member',
-                //    });
-                //    rowFilled = false;
-                //    return rowFilled;
-                //}
-
-                //if (endTime < startTime) {
-                //    $.alert({
-                //        title: 'Error!',
-                //        content: 'The end time must not be earlier than the start time.',
-                //    });
-                //    rowFilled = false;
-                //    return rowFilled;
-                //}
-
-                //if (hoursDiv == "" || !hoursDivMatch) {
-                //    //console.log("Hours div is empty or the hours do match the pattern.")
-                //    $.alert({
-                //        title: 'Error!',
-                //        content: 'Hours must be of form H.0, H.25, H.5, or H.75.',
-                //    });
-                //    rowFilled = false;
-                //    return rowFilled;
-                //}
-
-                //return rowFilled;
-
                 var currentRow = button.parent().parent();
                 var rowFilled = true;
                 var narrDiv = currentRow.find(".narr_div").html();
@@ -1519,8 +1471,6 @@
 
                 console.clear();
 
-                var startTime = $("#input_startTime").val();
-                var endTime = $("#input_endTime").val();
                 var totalDayHours = calcStartStopTimeDiff();
                 var totalDelayHours = 0.0;
 
