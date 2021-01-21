@@ -331,7 +331,8 @@
 
                 var temp_resourceTypeMatch = temp_resourceType.match(/(.*[A-Z]){2,}/);//maches the form two or more letters
                 var temp_descriptionMatch = temp_description.match(/(.*[A-Z]){3,}/);//maches the form three or more letters
-                var temp_rateMatch = temp_rate.match(/^(\d{1,3})\.(00)$/);//maches the form 125.00
+                //var temp_rateMatch = temp_rate.match(/^(\d{1,3})\.(00)$/);//maches the form 125.00
+                var temp_rateMatch = temp_rate.match(/^(\d{1,4})\.(00)$/);//maches the form 9999.00
 
                 if (!temp_resourceTypeMatch) {
                     $.alert({
@@ -354,7 +355,7 @@
                 if (!temp_rateMatch) {
                     $.alert({
                         title: 'Error!',
-                        content: 'Charge rate must not be empty and be of the form ###.##.',
+                        content: 'Charge rate must not be empty and be of the form #.## - ####.##.',
                     });
                     modalValid = false;
                     return modalValid;

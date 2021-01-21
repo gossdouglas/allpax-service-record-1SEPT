@@ -143,7 +143,7 @@
 
             var customerCode_OnLoad = '';
 
-            //fn_enableSelect2();
+            fn_enableSelect2();
 
             //////////////////BEGIN THE COMMON NEW JOB AND EDIT JOB MODAL SECTION
 
@@ -296,23 +296,22 @@
                 var modalID = modal.parents().eq(2).attr("id");
                 var currCustomerCode = $(this).val();
 
-                var currCustomerName2 = modal.find(".customer-code");
                 var currCustomerName = modal.find(".customer-name");
                 var currCustomerLocation = modal.find(".customer-location");
 
                 console.log(modalID);
                 console.log(customerCode_OnLoad);
-                //fn_disableSelect2();//disable select2 so the selected option can be reached
+                fn_disableSelect2();//disable select2 so the selected option can be reached
 
                 //if the instruction option is selected, clear out the customer name and location.  only applies to the new job modal.
                 if (currCustomerCode == '-1') {
                     $("#customer-name-new").val('');
                     $("#customer-location-new").val('');
+                    fn_enableSelect2();
                 }
 
                 //get all customer data through ajax
                 else {
-
                     if (modalID == "jobEditForm") {
                         $.confirm({
                             title: 'Change customer?',
@@ -330,12 +329,9 @@
 
                                                 //when the customer selected is found in the returned ajax data...
                                                 if (item.customerCode == currCustomerCode) {
-                                                    //console.log("Selected customerCode: " + item.customerCode)
-                                                    //console.log("Selected customerName: " + item.customerName)
-                                                    //console.log("Selected address: " + item.address)
-
                                                     currCustomerName.val(item.customerName);//fill the modal with the proper data from the ajax call
                                                     currCustomerLocation.val(item.address);//fill the modal with the proper data from the ajax call
+                                                    fn_enableSelect2();
                                                 }
                                             });
                                         }
@@ -353,49 +349,18 @@
 
                                                 //when the customer selected is found in the returned ajax data...
                                                 if (item.customerCode == customerCode_OnLoad) {
-                                                    //console.log("Selected customerCode: " + item.customerCode)
-                                                    //console.log("Selected customerName: " + item.customerName)
-                                                    //console.log("Selected address: " + item.address)
-
                                                     currCustomerName.val(item.customerName);//fill the modal with the proper data from the ajax call
                                                     currCustomerLocation.val(item.address);//fill the modal with the proper data from the ajax call
                                                     modal.find(".customer-code option[value=" + customerCode_OnLoad + "]").prop('selected', true);//fill the modal with the proper data from the ajax call
+                                                    fn_enableSelect2();
                                                 }
                                             });
                                         }
                                     });
-
-                                    //console.log("cancel")
-                                    //console.log(modal.find(".customer-code").val())
-                                    //modal.find(".customer-code").val("RAR");//fill the modal with the proper data from the ajax call
-                                    //modal.find(".customer-code option[value=" + customerCode_OnLoad + "]").prop('selected', true);//fill the modal with the proper data from the ajax call
-                                    //currCustomerName.val(item.customerName);//fill the modal with the proper data from the ajax call
-                                    //currCustomerLocation.val(item.address);//fill the modal with the proper data from the ajax call
                                 }
                             }
                         });
                     }
-
-                    //$.ajax({
-                    //    url: '/DataService.asmx/GetAllCustomers',
-                    //    method: 'post',
-                    //    dataType: 'json',
-                    //    success: function (data) {
-
-                    //        $(data).each(function (index, item) {
-
-                    //            //when the customer selected is found in the returned ajax data...
-                    //            if (item.customerCode == currCustomerCode) {
-                    //                //console.log("Selected customerCode: " + item.customerCode)
-                    //                //console.log("Selected customerName: " + item.customerName)
-                    //                //console.log("Selected address: " + item.address)
-
-                    //                currCustomerName.val(item.customerName);//fill the modal with the proper data from the ajax call
-                    //                currCustomerLocation.val(item.address);//fill the modal with the proper data from the ajax call
-                    //            }
-                    //        });
-                    //    }
-                    //});
                 }
             });
             //end customer code dropdown change
@@ -611,7 +576,7 @@
 
                 jobCrspdtID_RtndRecs = [];
 
-                //fn_disableSelect2();//disable select2 so the selected option can be reached
+                fn_disableSelect2();//disable select2 so the selected option can be reached
 
                 var modal = $(this)
                 var button = $(event.relatedTarget) // Button that triggered the modal
@@ -667,7 +632,6 @@
                     if ($(this).val() == temp_customerCode) {
                         $(this).prop('selected', true);
                     }
-
                 });
 
                 //begin get customer info by job id
@@ -819,7 +783,7 @@
                 });
                 //end get job correspondents by job id
 
-                //fn_enableSelect2();//re-enable select2 after affecting work to allow the selected option to be reached
+                fn_enableSelect2();//re-enable select2 after affecting work to allow the selected option to be reached
             })
 
             //Begin when a resource rate on the edit page is checked or unchecked...
