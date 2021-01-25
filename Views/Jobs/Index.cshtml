@@ -35,6 +35,40 @@
             overflow: auto;
         }
 
+        th.th_jobID, th.th_action, th.th_active {
+            width: 5%;
+        }
+
+        th.th_action {
+            width: 10%;
+        }
+
+        th.th_customerCode {
+            width: 15%;
+        }
+
+        /*/*th.th_jobID, th.th_customerCode, th.th_action, th.th_active {
+            width: 5%;
+        }*/
+
+        th.th_customerContact, th.th_workDescription {
+            width: 30%;
+        }
+
+        /*#jobData_container {
+            position: relative;*/
+            /*position: center;*/
+            /*width: 90%;
+        }*/
+
+        #jobData_container {
+            position: relative;
+            width: 80%;
+            margin: 0 auto;
+            height: calc(100vh - 150px);
+            overflow: auto;
+        }
+
         .subJobTypes_div {
             height: 200px;
             /*width: 100%;*/
@@ -89,6 +123,14 @@
 
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+
+            #jobData_container {
+                /*position: relative;*/
+                width: 100%;
+                /*margin: 0 auto;*/
+                /*height: calc(100vh - 150px);*/
+                /*overflow: auto;*/
+            }
             /* Force table to not be like tables anymore */
             table, thead, tbody, th, td, tr {
                 display: block;
@@ -1336,27 +1378,97 @@
 </div>
 <hr class="sectionSeparator">
 @*BEGIN RETURNED RECORDS*@
-<div class="container-md" id="customerData_container" style="overflow:auto; height: calc(100vh - 150px)">
+    @*<div class="container-md" id="jobData_container" style="overflow:auto; height: calc(100vh - 150px)">
     <div class="table-responsive">
-        <table id="dt_customerData" class="table table-striped table-bordered" style="width:100%">
+        <table id="dt_jobData" class="table table-striped table-bordered" style="width:100%">
             <thead>
                 <tr>
-                    <th class="">
+                    <th class="th_jobID">
                         <span>Job ID</span>
                     </th>
-                    <th class="">
+                    <th class="th_customerCode">
                         Customer Code
                     </th>
-                    <th class="">
+                    <th class="th_customerContact">
                         Customer Contact
                     </th>
-                    <th class="">
+                    <th class="th_workDescription">
                         Work Description
                     </th>
-                    <th class="">
+                    <th class="th_active">
                         Active
                     </th>
-                    <th class="">
+                    <th class="th_action">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>*@
+                @*BEGIN RETURNED RECORDS*@
+                @*@foreach (var job in Model.jobs)
+                {
+                    //BEGIN TEMPORARY LOOP VARIABLES
+                    string temp_jobID = job.jobID;
+                    string temp_customerCode = job.customerCode;
+                    string temp_customerContact = job.customerContact;
+                    string temp_jobDescription = job.description;
+                    bool temp_active = job.active;
+                    int temp_id = job.id;
+                    //END TEMPORARY LOOP VARIABLES
+
+                    <tr class="returnedRecords" id="" style="">
+                        <td class="jobID_div">@temp_jobID</td>
+                        <td class="customerCode_div">@temp_customerCode</td>
+                        <td class="customerContact_div">@temp_customerContact</td>
+                        <td class="jobDescription_div">@temp_jobDescription</td>
+                        <td class="active_div">
+                            @if (temp_active)
+                            {
+                                <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
+                            }
+                        </td>
+                        <td class="id_div" hidden>@temp_id</td>
+                        <td class="button_div" style="padding:0px;">
+                            <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#jobEditForm" data-job-id="@temp_jobID" data-customer-code="@temp_customerCode"
+                                    data-customer-contact="@temp_customerContact" data-job-description="@temp_jobDescription" data-active="@temp_active" data-id="@temp_id">
+                                <i class="far fa-edit fa-2x" style="color:black;">
+                                </i>
+                            </button>
+                            <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                        </td>
+                    </tr>
+                }*@
+                @*END RETURNED RECORDS*@
+            @*</tbody>
+        </table>
+    </div>
+</div>*@
+
+<div  class="" id="jobData_container">
+    <div class="table-responsive">
+        <table id="dt_jobData" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="th_jobID">
+                        <span>Job ID</span>
+                    </th>
+                    <th class="th_customerCode">
+                        Customer Code
+                    </th>
+                    <th class="th_customerContact">
+                        Customer Contact
+                    </th>
+                    <th class="th_workDescription">
+                        Work Description
+                    </th>
+                    <th class="th_active">
+                        Active
+                    </th>
+                    <th class="th_action">
                         Action
                     </th>
                 </tr>
@@ -1406,6 +1518,7 @@
         </table>
     </div>
 </div>
+
 @*END RETURNED RECORDS*@
 @*BEGIN EDIT CUSTOMER MODAL TEMPLATE*@
 <div class="modal fade" id="jobEditForm" tabindex="-1" role="dialog" aria-labelledby="jobEditForm" aria-hidden="true">
