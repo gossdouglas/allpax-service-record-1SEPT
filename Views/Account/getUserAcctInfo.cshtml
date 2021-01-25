@@ -30,9 +30,33 @@
             white-space: nowrap;
         }
 
-        /*BEGIN CHANGE LAYOUT FOR MOBILE*/
+        th.th_fullName, th.th_shortName, th.th_userName {
+            width: 10%;
+        }
+
+        th.th_email {
+            width: 15%;
+        }
+
+        th.th_admin, th.th_active, th.th_action {
+            width: 5%;
+        }
+
+        #userData_container {
+            position: relative;
+            width: 80%;
+            margin: 0 auto;
+            height: calc(100vh - 150px);
+            overflow: auto;
+        }
+
+        /*/*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px),
         (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+            #userData_container {
+                width: 100%;
+            }
 
 	        /* Force table to not be like tables anymore */
 	        table, thead, tbody, th, td, tr {
@@ -363,30 +387,31 @@
     </span>
 </div>
 <hr class="sectionSeparator">
-<div class="container-md" id="userData_container" style="overflow:auto; height: calc(100vh - 150px)">
+@*<div class="container-md" id="userData_container" style="overflow:auto; height: calc(100vh - 150px)">*@
+<div class="" id="userData_container">
     <div class="table-responsive">
         <table id="dt_dailyRptAll" class="table table-striped table-bordered" style="width:100%">
             <thead>
                 <tr>
-                    <th class="">
+                    <th class="th_fullName">
                         <span>Full Name</span>
                     </th>
-                    <th class="">
+                    <th class="th_shortName">
                         Short Name
                     </th>
-                    <th class="">
+                    <th class="th_userName">
                         User Name
                     </th>
-                    <th class="">
+                    <th class="th_email">
                         E-mail
                     </th>
-                    <th class="">
+                    <th class="th_admin">
                         Admin
                     </th>
-                    <th class="">
+                    <th class="th_active">
                         Active
                     </th>
-                    <th class="">
+                    <th class="th_action">
                         Action
                     </th>
                 </tr>
