@@ -58,7 +58,7 @@
             overflow-x: auto;
         }
 
-        th.th_date, th.th_jobId, th.th_startTime, th.th_endTime,
+        /*th.th_date, th.th_jobId, th.th_startTime, th.th_endTime,
         th.th_totalHours, th.th_delayHours {
             width: 7%;
         }
@@ -77,10 +77,11 @@
             margin: 0 auto;
             height: calc(100vh - 150px);
             overflow: auto;
-        }
+        }*/
 
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+
             /* Force table to not be like tables anymore */
             table, thead, tbody, th, td, tr {
                 display: block;
@@ -168,7 +169,7 @@
 
 <div class="container-fluid">
 
-    @*<h3 style="text-align: center">ACTIVE CUSTOMER SERVICE DAILY LOGS</h3>
+    <h3 style="text-align: center">ACTIVE CUSTOMER SERVICE DAILY LOGS</h3>
         <div class="row">
             <div class="md-col-1" style="padding: 5px ">
                 <strong>Start Date:</strong>
@@ -286,10 +287,10 @@
                 </tbody>
             </table>
         </div>
-        </div>*@
+        </div>
 
     @*<div class="" id="dailyRptViewActive_container">*@
-        <h3 style="text-align: center">ACTIVE CUSTOMER SERVICE DAILY LOGS</h3>
+        @*<h3 style="text-align: center">ACTIVE CUSTOMER SERVICE DAILY LOGS</h3>
         <div class="row">
             <div class="md-col-1" style="padding: 5px ">
                 <strong>Start Date:</strong>
@@ -405,7 +406,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div>*@
                 </div>
 
             @*</div>*@
@@ -555,17 +556,17 @@
                     auto_filter: {
                         delay: 250
                     },
-                    //col_widths: [
-                    //    "120px",//date
-                    //    "120px",//job
-                    //    "200px",//subJob
-                    //    "250px",//team
-                    //    "170px",//start time
-                    //    "170px",//end time
-                    //    "170px",//total hours
-                    //    "170px",//delay hours
-                    //    "170px",//warranty delay hours
-                    //    "auto"],//action
+                    col_widths: [
+                        "120px",//date
+                        "120px",//job
+                        "200px",//subJob
+                        "250px",//team
+                        "170px",//start time
+                        "170px",//end time
+                        "170px",//total hours
+                        "170px",//delay hours
+                        "170px",//warranty delay hours
+                        "auto"],//action
                     extensions: [{
                         name: 'filtersVisibility',//bring in the extension
                         visible_at_start: true,//true on page load in order to determine the proper size of the table
