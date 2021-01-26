@@ -2413,6 +2413,7 @@
     <None Include="Properties\PublishProfiles\GoDaddy.pubxml" />
     <Content Include="Scripts\chosen_v1.8.7\composer.json" />
     <Content Include="Scripts\chosen_v1.8.7\LICENSE.md" />
+    <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
