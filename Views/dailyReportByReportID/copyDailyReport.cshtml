@@ -1045,7 +1045,7 @@
 
                     $.alert({
                         title: 'Error!',
-                        content: 'Total delay hours must not exceed the total day hours of ' + totalDayHours,
+                        content: 'Total delay hours must not exceed the total day hours minus lunch of ' + totalDayHours,
                     });
                     rowFilled = false;
                     return rowFilled;
@@ -1058,6 +1058,7 @@
                 // Get values.
                 var valuestart = $("#input_startTime").val();
                 var valuestop = $("#input_endTime").val();
+                var valuelunch = $("#input_lunch").val();
 
                 // Create date format.          
                 var timeStart = new Date("01/01/2021 " + valuestart);
@@ -1065,7 +1066,7 @@
 
                 // Subtract.
                 var difference = timeEnd - timeStart;
-                var time = msToTime(difference);
+                var time = msToTime(difference) - valuelunch;
                 //console.log("Decimal hours is: " + time);
 
                 return time;

@@ -291,7 +291,23 @@
 
             //cloned to new daily report
             $(".Btn_edit").click(function () {
+
+                //HOURS INPUT UPDATE
                 var currentRow = $(this).parent().parent();
+                var currentRowClass = currentRow.attr("class");
+                var currentRowClassSwap;
+
+                console.log(currentRowClass);
+
+                if (currentRowClass.includes("addRecord")) {
+                    currentRowClassSwap = currentRowClass.replace(/addRecord/, "addRecordInEdit");//
+                    $(currentRow).prop("class", currentRowClassSwap);
+                }
+
+                console.log(".Btn_edit:" + currentRow.attr("class"));
+                console.log(".Btn_edit" + currentRowClassSwap);
+
+                //HOURS INPUT UPDATE
 
                 $(this).hide();
                 $(currentRow).find(".Btn_save").removeAttr("hidden");
@@ -312,9 +328,24 @@
             //cloned to new daily report
             $(".Btn_save").click(function () {
 
+                //HOURS INPUT UPDATE
+                var currentRow = $(this).parent().parent();
+                var currentRowClass = currentRow.attr("class");
+                var currentRowClassSwap;
+                //HOURS INPUT UPDATE
+
                 if (fn_rowFilled($(this))) {
 
-                    var currentRow = $(this).parent().parent();
+                    //var currentRow = $(this).parent().parent();
+
+                    //HOURS INPUT UPDATE
+                    if (currentRowClass.includes("addRecordInEdit")) {
+                        //currentRowClassSwap = currentRowClass.replace(/addRecord inEdit/, "addRecord");//
+                        currentRowClassSwap = currentRowClass.replace(/addRecordInEdit/, "addRecord");//
+                        $(currentRow).prop("class", currentRowClassSwap);
+                    }
+                    //HOURS INPUT UPDATE
+
                     var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
                     currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html
 
@@ -335,13 +366,6 @@
 
                     fn_produceParsedShortNames($(this));
                 }
-                //else {
-
-                //    $.alert({
-                //        title: 'Error!',
-                //        content: 'One or more row entries incorrect.  Narrative section must 10 or greater, at least one team member must be added and hours must be of form H.0, H.25, H.5, or H.75.',
-                //    });
-                //}
             });
 
             //differs between new daily report and an existing one
@@ -856,7 +880,8 @@
                 var hoursDiv = currentRow.find(".hours_div input").val();
                 //HOURS INPUT UPDATE
 
-                var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
+                //var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
+                var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(00|25|50|75)$/g);//should match 0-23.[00|25||50|75]
 
                 //HOURS INPUT UPDATE
                 var delayHours = $(".addRecord").find(".delaysTeam_hours_div input, .wntyDelaysTeam_hours_div input");
@@ -892,7 +917,7 @@
                     //console.log("Hours div is empty or the hours do match the pattern.")
                     $.alert({
                         title: 'Error!',
-                        content: 'Hours must be of form H.0, H.25, H.5, or H.75.',
+                        content: 'Hours must be of form H.00, H.25, H.50, or H.75.',
                     });
                     rowFilled = false;
                     return rowFilled;
@@ -914,7 +939,7 @@
 
                     $.alert({
                         title: 'Error!',
-                        content: 'Total delay hours must not exceed the total day hours of ' + totalDayHours,
+                        content: 'Total delay hours must not exceed the total day hours minus lunch of ' + totalDayHours,
                     });
                     rowFilled = false;
                     return rowFilled;
@@ -927,6 +952,7 @@
                 // Get values.
                 var valuestart = $("#input_startTime").val();
                 var valuestop = $("#input_endTime").val();
+                var valuelunch = $("#input_lunch").val();
 
                 // Create date format.          
                 var timeStart = new Date("01/01/2021 " + valuestart);
@@ -934,7 +960,7 @@
 
                 // Subtract.
                 var difference = timeEnd - timeStart;
-                var time = msToTime(difference);
+                var time = msToTime(difference) - valuelunch;
                 //console.log("Decimal hours is: " + time);
 
                 return time;
@@ -1128,7 +1154,7 @@
             @*//HOURS INPUT UPDATE*@
             @*<div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>*@
             <div class="col-md-1 hours_div workDescTeam_hours_div" id="" style="" hidden>
-                <input type="text" value="0.0" id="" name="" style="width:100%">
+                <input type="text" value="0.00" id="" name="" style="width:100%">
                 @*0.0*@
             </div>
             @*//HOURS INPUT UPDATE*@
@@ -1161,7 +1187,7 @@
             @*//HOURS INPUT UPDATE*@
             @*<div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>*@
             <div class="col-md-1 hours_div workDescTeam_hours_div" id="" style="" hidden>
-                <input type="text" value="0.0" id="" name="" style="width:100%">
+                <input type="text" value="0.00" id="" name="" style="width:100%">
                 @*0.0*@
             </div>
             @*//HOURS INPUT UPDATE*@
