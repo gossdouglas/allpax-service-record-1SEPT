@@ -255,7 +255,12 @@
                         $(".delaysLine_template_row_hidden").removeAttr("hidden");
                         currentRow.prop("id", "delaysLine_" + indexDelaysEntries_Add).appendTo("#delaysLine_template");
                         $("#delaysLine_" + indexDelaysEntries_Add).prop("class", " row addRecord delaysLine");
-                        $("#delaysLine_" + indexDelaysEntries_Add).find(".delaysTeam_hours_div").attr("contenteditable", "false");
+
+                        //HOURS INPUT UPDATE
+                        //$("#delaysLine_" + indexDelaysEntries_Add).find(".delaysTeam_hours_div").attr("contenteditable", "false");
+                        $("#delaysLine_" + indexDelaysEntries_Add).find(".delaysTeam_hours_div input").attr("disabled", "disabled");
+                        //HOURS INPUT UPDATE
+
                         $("#delaysLine_" + indexDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
                         $(".delaysLine_template_row_hidden").clone(true).prop("class", "row entryRow delaysLine_template_row_active").appendTo("#delaysLine_template");
@@ -267,7 +272,12 @@
                         $(".wntyDelaysLine_template_row_hidden").removeAttr("hidden");
                         currentRow.prop("id", "wntyDelaysLine_" + indexWntyDelaysEntries_Add).appendTo("#wntyDelaysLine_template");
                         $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).prop("class", " row addRecord wntyDelaysLine");
-                        $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
+
+                        //HOURS INPUT UPDATE
+                        //$("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".wntyDelaysTeam_hours_div").attr("contenteditable", "false");
+                        $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".wntyDelaysTeam_hours_div input").attr("disabled", "disabled");
+                        //HOURS INPUT UPDATE
+
                         $("#wntyDelaysLine_" + indexWntyDelaysEntries_Add).find(".Btn_addedRecord").removeAttr("hidden");
 
                         $(".wntyDelaysLine_template_row_hidden").clone(true).prop("class", "row entryRow wntyDelaysLine_template_row_active").appendTo("#wntyDelaysLine_template");
@@ -281,14 +291,35 @@
 
             //cloned to new daily report
             $(".Btn_edit").click(function () {
+
+                //HOURS INPUT UPDATE
                 var currentRow = $(this).parent().parent();
+                var currentRowClass = currentRow.attr("class");
+                var currentRowClassSwap;
+
+                console.log(currentRowClass);
+
+                if (currentRowClass.includes("addRecord")) {
+                    currentRowClassSwap = currentRowClass.replace(/addRecord/, "addRecordInEdit");//
+                    $(currentRow).prop("class", currentRowClassSwap);
+                }
+
+                console.log(".Btn_edit:" + currentRow.attr("class"));
+                console.log(".Btn_edit" + currentRowClassSwap);
+
+                //HOURS INPUT UPDATE
 
                 $(this).hide();
                 $(currentRow).find(".Btn_save").removeAttr("hidden");
                 $(currentRow).find(".Btn_save").show();
 
                 $(currentRow).find(".narr_div").attr("contenteditable", "true");
-                $(currentRow).find(".hours_div ").attr("contenteditable", "true");
+
+                //HOURS INPUT UPDATE
+                //$(currentRow).find(".hours_div").attr("contenteditable", "true");
+                $(currentRow).find(".hours_div input").removeAttr("disabled");
+                //HOURS INPUT UPDATE
+
                 $(currentRow).find(".dpdwn_parsed_div").hide();
                 $(currentRow).find(".dpdwn_div").show();
                 $(currentRow).css("color", "red");
@@ -297,9 +328,24 @@
             //cloned to new daily report
             $(".Btn_save").click(function () {
 
+                //HOURS INPUT UPDATE
+                var currentRow = $(this).parent().parent();
+                var currentRowClass = currentRow.attr("class");
+                var currentRowClassSwap;
+                //HOURS INPUT UPDATE
+
                 if (fn_rowFilled($(this))) {
 
-                    var currentRow = $(this).parent().parent();
+                    //var currentRow = $(this).parent().parent();
+
+                    //HOURS INPUT UPDATE
+                    if (currentRowClass.includes("addRecordInEdit")) {
+                        //currentRowClassSwap = currentRowClass.replace(/addRecord inEdit/, "addRecord");//
+                        currentRowClassSwap = currentRowClass.replace(/addRecordInEdit/, "addRecord");//
+                        $(currentRow).prop("class", currentRowClassSwap);
+                    }
+                    //HOURS INPUT UPDATE
+
                     var cleaned_narrDiv = fn_cleanupDataEntryFields(currentRow.find(".narr_div").html());
                     currentRow.find(".narr_div").html(cleaned_narrDiv);//set the content of .narr_div to cleaned html
 
@@ -308,20 +354,18 @@
                     $(currentRow).find(".Btn_edit").show();
 
                     $(currentRow).find(".narr_div").attr("contenteditable", "false");
-                    $(currentRow).find(".hours_div ").attr("contenteditable", "false");
+
+                    //HOURS INPUT UPDATE
+                    //$(currentRow).find(".hours_div ").attr("contenteditable", "false");
+                    $(currentRow).find(".hours_div input").attr("disabled", "disabled");
+                    //HOURS INPUT UPDATE
+
                     $(currentRow).find(".dpdwn_parsed_div").show();
                     $(currentRow).find(".dpdwn_div").hide();
                     $(currentRow).css("color", "black");
 
                     fn_produceParsedShortNames($(this));
                 }
-                //else {
-
-                //    $.alert({
-                //        title: 'Error!',
-                //        content: 'One or more row entries incorrect.  Narrative section must 10 or greater, at least one team member must be added and hours must be of form H.0, H.25, H.5, or H.75.',
-                //    });
-                //}
             });
 
             //differs between new daily report and an existing one
@@ -453,7 +497,7 @@
                 var serverResponseSuccess = "";//page to which the browser will redirect after all AJAX calls are successful
                 console.log("total operations to complete on entry is: " + totalOpsToDo);
 
-                //fn_showSpinner();
+                fn_showSpinner();
 
                 var data = {
                     dailyReportID: 0,
@@ -472,23 +516,23 @@
                     wntyDelaysArr: wntyDelaysArrJson_Add
                 };
 
-                //$.ajax({
-                //    url: '/dailyReport/AddDailyReport',
-                //    method: 'post',
-                //    contentType: 'application/json',
-                //    dataType: 'json',
-                //    data: JSON.stringify(data),
-                //    traditional: true,
-                //    success: function (response) {
-                //        totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                //        console.log("add record success. total operations to complete is now: " + totalOpsToDo);
-                //        serverResponseSuccess = response;
-                //        console.log("response is: " + response)
-                //        if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
-                //            window.location.href = serverResponseSuccess;
-                //        }
-                //    }
-                //});
+                $.ajax({
+                    url: '/dailyReport/AddDailyReport',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
+                        console.log("add record success. total operations to complete is now: " + totalOpsToDo);
+                        serverResponseSuccess = response;
+                        console.log("response is: " + response)
+                        if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
+                            window.location.href = serverResponseSuccess;
+                        }
+                    }
+                });
             }
 
             //cloned to new daily report
@@ -537,7 +581,12 @@
                     var delaysUserNamesArrTemp = [];
 
                     currentDropdownLine_Add = $(this).parent().attr("id");
-                    delaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".delaysTeam_hours_div").html());
+
+                    //HOURS INPUT UPDATE
+                    //delaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".delaysTeam_hours_div").html());
+                    delaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".delaysTeam_hours_div input").val());
+                    //HOURS INPUT UPDATE
+
                     delaysTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
                     $(delaysTeam_dpdwn_Content_Add).each(function (index2) {
@@ -562,7 +611,12 @@
                     var wntyDelaysUserNamesArrTemp = [];
 
                     currentDropdownLine_Add = $(this).parent().attr("id");
-                    wntyDelaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".wntyDelaysTeam_hours_div").html());
+
+                    //HOURS INPUT UPDATE
+                    //wntyDelaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".wntyDelaysTeam_hours_div").html());
+                    wntyDelaysTeam_hours_div_Content_Add = parseFloat($("#" + currentDropdownLine_Add).find(".wntyDelaysTeam_hours_div input").val());
+                    //HOURS INPUT UPDATE
+
                     wntyDelaysTeam_dpdwn_Content_Add = $("#" + currentDropdownLine_Add).find(".select2-selection__choice__display");
 
                     $(wntyDelaysTeam_dpdwn_Content_Add).each(function (index2) {
@@ -820,11 +874,21 @@
                 var rowFilled = true;
                 var narrDiv = currentRow.find(".narr_div").html();
                 var teamDiv = currentRow.find(".select2-selection__rendered").html();
-                var hoursDiv = currentRow.find(".hours_div").html();
-                var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
-                var delayHours = $(".addRecord").find(".delaysTeam_hours_div, .wntyDelaysTeam_hours_div");
 
-                console.clear();
+                //HOURS INPUT UPDATE
+                //var hoursDiv = currentRow.find(".hours_div").html();
+                var hoursDiv = currentRow.find(".hours_div input").val();
+                //HOURS INPUT UPDATE
+
+                //var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(0|25|5|75)$/g);//should match 0-23.[.0|25|75]
+                var hoursDivMatch = hoursDiv.match(/^(2[0-3]|[01]?[0-9])\.(00|25|50|75)$/g);//should match 0-23.[00|25||50|75]
+
+                //HOURS INPUT UPDATE
+                var delayHours = $(".addRecord").find(".delaysTeam_hours_div input, .wntyDelaysTeam_hours_div input");
+                //HOURS INPUT UPDATE
+
+                //console.log("hoursDiv:" + hoursDiv);
+                //console.clear();
                 
                 var totalDayHours = calcStartStopTimeDiff();
                 var totalDelayHours = 0.0;
@@ -853,26 +917,29 @@
                     //console.log("Hours div is empty or the hours do match the pattern.")
                     $.alert({
                         title: 'Error!',
-                        content: 'Hours must be of form H.0, H.25, H.5, or H.75.',
+                        content: 'Hours must be of form H.00, H.25, H.50, or H.75.',
                     });
                     rowFilled = false;
                     return rowFilled;
                 }
               
                 delayHours.each(function (index) {
-                    totalDelayHours = totalDelayHours + parseFloat($(this).html());
+                    //HOURS INPUT UPDATE
+                    //totalDelayHours = totalDelayHours + parseFloat($(this).html());
+                    totalDelayHours = totalDelayHours + parseFloat($(this).val());
+                    //HOURS INPUT UPDATE
                 });
 
-                //console.log("Total day hours: " + totalDayHours);
-                //console.log("Total present delay hours: " + totalDelayHours);
-                //console.log("Line delay hours: " + parseFloat(hoursDiv));
+                console.log("Total day hours: " + totalDayHours);
+                console.log("Total present delay hours: " + totalDelayHours);
+                console.log("Line delay hours: " + parseFloat(hoursDiv));
 
                 //newly added delay hours are disallowed if the entered value exceeds the day's total possible hours
                 if ((parseFloat(hoursDiv) + totalDelayHours) > totalDayHours) {
 
                     $.alert({
                         title: 'Error!',
-                        content: 'Total delay hours must not exceed the total day hours of ' + totalDayHours,
+                        content: 'Total delay hours must not exceed the total day hours minus lunch of ' + totalDayHours,
                     });
                     rowFilled = false;
                     return rowFilled;
@@ -885,6 +952,7 @@
                 // Get values.
                 var valuestart = $("#input_startTime").val();
                 var valuestop = $("#input_endTime").val();
+                var valuelunch = $("#input_lunch").val();
 
                 // Create date format.          
                 var timeStart = new Date("01/01/2021 " + valuestart);
@@ -892,7 +960,7 @@
 
                 // Subtract.
                 var difference = timeEnd - timeStart;
-                var time = msToTime(difference);
+                var time = msToTime(difference) - valuelunch;
                 //console.log("Decimal hours is: " + time);
 
                 return time;
@@ -1083,8 +1151,13 @@
 
             </div>
 
-            @*<div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>*@
-            <div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>0.0</div>
+            @*//HOURS INPUT UPDATE*@
+            @*<div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>*@
+            <div class="col-md-1 hours_div workDescTeam_hours_div" id="" style="" hidden>
+                <input type="text" value="0.00" id="" name="" style="width:100%">
+                @*0.0*@
+            </div>
+            @*//HOURS INPUT UPDATE*@
 
             <div class="col-md-2 button_div workDescTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
@@ -1111,8 +1184,13 @@
 
             </div>
 
-            @*<div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>1.0</div>*@
-            <div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>0.0</div>
+            @*//HOURS INPUT UPDATE*@
+            @*<div class="col-md-1 hours_div workDescTeam_hours_div" id="" contenteditable="false" style="" hidden>*@
+            <div class="col-md-1 hours_div workDescTeam_hours_div" id="" style="" hidden>
+                <input type="text" value="0.00" id="" name="" style="width:100%">
+                @*0.0*@
+            </div>
+            @*//HOURS INPUT UPDATE*@
 
             <div class="col-md-2 button_div workDescTeam_button_div" style="padding:0px;">
                 <button class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
@@ -1163,7 +1241,14 @@
             <div class="col-md-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
-            <div class="col-md-1 hours_div delaysTeam_hours_div" id="" contenteditable="true" style=""></div>
+
+            @*//HOURS INPUT UPDATE*@
+            @*<div class="col-md-1 hours_div delaysTeam_hours_div" id="" contenteditable="true" style="">*@
+            <div class="col-md-1 hours_div delaysTeam_hours_div" style="">
+                <input type="text" value="" id="" name="" style="width:100%">
+            </div>
+            @*//HOURS INPUT UPDATE*@
+
             <div class="col-md-2 button_div delaysTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newDelaysBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
 
@@ -1188,7 +1273,14 @@
             <div class="col-md-3 dpdwn_parsed_div delaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
-            <div class="col-md-1 hours_div delaysTeam_hours_div" id="" contenteditable="true" style=""></div>
+
+            @*//HOURS INPUT UPDATE*@
+            @*<div class="col-md-1 hours_div delaysTeam_hours_div" id="" contenteditable="true" style="">*@
+            <div class="col-md-1 hours_div delaysTeam_hours_div" style="">
+                <input type="text" value="" id="" name="" style="width:100%">
+            </div>
+
+            @*//HOURS INPUT UPDATE*@
             <div class="col-md-2 button_div delaysTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newDelaysBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
 
@@ -1237,7 +1329,14 @@
             <div class="col-md-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
-            <div class="col-md-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style=""></div>
+
+            @*//HOURS INPUT UPDATE*@
+            @*<div class="col-md-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style="">*@
+            <div class="col-md-1 hours_div wntyDelaysTeam_hours_div" style="">
+                <input type="text" value="" id="" name="" style="width:100%">
+            </div>
+            @*//HOURS INPUT UPDATE*@
+
             <div class="col-md-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newwntyDelaysBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
                 <button id="" class="btn btn-light btn-sm Btn_clear newwntyDelaysBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
@@ -1261,7 +1360,14 @@
             <div class="col-md-3 dpdwn_parsed_div wntyDelaysTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
-            <div class="col-md-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style=""></div>
+
+            @*//HOURS INPUT UPDATE*@
+            @*<div class="col-md-1 hours_div wntyDelaysTeam_hours_div" id="" contenteditable="true" style="">*@
+            <div class="col-md-1 hours_div wntyDelaysTeam_hours_div" style="">
+                <input type="text" value="" id="" name="" style="width:100%">
+            </div>
+            @*//HOURS INPUT UPDATE*@
+
             <div class="col-md-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_add newwntyDelaysBtn_add"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
                 <button id="" class="btn btn-light btn-sm Btn_clear newwntyDelaysBtn_clear" hidden><i class="fas fa-eraser fa-2x" style="color:black;"></i></button>
