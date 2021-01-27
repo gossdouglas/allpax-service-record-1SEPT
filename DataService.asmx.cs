@@ -239,6 +239,32 @@ namespace allpax_service_record
         }
 
         [WebMethod]
+        public void GetAllResourceTypes()
+        {
+            string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
+            List<vm_resourceTypes> resourceTypes = new List<vm_resourceTypes>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                SqlCommand cmd = new SqlCommand("spGetAllResourceTypes", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    vm_resourceTypes resourceType = new vm_resourceTypes();
+                    resourceType.resourceTypeID = rdr["resourceTypeID"].ToString();
+                    resourceType.resourceType = rdr["resourceType"].ToString();
+                    resourceType.description = rdr["description"].ToString();
+                    resourceType.rate = (decimal)rdr["rate"];
+                    resourceTypes.Add(resourceType);
+                }
+            }
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.Write(js.Serialize(resourceTypes));
+        }
+
+        [WebMethod]
         public void GetJobInfoByJobID(string jobID)
         {
             string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
@@ -391,6 +417,8 @@ namespace allpax_service_record
             JavaScriptSerializer js = new JavaScriptSerializer();
             Context.Response.Write(js.Serialize(lastTimeEntry));
         }
+
+        
 
         //[WebMethod]
         //public void CopyDailyRpt(int copied_dailyReportID, int new_dailyReportID)
