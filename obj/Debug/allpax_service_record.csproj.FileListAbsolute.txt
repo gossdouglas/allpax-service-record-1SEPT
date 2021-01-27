@@ -449,7 +449,6 @@ C:\Users\tgoss\Documents\GitHub\allpax-service-record-1SEPT\bin\Microsoft.Owin.S
 C:\Users\tgoss\Documents\GitHub\allpax-service-record-1SEPT\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Users\tgoss\Documents\GitHub\allpax-service-record-1SEPT\bin\Microsoft.Owin.Security.OAuth.xml
 C:\Users\tgoss\Documents\GitHub\allpax-service-record-1SEPT\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\tgoss\Documents\GitHub\allpax-service-record-1SEPT\obj\Debug\allpax_service_record.csprojAssemblyReference.cache
 C:\Users\tgoss\Documents\GitHub\allpax-service-record-1SEPT\obj\Debug\allpax_service_record.csproj.CoreCompileInputs.cache
 C:\Users\tgoss\Documents\GitHub\allpax-service-record-1SEPT\obj\Debug\allpax_service_record.csproj.CopyComplete
 C:\Users\tgoss\Documents\GitHub\allpax-service-record-1SEPT\obj\Debug\allpax_service_record.dll
