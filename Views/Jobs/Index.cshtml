@@ -717,132 +717,6 @@
                 });
                 //end get sub-job types by job id
 
-                //begin get resource types to reset the job resources in the edit job modal
-                //$.ajax({
-                //    url: '/DataService.asmx/GetAllResourceTypes',
-                //    method: 'post',
-                //    dataType: 'json',
-                //    success: function (data) {
-
-                //        //console.log("data.length: " + data.length);
-                //        console.log("data.length: ");
-                //        console.log(data.length);
-
-                //        $(data).each(function (index, item) {
-
-                //            var temp_resourceTypeID = item.resourceTypeID;
-                //            var temp_rate = item.rate.toFixed(2);
-                //            var currentRow = $(temp_resourceTypeInput[value = temp_resourceTypeID]).parent().parent();
-
-                //            console.log("data index: " + index);
-
-                //            //reset the class to row jobResource_Line
-                //            //currentRow.prop("class", "row jobResource_Line");
-
-                //            //reset the resource rate to the standard from tbl_resourceTypes
-                //            //currentRow.find(".resourceRate").val(temp_rate);
-
-                //            //console.log("currentRow: " + currentRow.find(".resourceRate"));
-                //            console.log("currentRow class:");
-                //            console.log(currentRow.attr("class"));
-                //            console.log("currentRow rate:");
-                //            console.log(currentRow.find(".resourceRate").val());
-                //            //console.log(currentRow.find(".resourceRate").val(temp_rate));
-                //            //console.log(currentRow.find(".resourceRate").val());
-
-                //            console.log("temp_resourceTypeID: " + temp_resourceTypeID);
-                //            console.log("temp_rate: " + temp_rate);
-                //            console.log("-------------------");
-
-                //            //$(temp_resourceTypeInput[value = temp_resourceTypeID])
-
-                //            //if (index == data.length -1) {
-                //            //    console.log("end of the reset loop.")
-                //            //}                                                
-                //        });               
-                //    }
-                //});
-
-                //end get resource types to reset the job resources in the edit job modal
-
-                //Begin when the save button on the edit job modal is pressed
-                $(".jobEditForm.btn_test").click(function () {
-
-                    //begin get job resources by job id
-                    $.ajax({
-                        url: '/DataService.asmx/GetJobResourcesByJobID',
-                        method: 'post',
-                        dataType: 'json',
-                        data: { jobID: temp_jobID },
-                        success: function (data) {
-                            $(data).each(function (index, item) {
-                                var temp_resourceTypeID = item.resourceTypeID;
-                                var temp_rate = item.rate.toFixed(2);
-
-                                //store the job resource ids in the database to an array
-                                jobResourceIDs_RtndRecs.push(temp_resourceTypeID);
-                                //store the resource rates in the database to an array
-                                jobRates_RtndRecs.push(temp_rate);
-                            });
-
-                            //dump jobResourceIDs_RtndRecs array into index 0 of jobResource_RtndRecs
-                            jobResource_RtndRecs[0] = jobResourceIDs_RtndRecs;
-                            //dump jobRates_RtndRecs array into index 1 of jobResource_RtndRecs
-                            jobResource_RtndRecs[1] = jobRates_RtndRecs;
-
-                            //console.log("jobResource_RtndRecs[0]:" + jobResource_RtndRecs[0]);
-                            //console.log("jobResourceIDs_RtndRecs:" + jobResourceIDs_RtndRecs);
-                            //console.log("jobResource_RtndRecs[1]:" + jobResource_RtndRecs[1]);
-                            //console.log("jobRates_RtndRecs:" + jobRates_RtndRecs);
-
-                            //get the value of each sub-job type checkbox
-                            $(temp_resourceTypeInput).each(function (index, item) {
-                                var currentRow = $(this).parent().parent();
-                                temp_resourceRateInput = currentRow.find(".resourceRate");
-
-                                //if the value of the current resource type checkbox is part of the jobResourceIDs_RtndRecs array...
-                                if ($.inArray($(this).val(), jobResource_RtndRecs[0]) !== -1) {
-
-                                    var temp_index = jobResourceIDs_RtndRecs.indexOf($(this).val());
-
-                                    //currentRow.prop("class", "row returnedRecords jobResource_Line");
-                                    $(this).prop('checked', true);//...check the input box for the HTML element
-                                    temp_resourceRateInput.val(jobRates_RtndRecs[temp_index]);
-
-                                    $(this).attr("data-resource-rate-rtnd", jobRates_RtndRecs[temp_index]);
-
-                                    temp_resourceRateInput.removeAttr('disabled');
-                                    temp_resourceRateInput.css("color", "black");
-
-                                    console.log("Index of jobResourceIDs_RtndRecs " + temp_index + " has a value of " + jobResourceIDs_RtndRecs[temp_index]);
-                                    console.log("Index of jobRates_RtndRecs " + temp_index + " has a value of " + jobRates_RtndRecs[temp_index]);
-                                    console.log($(this).val() + " was found in the returned record array.");
-                                    console.log("-------------------");
-
-                                    //console.log($(this));
-                                    //console.log($(this).attr("data-resource-rate-rtnd"));
-                                }
-
-                                //if the value of the current resource type checkbox is not part of the jobResourceIDs_RtndRecs array...
-                                else {
-
-                                    //currentRow.prop("class", " row jobResource_Line");
-                                    $(this).prop('checked', false);//...un-check the input box for the HTML element
-                                    temp_resourceRateInput.attr("disabled", "true");
-                                    temp_resourceRateInput.css("color", "black");
-
-                                    console.log($(this).val() + " was not found in the returned record array.");
-                                    console.log("-------------------");
-                                }
-                            });
-                        }
-                    });
-                //end get job resources by job id
-                });
-            //End when the save button on the edit job modal is pressed
-
-                
-
                 //begin get job resources by job id
                 $.ajax({
                     url: '/DataService.asmx/GetJobResourcesByJobID',
@@ -871,6 +745,21 @@
                         console.log("jobResource_RtndRecs2:");
                         console.log(jobResource_RtndRecs2);
 
+                        //if ($.inArray(1, jobResource_RtndRecs2.resourceTypeID) !== -1) {
+                        //    console.log("found it.")
+                        //}
+
+                        //var __FOUND = jobResource_RtndRecs2.find(function (post, index) {
+                        //    //if (post.resourceTypeID == '1')//works
+                        //    if (post.resourceTypeID == 1)//works
+                        //        return true;
+                        //});
+
+                        // On success __FOUND will contain the complete element (an object)
+                        // On failure it will contain undefined  
+                        //console.log(__FOUND); // { id: 3, title: 'Guava', description: 'Description of post 3' }
+
+
                         //dump jobResourceIDs_RtndRecs array into index 0 of jobResource_RtndRecs
                         jobResource_RtndRecs[0] = jobResourceIDs_RtndRecs;
                         //dump jobRates_RtndRecs array into index 1 of jobResource_RtndRecs
@@ -884,7 +773,28 @@
                         //get the value of each sub-job type checkbox
                         $(temp_resourceTypeInput).each(function (index, item) {
                             var currentRow = $(this).parent().parent();
+                            var temp_resourceTypeID = $(this).val().toString();
                             temp_resourceRateInput = currentRow.find(".resourceRate");
+
+                            //console.log($(this).val());
+                            //console.log($(this).val().toString());
+
+                            //{
+                            var __FOUND = jobResource_RtndRecs2.find(function (post, index) {
+                                //if (post.resourceTypeID == $(this).val())//doesn't work
+                                //if (post.resourceTypeID == "1")//works
+                                if (post.resourceTypeID == parseInt(temp_resourceTypeID))//
+                                    return true;
+                            });
+
+                            //    // On success __FOUND will contain the complete element (an object)
+                            //    // On failure it will contain undefined 
+
+                            if (__FOUND !== undefined ) {
+                                console.log(__FOUND); // { id: 3, title: 'Guava', description: 'Description of post 3' }
+                            }
+                                
+                            //}
 
                             //if the value of the current resource type checkbox is part of the jobResourceIDs_RtndRecs array...
                             if ($.inArray($(this).val(), jobResource_RtndRecs[0]) !== -1) {
@@ -907,7 +817,7 @@
 
                                 //console.log($(this));
                                 //console.log($(this).attr("data-resource-rate-rtnd"));
-                            }
+                            }                           
 
                             //if the value of the current resource type checkbox is not part of the jobResourceIDs_RtndRecs array...
                             else {
@@ -969,10 +879,10 @@
                 //reset the class
                 jobResourceLines.prop("class", "row jobResource_Line");
 
-                $(jobResourceLines).each(function (index, item) {
+                //$(jobResourceLines).each(function (index, item) {
 
-                    console.log($(this).prop("class"));
-                });
+                //    console.log($(this).prop("class"));
+                //});
 
             });
             //End when the cancel button on the edit job modal is pressed
