@@ -737,28 +737,12 @@
                                 resourceTypeID: item.resourceTypeID,
                                 resourceType: item.resourceType,
                                 description: item.description,
-                                rate: item.rate
+                                rate: item.rate.toFixed(2)
                             };
-
                         });
 
                         console.log("jobResource_RtndRecs2:");
                         console.log(jobResource_RtndRecs2);
-
-                        //if ($.inArray(1, jobResource_RtndRecs2.resourceTypeID) !== -1) {
-                        //    console.log("found it.")
-                        //}
-
-                        //var __FOUND = jobResource_RtndRecs2.find(function (post, index) {
-                        //    //if (post.resourceTypeID == '1')//works
-                        //    if (post.resourceTypeID == 1)//works
-                        //        return true;
-                        //});
-
-                        // On success __FOUND will contain the complete element (an object)
-                        // On failure it will contain undefined  
-                        //console.log(__FOUND); // { id: 3, title: 'Guava', description: 'Description of post 3' }
-
 
                         //dump jobResourceIDs_RtndRecs array into index 0 of jobResource_RtndRecs
                         jobResource_RtndRecs[0] = jobResourceIDs_RtndRecs;
@@ -772,52 +756,60 @@
 
                         //get the value of each sub-job type checkbox
                         $(temp_resourceTypeInput).each(function (index, item) {
+
+                            //load one resource type line
                             var currentRow = $(this).parent().parent();
+                            //cast the value of this line's resource type id as a string
                             var temp_resourceTypeID = $(this).val().toString();
+                            //store the rate of this line
                             temp_resourceRateInput = currentRow.find(".resourceRate");
 
-                            //console.log($(this).val());
-                            //console.log($(this).val().toString());
-
-                            //{
-                            var __FOUND = jobResource_RtndRecs2.find(function (post, index) {
-                                //if (post.resourceTypeID == $(this).val())//doesn't work
-                                //if (post.resourceTypeID == "1")//works
-                                if (post.resourceTypeID == parseInt(temp_resourceTypeID))//
+                            //build a found object that stores job resources returned from the database
+                            var __FOUND = jobResource_RtndRecs2.find(function (obj, index) {
+                                //convert the string to an int.  this is important took a while to figure out
+                                //this type of section will return a 'cannot convert lowercase' error if done without this method
+                                if (obj.resourceTypeID == parseInt(temp_resourceTypeID))
                                     return true;
                             });
 
-                            //    // On success __FOUND will contain the complete element (an object)
-                            //    // On failure it will contain undefined 
-
-                            if (__FOUND !== undefined ) {
-                                console.log(__FOUND); // { id: 3, title: 'Guava', description: 'Description of post 3' }
-                            }
-                                
-                            //}
-
-                            //if the value of the current resource type checkbox is part of the jobResourceIDs_RtndRecs array...
-                            if ($.inArray($(this).val(), jobResource_RtndRecs[0]) !== -1) {
-
-                                var temp_index = jobResourceIDs_RtndRecs.indexOf($(this).val());
+                            // On success __FOUND will contain the complete element (an object)
+                            // failure it will contain undefined 
+                            if (__FOUND !== undefined) {
 
                                 currentRow.prop("class", "row returnedRecords jobResource_Line");
                                 $(this).prop('checked', true);//...check the input box for the HTML element
-                                temp_resourceRateInput.val(jobRates_RtndRecs[temp_index]);
-
-                                $(this).attr("data-resource-rate-rtnd", jobRates_RtndRecs[temp_index]);
+                                temp_resourceRateInput.val(__FOUND.rate);
+                                $(this).attr("data-resource-rate-rtnd", __FOUND.rate);
 
                                 temp_resourceRateInput.removeAttr('disabled');
                                 temp_resourceRateInput.css("color", "black");
 
-                                //console.log("Index of jobResourceIDs_RtndRecs " + temp_index + " has a value of " + jobResourceIDs_RtndRecs[temp_index]);
-                                //console.log("Index of jobRates_RtndRecs " + temp_index + " has a value of " + jobRates_RtndRecs[temp_index]);
-                                //console.log($(this).val() + " was found in the returned record array.");
-                                //console.log("-------------------");
+                                console.log(__FOUND);
+                                console.log("-------------------");
+                            }                              
 
-                                //console.log($(this));
-                                //console.log($(this).attr("data-resource-rate-rtnd"));
-                            }                           
+                            //if the value of the current resource type checkbox is part of the jobResourceIDs_RtndRecs array...
+                            //if ($.inArray($(this).val(), jobResource_RtndRecs[0]) !== -1) {
+
+                            //    var temp_index = jobResourceIDs_RtndRecs.indexOf($(this).val());
+
+                            //    currentRow.prop("class", "row returnedRecords jobResource_Line");
+                            //    $(this).prop('checked', true);//...check the input box for the HTML element
+                            //    temp_resourceRateInput.val(jobRates_RtndRecs[temp_index]);
+
+                            //    $(this).attr("data-resource-rate-rtnd", jobRates_RtndRecs[temp_index]);
+
+                            //    temp_resourceRateInput.removeAttr('disabled');
+                            //    temp_resourceRateInput.css("color", "black");
+
+                            //    //console.log("Index of jobResourceIDs_RtndRecs " + temp_index + " has a value of " + jobResourceIDs_RtndRecs[temp_index]);
+                            //    //console.log("Index of jobRates_RtndRecs " + temp_index + " has a value of " + jobRates_RtndRecs[temp_index]);
+                            //    //console.log($(this).val() + " was found in the returned record array.");
+                            //    //console.log("-------------------");
+
+                            //    //console.log($(this));
+                            //    //console.log($(this).attr("data-resource-rate-rtnd"));
+                            //}                           
 
                             //if the value of the current resource type checkbox is not part of the jobResourceIDs_RtndRecs array...
                             else {
@@ -827,8 +819,8 @@
                                 temp_resourceRateInput.attr("disabled", "true");
                                 temp_resourceRateInput.css("color", "black");
 
-                                //console.log($(this).val() + " was not found in the returned record array.");
-                                //console.log("-------------------");
+                                console.log($(this).val() + " was not found in the returned record array.");
+                                console.log("-------------------");
                             }
                         });
                     }
@@ -871,7 +863,8 @@
             })
 
             //Begin when the cancel button on the edit job modal is pressed
-            $("#jobEditForm .btn_cancel").click(function () {
+            //$("#jobEditForm .btn_cancel").click(function () {
+            $('#jobEditForm').on('hidden.bs.modal', function (e) {
 
                 //select all resource lines
                 var jobResourceLines = $("#jobEditForm").find(".jobResource_Line");
@@ -1718,7 +1711,6 @@
                 @*END NEW WORK DESCRIPTION TEMPLATE*@
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn jobEditForm btn_test" value="">Test</button>
                 <button type="button" class="btn jobEditForm btn_save" value="">Save</button>
                 <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
             </div>
