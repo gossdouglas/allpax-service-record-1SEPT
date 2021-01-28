@@ -862,23 +862,38 @@
                 fn_enableSelect2();//re-enable select2 after affecting work to allow the selected option to be reached
             })
 
-            //Begin when the cancel button on the edit job modal is pressed
-            //$("#jobEditForm .btn_cancel").click(function () {
+            //Begin when the edit modal is closed or otherwise hidden
             $('#jobEditForm').on('hidden.bs.modal', function (e) {
 
-                //select all resource lines
+                //select all job resource lines
                 var jobResourceLines = $("#jobEditForm").find(".jobResource_Line");
 
-                //reset the class
+                //reset the class of the job resource lines
                 jobResourceLines.prop("class", "row jobResource_Line");
 
-                //$(jobResourceLines).each(function (index, item) {
+                //reset the rates to default
+                $.ajax({
+                    url: '/DataService.asmx/GetAllResourceTypes',
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        $(data).each(function (index, item) {
 
-                //    console.log($(this).prop("class"));
-                //});
+                            var temp_resourceTypeID = item.resourceTypeID;
+                            //cast the rate from the current data item to have two decimal places
+                            var temp_rate = item.rate.toFixed(2);
+                            //load the row which has a resourceTypeID that matches the current data item
+                            var currentRow = jobResourceLines.find(".resourceTypeID[value = " + temp_resourceTypeID + "]").parents().eq(1);
+                            //set the resourceRate of this row to default
+                            currentRow.find(".resourceRate").val(temp_rate);
 
+                            //console.log("temp_rate: " + temp_rate);
+                            //console.log(currentRow.find(".resourceRate").val());
+                        });
+                    }
+                });
             });
-            //End when the cancel button on the edit job modal is pressed
+            //End when the edit modal is closed or otherwise hidden
 
             //Begin when a resource rate on the edit page is checked or unchecked...
             $("#jobEditForm .resourceTypeID").on("change", function () {
