@@ -319,7 +319,7 @@
             });
 
             //begin customer code dropdown change
-            $(".customer-code").change(function () {
+            $("#jobEditForm .customer-code").change(function () {
 
                 var modal = $(this).parents().eq(2);
                 var modalID = modal.parents().eq(2).attr("id");
@@ -390,6 +390,48 @@
                             }
                         });
                     }
+                }
+            });
+            //end customer code dropdown change
+
+            //begin customer code dropdown change
+            $("#jobNewForm .customer-code").change(function () {
+
+                console.clear();
+
+                var modal = $(this).parents().eq(2);
+                var currCustomerCode = $(this).val();
+                var currCustomerName = modal.find(".customer-name");
+                var currCustomerLocation = modal.find(".customer-location");
+
+                //fn_disableSelect2();//disable select2 so the selected option can be reached
+
+                //if the instruction option is selected, clear out the customer name and location.  only applies to the new job modal.
+                if (currCustomerCode == '-1') {
+                    $("#customer-name-new").val('');
+                    $("#customer-location-new").val('');
+                    //fn_enableSelect2();
+                }
+
+                //get all customer data through ajax
+                else {
+                    $.ajax({
+                        url: '/DataService.asmx/GetAllCustomers',
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+
+                            $(data).each(function (index, item) {
+
+                                //when the customer selected is found in the returned ajax data...
+                                if (item.customerCode == currCustomerCode) {
+                                    currCustomerName.val(item.customerName);//fill the modal with the proper data from the ajax call
+                                    currCustomerLocation.val(item.address);//fill the modal with the proper data from the ajax call
+                                    //fn_enableSelect2();
+                                }
+                            });
+                        }
+                    });
                 }
             });
             //end customer code dropdown change
