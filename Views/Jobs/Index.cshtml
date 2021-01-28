@@ -159,11 +159,10 @@
             var subJobTypes_Add = [];
             var subJobTypeIDs_RtndRecs = [];//array which holds which subJobTypeIDs are stored in the database
 
-            var jobResource_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
-            //var jobResource_RtndRecs2 = [];//array which holds which jobResourceIDs are stored in the database
+            //var jobResource_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
 
-            var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
-            var jobRates_RtndRecs = [];//array which holds which job resource rates are stored in the database
+            //var jobResourceIDs_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
+            //var jobRates_RtndRecs = [];//array which holds which job resource rates are stored in the database
             var jobResources_Add = [];
             var jobResourcesJson_Add = [];
 
@@ -330,7 +329,7 @@
                 var currCustomerLocation = modal.find(".customer-location");
 
                 console.log(modalID);
-                console.log(customerCode_OnLoad);
+                //console.log(customerCode_OnLoad);
                 fn_disableSelect2();//disable select2 so the selected option can be reached
 
                 //if the instruction option is selected, clear out the customer name and location.  only applies to the new job modal.
@@ -598,15 +597,11 @@
             $('#jobEditForm').on('show.bs.modal', function (event) {
                 indexJobCrspdtEntries_Add = 0;
 
-                console.clear();
-                //console.log("Arrays upon modal load.")
+                //console.clear();
                 subJobTypeIDs_RtndRecs.length = 0;
-                jobResourceIDs_RtndRecs.length = 0;
-                jobRates_RtndRecs.length = 0;
 
-                var jobResource_RtndRecs2 = [];//array which holds which jobResourceIDs are stored in the database
-
-                jobCrspdtID_RtndRecs = [];
+                var jobResource_RtndRecs = [];//array which holds which jobResourceIDs are stored in the database
+                var jobCrspdtID_RtndRecs = [];
 
                 fn_disableSelect2();//disable select2 so the selected option can be reached
 
@@ -725,15 +720,8 @@
                     data: { jobID: temp_jobID },
                     success: function (data) {
                         $(data).each(function (index, item) {
-                            var temp_resourceTypeID = item.resourceTypeID;
-                            var temp_rate = item.rate.toFixed(2);
 
-                            //store the job resource ids in the database to an array
-                            jobResourceIDs_RtndRecs.push(temp_resourceTypeID);
-                            //store the resource rates in the database to an array
-                            jobRates_RtndRecs.push(temp_rate);
-
-                            jobResource_RtndRecs2[index] = {
+                            jobResource_RtndRecs[index] = {
                                 resourceTypeID: item.resourceTypeID,
                                 resourceType: item.resourceType,
                                 description: item.description,
@@ -741,18 +729,8 @@
                             };
                         });
 
-                        console.log("jobResource_RtndRecs2:");
-                        console.log(jobResource_RtndRecs2);
-
-                        //dump jobResourceIDs_RtndRecs array into index 0 of jobResource_RtndRecs
-                        jobResource_RtndRecs[0] = jobResourceIDs_RtndRecs;
-                        //dump jobRates_RtndRecs array into index 1 of jobResource_RtndRecs
-                        jobResource_RtndRecs[1] = jobRates_RtndRecs;
-
-                        //console.log("jobResource_RtndRecs[0]:" + jobResource_RtndRecs[0]);
-                        //console.log("jobResourceIDs_RtndRecs:" + jobResourceIDs_RtndRecs);
-                        //console.log("jobResource_RtndRecs[1]:" + jobResource_RtndRecs[1]);
-                        //console.log("jobRates_RtndRecs:" + jobRates_RtndRecs);
+                        //console.log("jobResource_RtndRecs:");
+                        //console.log(jobResource_RtndRecs);
 
                         //get the value of each sub-job type checkbox
                         $(temp_resourceTypeInput).each(function (index, item) {
@@ -765,7 +743,7 @@
                             temp_resourceRateInput = currentRow.find(".resourceRate");
 
                             //build a found object that stores job resources returned from the database
-                            var __FOUND = jobResource_RtndRecs2.find(function (obj, index) {
+                            var __FOUND = jobResource_RtndRecs.find(function (obj, index) {
                                 //convert the string to an int.  this is important took a while to figure out
                                 //this type of section will return a 'cannot convert lowercase' error if done without this method
                                 if (obj.resourceTypeID == parseInt(temp_resourceTypeID))
@@ -784,34 +762,11 @@
                                 temp_resourceRateInput.removeAttr('disabled');
                                 temp_resourceRateInput.css("color", "black");
 
-                                console.log(__FOUND);
-                                console.log("-------------------");
-                            }                              
+                                //console.log(__FOUND);
+                                //console.log("-------------------");
+                            }                                                  
 
-                            //if the value of the current resource type checkbox is part of the jobResourceIDs_RtndRecs array...
-                            //if ($.inArray($(this).val(), jobResource_RtndRecs[0]) !== -1) {
-
-                            //    var temp_index = jobResourceIDs_RtndRecs.indexOf($(this).val());
-
-                            //    currentRow.prop("class", "row returnedRecords jobResource_Line");
-                            //    $(this).prop('checked', true);//...check the input box for the HTML element
-                            //    temp_resourceRateInput.val(jobRates_RtndRecs[temp_index]);
-
-                            //    $(this).attr("data-resource-rate-rtnd", jobRates_RtndRecs[temp_index]);
-
-                            //    temp_resourceRateInput.removeAttr('disabled');
-                            //    temp_resourceRateInput.css("color", "black");
-
-                            //    //console.log("Index of jobResourceIDs_RtndRecs " + temp_index + " has a value of " + jobResourceIDs_RtndRecs[temp_index]);
-                            //    //console.log("Index of jobRates_RtndRecs " + temp_index + " has a value of " + jobRates_RtndRecs[temp_index]);
-                            //    //console.log($(this).val() + " was found in the returned record array.");
-                            //    //console.log("-------------------");
-
-                            //    //console.log($(this));
-                            //    //console.log($(this).attr("data-resource-rate-rtnd"));
-                            //}                           
-
-                            //if the value of the current resource type checkbox is not part of the jobResourceIDs_RtndRecs array...
+                            //if the value of the current resource type checkbox is not
                             else {
                                 
                                 currentRow.prop("class", "row jobResource_Line");
@@ -819,8 +774,8 @@
                                 temp_resourceRateInput.attr("disabled", "true");
                                 temp_resourceRateInput.css("color", "black");
 
-                                console.log($(this).val() + " was not found in the returned record array.");
-                                console.log("-------------------");
+                                //console.log($(this).val() + " was not found in the returned record array.");
+                                //console.log("-------------------");
                             }
                         });
                     }
