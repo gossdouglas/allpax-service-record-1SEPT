@@ -703,6 +703,10 @@
                 $('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
             }
 
+            function fn_hideSpinner() {
+                $.LoadingOverlay("hide");
+            }
+
             //cloned to new daily report
             function fn_printArrays() {
                 //console.clear();

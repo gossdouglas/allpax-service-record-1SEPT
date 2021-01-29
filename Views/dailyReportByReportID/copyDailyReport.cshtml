@@ -620,7 +620,7 @@
                     traditional: true,
                     success: function (response) {
                         totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
-                        console.log("add record success. total operations to complete is now: " + totalOpsToDo);
+                        //console.log("add record success. total operations to complete is now: " + totalOpsToDo);
                         serverResponseSuccess = response;
                         console.log("response is: " + response)
                         if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
@@ -797,6 +797,10 @@
                 });
 
                 $('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
+            }
+
+            function fn_hideSpinner() {
+                $.LoadingOverlay("hide");
             }
 
             function fn_printOnLoad() {

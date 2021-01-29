@@ -240,6 +240,10 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                 $('#saveAndExit_btn, #saveAndSubmit_btn').attr('disabled', 'disabled');
             }
 
+            function fn_hideSpinner() {
+                $.LoadingOverlay("hide");
+            }
+
             //window.onbeforeunload = function (e) {
             //    return 'Dialog text here.';
             //};
