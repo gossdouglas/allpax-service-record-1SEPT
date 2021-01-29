@@ -119,6 +119,13 @@
                             $("#output_customerCode").html(item.customerCode.toString());
                             $("#output_customerContact").html(item.customerContact.toString());
                         });
+                    },
+                    error: function (response) {
+                        var alertContent = "An error has occurred.";
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
+                        });
                     }
                 });
                
@@ -133,6 +140,14 @@
                     success: function (data) {
                         $(data).each(function (index, item) {
                             subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
+                        });
+                    },
+                    error: function (response) {
+                        fn_hideSpinner();
+                        var alertContent = "An error has occurred.";
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
                         });
                     }
                 });
@@ -151,6 +166,14 @@
                             temp_output_jobCrspdtInfo = temp_output_jobCrspdtInfo + item.jobCrspdtName + "|";
                         });
                         $("#output_jobCrspdtInfo").text(temp_output_jobCrspdtInfo);
+                    },
+                    error: function (response) {
+                        fn_hideSpinner();
+                        var alertContent = "An error has occurred.";
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
+                        });
                     }
                 });
                 //end fill the job correspondents section
@@ -182,26 +205,23 @@
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".RtndRecs");
                             enable_disableSave();//determine if the save button needs to be enabled or disabled
                         });
-                        //end AddTeamMember
 
-                        
-
-                        //begin DeleteTeamMember
-                        //begin axios delete post
-                        axios.post('/dailyReportByReportID/AddTeamMember', {
-
+                        var data = {
                             dailyReportID: dailyReportID,
                             userName: tempTeamMemberUserID,
-                        })
-                            .then(function (response) {
-                                console.log("Added team member " + tempTeamMemberUserID);
-                                console.log(dailyRptTeamArr);
-                                console.log(response);
-                            })
-                            .catch(function (error) {
-                                console.log(error);
-                            });
-                        //end axios delete post
+                        };
+
+                        $.ajax({
+                            url: '/dailyReportByReportID/AddTeamMember',
+                            method: 'post',
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            data: JSON.stringify(data),
+                            traditional: true,
+                            success: function (response) {
+                                
+                            }                           
+                        });
                     }
                 });
             });
@@ -209,10 +229,8 @@
 
             //begin when a team member class is clicked for deletion...
             //differs between new daily report and an existing one
-            //$(".team_").on('click', function () {
             $(team_dpdwn).on("select2:unselect", function (e) {//on unselecting a team member to delete...
 
-                //var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
                 var tempTeamMemberUserID = e.params.data.id;
                 
                 for (var row = 0; row < dailyRptTeamArr.length; row++) {
@@ -226,23 +244,24 @@
                 $(".RtndRecs option[value='" + tempTeamMemberUserID + "']").remove();
 
                 enable_disableSave();//determine if the save button needs to be enabled or disabled
-                
-                //begin DeleteTeamMember
-                //begin axios delete post
-                axios.post('/dailyReportByReportID/DeleteTeamMember', {
-
+               
+                var data = {
                     dailyReportID: dailyReportID,
                     userName: tempTeamMemberUserID
-                })
-                    .then(function (response) {
-                        console.log("Deleted team member " + tempTeamMemberUserID);
-                        console.log(dailyRptTeamArr);
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                ////end axios delete post
+                };
+
+                $.ajax({
+                    url: '/dailyReportByReportID/DeleteTeamMember',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        window.location.href = response;
+                    }
+                });
+
             });
             //end when a team member class is clicked for deletion...
 
@@ -503,6 +522,14 @@
                                 jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
                             }
                         });
+                    },
+                    error: function (response) {
+                        
+                        var alertContent = "An error has occurred.";
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
+                        });
                     }
                 });
                 //end fill the jobs dropdown
@@ -519,6 +546,14 @@
                             if (item.subJobID !== subJobTypes_dpdwn.val()) {
                                 subJobTypes_dpdwn.append($('<option/>', { value: item.subJobID, text: item.description }));
                             }
+                        });
+                    },
+                    error: function (response) {
+                        
+                        var alertContent = "An error has occurred.";
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
                         });
                     }
                 });
@@ -758,6 +793,14 @@
                             if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
                                 window.location.href = serverResponseSuccess;
                             }
+                        },
+                        error: function (response) {
+
+                            var alertContent = "An error has occurred.";
+                            $.alert({
+                                title: 'Alert!',
+                                content: alertContent,
+                            });
                         }
                     });
                 }
@@ -788,6 +831,14 @@
                             if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
                                 window.location.href = serverResponseSuccess;
                             }
+                        },
+                        error: function (response) {
+
+                            var alertContent = "An error has occurred.";
+                            $.alert({
+                                title: 'Alert!',
+                                content: alertContent,
+                            });
                         }
                     });
                 }
@@ -818,6 +869,14 @@
                             if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
                                 window.location.href = serverResponseSuccess;
                             }
+                        },
+                        error: function (response) {
+
+                            var alertContent = "An error has occurred.";
+                            $.alert({
+                                title: 'Alert!',
+                                content: alertContent,
+                            });
                         }
                     });
                 }
@@ -845,6 +904,14 @@
                             if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
                                 window.location.href = serverResponseSuccess;
                             }
+                        },
+                        error: function (response) {
+
+                            var alertContent = "An error has occurred.";
+                            $.alert({
+                                title: 'Alert!',
+                                content: alertContent,
+                            });
                         }
                     });
                 }
@@ -876,6 +943,14 @@
                             if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
                                 window.location.href = serverResponseSuccess;
                             }
+                        },
+                        error: function (response) {
+                            fn_hideSpinner();
+                            var alertContent = "An error has occurred.";
+                            $.alert({
+                                title: 'Alert!',
+                                content: alertContent,
+                            });
                         }
                     });
                 }
@@ -1422,21 +1497,51 @@
             $("#printDailyReport").click(function () {//when a record's edit button is clicked...
 
                 //begin axios delete post
-                axios.post('/DailyReportByReportIDPrint', {
+                //axios.post('/DailyReportByReportIDPrint', {
 
+                //    reportID: dailyReportID,
+                //})
+                //    .then(function (response) {
+                //        console.log(response);
+                //        $.alert({
+                //            title: 'Confirmation',
+                //            content: 'This daily report has been e-mailed.',
+                //        });
+                //    })
+                //    .catch(function (error) {
+                //        console.log(error);
+                //    });
+                //end axios add post
+
+                var data = {
                     reportID: dailyReportID,
-                })
-                    .then(function (response) {
-                        console.log(response);
+                };
+
+                fn_showSpinner();
+
+                $.ajax({
+                    url: '/DailyReportByReportIDPrint',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        
                         $.alert({
                             title: 'Confirmation',
                             content: 'This daily report has been e-mailed.',
                         });
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                //end axios add pos
+                    },
+                    error: function (response) {
+                        fn_hideSpinner();
+                        var alertContent = "An error has occurred.";
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
+                        });
+                    }
+                });
             });
 
             //cloned to new daily report
@@ -1477,20 +1582,6 @@
             $("#disableSelect2").click(function () {
                 fn_disableSelect2();
             });
-
-            function okToCloseBrowser(e) {
-                //if (!e) e = window.event;
-                ////e.cancelBubble is supported by IE - this will kill the bubbling process.
-                //e.cancelBubble = true;
-                //e.returnValue = 'You sure you want to leave?';
-
-                ////e.stopPropagation works in Firefox.
-                //if (e.stopPropagation) {
-                //    e.stopPropagation();
-                //    e.preventDefault();
-                //}
-            }
-            //window.onbeforeunload = okToCloseBrowser; 
 
             //END MISCELLANEOUS SECTION
 
@@ -1610,9 +1701,9 @@
                     //HOURS INPUT UPDATE
                 });
 
-                console.log("Total day hours: " + totalDayHours);
-                console.log("Total present delay hours: " + totalDelayHours);
-                console.log("Line delay hours: " + parseFloat(hoursDiv));
+                //console.log("Total day hours: " + totalDayHours);
+                //console.log("Total present delay hours: " + totalDelayHours);
+                //console.log("Line delay hours: " + parseFloat(hoursDiv));
 
                 //newly added delay hours are disallowed if the entered value exceeds the day's total possible hours
                 if ((parseFloat(hoursDiv) + totalDelayHours) > totalDayHours) {
@@ -1641,7 +1732,7 @@
                 // Subtract.
                 var difference = timeEnd - timeStart
                 var time = msToTime(difference) - valuelunch;
-                console.log("Decimal hours is: " + time);
+                //console.log("Decimal hours is: " + time);
 
                 return time;
             }
