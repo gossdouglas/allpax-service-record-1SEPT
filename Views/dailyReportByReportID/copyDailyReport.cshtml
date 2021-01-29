@@ -104,7 +104,7 @@
                     }
                 });
 
-                //begin fill sub jobs dropdown
+                //begin fill sub jobs dropdown 
                 $('#subJobTypes_dpdwn').empty();//clear the dropdown
 
                 $.ajax({
@@ -127,7 +127,7 @@
                     dataType: 'json',
                     data: { jobID: jobs_dpdown.val() },
                     success: function (data) {
-                        //console.clear();
+                        
                         var temp_output_jobCrspdtInfo = "";
                         $(data).each(function (index, item) {
                             temp_output_jobCrspdtInfo = temp_output_jobCrspdtInfo + item.jobCrspdtName + "|";
@@ -168,20 +168,36 @@
 
                         //begin DeleteTeamMember
                         //begin axios delete post
-                        axios.post('/dailyReportByReportID/AddTeamMember', {
+                        //axios.post('/dailyReportByReportID/AddTeamMember', {
 
+                        //    dailyReportID: dailyReportID,
+                        //    userName: tempTeamMemberUserID,
+                        //})
+                        //    .then(function (response) {
+                        //        console.log("Added team member " + tempTeamMemberUserID);
+                        //        console.log(dailyRptTeamArr);
+                        //        console.log(response);
+                        //    })
+                        //    .catch(function (error) {
+                        //        console.log(error);
+                        //    });
+
+                        var data = {
                             dailyReportID: dailyReportID,
                             userName: tempTeamMemberUserID,
-                        })
-                            .then(function (response) {
-                                console.log("Added team member " + tempTeamMemberUserID);
-                                console.log(dailyRptTeamArr);
-                                console.log(response);
-                            })
-                            .catch(function (error) {
-                                console.log(error);
-                            });
-                        //end axios delete post
+                        };
+
+                        $.ajax({
+                            url: '/dailyReportByReportID/AddTeamMember',
+                            method: 'post',
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            data: JSON.stringify(data),
+                            traditional: true,
+                            success: function (response) {
+                                window.location.href = response;
+                            }
+                        });
                     }
                 });
             });
@@ -189,10 +205,8 @@
 
             //begin when a team member class is clicked for deletion...
             //differs between new daily report and an existing one
-            //$(".team_").on('click', function () {
             $(team_dpdwn).on("select2:unselect", function (e) {//on unselecting a team member to delete...
 
-                //var tempTeamMemberUserID = this.id.replace(/team_[0-9]*/i, "");
                 var tempTeamMemberUserID = e.params.data.id;
 
                 for (var row = 0; row < dailyRptTeamArr.length; row++) {
@@ -209,20 +223,37 @@
 
                 //begin DeleteTeamMember
                 //begin axios delete post
-                axios.post('/dailyReportByReportID/DeleteTeamMember', {
+                //axios.post('/dailyReportByReportID/DeleteTeamMember', {
 
+                //    dailyReportID: dailyReportID,
+                //    userName: tempTeamMemberUserID
+                //})
+                //    .then(function (response) {
+                //        console.log("Deleted team member " + tempTeamMemberUserID);
+                //        console.log(dailyRptTeamArr);
+                //        console.log(response);
+                //    })
+                //    .catch(function (error) {
+                //        console.log(error);
+                //    });
+                ////end axios delete post
+
+                var data = {
                     dailyReportID: dailyReportID,
                     userName: tempTeamMemberUserID
-                })
-                    .then(function (response) {
-                        console.log("Deleted team member " + tempTeamMemberUserID);
-                        console.log(dailyRptTeamArr);
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                ////end axios delete post
+                };
+
+                $.ajax({
+                    url: '/dailyReportByReportID/DeleteTeamMember',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        
+                    }
+                });
             });
             //end when a team member class is clicked for deletion...
 
@@ -268,7 +299,6 @@
 
                     if (/newWorkDescBtn_add/i.test($(this).attr("class"))) {
                         indexWorkDescEntries_Add = indexWorkDescEntries_Add + 1;
-                        //console.log(indexWorkDescEntries_Add);
                         $(".workDescriptionLine_template_row_hidden").removeAttr("hidden");
                         currentRow.prop("id", "workDescLine_" + indexWorkDescEntries_Add).appendTo("#workDescriptionLine_template");
                         $("#workDescLine_" + indexWorkDescEntries_Add).prop("class", " row addRecord workDescLine");
@@ -324,15 +354,10 @@
                 var currentRowClass = currentRow.attr("class");
                 var currentRowClassSwap;
 
-                console.log(currentRowClass);
-
                 if (currentRowClass.includes("addRecord")) {
                     currentRowClassSwap = currentRowClass.replace(/addRecord/, "addRecordInEdit");//
                     $(currentRow).prop("class", currentRowClassSwap);
                 }
-
-                console.log(".Btn_edit:" + currentRow.attr("class"));
-                console.log(".Btn_edit" + currentRowClassSwap);
                 //HOURS INPUT UPDATE
 
                 $(this).hide();
@@ -434,7 +459,6 @@
                 //cloned to new daily report
                 //begin fill the jobs dropdown
                 $.ajax({
-                    //url: 'DataService.asmx/GetAllJobNos',
                     url: '/DataService.asmx/GetAllJobNos',
                     method: 'post',
                     dataType: 'json',
@@ -451,7 +475,6 @@
                 //differs between new daily report and an existing one
                 //begin fill sub jobs dropdown
                 $.ajax({
-                    //url: 'DataService.asmx/GetSubJobTypesByJobID',
                     url: '/DataService.asmx/GetSubJobTypesByJobID',
                     method: 'post',
                     dataType: 'json',
@@ -467,15 +490,12 @@
                 //end fill sub jobs dropdown
 
                 //begin load team members on page load
-                //console.log("daily report ID passed: " + dailyReportID);
                 $.ajax({
-                    //url: 'DataService.asmx/GetAllTeamNamesByReportID',
                     url: '/DataService.asmx/GetAllTeamNamesByReportID',
                     method: 'post',
                     dataType: 'json',
                     data: { userName: '%', dailyReportID: dailyReportID },
                     success: function (data) {
-                        //console.clear();
 
                         $(data).each(function (index, item) {
                             var temp_userName = item.userName;
@@ -485,12 +505,10 @@
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
                         });
-                        //console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
 
                         //cloned to new daily report
                         //begin fill the team names dropdown
                         $.ajax({
-                            //url: 'DataService.asmx/GetAllTeamNames',
                             url: '/DataService.asmx/GetAllTeamNames',
                             method: 'post',
                             dataType: 'json',
@@ -530,7 +548,6 @@
                             }
                         });
                         //end fill the team names dropdown
-                        //fn_loadTeamNamesRtndRecs();//load team names into the records returned from the database
                     }
                 });
                 //end load team members on page load
@@ -622,10 +639,17 @@
                         totalOpsToDo = totalOpsToDo - 1;//reduce the total ops to complete by 1
                         //console.log("add record success. total operations to complete is now: " + totalOpsToDo);
                         serverResponseSuccess = response;
-                        console.log("response is: " + response)
                         if (totalOpsToDo == 0) {//if there are no more ops left to complete, redirect the browser
                             window.location.href = serverResponseSuccess;
                         }
+                    },
+                    error: function (response) {
+                        fn_hideSpinner();
+                        var alertContent = "An error has occurred.";
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
+                        });
                     }
                 });                
             }
@@ -644,7 +668,7 @@
                 var wntyDelaysTeam_hours_div_Content_Add;
                 var wntyDelaysTeam_dpdwn_Content_Add;
 
-                var currentDropdownLine_Add;//generic
+                var currentDropdownLine_Add;
 
                 $(workDescTeam_narr_div_Content_Add).each(function (index1) {
 
@@ -859,21 +883,48 @@
             $("#printDailyReport").click(function () {//when a record's edit button is clicked...
 
                 //begin axios delete post
-                axios.post('/DailyReportByReportIDPrint', {
+                //axios.post('/DailyReportByReportIDPrint', {
 
+                //    reportID: dailyReportID,
+                //})
+                //    .then(function (response) {
+                //        console.log(response);
+                //        $.alert({
+                //            title: 'Confirmation',
+                //            content: 'This daily report has been e-mailed.',
+                //        });
+                //    })
+                //    .catch(function (error) {
+                //        console.log(error);
+                //    });
+                //end axios add pos
+
+                var data = {
                     reportID: dailyReportID,
-                })
-                    .then(function (response) {
-                        console.log(response);
+                };
+
+                $.ajax({
+                    url: '/DailyReportByReportIDPrint',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
                         $.alert({
                             title: 'Confirmation',
                             content: 'This daily report has been e-mailed.',
                         });
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                //end axios add pos
+                    },
+                    error: function (response) {
+                        
+                        var alertContent = "An error has occurred.";
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
+                        });
+                    }
+                });
             });
 
             //cloned to new daily report
@@ -901,20 +952,6 @@
             $("#disableSelect2").click(function () {
                 fn_disableSelect2();
             });
-
-            function okToCloseBrowser(e) {
-                //if (!e) e = window.event;
-                ////e.cancelBubble is supported by IE - this will kill the bubbling process.
-                //e.cancelBubble = true;
-                //e.returnValue = 'You sure you want to leave?';
-
-                ////e.stopPropagation works in Firefox.
-                //if (e.stopPropagation) {
-                //    e.stopPropagation();
-                //    e.preventDefault();
-                //}
-            }
-            //window.onbeforeunload = okToCloseBrowser; 
 
             //END MISCELLANEOUS SECTION
 
