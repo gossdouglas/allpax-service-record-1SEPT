@@ -457,17 +457,6 @@
                         }
                     </td>
 
-                    @*@if ((@temp_userName != "admin") && (@temp_userName == @User.Identity.GetUserName()))
-                    {
-                        <td class="button_div" style="padding:0px;">
-                            <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                    data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
-                                <i class="far fa-edit fa-2x" style="color:black;">
-                                </i>
-                            </button>
-                            <button class="btn btn-light btn-sm Btn_delete" disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-                        </td>
-                    }*@
                     @if ((@temp_userName == "admin") || (@temp_userName == @User.Identity.GetUserName()))
                     {
                         <td class="button_div" style="padding:0px;">
