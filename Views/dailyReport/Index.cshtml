@@ -193,7 +193,7 @@
                 $(".team_dpdwn_new option[value='" + tempTeamMemberUserID + "']").remove();
 
                 enable_disableSave();//determine if the save button needs to be enabled or disabled
-                console.log(dailyRptTeamArr);
+                //console.log(dailyRptTeamArr);
             });
             //end when a team member class is clicked for deletion...
 
@@ -296,15 +296,10 @@
                 var currentRowClass = currentRow.attr("class");
                 var currentRowClassSwap;
 
-                console.log(currentRowClass);
-
                 if (currentRowClass.includes("addRecord")) {
                     currentRowClassSwap = currentRowClass.replace(/addRecord/, "addRecordInEdit");//
                     $(currentRow).prop("class", currentRowClassSwap);
                 }
-
-                console.log(".Btn_edit:" + currentRow.attr("class"));
-                console.log(".Btn_edit" + currentRowClassSwap);
 
                 //HOURS INPUT UPDATE
 
@@ -933,9 +928,9 @@
                     //HOURS INPUT UPDATE
                 });
 
-                console.log("Total day hours: " + totalDayHours);
-                console.log("Total present delay hours: " + totalDelayHours);
-                console.log("Line delay hours: " + parseFloat(hoursDiv));
+                //console.log("Total day hours: " + totalDayHours);
+                //console.log("Total present delay hours: " + totalDelayHours);
+                //console.log("Line delay hours: " + parseFloat(hoursDiv));
 
                 //newly added delay hours are disallowed if the entered value exceeds the day's total possible hours
                 if ((parseFloat(hoursDiv) + totalDelayHours) > totalDayHours) {
@@ -1117,8 +1112,8 @@
                     Johnny Watkins|JW
                 </div>
             </div>
-            <button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
-            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>
+            @*<button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
+            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>*@
         </div>
     </div>
 </div>

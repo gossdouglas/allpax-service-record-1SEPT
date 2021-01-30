@@ -162,23 +162,6 @@
                             $("<option value=" + temp_userName + ">" + temp_shortName + "</option>").appendTo(".RtndRecs");
                             enable_disableSave();//determine if the save button needs to be enabled or disabled
                         });
-                        //end AddTeamMember
-
-                        //begin DeleteTeamMember
-                        //begin axios delete post
-                        //axios.post('/dailyReportByReportID/AddTeamMember', {
-
-                        //    dailyReportID: dailyReportID,
-                        //    userName: tempTeamMemberUserID,
-                        //})
-                        //    .then(function (response) {
-                        //        console.log("Added team member " + tempTeamMemberUserID);
-                        //        console.log(dailyRptTeamArr);
-                        //        console.log(response);
-                        //    })
-                        //    .catch(function (error) {
-                        //        console.log(error);
-                        //    });
 
                         var data = {
                             dailyReportID: dailyReportID,
@@ -218,23 +201,6 @@
                 $(".RtndRecs option[value='" + tempTeamMemberUserID + "']").remove();
 
                 enable_disableSave();//determine if the save button needs to be enabled or disabled
-
-                //begin DeleteTeamMember
-                //begin axios delete post
-                //axios.post('/dailyReportByReportID/DeleteTeamMember', {
-
-                //    dailyReportID: dailyReportID,
-                //    userName: tempTeamMemberUserID
-                //})
-                //    .then(function (response) {
-                //        console.log("Deleted team member " + tempTeamMemberUserID);
-                //        console.log(dailyRptTeamArr);
-                //        console.log(response);
-                //    })
-                //    .catch(function (error) {
-                //        console.log(error);
-                //    });
-                ////end axios delete post
 
                 var data = {
                     dailyReportID: dailyReportID,
@@ -582,7 +548,6 @@
             });
 
             //differs between new daily report and an existing one
-            //$("#addButton").click(function () {//when the add button is clicked...
             function fn_exitSubmit(submissionState) {
                 submissionStatus = submissionState;//0 indicates meant to be stored, 1 indicates stored and submitted for review
 
@@ -879,23 +844,6 @@
 
             //cloned to new daily report
             $("#printDailyReport").click(function () {//when a record's edit button is clicked...
-
-                //begin axios delete post
-                //axios.post('/DailyReportByReportIDPrint', {
-
-                //    reportID: dailyReportID,
-                //})
-                //    .then(function (response) {
-                //        console.log(response);
-                //        $.alert({
-                //            title: 'Confirmation',
-                //            content: 'This daily report has been e-mailed.',
-                //        });
-                //    })
-                //    .catch(function (error) {
-                //        console.log(error);
-                //    });
-                //end axios add pos
 
                 var data = {
                     reportID: dailyReportID,
