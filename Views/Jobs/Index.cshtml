@@ -212,6 +212,7 @@
                 $(this).hide();//hide the job correspondent line edit button
                 $(currentRow).find(".Btn_save").removeAttr("hidden");//show the job correspondent line save button
                 $(currentRow).find(".Btn_save").show();//show the job correspondent line save button
+                $(currentRow).find(".Btn_delete").attr("disabled", "true");//disable the delete button
 
                 currentRow.find(".name_input").removeAttr("disabled");//enable the job correspondent line name field for edits
                 currentRow.find(".email_input").removeAttr("disabled");//enable the job correspondent line email field for edits
@@ -228,6 +229,8 @@
                 $(this).hide();//hide the job correspondent line save button
                 $(currentRow).find(".Btn_edit").removeAttr("hidden");//show the job correspondent line edit button
                 $(currentRow).find(".Btn_edit").show();//show the job correspondent line edit button
+                $(currentRow).find(".Btn_delete").removeAttr("disabled");//disable the delete button
+
 
                 currentRow.find(".name_input").attr("disabled", "true");//lock the name field for edits
                 currentRow.find(".email_input").attr("disabled", "true");//lock the name field for edits
