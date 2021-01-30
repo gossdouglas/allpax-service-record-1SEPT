@@ -152,7 +152,6 @@
             $(team_dpdwn).on("select2:select", function (e) {//on selecting a new team member to add...
 
                 var tempTeamMemberUserID = e.params.data.id;
-                //console.log("team member to be added: " + tempTeamMemberUserID);
 
                 $.ajax({
                     url: 'DataService.asmx/GetAllTeamNames',
@@ -1016,15 +1015,15 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-2" style="padding:5px">
+        <div class="md-col-2" style="padding:5px">
             <strong>Job:</strong>
         </div>
-        <div class="col-md-2" style="padding:5px">
+        <div class="md-col-2" style="padding:5px">
             <select name="jobs_dpdown" id="jobs_dpdown" style="width:100%" value="">
             </select>
             <input type="text" id="input_jobs_dpdown" name="" style="width:100%" hidden>
         </div>
-        <div class="col-md-5" style="padding:5px"></div>
+        <div class="md-col-5" style="padding:5px"></div>
     </div>
     <div class="row">
         <div class="col-md-2" style="padding:5px">
@@ -1118,8 +1117,8 @@
                     Johnny Watkins|JW
                 </div>
             </div>
-            @*<button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
-            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>*@
+            <button class='btn btn-light btn-sm' id="enableSelect2">enable</button>
+            <button class='btn btn-light btn-sm' id="disableSelect2">disable</button>
         </div>
     </div>
 </div>

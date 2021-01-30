@@ -136,17 +136,41 @@
                     buttons: {
                         confirm: function () {
                             //begin axios add post
-                            axios.post('/dailyReportAll/DeleteDailyReport', {
-                                dailyReportID: selectedItem0
-                            })
-                                .then(function (response) {
-                                    console.log(response);
-                                    window.location = '/DailyReportAll';//reload the page after a deletion
-                                })
-                                .catch(function (error) {
-                                    console.log(error);
-                                });
+                            ////axios.post('/dailyReportAll/DeleteDailyReport', {
+                            ////    dailyReportID: selectedItem0
+                            ////})
+                            ////    .then(function (response) {
+                            ////        console.log(response);
+                            ////        window.location = '/DailyReportAll';//reload the page after a deletion
+                            ////    })
+                            ////    .catch(function (error) {
+                            ////        console.log(error);
+                            ////    });
                             //end axios add post
+
+                            var data = {
+                                dailyReportID: selectedItem0
+                            };
+
+                            $.ajax({
+                                url: '/dailyReportAll/DeleteDailyReport',
+                                method: 'post',
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                data: JSON.stringify(data),
+                                traditional: true,
+                                success: function (response) {
+                                    window.location.href = response;
+                                },
+                                error: function (response) {
+                                    fn_hideSpinner();
+                                    var alertContent = "An error has occurred.";
+                                    $.alert({
+                                        title: 'Alert!',
+                                        content: alertContent,
+                                    });
+                                }
+                            });
                         },
                         cancel: function () {
                         }
