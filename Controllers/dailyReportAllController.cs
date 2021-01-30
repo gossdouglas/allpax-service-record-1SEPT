@@ -139,7 +139,7 @@ namespace allpax_service_record.Controllers
         {
             db.Database.ExecuteSqlCommand("DELETE FROM tbl_dailyReport WHERE dailyReportID=({0})", dailyReportDelete.dailyReportID);
 
-            return RedirectToAction("Index");
+            return Json(Url.Action("Index", "DailyReportAll"));
         }
 
         public List<string> TeamUserNamesByDailyReportID(int dailyReportID)
