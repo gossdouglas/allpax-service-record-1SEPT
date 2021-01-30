@@ -371,10 +371,15 @@
                     $(currentRow).prop("class", currentRowClassSwap);
                 }
 
-                //if (currentRowClass.includes("returnedRecords")) {
-                //    currentRowClassSwap = currentRowClass.replace(/returnedRecords/, "returnedRecordsInEdit");//
-                //    $(currentRow).prop("class", currentRowClassSwap);
-                //}
+                if (currentRowClass.includes("returnedRecords")) {                   
+                    currentRowClassSwap = currentRowClass.replace(/returnedRecords/, "returnedRecordsInEdit");//
+                    $(currentRow).prop("class", currentRowClassSwap);
+
+                    recordsToEditStatus = 1;
+                    $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                    $($(currentRow)).find(".Btn_editedRecord").removeAttr("hidden");
+                    $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+                }
 
                 console.log(".Btn_edit:" + currentRow.attr("class"));
                 console.log(".Btn_edit" + currentRowClassSwap);
@@ -676,10 +681,11 @@
 
             //only on existing records or copies
             $(".returnedRecords").on("change keypress", function () {
-                var currentRow = $(this);
-                recordsToEditStatus = 1;
-                temp_LineClass = $(this).prop("class");
+                //var currentRow = $(this);
+                //recordsToEditStatus = 1;
+                //temp_LineClass = $(this).prop("class");
 
+                //OLD
                 //used to change the class of a returned record to an edited record for later processing with an update operation
                 //if (temp_LineClass.includes("workDescLine")) {
                 //    $($(currentRow)).prop("class", "row editedRecords workDescLine");
@@ -690,24 +696,25 @@
                 //if (temp_LineClass.includes("wntyDelaysLine")) {
                 //    $($(currentRow)).prop("class", "row editedRecords wntyDelaysLine");
                 //}
+                //OLD
 
-                if (temp_LineClass.includes("workDescLine")) {
-                    $($(currentRow)).prop("class", "row returnedRecordsInEdit workDescLine");
-                }
+                //if (temp_LineClass.includes("workDescLine")) {
+                //    $($(currentRow)).prop("class", "row returnedRecordsInEdit workDescLine");
+                //}
 
-                if (temp_LineClass.includes("delaysLine")) {
-                    $($(currentRow)).prop("class", "row returnedRecordsInEdit delaysLine");
-                }
+                //if (temp_LineClass.includes("delaysLine")) {
+                //    $($(currentRow)).prop("class", "row returnedRecordsInEdit delaysLine");
+                //}
 
-                if (temp_LineClass.includes("wntyDelaysLine")) {
-                    $($(currentRow)).prop("class", "row returnedRecordsInEdit wntyDelaysLine");
-                }
+                //if (temp_LineClass.includes("wntyDelaysLine")) {
+                //    $($(currentRow)).prop("class", "row returnedRecordsInEdit wntyDelaysLine");
+                //}
 
-                $($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
-                $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
+                //$($(currentRow)).find(".button_div .Btn_edit").attr("disabled", "true");
+                //$($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
 
-                $($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
-                $($(currentRow)).find(".Btn_editedRecord").removeAttr("hidden");
+                //$($(currentRow)).find(".Btn_rtndRecord").attr("hidden", "true");
+                //$($(currentRow)).find(".Btn_editedRecord").removeAttr("hidden");
             });
 
             //END RETURNED RECORDS AND TIME ENTRY SECTION
