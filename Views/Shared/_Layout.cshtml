@@ -115,7 +115,7 @@
                 <li class="nav-item ">
                     <a class="nav-link" href="/dailyReport">Create New Daily Report</a>
                 </li>
-                <li class="nav-item ">
+                <li class="nav-item">
                     <a class="nav-link" href="/dailyReportAll">View Daily Reports</a>
                 </li>
                 @if (User.IsInRole("Admin"))
@@ -139,27 +139,12 @@
                         </div>
                     </li>
                 }
-
-                <li class="nav-item">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Library</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Data</li>
-                    </ol>
-                </li>
             </ul>
-            @*<nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Library</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Data</li>
-                </ol>
-            </nav>*@
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    @Html.Partial("_LoginPartial")
-                </li>
-            </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                @Html.Partial("_LoginPartial")
+            </li>
+        </ul>
 
         </div>
     </nav>
