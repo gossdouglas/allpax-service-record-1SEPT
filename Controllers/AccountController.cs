@@ -366,7 +366,8 @@ namespace allpax_service_record.Controllers
                 //var user = await UserManager.FindByNameAsync(model.Email);
                 var user = await UserManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-                //if (user == null)
+
+                if (user == null)
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
@@ -454,23 +455,35 @@ namespace allpax_service_record.Controllers
         {
             if (!ModelState.IsValid)
             {
+                System.Diagnostics.Debug.WriteLine("invalid model");
                 return View(model);
             }
+
             //canned logic was for the user name and the email address to be the same
-            //var user = await UserManager.FindByNameAsync(model.Email);
-            var user = await UserManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                // Don't reveal that the user does not exist
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
-            }
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            //var user = await UserManager.FindByEmailAsync(model.Email);
+            var user = await UserManager.FindByIdAsync(model.aspNetId);
+
+            //if (user == null)
+            //{
+            //    // Don't reveal that the user does not exist
+            //    return RedirectToAction("ResetPasswordConfirmation", "Account");
+            //}
+
+            //string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            string code = await UserManager.GeneratePasswordResetTokenAsync(model.aspNetId);
+
+            //var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            var result = await UserManager.ResetPasswordAsync(model.aspNetId, code, model.Password);
+
             if (result.Succeeded)
             {
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                //return RedirectToAction("ResetPasswordConfirmation", "Account");
+                System.Diagnostics.Debug.WriteLine("success");
             }
             AddErrors(result);
-            return View();
+
+            //return View();
+            return RedirectToAction("getUserAcctInfo", "Account");//redirects, and the daily report does kick out the records to its view
         }
 
         //

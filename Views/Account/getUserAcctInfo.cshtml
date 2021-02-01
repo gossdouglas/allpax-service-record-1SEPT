@@ -266,6 +266,24 @@
 
             //////////////////END THE EDIT USER MODAL SECTION
 
+            //////////////////BEGIN RESET PASSWORD MODAL SECTION
+
+            $('#resetPasswordForm').on('show.bs.modal', function (event) {
+
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var temp_aspNetId = button.data('asp-net-id') // Extract info from data-* attributes
+                var temp_fullName = button.data('full-name') // Extract info from data-* attributes
+                var temp_userName = button.data('user-name') // Extract info from data-* attributes
+
+                var modal = $(this)
+                modal.find('.modal-title').text('Update User Password')
+                modal.find('.asp-net-id').val(temp_aspNetId)
+                modal.find('.full-name').val(temp_fullName)
+                modal.find('.user-name').val(temp_userName)
+            })
+
+            //////////////////END RESET PASSWORD MODAL SECTION
+
             //////////////////BEGIN RETURNED RECORDS SECTION
 
             $(".returnedRecords .Btn_delete").click(function () {
@@ -433,57 +451,68 @@
                     bool temp_active = item.active;
                     //END TEMPORARY LOOP VARIABLES
 
-                <tr class="returnedRecords" id="" data-time-Entry-ID="" style="">
-                    <td class="aspNetId_div" hidden>@temp_aspNetId</td>
-                    <td class="block fullName_div">@temp_name</td>
-                    <td class="shortName_div">@temp_shortName</td>
-                    <td class="userName_div">@temp_userName</td>
-                    <td class="email_div">@temp_email</td>
+                    <tr class="returnedRecords" id="" data-time-Entry-ID="" style="">
+                        <td class="aspNetId_div" hidden>@temp_aspNetId</td>
+                        <td class="block fullName_div">@temp_name</td>
+                        <td class="shortName_div">@temp_shortName</td>
+                        <td class="userName_div">@temp_userName</td>
+                        <td class="email_div">@temp_email</td>
 
-                    <td class="admin_div">
-                        @if (temp_admin)
-                        {
-                            <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
-                        }
-                        else
-                        {
-                            <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
-                        }
-                    </td>
-                    <td class="active_div">
-                        @if (temp_active)
-                        {
-                            <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
-                        }
-                        else
-                        {
-                            <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
-                        }
-                    </td>
+                        <td class="admin_div">
+                            @if (temp_admin)
+                            {
+                                <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
+                            }
+                        </td>
+                        <td class="active_div">
+                            @if (temp_active)
+                            {
+                                <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
+                            }
+                        </td>
 
-                    @if ((@temp_userName == "admin") || (@temp_userName == @User.Identity.GetUserName()))
-                    {
-                        <td class="button_div" style="padding:0px;">
-                            <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                    data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
-                                <i class="far fa-edit fa-2x" style="color:black;">
-                                </i>
-                            </button>
-                            <button class="btn btn-light btn-sm Btn_delete" disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-                        </td>
-                    }
-                    @if ((@temp_userName != "admin") && (@temp_userName != @User.Identity.GetUserName()))
-                    {
-                        <td class="button_div" style="padding:0px;">
-                            <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                    data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
-                                <i class="far fa-edit fa-2x" style="color:black;">
-                                </i>
-                            </button>
-                            <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-                        </td>
-                    }
-                </tr>
+                        @if ((@temp_userName == "admin") || (@temp_userName == @User.Identity.GetUserName()))
+                        {
+                    <td class="button_div" style="padding:0px;">
+                        <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+                                data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
+                            <i class="far fa-edit fa-2x" style="color:black;">
+                            </i>
+                        </button>
+                        <button class="btn btn-light btn-sm Btn_delete" disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                        <button class="btn btn-light btn-sm Btn_resetPwd" data-toggle="modal" data-target="#resetPasswordForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+                                data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
+                            <i class="fas fa-key fa-2x" style="color:black;">
+                            </i>
+                        </button>
+
+                    </td>
+                        }
+                        @if ((@temp_userName != "admin") && (@temp_userName != @User.Identity.GetUserName()))
+                        {
+                    <td class="button_div" style="padding:0px;">
+                        <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+                                data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
+                            <i class="far fa-edit fa-2x" style="color:black;">
+                            </i>
+                        </button>
+                        <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                        <button class="btn btn-light btn-sm Btn_resetPwd" data-toggle="modal" data-target="#resetPasswordForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+                                data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
+                            <i class="fas fa-key fa-2x" style="color:black;">
+                            </i>
+                        </button>
+                    </td>
+                        }
+                    </tr>
                 }
                 @*END RETURNED RECORDS*@
             </tbody>
@@ -543,17 +572,6 @@
                                         <label for="email" class="col-form-label">E-mail:</label>
                                         <input type="text" class="form-control email">
                                         @*@Html.TextBoxFor(m => m.Email, new { @class = "form-control email" })*@
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="user-name" class="col-form-label">Password:</label>
-                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control password", @maxlength = "16" })
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="email" class="col-form-label">Confirm Password:</label>
-                                        @*<input type="text" class="form-control email">*@
-                                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control passwordConfirm", @maxlength = "16" })
                                     </div>
                                 </div>
                                 <div class="form-check form-check-inline">
@@ -624,6 +642,17 @@
                                         @Html.TextBoxFor(m => m.Email, new { @class = "form-control email" })
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="user-name" class="col-form-label">Password:</label>
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control password", @maxlength = "16" })
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="email" class="col-form-label">Confirm Password:</label>
+                                        @*<input type="text" class="form-control email">*@
+                                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control passwordConfirm", @maxlength = "16" })
+                                    </div>
+                                </div>
                                 <div class="form-check form-check-inline">
                                     @Html.CheckBoxFor(m => m.admin)
                                     <label class="form-check-label" for="">
@@ -648,6 +677,58 @@
         </div>
     }
     @*END NEW USER MODAL TEMPLATE*@
+
+    @*BEGIN CHANGE PASSWORD MODAL TEMPLATE*@
+    @using (Html.BeginForm("ResetPassword", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="modal fade" id="resetPasswordForm" tabindex="-1" role="dialog" aria-labelledby="resetPasswordForm" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userNewForm99">Update User Password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary("", new { @class = "text-danger" })
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="asp-net-id" class="col-form-label" hidden>ASP.net ID:</label>
+                                        @Html.TextBoxFor(m => m.aspNetId, new { @class = "form-control asp-net-id", @maxlength = "50", @readonly = "readonly", @hidden = "hidden" })
+                                        <label for="full-name" class="col-form-label">Full Name:</label>
+                                        @Html.TextBoxFor(m => m.name, new { @class = "form-control full-name", @maxlength = "50", @readonly = "readonly" })
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="user-name" class="col-form-label">User Name:</label>
+                                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control user-name", @maxlength = "16", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="password" class="col-form-label">Password:</label>
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control password", @maxlength = "16" })
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="password-confirm" class="col-form-label">Confirm Password:</label>
+                                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control passwordConfirm", @maxlength = "16" })
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn resetPasswordForm btn_save" value="ResetPassword">Save</button>
+                        <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @*END PASSWORD CHANGE MODAL TEMPLATE*@
 
 </div>
 @*END USER SECTION*@

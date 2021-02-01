@@ -34,6 +34,9 @@ namespace allpax_service_record.Models
 
     public class RegisterViewModel
     {
+        //ADDED BY GOSS
+        [Display(Name = "aspNetId")]
+        public string aspNetId { get; set; }
 
         //ADDED BY GOSS
         [Required]
@@ -81,7 +84,9 @@ namespace allpax_service_record.Models
 
     public class ResetPasswordViewModel
     {
-        [Required]
+        public string aspNetId { get; set; }
+
+        //[Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
