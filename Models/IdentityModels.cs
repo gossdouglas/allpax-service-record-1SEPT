@@ -21,6 +21,7 @@ namespace allpax_service_record.Models
         public string shortName { get; set; }
         public bool admin { get; set; }
         public bool active { get; set; }
+        //public bool emailConfirmed { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

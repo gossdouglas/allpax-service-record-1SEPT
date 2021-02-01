@@ -1,4 +1,5 @@
 ﻿@model allpax_service_record.Models.RegisterViewModel
+@using Microsoft.AspNet.Identity
 @*@model allpax_service_record.Models.View_Models.vm_userAcctInfo*@
 @{
     ViewBag.Title = "Register";
@@ -22,7 +23,7 @@
         }
 
         table {
-        table-layout: auto !important;
+            table-layout: auto !important;
         }
 
         thead th, tbody td, tfoot td, tfoot th {
@@ -51,48 +52,46 @@
         }
 
         /*/*BEGIN CHANGE LAYOUT FOR MOBILE*/
-        @@media only screen and (max-width: 760px),
-        (min-device-width: 768px) and (max-device-width: 1024px)  {
+        @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
 
             #userData_container {
                 width: 100%;
             }
+            /* Force table to not be like tables anymore */
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+                /* Hide table headers (but not display: none;, for accessibility) */
+                thead tr {
+                    position: absolute;
+                    top: -9999px;
+                    left: -9999px;
+                }
 
-	        /* Force table to not be like tables anymore */
-	        table, thead, tbody, th, td, tr {
-		        display: block;
-	        }
+            tr {
+                border: 1px solid #ccc;
+            }
 
-	        /* Hide table headers (but not display: none;, for accessibility) */
-	        thead tr {
-		        position: absolute;
-		        top: -9999px;
-		        left: -9999px;
-	        }
+            td {
+                /* Behave  like a "row" */
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 50%;
+            }
 
-	        tr { border: 1px solid #ccc; }
-
-	        td {
-		        /* Behave  like a "row" */
-		        border: none;
-		        border-bottom: 1px solid #eee;
-		        position: relative;
-		        padding-left: 50%;
-	        }
-
-	        td:before {
-		        /* Now like a table header */
-		        position: absolute;
-		        /* Top/left values mimic padding */
-		        top: 6px;
-		        left: 6px;
-		        width: 45%;
-		        padding-right: 10px;
-		        white-space: nowrap;
-	    }
-        /*END CHANGE LAYOUT FOR MOBILE*/
-}
-
+                td:before {
+                    /* Now like a table header */
+                    position: absolute;
+                    /* Top/left values mimic padding */
+                    top: 6px;
+                    left: 6px;
+                    width: 45%;
+                    padding-right: 10px;
+                    white-space: nowrap;
+                }
+            /*END CHANGE LAYOUT FOR MOBILE*/
+        }
     </style>
     <script>
         $(document).ready(function () {//begin document read jquery statements
@@ -226,7 +225,7 @@
                         }
                     });
                 }
-                });
+            });
 
             $(".userEditForm.btn_delete").click(function () {
                 console.clear();
@@ -327,7 +326,7 @@
 
             //////////////////END RETURNED RECORDS SECTION
 
-            //////////////////BEGIN MISCELLANEOUS SECTION            
+            //////////////////BEGIN MISCELLANEOUS SECTION
 
             function fn_showSpinner() {
                 $.LoadingOverlay("show", {
@@ -349,7 +348,7 @@
                 var temp_shortName = currentRow.find(".short-name").val();
                 var temp_userName = currentRow.find(".user-name").val();
                 var temp_email = currentRow.find(".email").val();
-                
+
                 console.log(temp_fullName)
                 console.log(temp_shortName)
                 console.log(temp_userName)
@@ -375,7 +374,7 @@
             });
 
             //////////////////END MISCELLANEOUS SECTION
-            
+
         });//end document read jquery statements
     </script>
 </head>
@@ -434,57 +433,57 @@
                     bool temp_active = item.active;
                     //END TEMPORARY LOOP VARIABLES
 
-                    <tr class="returnedRecords" id="" data-time-Entry-ID="" style="">
-                        <td class="aspNetId_div" hidden>@temp_aspNetId</td>
-                        <td class="block fullName_div">@temp_name</td>
-                        <td class="shortName_div">@temp_shortName</td>
-                        <td class="userName_div">@temp_userName</td>
-                        <td class="email_div">@temp_email</td>
+                <tr class="returnedRecords" id="" data-time-Entry-ID="" style="">
+                    <td class="aspNetId_div" hidden>@temp_aspNetId</td>
+                    <td class="block fullName_div">@temp_name</td>
+                    <td class="shortName_div">@temp_shortName</td>
+                    <td class="userName_div">@temp_userName</td>
+                    <td class="email_div">@temp_email</td>
 
-                        <td class="admin_div">
-                            @if (temp_admin)
-                            {
-                                <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
-                            }
-                            else
-                            {
-                                <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
-                            }
-                        </td>
-                        <td class="active_div">
-                            @if (temp_active)
-                            {
-                                <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
-                            }
-                            else
-                            {
-                                <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
-                            }
-                        </td>
-
-                        @if (@temp_userName == "admin")
+                    <td class="admin_div">
+                        @if (temp_admin)
                         {
-                            <td class="button_div" style="padding:0px;">
-                                <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                        data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
-                                    <i class="far fa-edit fa-2x" style="color:black;">
-                                    </i>
-                                </button>
-                                <button class="btn btn-light btn-sm Btn_delete" disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-                            </td>
+                            <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
                         }
                         else
                         {
-                            <td class="button_div" style="padding:0px;">
-                                <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                        data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
-                                    <i class="far fa-edit fa-2x" style="color:black;">
-                                    </i>
-                                </button>
-                                <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-                            </td>
+                            <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
                         }
-                    </tr>
+                    </td>
+                    <td class="active_div">
+                        @if (temp_active)
+                        {
+                            <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
+                        }
+                    </td>
+
+                    @if ((@temp_userName == "admin") || (@temp_userName == @User.Identity.GetUserName()))
+                    {
+                        <td class="button_div" style="padding:0px;">
+                            <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+                                    data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
+                                <i class="far fa-edit fa-2x" style="color:black;">
+                                </i>
+                            </button>
+                            <button class="btn btn-light btn-sm Btn_delete" disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                        </td>
+                    }
+                    @if ((@temp_userName != "admin") && (@temp_userName != @User.Identity.GetUserName()))
+                    {
+                        <td class="button_div" style="padding:0px;">
+                            <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+                                    data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
+                                <i class="far fa-edit fa-2x" style="color:black;">
+                                </i>
+                            </button>
+                            <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                        </td>
+                    }
+                </tr>
                 }
                 @*END RETURNED RECORDS*@
             </tbody>

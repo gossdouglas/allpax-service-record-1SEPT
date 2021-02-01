@@ -130,7 +130,7 @@ namespace allpax_service_record.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, name = model.name, shortName = model.ShortName, admin = model.admin, active = model.active };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, name = model.name, shortName = model.ShortName, admin = model.admin, active = model.active, EmailConfirmed = true};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

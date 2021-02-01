@@ -213,16 +213,17 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                                 data: JSON.stringify(data),
                                 traditional: true,
                                 success: function (response) {
-                                    window.location = '/DailyReportAll';//reload the page after a deletion
+                                    //window.location = '/DailyReportAll';//reload the page after a deletion
+                                    window.location.href = response;
                                 },
-                                error: function (response) {
-                                    fn_hideSpinner();
-                                    var alertContent = "An error has occurred.";
-                                    $.alert({
-                                        title: 'Alert!',
-                                        content: alertContent,
-                                    });
-                                }
+                                //error: function (response) {
+                                //    fn_hideSpinner();
+                                //    var alertContent = "An error has occurred.";
+                                //    $.alert({
+                                //        title: 'Alert!',
+                                //        content: alertContent,
+                                //    });
+                                //}
                             });
                         },
                         cancel: function () {
