@@ -3,7 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title-Service Record</title>
+    @*<title>@ViewBag.Title-Service Record</title>*@
+    <link rel="dd" href="~/assets/images/allpax_8jh_icon.ico">
+    @*<link rel="shortcut icon" href="~/assets/images/allpaxLogo.jpg">*@
+    <link rel="shortcut icon" href="~/assets/images/allpax.png">
+    <title>Allpax Customer Service Record</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -90,7 +94,6 @@
         .span_inlineBlock {
             display: inline-block
         }
-
     </style>
 
 </head>
@@ -117,9 +120,9 @@
                 </li>
                 @if (User.IsInRole("Admin"))
                 {
-                <li class="nav-item ">
-                    <a class="nav-link" href="/dailyReportViewActive">Active Daily Reports</a>
-                </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/dailyReportViewActive">Active Daily Reports</a>
+                    </li>
                 }
                 @if (User.IsInRole("Admin"))
                 {
@@ -136,12 +139,28 @@
                         </div>
                     </li>
                 }
+
+                <li class="nav-item">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Library</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Data</li>
+                    </ol>
+                </li>
             </ul>
+            @*<nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Library</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Data</li>
+                </ol>
+            </nav>*@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     @Html.Partial("_LoginPartial")
                 </li>
             </ul>
+
         </div>
     </nav>
     <div class="container-fluid">
