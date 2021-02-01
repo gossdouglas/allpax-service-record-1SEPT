@@ -287,315 +287,74 @@
                 </tbody>
             </table>
         </div>
-        </div>
-
-    @*<div class="" id="dailyRptViewActive_container">*@
-        @*<h3 style="text-align: center">ACTIVE CUSTOMER SERVICE DAILY LOGS</h3>
-        <div class="row">
-            <div class="md-col-1" style="padding: 5px ">
-                <strong>Start Date:</strong>
-            </div>
-            <div class="md-col-2" style="padding:5px">
-                <input type="date" class="form-control form-control-sm" id="startDateInput" placeholder="" value="">
-            </div>
-            <div class="md-col-1" style="padding:5px">
-                <strong>End Date:</strong>
-            </div>
-            <div class="md-col-2" style="padding:5px">
-                <input type="date" class="form-control form-control-sm" id="endDateInput" placeholder="" value="">
-            </div>
-            <div class="md-col-1" style="padding:5px">
-                <button class="btn btn-light btn-sm" id="filterDateBtn">Apply Date Filter</button>
-            </div>
-            <div class="md-col-1" style="padding:5px">
-                <div id="filtersToggle"></div>
-            </div>
-            <div id="filtersStatusBar"></div>
-            <div class="table-responsive">
-                        <table id="dt_dailyRptActive" class="table table-striped table-bordered" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th class="th_date">
-                                        Date
-                                    </th>
-                                    <th class="th_jobId">
-                                        Job
-                                    </th>
-                                    <th class="th_subJobType">
-                                        Sub-job
-                                    </th>
-                                    <th class="th_team">
-                                        Team
-                                    </th>
-                                    <th class="th_startTime">
-                                        Start Time
-                                    </th>
-                                    <th class="th_endTime">
-                                        End Time
-                                    </th>
-                                    <th class="th_totalHours">
-                                        Total Hours
-                                    </th>
-                                    <th class="th_delayHours">
-                                        Delay Hours
-                                    </th>
-                                    <th class="th_wntyHours">
-                                        Warranty Hours
-                                    </th>
-                                    <th class="th_action">
-                                        Action
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    //BEGIN TEMPORARY LOOP VARIABLES
-                                    string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
-                                    string temp_jobID = item.jobID;
-                                    string temp_startTime = string.Format("{0:00}:{1:00}", item.startTime.Hours, item.startTime.Minutes);
-                                    string temp_endTime = string.Format("{0:00}:{1:00}", item.endTime.Hours, item.endTime.Minutes);
-                                    int temp_lunchHours = item.lunchHours;
-                                    string temp_subJobDesc = item.subJobDescription;
-                                    Boolean temp_active = item.active;
-                                    decimal temp_totalHours = item.totalHours;
-                                    decimal temp_delayHours = item.delayHours;
-                                    decimal temp_wntyDelayHours = item.wntyDelayHours;
-                                    int temp_dailyReportID = item.dailyReportID;
-                                    List<string> temp_teamUserNames = item.teamUserNames;
-                                    List<string> temp_teamNames = item.teamNames;
-                                    List<string> temp_teamShortNames = item.teamShortNames;
-
-                                    string userLoggedIn = @User.Identity.GetUserName();
-                                    Boolean userAuthorized = false;
-                                    //END TEMPORARY LOOP VARIABLES
-
-                                    <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
-                                        <td id="record_item0" style="width:auto" @Html.DisplayFor(modelItem => item.date)>@Html.DisplayFor(modelItem => item.date)</td>
-                                        <td id="record_item1" value=@temp_jobID>@temp_jobID</td>
-                                        <td id="record_item2" value=@Html.DisplayFor(modelItem => item.subJobDescription)>@Html.DisplayFor(modelItem => item.subJobDescription)</td>
-                                        <td id="record_item3" value=>
-                                            <span>
-                                                @for (var i = 0; i < (temp_teamNames.Count); i++)
-                                                {
-                                                    <span class="" id="" style="">@temp_teamNames[@i]|</span>
-                                                }
-                                            </span>
-                                        </td>
-                                        <td id="record_item4" value=@Html.DisplayFor(modelItem => @temp_startTime)>@Html.DisplayFor(modelItem => @temp_startTime)</td>
-                                        <td id="record_item5" value=@Html.DisplayFor(modelItem => @temp_endTime)>@Html.DisplayFor(modelItem => @temp_endTime)</td>
-                                        <td id="record_item6" value=@Html.DisplayFor(modelItem => item.totalHours)>@Html.DisplayFor(modelItem => item.totalHours)</td>
-                                        <td id="record_item7" value=@Html.DisplayFor(modelItem => item.delayHours)>@Html.DisplayFor(modelItem => item.delayHours)</td>
-                                        <td id="record_item8" value=@Html.DisplayFor(modelItem => item.wntyDelayHours)>@Html.DisplayFor(modelItem => item.wntyDelayHours)</td>
-                                        <td>
-                                            @if (User.IsInRole("Admin"))
-                                            {
-                                                userAuthorized = true;
-                                            }
-                                            @if (userAuthorized == true)
-                                            {
-                                                <button class="btn btn-light btn-sm editButton">View Report @temp_dailyReportID</button>
-                                            }
-                                            else
-                                            {
-                                                <button class="btn btn-light btn-sm editButton" disabled>View Report @temp_dailyReportID</button>
-                                            }
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>*@
-                </div>
-
-            @*</div>*@
-
-            <!--<div class="" id="dailyRptViewActive_container">
-                <h3 style="text-align: center">ACTIVE CUSTOMER SERVICE DAILY LOGS</h3>
-                <div class="row">
-                    <div class="md-col-1" style="padding: 5px ">
-                        <strong>Start Date:</strong>
-                    </div>
-                    <div class="md-col-2" style="padding:5px">
-                        <input type="date" class="form-control form-control-sm" id="startDateInput" placeholder="" value="">
-                    </div>
-                    <div class="md-col-1" style="padding:5px">
-                        <strong>End Date:</strong>
-                    </div>
-                    <div class="md-col-2" style="padding:5px">
-                        <input type="date" class="form-control form-control-sm" id="endDateInput" placeholder="" value="">
-                    </div>
-                    <div class="md-col-1" style="padding:5px">
-                        <button class="btn btn-light btn-sm" id="filterDateBtn">Apply Date Filter</button>
-                    </div>
-                    <div class="md-col-1" style="padding:5px">
-                        <div id="filtersToggle"></div>
-                    </div>
-            @*<div id="filtersStatusBar"></div>*@
-            <!--<div class="table-responsive">
-                    <table id="dt_dailyRptActive" class="table table-striped table-bordered" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th class="th_date">
-                                    Date
-                                </th>
-                                <th class="th_jobId">
-                                    Job
-                                </th>
-                                <th class="th_subJobType">
-                                    Sub-job
-                                </th>
-                                <th class="th_team">
-                                    Team
-                                </th>
-                                <th class="th_startTime">
-                                    Start Time
-                                </th>
-                                <th class="th_endTime">
-                                    End Time
-                                </th>
-                                <th class="th_totalHours">
-                                    Total Hours
-                                </th>
-                                <th class="th_delayHours">
-                                    Delay Hours
-                                </th>
-                                <th class="th_wntyHours">
-                                    Warranty Hours
-                                </th>
-                                <th class="th_action">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                //BEGIN TEMPORARY LOOP VARIABLES
-                                string temp_date = String.Format("{0:yyyy-MM-dd}", item.date);
-                                string temp_jobID = item.jobID;
-                                string temp_startTime = string.Format("{0:00}:{1:00}", item.startTime.Hours, item.startTime.Minutes);
-                                string temp_endTime = string.Format("{0:00}:{1:00}", item.endTime.Hours, item.endTime.Minutes);
-                                int temp_lunchHours = item.lunchHours;
-                                string temp_subJobDesc = item.subJobDescription;
-                                Boolean temp_active = item.active;
-                                decimal temp_totalHours = item.totalHours;
-                                decimal temp_delayHours = item.delayHours;
-                                decimal temp_wntyDelayHours = item.wntyDelayHours;
-                                int temp_dailyReportID = item.dailyReportID;
-                                List<string> temp_teamUserNames = item.teamUserNames;
-                                List<string> temp_teamNames = item.teamNames;
-                                List<string> temp_teamShortNames = item.teamShortNames;
-
-                                string userLoggedIn = @User.Identity.GetUserName();
-                                Boolean userAuthorized = false;
-                                //END TEMPORARY LOOP VARIABLES
-
-                                <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
-                                    <td id="record_item0" style="width:auto" @Html.DisplayFor(modelItem => item.date)>@Html.DisplayFor(modelItem => item.date)</td>
-                                    <td id="record_item1" value=@temp_jobID>@temp_jobID</td>
-                                    <td id="record_item2" value=@Html.DisplayFor(modelItem => item.subJobDescription)>@Html.DisplayFor(modelItem => item.subJobDescription)</td>
-                                    <td id="record_item3" value=>
-                                        <span>
-                                            @for (var i = 0; i < (temp_teamNames.Count); i++)
-                                            {
-                                                <span class="" id="" style="">@temp_teamNames[@i]|</span>
-                                            }
-                                        </span>
-                                    </td>
-                                    <td id="record_item4" value=@Html.DisplayFor(modelItem => @temp_startTime)>@Html.DisplayFor(modelItem => @temp_startTime)</td>
-                                    <td id="record_item5" value=@Html.DisplayFor(modelItem => @temp_endTime)>@Html.DisplayFor(modelItem => @temp_endTime)</td>
-                                    <td id="record_item6" value=@Html.DisplayFor(modelItem => item.totalHours)>@Html.DisplayFor(modelItem => item.totalHours)</td>
-                                    <td id="record_item7" value=@Html.DisplayFor(modelItem => item.delayHours)>@Html.DisplayFor(modelItem => item.delayHours)</td>
-                                    <td id="record_item8" value=@Html.DisplayFor(modelItem => item.wntyDelayHours)>@Html.DisplayFor(modelItem => item.wntyDelayHours)</td>
-                                    <td>
-                                        @if (User.IsInRole("Admin"))
-                                        {
-                                            userAuthorized = true;
-                                        }
-                                        @if (userAuthorized == true)
-                                        {
-                                            <button class="btn btn-light btn-sm editButton">View Report @temp_dailyReportID</button>
-                                        }
-                                        else
-                                        {
-                                            <button class="btn btn-light btn-sm editButton" disabled>View Report @temp_dailyReportID</button>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            </div>-->
-
-            <script>
-                var tf = new TableFilter('dt_dailyRptActive', {//new instance of TableFilter
-                    base_path: '/Content/tableFilter/dist/tablefilter/',//where the plugin lives locally
-                    col_0: 'none',//date
-                    col_1: 'checklist',//job
-                    col_2: 'checklist',//subJob
-                    col_3: 'none',//team
-                    col_4: 'none',//start time
-                    col_5: 'none',//end time
-                    col_6: 'none',//total hours
-                    col_7: 'none',//delay hours
-                    col_8: 'none',//warranty delay hours
-                    col_9: 'none',//action
-                    toolbar: {
-                        target_id: 'filtersStatusBar'//the id of the html element in which the status bar lives
-                    },
-                    paging: {
-                        results_per_page: ['Records: ', [10, 25, 50, 100]],
-                    },//enable paging
-                    rows_counter: {
-                        text: 'Total items: ', over_text: ' of '
-                    },
-                    auto_filter: {
-                        delay: 250
-                    },
-                    col_widths: [
-                        "120px",//date
-                        "120px",//job
-                        "200px",//subJob
-                        "250px",//team
-                        "170px",//start time
-                        "170px",//end time
-                        "170px",//total hours
-                        "170px",//delay hours
-                        "170px",//warranty delay hours
-                        "auto"],//action
-                    extensions: [{
-                        name: 'filtersVisibility',//bring in the extension
-                        visible_at_start: true,//true on page load in order to determine the proper size of the table
-                        target_id: 'filtersToggle',//the is of where the filter row lives
-                        //shape of the filter visibilty toggle
-                        btn_html: "<span><button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton'>Toggle Column Filters</button></span>",
-                    },
-                    { name: 'sort' }
-                    ],
-                    // allows Bootstrap table styling
-                    themes: [{
-                        name: 'transparent'//allow Bootstrap styling to be visible
-                    }],
-                    // columns data types
-                    col_types: [
-                        { type: 'date', locale: 'en-US' },//date
-                        'string',//job
-                        'string',//subJob
-                        'none',//team
-                        'time',//start time
-                        'time',//end time
-                        'number',//total hours
-                        'number',//delay hours
-                        'number',//warranty delay hours
-                        'none'//action
-                    ],
-                });
-                tf.init();//initialize this instance of TableFilter
-            </script>
+        </div>  
+</div>
+         
+<script>
+    var tf = new TableFilter('dt_dailyRptActive', {//new instance of TableFilter
+        base_path: '/Content/tableFilter/dist/tablefilter/',//where the plugin lives locally
+        col_0: 'none',//date
+        col_1: 'checklist',//job
+        col_2: 'checklist',//subJob
+        col_3: 'none',//team
+        col_4: 'none',//start time
+        col_5: 'none',//end time
+        col_6: 'none',//total hours
+        col_7: 'none',//delay hours
+        col_8: 'none',//warranty delay hours
+        col_9: 'none',//action
+        toolbar: {
+            target_id: 'filtersStatusBar'//the id of the html element in which the status bar lives
+        },
+        paging: {
+            results_per_page: ['Records: ', [10, 25, 50, 100]],
+        },//enable paging
+        rows_counter: {
+            text: 'Total items: ', over_text: ' of '
+        },
+        auto_filter: {
+            delay: 250
+        },
+        col_widths: [
+            "120px",//date
+            "120px",//job
+            "200px",//subJob
+            "250px",//team
+            "170px",//start time
+            "170px",//end time
+            "170px",//total hours
+            "170px",//delay hours
+            "170px",//warranty delay hours
+            "auto"],//action
+        extensions: [{
+            name: 'filtersVisibility',//bring in the extension
+            visible_at_start: true,//true on page load in order to determine the proper size of the table
+            target_id: 'filtersToggle',//the is of where the filter row lives
+            //shape of the filter visibilty toggle
+            btn_html: "<span><button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton'>Toggle Column Filters</button></span>",
+        },
+        { name: 'sort' }
+        ],
+        // allows Bootstrap table styling
+        themes: [{
+            name: 'transparent'//allow Bootstrap styling to be visible
+        }],
+        // columns data types
+        col_types: [
+            { type: 'date', locale: 'en-US' },//date
+            'string',//job
+            'string',//subJob
+            'none',//team
+            'time',//start time
+            'time',//end time
+            'number',//total hours
+            'number',//delay hours
+            'number',//warranty delay hours
+            'none'//action
+        ],
+    });
+    tf.init();//initialize this instance of TableFilter
+</script>
 
 
 
