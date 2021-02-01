@@ -12,6 +12,7 @@ using System.Data.SqlClient;
 
 namespace allpax_service_record.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class resourceTypesController : Controller
     {
         private allpaxServiceRecordEntities db = new allpaxServiceRecordEntities();

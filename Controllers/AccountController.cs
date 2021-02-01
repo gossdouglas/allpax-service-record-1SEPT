@@ -20,7 +20,7 @@ using System.Net;
 
 namespace allpax_service_record.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -462,6 +462,7 @@ namespace allpax_service_record.Controllers
             //canned logic was for the user name and the email address to be the same
             //var user = await UserManager.FindByEmailAsync(model.Email);
             var user = await UserManager.FindByIdAsync(model.aspNetId);
+            System.Diagnostics.Debug.WriteLine(user.name);
 
             //if (user == null)
             //{

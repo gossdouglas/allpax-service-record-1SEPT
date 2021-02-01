@@ -439,7 +439,8 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             target_id: 'filtersStatusBar'//the id of the html element in which the status bar lives
         },
         paging: {
-            results_per_page: ['Records: ', [10, 25, 50, 100]],
+            results_per_page: ['Records: ', [50, 100]],
+            pageLength: 50,
         },//enable paging
         rows_counter: {
             text: 'Total items: ', over_text: ' of '

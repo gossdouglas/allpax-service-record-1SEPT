@@ -11,6 +11,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 namespace allpax_service_record.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class subJobTypesController : Controller
     {
         private allpaxServiceRecordEntities db = new allpaxServiceRecordEntities();
