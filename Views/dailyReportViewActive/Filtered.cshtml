@@ -32,28 +32,7 @@
             text-overflow: ellipsis;
         }
 
-        th.th_jobId {
-            width: 5%;
-        }
-
-        /*th.th_date, th.th_subJobType, th.th_startTime, th.th_endTime, th.th_totalHours, th.th_delayHours, th.th_wntyHours, th.th_action {
-            width: 10%;
-        }*/
-
-        /*th.th_team {
-            width: 15%;
-        }*/
-
         #filterResetDateBtn {
-            background-color: #D7D8D6;
-            border-style: solid;
-            border-color: black;
-            border-radius: 0px;
-            font-family: Tahoma;
-            color: black;
-        }
-
-        #fltrTgglBtn {
             background-color: #D7D8D6;
             border-style: solid;
             border-color: black;
@@ -73,6 +52,11 @@
 
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+
+            #reportData_container {
+                width: 100%;
+            }
+
             /* Force table to not be like tables anymore */
             table, thead, tbody, th, td, tr {
                 display: block;
@@ -143,7 +127,7 @@
             //end when the filter reset button is clicked
 
             //BEGIN HIDE THE FILTER ROW AFTER PAGE LOAD
-            $(".fltrow").css("display", "none");
+            //$(".fltrow").css("display", "none");
             //END HIDE THE FILTER ROW AFTER PAGE LOAD
 
             //BEGIN HIDE TABLEFILTER HELP LINK AFTER PAGE LOAD
@@ -172,9 +156,9 @@
         <div class="md-col-1" style="padding:5px">
             <button class="btn btn-primary btn-sm" id="filterResetDateBtn">Reset Date Filter</button>
         </div>
-        <div class="md-col-1" style="padding:5px">
+        @*<div class="md-col-1" style="padding:5px">
             <div id="filtersToggle"></div>
-        </div>
+        </div>*@
     </div>
     @*<div class="col-md-12" style="border:none">*@
     <div class="" id="reportData_container">
@@ -208,7 +192,7 @@
                             Delay Hours
                         </th>
                         <th class="th_wntyHours">
-                            Warranty Hours
+                            Wnty Hours
                         </th>
                         <th class="th_action">
                             Action
@@ -302,23 +286,23 @@
         auto_filter: {
             delay: 250
         },
-        //col_widths: [
-        //    "120px",//date
-        //    "120px",//job
-        //    "200px",//subJob
-        //    "250px",//team
-        //    "170px",//start time
-        //    "170px",//end time
-        //    "170px",//total hours
-        //    "170px",//delay hours
-        //    "170px",//warranty delay hours
-        //    "auto"],//action
+        col_widths: [
+            "10%",//date
+            "5%",//job
+            "10%",//subJob
+            "30%",//team
+            "7%",//start time
+            "7%",//end time
+            "7%",//total hours
+            "7%",//delay hours
+            "7%",//warranty delay hours
+            "auto"],//action
         extensions: [{
             name: 'filtersVisibility',//bring in the extension
             visible_at_start: true,//true on page load in order to determine the proper size of the table
-            target_id: 'filtersToggle',//the is of where the filter row lives
+            //target_id: 'filtersToggle',//the is of where the filter row lives
             //shape of the filter visibilty toggle
-            btn_html: "<span><button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton'>Toggle Column Filters</button></span>",
+            //btn_html: "<span><button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton'>Toggle Column Filters</button></span>",
         },
         { name: 'sort' }
         ],

@@ -32,7 +32,7 @@
             text-overflow: ellipsis;
         }
 
-        th.th_active, th.th_jobID {
+        /*th.th_active, th.th_jobID {
             width: 5%;
         }
 
@@ -42,7 +42,7 @@
 
         th.th_customer, th.th_team, th.th_subJob, th.th_workDesc {
             width: auto;
-        }
+        }*/
 
         #filterResetDateBtn {
             background-color: #D7D8D6;
@@ -244,7 +244,7 @@
             //end when the filter reset button is clicked
 
             //BEGIN HIDE THE FILTER ROW AFTER PAGE LOAD
-            $(".fltrow").css("display", "none");
+            //$(".fltrow").css("display", "none");
             //END HIDE THE FILTER ROW AFTER PAGE LOAD
 
             //BEGIN HIDE TABLEFILTER HELP LINK AFTER PAGE LOAD
@@ -273,9 +273,9 @@
         <div class="md-col-1" style="padding:5px">
             <button class="btn btn-primary btn-sm" id="filterResetDateBtn">Reset Date Filter</button>
         </div>
-        <div class="md-col-1" style="padding:5px">
+        @*<div class="md-col-1" style="padding:5px">
             <div id="filtersToggle"></div>
-        </div>
+        </div>*@
     </div>
     @*<div class="col-md-12" style="border:none">*@
     <div class="" id="reportData_container">
@@ -425,7 +425,7 @@
         auto_filter: {
             delay: 250
         },
-        //col_widths: [
+        col_widths: [
         //    "120px",//reportID
         //    "120px",//Active
         //    "120px",//date
@@ -436,12 +436,23 @@
         //    "400px",//team
         //    "170px",//work description
         //    "auto"],//action
+
+            "5%",//reportID
+            "5%",//Active
+            "10%",//date
+            "5%",//job
+            "10%",//subJob
+            "auto",//customer
+            "10%",//location
+            "auto",//team
+            "auto",//work description
+            "auto"],//action
         extensions: [{
             name: 'filtersVisibility',//bring in the extension
             visible_at_start: true,//true on page load in order to determine the proper size of the table
-            target_id: 'filtersToggle',//the is of where the filter row lives
+            //target_id: 'filtersToggle',//the is of where the filter row lives
             //shape of the filter visibilty toggle
-            btn_html: "<span><button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton'>Toggle Column Filters</button></span>",
+            //btn_html: "<span><button id= 'fltrTgglBtn' class='btn btn-primary btn-sm editButton'>Toggle Column Filters</button></span>",
         },
         { name: 'sort' }
         ],
