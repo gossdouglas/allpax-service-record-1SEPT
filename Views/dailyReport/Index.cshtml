@@ -443,7 +443,7 @@
                 var currentTeamDpdwnParsed = $(button).parent().parent().find(".dpdwn_parsed_div");
 
                 $(currentTeamShortNameLists).each(function (index) {
-                    currentWorkDescTeamShortNamesParsed = currentWorkDescTeamShortNamesParsed.concat($(this).attr("title") + "| ");
+                    currentWorkDescTeamShortNamesParsed = currentWorkDescTeamShortNamesParsed.concat($(this).attr("title") + " | ");
                 });
                 currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
             }
