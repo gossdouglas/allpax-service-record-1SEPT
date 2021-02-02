@@ -12,11 +12,6 @@
 
     <style>
 
-        .breadcrumb {
-            background-color: transparent;
-            padding: 0px;
-        }
-
         .admin_div, .active_div {
             text-align: center
         }
@@ -53,6 +48,13 @@
             width: 80%;
             margin: 0 auto;
             height: calc(100vh - 150px);
+            overflow: auto;
+        }
+
+        #userData_cntr_hdr {
+            position: relative;
+            width: 80%;
+            margin: 0 auto;
             overflow: auto;
         }
 
@@ -401,136 +403,129 @@
         });//end document read jquery statements
     </script>
 </head>
-<div class="col-md-12">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/dailyReportAll">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Admin Tasks</li>
-            <li class="breadcrumb-item active" aria-current="page">Users</li>
-        </ol>
-    </nav>
-</div>
 @*BEGIN USER SECTION*@
 <hr class="sectionSeparator">
-<div class="col-12" style="padding:0px;">
-    <span><strong>Add a New User</strong></span>
-    <span>
-        <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#userNewForm">
-            <i class="far fa-plus-square fa-2x" style="color:black;"></i>
-        </button>
-    </span>
+<div class="" id="userData_cntr_hdr">
+    <div class="col-12" style="padding:0px;">
+        <h2>
+            <span>
+                <strong>User Management</strong>
+                <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#userNewForm">
+                    <i class="far fa-plus-square fa-2x" style="color:black;"></i>
+                </button>
+            </span>
+        </h2>
+    </div>
 </div>
-<hr class="sectionSeparator">
-@*<div class="container-md" id="userData_container" style="overflow:auto; height: calc(100vh - 150px)">*@
 <div class="" id="userData_container">
     <div class="table-responsive">
-        <table id="dt_dailyRptAll" class="table table-striped table-bordered" style="width:100%">
-            <thead>
-                <tr>
-                    <th class="th_fullName">
-                        <span>Full Name</span>
-                    </th>
-                    <th class="th_shortName">
-                        Short Name
-                    </th>
-                    <th class="th_userName">
-                        User Name
-                    </th>
-                    <th class="th_email">
-                        E-mail
-                    </th>
-                    <th class="th_admin">
-                        Admin
-                    </th>
-                    <th class="th_active">
-                        Active
-                    </th>
-                    <th class="th_action">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @*BEGIN RETURNED RECORDS*@
-                @foreach (var item in Model.userAcctInfo)
-                {
-                    //BEGIN TEMPORARY LOOP VARIABLES
-                    string temp_aspNetId = item.aspNetId;
-                    string temp_name = item.name;
-                    string temp_shortName = item.ShortName;
-                    string temp_userName = item.UserName;
-                    string temp_email = item.Email;
-                    bool temp_admin = item.admin;
-                    bool temp_active = item.active;
-                    //END TEMPORARY LOOP VARIABLES
-
-                    <tr class="returnedRecords" id="" data-time-Entry-ID="" style="">
-                        <td class="aspNetId_div" hidden>@temp_aspNetId</td>
-                        <td class="block fullName_div">@temp_name</td>
-                        <td class="shortName_div">@temp_shortName</td>
-                        <td class="userName_div">@temp_userName</td>
-                        <td class="email_div">@temp_email</td>
-
-                        <td class="admin_div">
-                            @if (temp_admin)
-                            {
-                                <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
-                            }
-                            else
-                            {
-                                <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
-                            }
-                        </td>
-                        <td class="active_div">
-                            @if (temp_active)
-                            {
-                                <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
-                            }
-                            else
-                            {
-                                <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
-                            }
-                        </td>
-
-                        @if ((@temp_userName == "admin") || (@temp_userName == @User.Identity.GetUserName()))
-                        {
-                    <td class="button_div" style="padding:0px;">
-                        <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
-                            <i class="far fa-edit fa-2x" style="color:black;">
-                            </i>
-                        </button>
-                        <button class="btn btn-light btn-sm Btn_delete" disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-                        <button class="btn btn-light btn-sm Btn_resetPwd" data-toggle="modal" data-target="#resetPasswordForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
-                            <i class="fas fa-key fa-2x" style="color:black;">
-                            </i>
-                        </button>
-
-                    </td>
-                        }
-                        @if ((@temp_userName != "admin") && (@temp_userName != @User.Identity.GetUserName()))
-                        {
-                    <td class="button_div" style="padding:0px;">
-                        <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
-                            <i class="far fa-edit fa-2x" style="color:black;">
-                            </i>
-                        </button>
-                        <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-                        <button class="btn btn-light btn-sm Btn_resetPwd" data-toggle="modal" data-target="#resetPasswordForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
-                            <i class="fas fa-key fa-2x" style="color:black;">
-                            </i>
-                        </button>
-                    </td>
-                        }
+            <table id="dt_dailyRptAll" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="th_fullName">
+                            <span>Full Name</span>
+                        </th>
+                        <th class="th_shortName">
+                            Short Name
+                        </th>
+                        <th class="th_userName">
+                            User Name
+                        </th>
+                        <th class="th_email">
+                            E-mail
+                        </th>
+                        <th class="th_admin">
+                            Admin
+                        </th>
+                        <th class="th_active">
+                            Active
+                        </th>
+                        <th class="th_action">
+                            Action
+                        </th>
                     </tr>
-                }
-                @*END RETURNED RECORDS*@
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @*BEGIN RETURNED RECORDS*@
+                    @foreach (var item in Model.userAcctInfo)
+                    {
+                        //BEGIN TEMPORARY LOOP VARIABLES
+                        string temp_aspNetId = item.aspNetId;
+                        string temp_name = item.name;
+                        string temp_shortName = item.ShortName;
+                        string temp_userName = item.UserName;
+                        string temp_email = item.Email;
+                        bool temp_admin = item.admin;
+                        bool temp_active = item.active;
+                        //END TEMPORARY LOOP VARIABLES
+
+                        <tr class="returnedRecords" id="" data-time-Entry-ID="" style="">
+                            <td class="aspNetId_div" hidden>@temp_aspNetId</td>
+                            <td class="block fullName_div">@temp_name</td>
+                            <td class="shortName_div">@temp_shortName</td>
+                            <td class="userName_div">@temp_userName</td>
+                            <td class="email_div">@temp_email</td>
+
+                            <td class="admin_div">
+                                @if (temp_admin)
+                                {
+                                    <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
+                                }
+                            </td>
+                            <td class="active_div">
+                                @if (temp_active)
+                                {
+                                    <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-check-circle fa-2x" style="color:red;"></i>
+                                }
+                            </td>
+
+                            @if ((@temp_userName == "admin") || (@temp_userName == @User.Identity.GetUserName()))
+                            {
+                                <td class="button_div" style="padding:0px;">
+                                    <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+                                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
+                                        <i class="far fa-edit fa-2x" style="color:black;">
+                                        </i>
+                                    </button>
+                                    <button class="btn btn-light btn-sm Btn_delete" disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                                    <button class="btn btn-light btn-sm Btn_resetPwd" data-toggle="modal" data-target="#resetPasswordForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+                                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
+                                        <i class="fas fa-key fa-2x" style="color:black;">
+                                        </i>
+                                    </button>
+
+                                </td>
+                            }
+                            @if ((@temp_userName != "admin") && (@temp_userName != @User.Identity.GetUserName()))
+                            {
+                                <td class="button_div" style="padding:0px;">
+                                    <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+                                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
+                                        <i class="far fa-edit fa-2x" style="color:black;">
+                                        </i>
+                                    </button>
+                                    <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                                    <button class="btn btn-light btn-sm Btn_resetPwd" data-toggle="modal" data-target="#resetPasswordForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
+                                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
+                                        <i class="fas fa-key fa-2x" style="color:black;">
+                                        </i>
+                                    </button>
+                                </td>
+                            }
+                        </tr>
+                    }
+                    @*END RETURNED RECORDS*@
+                </tbody>
+            </table>
+        </div>
 
     @*END RETURNED RECORDS*@
 

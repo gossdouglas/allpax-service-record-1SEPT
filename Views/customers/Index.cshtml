@@ -10,11 +10,6 @@
 
     <style>
 
-        .breadcrumb {
-            background-color: transparent;
-            padding: 0px;
-        }
-
         /*AN INVISIBLE HORIZONTAL SPACE*/
         .sectionSeparator {
             margin: 1px;
@@ -45,6 +40,13 @@
             width: 60%;
             margin: 0 auto;
             height: calc(100vh - 150px);
+            overflow: auto;
+        }
+
+        #userData_cntr_hdr {
+            position: relative;
+            width: 80%;
+            margin: 0 auto;
             overflow: auto;
         }
 
@@ -365,15 +367,6 @@
         });//end document read jquery statements
     </script>
 </head>
-<div class="col-md-12">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/dailyReportAll">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Admin Tasks</li>
-            <li class="breadcrumb-item active" aria-current="page">Customers</li>
-        </ol>
-    </nav>
-</div>
 @*BEGIN CUSTOMER SECTION*@
 <hr class="sectionSeparator">
 <div class="col-12" style="padding:0px;">
