@@ -12,9 +12,37 @@
 @*FILTERED DAILY REPORTS*@
 <head>
     <style>
-        .container {
-            border: 2px solid black;
+
+        #reportData_container {
+            position: relative;
+            width: 100%;
+            margin: 0 auto;
+            height: calc(100vh - 150px);
+            overflow: auto;
         }
+
+        table {
+            table-layout: fixed;
+            /*table-layout: auto !important;*/
+        }
+
+        thead th, tbody td, tfoot td, tfoot th {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        th.th_jobId {
+            width: 5%;
+        }
+
+        /*th.th_date, th.th_subJobType, th.th_startTime, th.th_endTime, th.th_totalHours, th.th_delayHours, th.th_wntyHours, th.th_action {
+            width: 10%;
+        }*/
+
+        /*th.th_team {
+            width: 15%;
+        }*/
 
         #filterResetDateBtn {
             background-color: #D7D8D6;
@@ -41,20 +69,6 @@
             border-radius: 0px;
             font-family: Tahoma;
             color: white;
-        }
-
-        table {
-            /*table-layout: auto !important;*/
-            table-layout: fixed !important;
-        }
-
-        thead th, tbody td, tfoot td, tfoot th {
-            /*width: auto !important;*/
-            white-space: nowrap;
-        }
-
-        td {
-            overflow: auto;
         }
 
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
@@ -162,40 +176,41 @@
             <div id="filtersToggle"></div>
         </div>
     </div>
-    <div class="col-md-12" style="border:none">
+    @*<div class="col-md-12" style="border:none">*@
+    <div class="" id="reportData_container">
         <div id="filtersStatusBar"></div>
         <div class="table-responsive">
             <table id="dt_dailyRptActive" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th class="th-sm">
+                        <th class="th_date">
                             Date
                         </th>
-                        <th class="th-sm">
+                        <th class="th_jobId">
                             Job
                         </th>
-                        <th class="th-sm">
+                        <th class="th_subJobType">
                             Sub-job
                         </th>
-                        <th class="th-sm">
+                        <th class="th_team">
                             Team
                         </th>
-                        <th class="th-sm">
+                        <th class="th_startTime">
                             Start Time
                         </th>
-                        <th class="th-sm">
+                        <th class="th_endTime">
                             End Time
                         </th>
-                        <th class="th-sm">
+                        <th class="th_totalHours">
                             Total Hours
                         </th>
-                        <th class="th-sm">
+                        <th class="th_delayHours">
                             Delay Hours
                         </th>
-                        <th class="th-sm">
+                        <th class="th_wntyHours">
                             Warranty Hours
                         </th>
-                        <th class="th-sm">
+                        <th class="th_action">
                             Action
                         </th>
                     </tr>
@@ -266,14 +281,14 @@
     var tf = new TableFilter('dt_dailyRptActive', {//new instance of TableFilter
         base_path: '/Content/tableFilter/dist/tablefilter/',//where the plugin lives locally
         col_0: 'none',//date
-        col_1: 'checklist',//job
-        col_2: 'checklist',//subJob
-        col_3: 'none',//team
+        col_1: '',//job
+        col_2: '',//subJob
+        col_3: '',//team
         col_4: 'none',//start time
         col_5: 'none',//end time
-        col_6: 'none',//total hours
-        col_7: 'none',//delay hours
-        col_8: 'none',//warranty delay hours
+        col_6: '',//total hours
+        col_7: '',//delay hours
+        col_8: '',//warranty delay hours
         col_9: 'none',//action
         toolbar: {
             target_id: 'filtersStatusBar'//the id of the html element in which the status bar lives
@@ -287,17 +302,17 @@
         auto_filter: {
             delay: 250
         },
-        col_widths: [
-            "120px",//date
-            "120px",//job
-            "200px",//subJob
-            "250px",//team
-            "170px",//start time
-            "170px",//end time
-            "170px",//total hours
-            "170px",//delay hours
-            "170px",//warranty delay hours
-            "auto"],//action
+        //col_widths: [
+        //    "120px",//date
+        //    "120px",//job
+        //    "200px",//subJob
+        //    "250px",//team
+        //    "170px",//start time
+        //    "170px",//end time
+        //    "170px",//total hours
+        //    "170px",//delay hours
+        //    "170px",//warranty delay hours
+        //    "auto"],//action
         extensions: [{
             name: 'filtersVisibility',//bring in the extension
             visible_at_start: true,//true on page load in order to determine the proper size of the table
