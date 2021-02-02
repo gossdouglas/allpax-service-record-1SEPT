@@ -10,9 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
 
     <style>
-
-        
-
+     
         /*AN INVISIBLE HORIZONTAL SPACE*/
         .sectionSeparator {
             margin: 1px;
@@ -25,12 +23,9 @@
         }
 
         thead th, tbody td, tfoot td, tfoot th {
-            /*width: auto !important;*/
             white-space: nowrap;
-        }
-
-        td {
-            overflow: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         th.th_jobID, th.th_action, th.th_active {
