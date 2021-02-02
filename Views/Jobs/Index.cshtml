@@ -10,6 +10,11 @@
     <script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
 
     <style>
+
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0px;
+        }
      
         /*AN INVISIBLE HORIZONTAL SPACE*/
         .sectionSeparator {
@@ -1428,7 +1433,15 @@
     </script>
 
 </head>
-
+<div class="col-md-12">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/dailyReportAll">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Admin Tasks</li>
+            <li class="breadcrumb-item active" aria-current="page">Jobs</li>
+        </ol>
+    </nav>
+</div>
 @*BEGIN USER SECTION*@
 <hr class="sectionSeparator">
 <div class="col-md-12" style="padding:0px;">

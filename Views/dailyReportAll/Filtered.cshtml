@@ -32,6 +32,11 @@
             text-overflow: ellipsis;
         }
 
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0px;
+        }
+
         /*th.th_active, th.th_jobID {
             width: 5%;
         }
@@ -254,7 +259,14 @@
         });//end document read jquery statements
     </script>
 </head>
-
+<div class="col-md-12">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/dailyReportAll">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Filtered Daily Reports</li>
+        </ol>
+    </nav>
+</div>
 <div class="container-fluid">
     <h3 style="text-align: center">CUSTOMER SERVICE DAILY LOGS</h3>
     <div class="row">

@@ -11,6 +11,11 @@
 
     <style>
 
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0px;
+        }
+
         /*AN INVISIBLE HORIZONTAL SPACE*/
         .sectionSeparator {
             margin: 1px;
@@ -351,7 +356,15 @@
         });//end document read jquery statements
     </script>
 </head>
-
+<div class="col-md-12">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/dailyReportAll">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Admin Tasks</li>
+            <li class="breadcrumb-item active" aria-current="page">Sub-job Types</li>
+        </ol>
+    </nav>
+</div>
 @*BEGIN SUB-JOB TYPE SECTION*@
 <hr class="sectionSeparator">
 <div class="col-12" style="padding:0px;">

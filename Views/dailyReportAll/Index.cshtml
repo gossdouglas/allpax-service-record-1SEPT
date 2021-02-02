@@ -6,7 +6,7 @@
 
 @{
     ViewBag.Title = "Index";
-Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @*DAILY REPORT ALL*@
@@ -26,24 +26,17 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             table-layout: fixed;
             /*table-layout: auto !important;*/
         }
-      
+
         thead th, tbody td, tfoot td, tfoot th {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        /*th.th_reportID, th.th_active, th.th_jobID {
-            width: 5%;
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0px;
         }
-
-         th.th_date, th.th_subJob, th.th_location, th.th_action {
-            width: 10%;
-        }
-
-        th.th_customer, th.th_team, th.th_subJob, th.th_workDesc {
-            width: auto;
-        }*/
 
         #filterDateBtn {
             background-color: #D7D8D6;
@@ -89,19 +82,17 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             font-family: Tahoma;
             color: black;
         }
-       
+
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
 
             #reportData_container {
                 width: 100%;
             }
-
             /* Force table to not be like tables anymore */
             table, thead, tbody, th, td, tr {
                 display: block;
             }
-
                 /* Hide table headers (but not display: none;, for accessibility) */
                 thead tr {
                     position: absolute;
@@ -133,7 +124,6 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                 }
             /*END CHANGE LAYOUT FOR MOBILE*/
         }
-
     </style>
 
     @*BEGIN TABLE FILTER*@
@@ -239,7 +229,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             $("#dt_dailyRptAll tbody").on("click", ".copyButton", function () {//when a record's copy button is clicked...
 
                 window.location = '/dailyReportByReportID/copyDailyReport?reportID=' + selectedItem0;
-              
+
             });
 
             $("#filterDateBtn").on('click', function () {//...when the line save button is pressed
@@ -281,6 +271,13 @@ Layout = "~/Views/Shared/_Layout.cshtml";
     </script>
 </head>
 
+<div class="col-md-12">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/dailyReportAll">Home</a></li>
+        </ol>
+    </nav>
+</div>
 <div class="container-fluid">
     <h3 style="text-align: center">CUSTOMER SERVICE DAILY LOGS</h3>
     <div class="row">
@@ -300,10 +297,9 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             <button class="btn btn-light btn-sm" id="filterDateBtn">Apply Date Filter</button>
         </div>
         @*<div class="md-col-1" style="padding:5px">
-            <div id="filtersToggle"></div>
-        </div>*@
+                <div id="filtersToggle"></div>
+            </div>*@
     </div>
-    @*<div class="col-md-12" style="border:none">*@
     <div class="" id="reportData_container">
         <div id="filtersStatusBar"></div>
         <div class="table-responsive">
