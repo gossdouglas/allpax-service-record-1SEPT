@@ -12,35 +12,40 @@
 @*FILTERED DAILY REPORTS*@
 <head>
     <style>
-        /*.container {
-            border: 2px solid black;
-        }*/
 
-        /*table {
-            table-layout: fixed;
-        }*/
-
-        table {
-            table-layout: auto !important;
+        #reportData_container {
+            position: relative;
+            width: 100%;
+            margin: 0 auto;
+            height: calc(100vh - 150px);
+            overflow: auto;
         }
 
-        /*#record_item8 {
-            overflow: hidden;
+        table {
+            /*table-layout: auto;*/
+            table-layout: fixed;
+        }
+
+        thead th, tbody td, tfoot td, tfoot th {
             white-space: nowrap;
+            overflow: hidden;
             text-overflow: ellipsis;
-        }*/
+        }
+
+        th.th_active, th.th_jobID {
+            width: 5%;
+        }
+
+        th.th_reportID, th.th_date, th.th_subJob, th.th_location, th.th_action {
+            width: 10%;
+        }
+
+        th.th_customer, th.th_team, th.th_subJob, th.th_workDesc {
+            width: auto;
+        }
 
         #filterResetDateBtn {
             background-color: #D7D8D6;
-            border-style: solid;
-            border-color: black;
-            border-radius: 0px;
-            font-family: Tahoma;
-            color: black;
-        }
-
-        #newDailyRptBtn {
-            background-color: #83B6CC;
             border-style: solid;
             border-color: black;
             border-radius: 0px;
@@ -87,7 +92,7 @@
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
 
-            #customerData_container {
+            #reportData_container {
                 width: 100%;
             }
 
@@ -272,39 +277,40 @@
             <div id="filtersToggle"></div>
         </div>
     </div>
-    <div class="col-md-12" style="border:none">
+    @*<div class="col-md-12" style="border:none">*@
+    <div class="" id="reportData_container">
         <div id="filtersStatusBar"></div>
         <table id="dt_dailyRptAll" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th class="th-sm">
+                    <th class="th_reportID">
                         Report ID
                     </th>
-                    <th class="th-sm">
+                    <th class="th_active">
                         Active
                     </th>
-                    <th class="th-sm">
+                    <th class="th_date">
                         Date
                     </th>
-                    <th class="th-sm">
+                    <th class="th_jobID">
                         Job
                     </th>
-                    <th class="th-sm">
+                    <th class="th_subJob">
                         Sub Job
                     </th>
-                    <th class="th-sm">
+                    <th class="th_customer">
                         Customer
                     </th>
-                    <th class="th-sm">
+                    <th class="th_location">
                         Location
                     </th>
-                    <th class="th-sm">
+                    <th class="th_team">
                         Team
                     </th>
-                    <th class="th-sm">
+                    <th class="th_workDesc">
                         Work
                     </th>
-                    <th class="th-sm">
+                    <th class="th_action">
                         Action
                     </th>
                 </tr>
@@ -398,13 +404,13 @@
     var tf = new TableFilter('dt_dailyRptAll', {//new instance of TableFilter
         base_path: '/Content/tableFilter/dist/tablefilter/',//where the plugin lives locally
         col_0: 'none',//reportID
-        col_1: 'checklist',//Active
+        col_1: '',//Active
         col_2: 'none',//date
-        col_3: 'checklist',//job
-        col_4: 'checklist',//subJob
-        col_5: 'checklist',//customer
-        col_6: 'checklist',//location
-        col_7: 'none',//team
+        col_3: '',//job
+        col_4: '',//subJob
+        col_5: '',//customer
+        col_6: '',//location
+        col_7: '',//team
         col_8: '',//work description
         col_9: 'none',//action
         toolbar: {

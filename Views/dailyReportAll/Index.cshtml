@@ -310,7 +310,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             <table id="dt_dailyRptAll" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th class="th_reportID" id="thReportID">
+                        <th class="th_reportID">
                             Report ID
                         </th>
                         <th class="th_active">
@@ -431,13 +431,13 @@ Layout = "~/Views/Shared/_Layout.cshtml";
     var tf = new TableFilter('dt_dailyRptAll', {//new instance of TableFilter
         base_path: '/Content/tableFilter/dist/tablefilter/',//where the plugin lives locally
         col_0: 'none',//reportID
-        col_1: 'checklist',//Active
+        col_1: '',//Active
         col_2: 'none',//date
-        col_3: 'checklist',//job
-        col_4: 'checklist',//subJob
-        col_5: 'checklist',//customer
-        col_6: 'checklist',//location
-        col_7: 'none',//team
+        col_3: '',//job
+        col_4: '',//subJob
+        col_5: '',//customer
+        col_6: '',//location
+        col_7: '',//team
         col_8: '',//work description
         col_9: 'none',//action
         toolbar: {
