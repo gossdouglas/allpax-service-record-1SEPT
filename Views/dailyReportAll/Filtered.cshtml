@@ -12,19 +12,23 @@
 @*FILTERED DAILY REPORTS*@
 <head>
     <style>
-        .container {
+        /*.container {
             border: 2px solid black;
-        }
+        }*/
 
         /*table {
             table-layout: fixed;
         }*/
 
-        #record_item8 {
+        table {
+            table-layout: auto !important;
+        }
+
+        /*#record_item8 {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-        }
+        }*/
 
         #filterResetDateBtn {
             background-color: #D7D8D6;
@@ -78,6 +82,50 @@
             border-radius: 0px;
             font-family: Tahoma;
             color: black;
+        }
+
+        /*BEGIN CHANGE LAYOUT FOR MOBILE*/
+        @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+
+            #customerData_container {
+                width: 100%;
+            }
+
+            /* Force table to not be like tables anymore */
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+                /* Hide table headers (but not display: none;, for accessibility) */
+                thead tr {
+                    position: absolute;
+                    top: -9999px;
+                    left: -9999px;
+                }
+
+            tr {
+                border: 1px solid #ccc;
+            }
+
+            td {
+                /* Behave  like a "row" */
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 50%;
+            }
+
+                td:before {
+                    /* Now like a table header */
+                    position: absolute;
+                    /* Top/left values mimic padding */
+                    top: 6px;
+                    left: 6px;
+                    width: 45%;
+                    padding-right: 10px;
+                    white-space: nowrap;
+                }
+            /*END CHANGE LAYOUT FOR MOBILE*/
         }
     </style>
 
@@ -371,17 +419,17 @@
         auto_filter: {
             delay: 250
         },
-        col_widths: [
-            "120px",//reportID
-            "120px",//Active
-            "120px",//date
-            "120px",//job
-            "170px",//subJob
-            "170px",//customer
-            "170px",//location
-            "400px",//team
-            "170px",//work description
-            "auto"],//action
+        //col_widths: [
+        //    "120px",//reportID
+        //    "120px",//Active
+        //    "120px",//date
+        //    "120px",//job
+        //    "170px",//subJob
+        //    "170px",//customer
+        //    "170px",//location
+        //    "400px",//team
+        //    "170px",//work description
+        //    "auto"],//action
         extensions: [{
             name: 'filtersVisibility',//bring in the extension
             visible_at_start: true,//true on page load in order to determine the proper size of the table
