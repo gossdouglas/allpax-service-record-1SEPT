@@ -10,28 +10,23 @@ namespace allpax_service_record.Models.View_Models
     {
         public string aspNetId { get; set; }
 
-        //public string name { get; set; }
         [Required]
         [Display(Name = "Full Name")]
         public string name { get; set; }
 
-        //public string ShortName { get; set; }
         [Required]
         [Display(Name = "Short Name")]
         public string ShortName { get; set; }
 
-        //public string UserName { get; set; }
         [Required]
         [Display(Name = "User Name")]
         public string UserName { get; set; }
 
-        //public string Email { get; set; }
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
@@ -42,12 +37,10 @@ namespace allpax_service_record.Models.View_Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        //public bool admin { get; set; }
         [Required]
         [Display(Name = "Admin Status")]
         public bool admin { get; set; }
 
-        //public bool active { get; set; }
         [Required]
         [Display(Name = "Active")]
         public bool active { get; set; }
