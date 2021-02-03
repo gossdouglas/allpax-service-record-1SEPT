@@ -33,11 +33,6 @@
             text-overflow: ellipsis;
         }
 
-        /*.breadcrumb {
-            background-color: transparent;
-            padding: 0px;
-        }*/
-
         #filterDateBtn {
             background-color: #D7D8D6;
             border-style: solid;
@@ -81,6 +76,11 @@
             border-radius: 0px;
             font-family: Tahoma;
             color: black;
+        }
+
+        .container-fluid {
+            background-color: black;
+            color: lightgray;
         }
 
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
@@ -272,6 +272,7 @@
             function fn_navBarUpdate() {
                 $(".nav-item").css('border', 'none');
                 $(".nav-item.dailyReportAll").css('border', '1px solid grey');
+                $(".inf").css('background', 'black');
             }
 
         });//end document read jquery statements

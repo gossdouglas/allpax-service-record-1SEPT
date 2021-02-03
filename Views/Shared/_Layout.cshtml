@@ -94,11 +94,17 @@
         .span_inlineBlock {
             display: inline-block
         }
+
+        /*.nav-link.navBar {*/
+        .navBar {
+            color: blue;
+        }
+
     </style>
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg" style="background-color: lightgray;">
         <div class="navbar-header">
             <button class="navbar-toggler navbar-toggler-right"
                     type="button" data-toggle="collapse"
@@ -113,29 +119,29 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dailyReport">
-                    <a class="nav-link" href="/dailyReport">Create New Daily Report</a>
+                    <a class="nav-link navBar" href="/dailyReport">Create New Daily Report</a>
                 </li>
                 <li class="nav-item dailyReportAll">
-                    <a class="nav-link" href="/dailyReportAll">View Daily Reports</a>
+                    <a class="nav-link navBar" href="/dailyReportAll">View Daily Reports</a>
                 </li>
                 @if (User.IsInRole("Admin"))
                 {
                 <li class="nav-item dailyReportViewActive">
-                    <a class="nav-link" href="/dailyReportViewActive">Active Daily Reports</a>
+                    <a class="nav-link navBar" href="/dailyReportViewActive">Active Daily Reports</a>
                 </li>
                 }
                 @if (User.IsInRole("Admin"))
                 {
                 <li class="nav-item dropdown adminTasks">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link navBar dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin Tasks
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="nav-link" href="/Customers">Customers</a>
-                        <a class="nav-link" href="/Jobs">Jobs</a>
-                        <a class="nav-link" href="/SubJobTypes">Sub-job Types</a>
-                        <a class="nav-link" href="/ResourceTypes">Resource Types</a>
-                        <a class="nav-link" href="/Account/GetUserAcctInfo">Users</a>
+                        <a class="nav-link navBar" href="/Customers">Customers</a>
+                        <a class="nav-link navBar" href="/Jobs">Jobs</a>
+                        <a class="nav-link navBar" href="/SubJobTypes">Sub-job Types</a>
+                        <a class="nav-link navBar" href="/ResourceTypes">Resource Types</a>
+                        <a class="nav-link navBar" href="/Account/GetUserAcctInfo">Users</a>
                     </div>
                 </li>
                 }
