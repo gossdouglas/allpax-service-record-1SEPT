@@ -46,9 +46,9 @@
             overflow: auto;
         }
 
-        #userData_cntr_hdr {
+        #resourceData_cntr_hdr {
             position: relative;
-            width: 80%;
+            width: 40%;
             margin: 0 auto;
             overflow: auto;
         }
@@ -401,27 +401,20 @@
         });//end document read jquery statements
     </script>
 </head>
-@*<div class="col-md-12">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/dailyReportAll">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Admin Tasks</li>
-            <li class="breadcrumb-item active" aria-current="page">Resource Types</li>
-        </ol>
-    </nav>
-</div>*@
 @*BEGIN RESOURCE SECTION*@
 <hr class="sectionSeparator">
-<div class="col-12" style="padding:0px;">
-    <span><strong>Add a New Resource</strong></span>
-    <span>
-        <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#resourceNewForm">
-            <i class="far fa-plus-square fa-2x" style="color:black;"></i>
-        </button>
-    </span>
+<div class="" id="resourceData_cntr_hdr">
+    <div class="col-12" style="padding:0px;">
+        <h2>
+            <span>
+                <strong>Resource Management</strong>
+                <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#resourceNewForm">
+                    <i class="far fa-plus-square fa-2x" style="color:black;"></i>
+                </button>
+            </span>
+        </h2>
+    </div>
 </div>
-<hr class="sectionSeparator">
-@*<div class="container-md" id="resourceData_container" style="overflow:auto; height: calc(100vh - 150px)">*@
 <div class="" id="resourceData_container">
     <div class="table-responsive">
         <table id="dt_resourceData" class="table table-striped table-bordered" style="width:100%">

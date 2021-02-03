@@ -43,9 +43,9 @@
             overflow: auto;
         }
 
-        #userData_cntr_hdr {
+        #customerData_cntr_hdr {
             position: relative;
-            width: 80%;
+            width: 60%;
             margin: 0 auto;
             overflow: auto;
         }
@@ -369,15 +369,18 @@
 </head>
 @*BEGIN CUSTOMER SECTION*@
 <hr class="sectionSeparator">
-<div class="col-12" style="padding:0px;">
-    <span><strong>Add a New Customer</strong></span>
-    <span>
-        <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#customerNewForm">
-            <i class="far fa-plus-square fa-2x" style="color:black;"></i>
-        </button>
-    </span>
+<div class="" id="customerData_cntr_hdr">
+    <div class="col-12" style="padding:0px;">
+        <h2>
+            <span>
+                <strong>Customer Management</strong>
+                <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#customerNewForm">
+                    <i class="far fa-plus-square fa-2x" style="color:black;"></i>
+                </button>
+            </span>
+        </h2>
+    </div>
 </div>
-<hr class="sectionSeparator">
 <div class="" id="customerData_container">
     <div class="table-responsive">
         <table id="dt_customerData" class="table table-striped table-bordered" style="width:100%">
