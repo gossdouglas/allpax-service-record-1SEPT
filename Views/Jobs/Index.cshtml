@@ -10,12 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
 
     <style>
-
-        /*.breadcrumb {
-            background-color: transparent;
-            padding: 0px;
-        }*/
-     
+    
         /*AN INVISIBLE HORIZONTAL SPACE*/
         .sectionSeparator {
             margin: 1px;
@@ -33,17 +28,13 @@
             text-overflow: ellipsis;
         }
 
-        th.th_jobID, th.th_action, th.th_active {
-            width: 5%;
-        }
-
-        th.th_action {
-            width: 10%;
+        th.th_jobID, th.th_active {
+            width: 7%;
         }
 
         th.th_customerCode {
             width: 15%;
-        }
+        } 
 
         th.th_customerContact, th.th_workDescription {
             width: 30%;
@@ -51,7 +42,7 @@
 
         #jobData_container {
             position: relative;
-            width: 80%;
+            width: 90%;
             margin: 0 auto;
             height: calc(100vh - 150px);
             overflow: auto;
@@ -59,7 +50,7 @@
 
         #jobData_cntr_hdr {
             position: relative;
-            width: 80%;
+            width: 90%;
             margin: 0 auto;
             overflow: auto;
         }
@@ -182,6 +173,7 @@
             var customerCode_OnLoad = '';
 
             fn_enableSelect2();
+            fn_navBarUpdate();
 
             //////////////////BEGIN THE COMMON NEW JOB AND EDIT JOB MODAL SECTION
 
@@ -1433,6 +1425,11 @@
             }
             //Begin validation
 
+            function fn_navBarUpdate() {
+                $(".nav-item").css('border', 'none');
+                $(".nav-item.adminTasks").css('border', '1px solid grey');
+            }
+
             //////////////////END MISCELLANEOUS SECTION           
 
         });//end document read jquery statements
@@ -1446,7 +1443,7 @@
     <div class="col-12" style="padding:0px;">
         <h2>
             <span>
-                <strong>Resource Management</strong>
+                <strong>Job Management</strong>
                 <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#jobNewForm">
                     <i class="far fa-plus-square fa-2x" style="color:black;"></i>
                 </button>

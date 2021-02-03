@@ -99,6 +99,8 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
+            fn_navBarUpdate();
+
             //////////////////BEGIN THE COMMON NEW RESOURCE TYPE AND EDIT RESOURCE TYPE MODAL SECTION
 
             //////////////////END THE COMMON NEW RESOURCE TYPE AND EDIT RESOURCE TYPE MODAL SECTION
@@ -394,6 +396,11 @@
                     return modalValid;
                 }
                 return modalValid;
+            }
+
+            function fn_navBarUpdate() {
+                $(".nav-item").css('border', 'none');
+                $(".nav-item.adminTasks").css('border', '1px solid grey');
             }
 
             //////////////////END MISCELLANEOUS SECTION

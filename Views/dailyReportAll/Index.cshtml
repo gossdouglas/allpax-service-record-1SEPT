@@ -137,6 +137,8 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
+            fn_navBarUpdate();
+
             //begin when a record class is clicked...
             $("#dt_dailyRptAll tbody").on("click mouseover", ".record", function () {
 
@@ -266,6 +268,11 @@
             //window.onbeforeunload = function (e) {
             //    return 'Dialog text here.';
             //};
+
+            function fn_navBarUpdate() {
+                $(".nav-item").css('border', 'none');
+                $(".nav-item.dailyReportAll").css('border', '1px solid grey');
+            }
 
         });//end document read jquery statements
     </script>

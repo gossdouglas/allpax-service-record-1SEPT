@@ -120,6 +120,7 @@
                 $(allPasswordInputs).val('');//reset text boxes
                 $(allCheckInputs).prop('checked', false);//reset check boxes
             }
+            fn_navBarUpdate();
 
             $('#userNewForm').on('show.bs.modal', function (event) {
 
@@ -397,6 +398,11 @@
             $('.short-name').keyup(function () {
                 $(this).val($(this).val().toUpperCase());
             });
+
+            function fn_navBarUpdate() {
+                $(".nav-item").css('border', 'none');
+                $(".nav-item.adminTasks").css('border', '1px solid grey');
+            }
 
             //////////////////END MISCELLANEOUS SECTION
 

@@ -110,6 +110,8 @@
     <script>
         $(document).ready(function () {//begin document read jquery statements
 
+            fn_navBarUpdate();
+
             //begin when a record class is clicked...
             $(".record").on('click mouseover', function () {
                 selectedItem0 = $(this).attr("id");//works
@@ -138,6 +140,11 @@
             //BEGIN HIDE TABLEFILTER HELP LINK AFTER PAGE LOAD
             $(".helpBtn").css("display", "none");
             //END HIDE TABLEFILTER HELP LINK AFTER PAGE LOAD
+
+            function fn_navBarUpdate() {
+                $(".nav-item").css('border', 'none');
+                $(".nav-item.dailyReportViewActive").css('border', '1px solid grey');
+            }
 
         });//end document read jquery statements
     </script>

@@ -41,7 +41,7 @@
 
         #subJobTypeData_container {
             position: relative;
-            width: 30%;
+            width: 35%;
             margin: 0 auto;
             height: calc(100vh - 150px);
             overflow: auto;
@@ -49,7 +49,7 @@
 
         #subJobTypeData_cntr_hdr {
             position: relative;
-            width: 30%;
+            width: 35%;
             margin: 0 auto;
             overflow: auto;
         }
@@ -99,6 +99,8 @@
     </style>
     <script>
         $(document).ready(function () {//begin document read jquery statements
+
+            fn_navBarUpdate();
 
             //////////////////BEGIN THE COMMON NEW SUB-JOB TYPE AND EDIT SUB-JOB TYPE MODAL SECTION
 
@@ -356,6 +358,11 @@
                 }
 
                 return modalValid;
+            }
+
+            function fn_navBarUpdate() {
+                $(".nav-item").css('border', 'none');
+                $(".nav-item.adminTasks").css('border', '1px solid grey');
             }
 
             //////////////////END MISCELLANEOUS SECTION          

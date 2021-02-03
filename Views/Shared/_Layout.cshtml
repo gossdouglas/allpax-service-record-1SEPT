@@ -112,32 +112,32 @@
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item ">
+                <li class="nav-item dailyReport">
                     <a class="nav-link" href="/dailyReport">Create New Daily Report</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item dailyReportAll">
                     <a class="nav-link" href="/dailyReportAll">View Daily Reports</a>
                 </li>
                 @if (User.IsInRole("Admin"))
                 {
-                    <li class="nav-item ">
-                        <a class="nav-link" href="/dailyReportViewActive">Active Daily Reports</a>
-                    </li>
+                <li class="nav-item dailyReportViewActive">
+                    <a class="nav-link" href="/dailyReportViewActive">Active Daily Reports</a>
+                </li>
                 }
                 @if (User.IsInRole("Admin"))
                 {
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Admin Tasks
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="nav-link" href="/Customers">Customers</a>
-                            <a class="nav-link" href="/Jobs">Jobs</a>
-                            <a class="nav-link" href="/SubJobTypes">Sub-job Types</a>
-                            <a class="nav-link" href="/ResourceTypes">Resource Types</a>
-                            <a class="nav-link" href="/Account/GetUserAcctInfo">Users</a>
-                        </div>
-                    </li>
+                <li class="nav-item dropdown adminTasks">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin Tasks
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="nav-link" href="/Customers">Customers</a>
+                        <a class="nav-link" href="/Jobs">Jobs</a>
+                        <a class="nav-link" href="/SubJobTypes">Sub-job Types</a>
+                        <a class="nav-link" href="/ResourceTypes">Resource Types</a>
+                        <a class="nav-link" href="/Account/GetUserAcctInfo">Users</a>
+                    </div>
+                </li>
                 }
             </ul>
         <ul class="navbar-nav ml-auto">

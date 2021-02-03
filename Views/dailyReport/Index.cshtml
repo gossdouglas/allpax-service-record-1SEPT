@@ -92,6 +92,7 @@
 
             fn_enableSelect2();//enable the select2 add-on on page load
             fn_loadDropDowns();
+            fn_navBarUpdate();
 
             //BEGIN DAILY REPORT LOG SECTION
 
@@ -807,6 +808,11 @@
                 //}
             }
             //window.onbeforeunload = okToCloseBrowser; 
+
+            function fn_navBarUpdate() {
+                $(".nav-item").css('border', 'none');
+                $(".nav-item.dailyReport").css('border', '1px solid grey');
+            }
 
             //END MISCELLANEOUS SECTION
 
