@@ -217,14 +217,6 @@ namespace allpax_service_record.Controllers
             string mainconn = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             SqlConnection sqlconn = new SqlConnection(mainconn);
 
-            //string sqlquery1 = "SELECT tbl_Users.shortName " +
-            //"FROM " +
-            //"tbl_Users " +
-            //"INNER JOIN " +
-            //"tbl_dailyReportUsers ON tbl_dailyReportUsers.userName = tbl_Users.userName " +
-            //"WHERE " +
-            //"tbl_dailyReportUsers.dailyReportID = @dailyReportID";
-
             string sqlquery1 = "SELECT AspNetUsers.shortName " +
             "FROM " +
             "AspNetUsers " +

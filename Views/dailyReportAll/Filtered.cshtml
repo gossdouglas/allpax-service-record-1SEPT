@@ -296,7 +296,7 @@
             <thead>
                 <tr>
                     <th class="th_reportID">
-                        Report ID
+                        ID
                     </th>
                     <th class="th_active">
                         Active
@@ -365,15 +365,17 @@
                             <span>
                                 @for (var i = 0; i < (temp_team.Count); i++)
                                 {
-                                    <span class="" id="" style=""> @temp_team[@i] | </span>
+                                    @(temp_team[@i] + "|")
                                 }
                             </span>
                         </td>
                         <td id="record_item8" value= style="overflow:hidden; white-space:nowrap">
-                            @for (var i = 0; i < (temp_workDescription.Count); i++)
-                            {
-                                @temp_workDescription[@i]
-                            }
+                            <span>
+                                @for (var i = 0; i < (temp_workDescription.Count); i++)
+                                {
+                                    @(temp_workDescription[@i] + "|")
+                                }
+                            </span>
                         </td>
                         <td>
                             @if (User.IsInRole("Admin") | userLoggedIn == temp_author)

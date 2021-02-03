@@ -531,7 +531,7 @@
                 var currentTeamDpdwnParsed = $(button).parent().parent().find(".dpdwn_parsed_div");
 
                 $(currentTeamShortNameLists).each(function (index) {
-                    currentWorkDescTeamShortNamesParsed = currentWorkDescTeamShortNamesParsed.concat($(this).attr("title") + " | ");
+                    currentWorkDescTeamShortNamesParsed = currentWorkDescTeamShortNamesParsed.concat($(this).attr("title") + "|");
                 });
                 currentTeamDpdwnParsed.html(currentWorkDescTeamShortNamesParsed);
             }
@@ -1288,7 +1288,7 @@
     <div class="col-md-3 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" contenteditable="false" style="">
         @for (var k = 0; k < (temp_userShortNames.Count); k++)
         {
-            @(temp_userShortNames[k] + " | ");
+            @(temp_userShortNames[k] + "|");
         }
     </div>
 
@@ -1442,7 +1442,7 @@
         @*AB|DB|JB*@
         @for (var k = 0; k < (temp_userShortNames.Count); k++)
         {
-            @(temp_userShortNames[k] + " | ");
+            @(temp_userShortNames[k] + "|");
         }
     </div>
 
@@ -1588,7 +1588,7 @@
         @*AB|DB|JB*@
         @for (var k = 0; k < (temp_userShortNames.Count); k++)
         {
-            @(temp_userShortNames[k] + " | ");
+            @(temp_userShortNames[k] + "|");
         }
     </div>
 
