@@ -1,83 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
 
-<head>
-    <script>
-
-        //Begin when the save button on the edit resource type modal is pressed
-        $('#linkLogOff').click(function () {
-
-            console.log("log off selected.")
-
-                fn_showSpinner();//display the spinner to demonstrate an operation is underway
-                $.ajax({
-                    url: '/ResourceTypes/UpdateResourceType',
-                    method: 'post',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    traditional: true,
-                    //if successful, redirect the page returned by the controller
-                    success: function (response) {
-                        window.location.href = response;
-                    },
-                    //if un-successful...
-                    error: function (response) {
-                        fn_hideSpinner();//hide the spinner
-
-                        //build an error string based on the error returned from the controller...
-                        var alertContent = "An error has occurred.";
-
-                        //and display that error in an alert box
-                        $.alert({
-                            title: 'Alert!',
-                            content: alertContent,
-                        });
-                    }
-                });
-        }
-
-            
-        );
-
-        $('.aaf').on("click", function () {
-            //var usersid = $(this).attr("id");
-            alert('yo')
-            //post code
-        })
-
-        function fn_logOff() {
-            console.log("log off.")
-
-            $.ajax({
-                url: '/Account/LogOff',
-                method: 'post',
-                contentType: 'application/json',
-                dataType: 'json',
-                //data: JSON.stringify(data),
-                traditional: true,
-                //if successful, redirect the page returned by the controller
-                success: function (response) {
-                    //window.location.href = response;
-                },
-                //if un-successful...
-                //error: function (response) {
-                //    fn_hideSpinner();//hide the spinner
-
-                //    //build an error string based on the error returned from the controller...
-                //    var alertContent = "An error has occurred.";
-
-                //    //and display that error in an alert box
-                //    $.alert({
-                //        title: 'Alert!',
-                //        content: alertContent,
-                //    });
-                //}
-            });
-        }
-
-    </script>
-</head>
-
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
@@ -90,10 +12,6 @@
         @Html.ActionLink("Hello " + User.Identity.GetUserName() + "! |", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
     </li>
     <li><a href="javascript:document.getElementById('logoutForm').submit()">&nbsp;Log off</a></li>
-    @*<li>@Html.ActionLink("Log off", "LogOff", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>*@
-    @*<li><a id="linkLogOff" href="javascript:void(0)">&nbsp;Log off2</a></li>*@
-    @*<li><a href="#" onclick="fn_logOff()">Log off</a></li>*@
-    <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>
 </ul>
     }
 }
