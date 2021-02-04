@@ -20,7 +20,6 @@ using System.Net;
 
 namespace allpax_service_record.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
