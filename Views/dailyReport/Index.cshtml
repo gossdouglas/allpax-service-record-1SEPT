@@ -42,6 +42,29 @@
             margin: 1px;
             opacity: 0;
         }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black;
+        }
+
+            .tooltip .tooltiptext {
+                /*visibility: hidden;*/
+                width: 120px;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                border-radius: 6px;
+                padding: 5px 0;
+                /* Position the tooltip */
+                position: absolute;
+                z-index: 1;
+            }
+
+            .tooltip:hover .tooltiptext {
+                visibility: visible;
+            }
         /*END UPDATED CSS COPY FROM EDIT PAGE*/
 
     </style>
@@ -991,6 +1014,11 @@
 <hr class="sectionSeparator">
 <div class="container" id="contnrDailyLog">
     <h3 style="text-align:center">CREATE A NEW FIELD SERVICE RECORD</h3>
+    @*<button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>*@
+    <div class="tooltip">
+        Hover over me
+        <span class="tooltiptext">Tooltip text</span>
+    </div>
     <div class="row">
         <div class="col-md-2" style="padding:5px">
             <strong>Daily Log Information</strong>
@@ -1151,6 +1179,7 @@
                 <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
+
             <div class="col-md-3 dpdwn_parsed_div workDescTeam_dpdwn_parsed_div" id="" hidden contenteditable="false" style="">
 
             </div>
@@ -1160,16 +1189,16 @@
                 @*0.0*@
             </div>
 
-        <div class="col-md-2 button_div workDescTeam_button_div" style="padding:0px;">
-            <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30" ></button>
+            <div class="col-md-2 button_div workDescTeam_button_div" style="padding:0px;">
+                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
 
-            <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-            <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-            <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
-        </div>
+                <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+            </div>
 
             <div class="col-md-1 state_div workDescTeam_state_div" style="padding:0px;">
-                <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>               
+                <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
             </div>
 
         </div>
