@@ -43,6 +43,28 @@
             opacity: 0;
         }
 
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black;
+        }
+
+            .tooltip .tooltiptext {
+                visibility: hidden;
+                width: 120px;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                border-radius: 6px;
+                padding: 5px 0;
+                /* Position the tooltip */
+                position: absolute;
+                z-index: 1;
+            }
+
+            .tooltip:hover .tooltiptext {
+                visibility: visible;
+            }
         /*END UPDATED CSS COPY FROM EDIT PAGE*/
 
     </style>
@@ -50,6 +72,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- JQuery -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     @*<script src="~/Scripts/chosen.jquery.min.js"></script>*@
     @*<script src="~/Scripts/chosen.jquery.js"></script>*@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
@@ -790,7 +813,7 @@
                 fn_disableSelect2();
             });
 
-            function okToCloseBrowser (e) {
+            function okToCloseBrowser(e) {
                 //if (!e) e = window.event;
                 ////e.cancelBubble is supported by IE - this will kill the bubbling process.
                 //e.cancelBubble = true;
@@ -802,7 +825,7 @@
                 //    e.preventDefault();
                 //}
             }
-            //window.onbeforeunload = okToCloseBrowser; 
+            //window.onbeforeunload = okToCloseBrowser;
 
             function fn_navBarUpdate() {
                 $(".nav-item").css('border', 'none');
@@ -894,7 +917,7 @@
 
                 //console.log("hoursDiv:" + hoursDiv);
                 //console.clear();
-                
+
                 var totalDayHours = calcStartStopTimeDiff();
                 var totalDelayHours = 0.0;
 
@@ -917,7 +940,7 @@
                     rowFilled = false;
                     return rowFilled;
                 }
-             
+
                 if (hoursDiv == "" || !hoursDivMatch) {
                     //console.log("Hours div is empty or the hours do match the pattern.")
                     $.alert({
@@ -927,7 +950,7 @@
                     rowFilled = false;
                     return rowFilled;
                 }
-              
+
                 delayHours.each(function (index) {
                     //HOURS INPUT UPDATE
                     //totalDelayHours = totalDelayHours + parseFloat($(this).html());
@@ -959,7 +982,7 @@
                 var valuestop = $("#input_endTime").val();
                 var valuelunch = $("#input_lunch").val();
 
-                // Create date format.          
+                // Create date format.
                 var timeStart = new Date("01/01/2021 " + valuestart);
                 var timeEnd = new Date("01/01/2021 " + valuestop);
 
@@ -984,6 +1007,8 @@
 
             $("#input_startTime, #input_endTime").change(calcStartStopTimeDiff);
 
+            $('[data-toggle="tooltip"]').tooltip();
+
             //END VALIDATION BEFORE SAVING SECTION
 
         });//end document read jquery statements
@@ -993,10 +1018,22 @@
 <div class="container" id="contnrDailyLog">
     <h3 style="text-align:center">CREATE A NEW FIELD SERVICE RECORD</h3>
     @*<button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>*@
-    <div class="tooltip">
+    @*<div class="tooltip">
         Hover over me
         <span class="tooltiptext">Tooltip text</span>
-    </div>
+    </div>*@
+    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">dfdfdfdfd</button>
+
+    @*<a href="#" data-toggle="tooltip" title="Some tooltip text!">Hover over me</a>*@
+
+    <!-- Generated markup by the plugin -->
+    @*<div class="tooltip bs-tooltip-top" role="tooltip">
+        <div class="arrow"></div>
+        <div class="tooltip-inner">
+            Some tooltip text!
+        </div>
+    </div>*@
+
     <div class="row">
         <div class="col-md-2" style="padding:5px">
             <strong>Daily Log Information</strong>
