@@ -41,9 +41,9 @@
     @*END JQUERY LoadingOverlay PLUGIN*@
 
     <style>
-        a:hover, button:hover {
+        /*a:hover, button:hover {
             color: gray;
-        }
+        }*/
 
         body, a {
             font-family: Tahoma;
@@ -67,7 +67,6 @@
             font-family: Tahoma;
             color: black;
         }
-
 
         #addWorkDescWntyDelaysNarrBtn, #addWorkDescWntyDelaysRecordBtn, #addWorkDescWntyDelaysBtn, #submitButton, #printDailyReport, #saveAndSubmit_btn, .btn_cancel {
             background-color: #D7D8D6; /*GRAY*/
@@ -95,15 +94,15 @@
             display: inline-block
         }
 
-        /*.navBar {
-            color: black;
-        }*/
+        .navBar, a:hover {
+            color: white;
+        }
 
     </style>
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg" style="background-color: lightgray;">
+    <nav class="navbar navbar-expand-lg" style="background-color: dimgray;">
         <div class="navbar-header">
             <button class="navbar-toggler navbar-toggler-right"
                     type="button" data-toggle="collapse"
@@ -136,7 +135,7 @@
                     <a class="nav-link navBar dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin Tasks
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background: dimgray";>
                         <a class="nav-link navBar" href="/Customers">Customers</a>
                         <a class="nav-link navBar" href="/Jobs">Jobs</a>
                         <a class="nav-link navBar" href="/SubJobTypes">Sub-job Types</a>

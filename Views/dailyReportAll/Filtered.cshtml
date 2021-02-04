@@ -94,6 +94,12 @@
             color: black;
         }
 
+        /*AN INVISIBLE HORIZONTAL SPACE*/
+        .sectionSeparator {
+            margin: 1px;
+            opacity: 0;
+        }
+
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
 
@@ -266,6 +272,7 @@
         });//end document read jquery statements
     </script>
 </head>
+<hr class="sectionSeparator">
 @*<div class="col-md-12">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
