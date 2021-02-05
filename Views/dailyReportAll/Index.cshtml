@@ -348,9 +348,9 @@
                         List<string> temp_team = item.teamShortNames;
                         List<string> temp_workDescription = item.workDescription;
                         Boolean temp_active = item.active;
-                        string userLoggedIn = @User.Identity.GetUserName();
-                        Boolean userAuthorized = false;
-                        string temp_author = item.dailyReportAuthor;
+                        //string userLoggedIn = @User.Identity.GetUserName();
+                        //Boolean userAuthorized = false;
+                        //string temp_author = item.dailyReportAuthor;
                         //END TEMPORARY LOOP VARIABLES
                       
                 <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
@@ -389,7 +389,7 @@
                         </span>
                     </td>
                     <td>
-                        @if (User.IsInRole("Admin") | userLoggedIn == temp_author)
+                        @*@if (User.IsInRole("Admin") | userLoggedIn == temp_author)
                         {
                             userAuthorized = true;
                         }
@@ -404,15 +404,15 @@
                             }
                         }
                         @if (userAuthorized == true)
-                        {
+                        {*@
                             <button class="btn btn-light btn-sm editButton">Edit</button>
                             <button class="btn btn-light btn-sm deleteButton">Delete</button>
-                        }
+                        @*}
                         else
                         {
                             <button class="btn btn-light btn-sm editButton" disabled>Edit</button>
                             <button class="btn btn-light btn-sm deleteButton" disabled>Delete</button>
-                        }
+                        }*@
                         <button class="btn btn-light btn-sm copyButton">Copy</button>
                         <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
                         <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
