@@ -732,6 +732,11 @@
                 fn_exitSubmit(1);
             });
 
+            $("#returnDailyRptAll_btn").click(function () {//
+
+                window.location = '/DailyReportAll';
+            });
+
             //differs between new daily report and an existing one
             //$("#addButton").click(function () {//when the add button is clicked...
             function fn_exitSubmit(submissionState) {
@@ -1758,15 +1763,15 @@
 
             //END VALIDATION BEFORE SAVING SECTION   
 
-            //$("button").prop("disabled", true);
-            //$("select").prop("disabled", true);
-
-            //if (($("#isAdmin").val() == 'false') && ($("txt_rtndSubmissionStatus").val() == 1)) {
-            //if (($("#isAdmin").val() == 'False')) {
-            //if ($("txt_rtndSubmissionStatus").val() == 1) {
             if (($("#isAdmin").text() == 'False') && $("#txt_rtndSubmissionStatus").attr("value") == 1) {
                 $(":input").prop("disabled", true);
-                console.log("not admin.")
+
+                $("#saveAndSubmit_btn").attr("hidden", "hidden");
+                $("#saveAndExit_btn").attr("hidden", "hidden");
+                $("#returnDailyRptAll_btn").removeAttr("disabled");
+                $("#returnDailyRptAll_btn").parent().removeAttr("hidden");
+                $("#pageTitle").html("VIEW FIELD SERVICE RECORD");
+                //console.log("not admin.")
             }
 
             //console.log($("#txt_rtndSubmissionStatus").val());
@@ -1780,7 +1785,7 @@
 </head>
 <hr class="sectionSeparator">
 <div class="container" id="contnrDailyLog">
-    <h3 style="text-align:center">EDIT FIELD SERVICE RECORD</h3>
+    <h3 id="pageTitle" style="text-align:center">EDIT FIELD SERVICE RECORD</h3>
     <div class="row">
         <div class="col-md-2" style="padding:5px">
             <strong>Daily Log Information</strong>
@@ -2361,9 +2366,14 @@
         <div class="col-md-6" style="padding:5px">
             <button type="button" class="btn btn-primary btn-sm" id="saveAndSubmit_btn" style="width: 100%">Save & Submit</button>
         </div>
+        <div class="col-md-12" style="padding:5px" hidden>
+            <button type="button" class="btn btn-primary btn-sm" id="returnDailyRptAll_btn" style="width: 100%">Return to View Daily Reports Page</button>
+        </div>
         @*<div class="col-md-4" style="padding:5px">
             <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%" disabled>E-mail Daily Report Test</button>
         </div>*@
+
+
     </div>
 </div>
 @*END FINAL PAGE ACTIONS*@

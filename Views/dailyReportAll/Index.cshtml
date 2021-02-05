@@ -51,7 +51,7 @@
             color: black;
         }
 
-        .editButton {
+        .editButton, .recallButton {
             background-color: #333F48;
             border-style: solid;
             border-color: black;
@@ -214,7 +214,6 @@
                                 data: JSON.stringify(data),
                                 traditional: true,
                                 success: function (response) {
-                                    //window.location = '/DailyReportAll';//reload the page after a deletion
                                     window.location.href = response;
                                 },
                                 //error: function (response) {
@@ -237,6 +236,36 @@
 
                 window.location = '/dailyReportByReportID/copyDailyReport?reportID=' + selectedItem0;
 
+            });
+
+            $("#dt_dailyRptAll tbody").on("click", ".recallButton", function () {//when a record's recall button is clicked...
+
+                var data = {
+                    dailyReportID: selectedItem0,
+                    submissionStatus: 0
+                };
+
+                fn_showSpinner();
+                $.ajax({
+                    url: '/dailyReportByReportID/UpdateDailyReportSubmissionStatus',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        serverResponseSuccess = response;
+                            window.location.href = serverResponseSuccess;
+                    },
+                    error: function (response) {
+                        fn_hideSpinner();
+                        var alertContent = "An error has occurred.";
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
+                        });
+                    }
+                });
             });
 
             $("#filterDateBtn").on('click', function () {//...when the line save button is pressed
@@ -272,7 +301,7 @@
 
             function fn_navBarUpdate() {
                 $(".nav-item").css('border', 'none');
-                $(".nav-item.dailyReportAll").css('border', '1px solid grey');
+                $(".nav-item.dailyReportAll").css('border', '2px solid white');
             }
 
         });//end document read jquery statements
@@ -310,9 +339,6 @@
                         <th class="th_reportID">
                             ID
                         </th>
-                        @*<th class="th_active">
-                            Active
-                        </th>*@
                         <th class="th_submissionSts">
                             Submitted
                         </th>
@@ -397,16 +423,32 @@
                         @*if the user is not an admin and the report has been submitted...*@
                         @if (!(User.IsInRole("Admin")) && item.submissionStatus == 1)
                         {
-                            <button class="btn btn-light btn-sm editButton">Edit</button>
+                            <button class="btn btn-light btn-sm editButton">View</button>
                             <button class="btn btn-light btn-sm deleteButton" disabled>Delete</button>
                             <button class="btn btn-light btn-sm copyButton">Copy</button>
                         }
 
-                        else
+                        @if (!(User.IsInRole("Admin")) && item.submissionStatus != 1)
+                        {
+                            <button class="btn btn-light btn-sm editButton">View</button>
+                            <button class="btn btn-light btn-sm deleteButton">Delete</button>
+                            <button class="btn btn-light btn-sm copyButton">Copy</button>
+                        }
+
+                        @if ((User.IsInRole("Admin")) && (item.submissionStatus == 1))
                         {
                             <button class="btn btn-light btn-sm editButton">Edit</button>
                             <button class="btn btn-light btn-sm deleteButton">Delete</button>
                             <button class="btn btn-light btn-sm copyButton">Copy</button>
+                            <button class="btn btn-light btn-sm recallButton">Recall</button>
+                        }
+
+                        @if ((User.IsInRole("Admin")) && (item.submissionStatus != 1))
+                        {
+                            <button class="btn btn-light btn-sm editButton">Edit</button>
+                            <button class="btn btn-light btn-sm deleteButton">Delete</button>
+                            <button class="btn btn-light btn-sm copyButton">Copy</button>
+                            <button class="btn btn-light btn-sm recallButton" hidden>Recall</button>
                         }
 
                         <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
@@ -464,10 +506,10 @@
             "10%",//date
             "5%",//job
             "10%",//subJob
-            "auto",//customer
+            "10%",//customer
             "10%",//location
-            "auto",//team
-            "auto",//work description
+            "10%",//team
+            "",//work description
             "auto"],//action
         extensions: [{
             name: 'filtersVisibility',//bring in the extension

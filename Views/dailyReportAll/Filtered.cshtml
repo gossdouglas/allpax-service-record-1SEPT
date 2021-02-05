@@ -32,18 +32,6 @@
             text-overflow: ellipsis;
         }
 
-        /*th.th_active, th.th_jobID {
-            width: 5%;
-        }
-
-        th.th_reportID, th.th_date, th.th_subJob, th.th_location, th.th_action {
-            width: 10%;
-        }
-
-        th.th_customer, th.th_team, th.th_subJob, th.th_workDesc {
-            width: auto;
-        }*/
-
         #filterResetDateBtn {
             background-color: #D7D8D6;
             border-style: solid;
@@ -62,7 +50,7 @@
             color: black;
         }
 
-        .editButton {
+        .editButton, .recallButton {
             background-color: #333F48;
             border-style: solid;
             border-color: black;
@@ -245,6 +233,38 @@
                     + "&equipment=" + selectedItem11 + "&copiedDailyReportID=" + selectedItem0;
             });
 
+            $("#dt_dailyRptAll tbody").on("click", ".recallButton", function () {//when a record's recall button is clicked...
+
+                var data = {
+                    dailyReportID: selectedItem0,
+                    submissionStatus: 0
+                };
+
+                console.log(data);
+
+                fn_showSpinner();
+                $.ajax({
+                    url: '/dailyReportByReportID/UpdateDailyReportSubmissionStatus',
+                    method: 'post',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    traditional: true,
+                    success: function (response) {
+                        serverResponseSuccess = response;
+                        window.location.href = serverResponseSuccess;
+                    },
+                    error: function (response) {
+                        fn_hideSpinner();
+                        var alertContent = "An error has occurred.";
+                        $.alert({
+                            title: 'Alert!',
+                            content: alertContent,
+                        });
+                    }
+                });
+            });
+
             //begin when the filter reset button is clicked
             $("#filterResetDateBtn").on('click', function () {
                 window.location = '/dailyReportAll';
@@ -261,7 +281,7 @@
 
             function fn_navBarUpdate() {
                 $(".nav-item").css('border', 'none');
-                $(".nav-item.dailyReportAll").css('border', '1px solid grey');
+                $(".nav-item.dailyReportAll").css('border', '2px solid white');
             }
 
         });//end document read jquery statements
@@ -389,23 +409,39 @@
                         </td>
                         <td>
                             @*if the user is not an admin and the report has been submitted...*@
-                            @if (!(User.IsInRole("Admin")) && item.submissionStatus == 1)
-                            {
-                                <button class="btn btn-light btn-sm editButton">Edit</button>
-                                <button class="btn btn-light btn-sm deleteButton" disabled>Delete</button>
-                                <button class="btn btn-light btn-sm copyButton">Copy</button>
-                            }
+                        @if (!(User.IsInRole("Admin")) && item.submissionStatus == 1)
+                        {
+                            <button class="btn btn-light btn-sm editButton">View</button>
+                            <button class="btn btn-light btn-sm deleteButton" disabled>Delete</button>
+                            <button class="btn btn-light btn-sm copyButton">Copy</button>
+                        }
 
-                            else
-                            {
-                                <button class="btn btn-light btn-sm editButton">Edit</button>
-                                <button class="btn btn-light btn-sm deleteButton">Delete</button>
-                                <button class="btn btn-light btn-sm copyButton">Copy</button>
-                            }
+                        @if (!(User.IsInRole("Admin")) && item.submissionStatus != 1)
+                        {
+                            <button class="btn btn-light btn-sm editButton">View</button>
+                            <button class="btn btn-light btn-sm deleteButton">Delete</button>
+                            <button class="btn btn-light btn-sm copyButton">Copy</button>
+                        }
 
-                            <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
-                            <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
-                            <span id="record_item11" hidden>@Html.DisplayFor(modelItem => item.equipment)</span>
+                        @if ((User.IsInRole("Admin")) && (item.submissionStatus == 1))
+                        {
+                            <button class="btn btn-light btn-sm editButton">Edit</button>
+                            <button class="btn btn-light btn-sm deleteButton">Delete</button>
+                            <button class="btn btn-light btn-sm copyButton">Copy</button>
+                            <button class="btn btn-light btn-sm recallButton">Recall</button>
+                        }
+
+                        @if ((User.IsInRole("Admin")) && (item.submissionStatus != 1))
+                        {
+                            <button class="btn btn-light btn-sm editButton">Edit</button>
+                            <button class="btn btn-light btn-sm deleteButton">Delete</button>
+                            <button class="btn btn-light btn-sm copyButton">Copy</button>
+                            <button class="btn btn-light btn-sm recallButton" hidden>Recall</button>
+                        }
+
+                        <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
+                        <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
+                        <span id="record_item11" hidden>@Html.DisplayFor(modelItem => item.equipment)</span>
                         </td>
                     </tr>
                 }
@@ -456,10 +492,10 @@
             "10%",//date
             "5%",//job
             "10%",//subJob
-            "auto",//customer
+            "10%",//customer
             "10%",//location
-            "auto",//team
-            "auto",//work description
+            "10%",//team
+            "",//work description
             "auto"],//action
         extensions: [{
             name: 'filtersVisibility',//bring in the extension

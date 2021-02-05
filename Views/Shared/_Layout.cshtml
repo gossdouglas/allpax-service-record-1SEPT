@@ -56,7 +56,7 @@
             color: white;
         }
 
-        #addWorkDescDelaysNarrBtn, #addWorkDescDelaysRecordBtn, #addWorkDescDelaysBtn, #addButton, #saveAndExit_btn, .btn_save {
+        #addWorkDescDelaysNarrBtn, #addWorkDescDelaysRecordBtn, #addWorkDescDelaysBtn, #addButton, #saveAndExit_btn, .btn_save, #returnDailyRptAll_btn {
             background-color: #83B6CC; /*ALLPAX BLUE*/
             border-style: solid;
             border-color: black;
@@ -116,35 +116,35 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             @if (Request.IsAuthenticated)
             {
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dailyReport">
-                        <a class="nav-link navBar" href="/dailyReport">Create New Daily Report</a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dailyReportAll">
+                    <a class="nav-link navBar" href="/dailyReportAll">View Daily Reports</a>
+                </li>
+                <li class="nav-item dailyReport">
+                    <a class="nav-link navBar" href="/dailyReport">Create New Daily Report</a>
+                </li>
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="nav-item dailyReportViewActive">
+                        <a class="nav-link navBar" href="/dailyReportViewActive">Active Daily Reports</a>
                     </li>
-                    <li class="nav-item dailyReportAll">
-                        <a class="nav-link navBar" href="/dailyReportAll">View Daily Reports</a>
+                }
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="nav-item dropdown adminTasks">
+                        <a class="nav-link navBar dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Admin Tasks
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background: dimgray" ;>
+                            <a class="nav-link navBar" href="/Customers">Customers</a>
+                            <a class="nav-link navBar" href="/Jobs">Jobs</a>
+                            <a class="nav-link navBar" href="/SubJobTypes">Sub-job Types</a>
+                            <a class="nav-link navBar" href="/ResourceTypes">Resource Types</a>
+                            <a class="nav-link navBar" href="/Account/GetUserAcctInfo">Users</a>
+                        </div>
                     </li>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li class="nav-item dailyReportViewActive">
-                            <a class="nav-link navBar" href="/dailyReportViewActive">Active Daily Reports</a>
-                        </li>
-                    }
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li class="nav-item dropdown adminTasks">
-                            <a class="nav-link navBar dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Admin Tasks
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background: dimgray" ;>
-                                <a class="nav-link navBar" href="/Customers">Customers</a>
-                                <a class="nav-link navBar" href="/Jobs">Jobs</a>
-                                <a class="nav-link navBar" href="/SubJobTypes">Sub-job Types</a>
-                                <a class="nav-link navBar" href="/ResourceTypes">Resource Types</a>
-                                <a class="nav-link navBar" href="/Account/GetUserAcctInfo">Users</a>
-                            </div>
-                        </li>
-                    }
-                </ul>
+                }
+            </ul>
             }
 
             <ul class="navbar-nav ml-auto">
