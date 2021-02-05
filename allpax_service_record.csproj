@@ -260,6 +260,7 @@
     <Content Include="assets\images\Allpax.png" />
     <Content Include="assets\images\allpaxLogo.jpg" />
     <Content Include="assets\images\allpax_8jh_icon.ico" />
+    <Content Include="assets\images\allpax_trnspnt.png" />
     <Content Include="assets\images\save-custom.svg" />
     <Content Include="assets\images\service_icon.png" />
     <Content Include="bin\allpax_service_record.dll" />
