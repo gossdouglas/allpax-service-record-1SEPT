@@ -410,12 +410,20 @@
         }
         @if (userAuthorized == true)
         {*@
-
-                        if (!(User.IsInRole("Admin")) && @temp_submissionSts != 1) {
-
+                        @*if the user is not an admin and the report has been submitted...*@
+                        @*@if (!(User.IsInRole("Admin")) && @temp_submissionSts != 1)*@
+                        @if (!(User.IsInRole("Admin")) && item.submissionStatus == 1)
+                        {
+                            <button class="btn btn-light btn-sm editButton">Edit</button>
+                            <button class="btn btn-light btn-sm deleteButton" disabled>Delete</button>
                         }
-                        <button class="btn btn-light btn-sm editButton">Edit</button>
-                        <button class="btn btn-light btn-sm deleteButton">Delete</button>
+
+                        else
+                        {
+                            <button class="btn btn-light btn-sm editButton">Edit</button>
+                            <button class="btn btn-light btn-sm deleteButton">Delete</button>
+                        }
+
                         @*}
         else
         {
