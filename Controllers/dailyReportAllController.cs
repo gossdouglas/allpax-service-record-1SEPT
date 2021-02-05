@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using allpax_service_record.Models;
 using allpax_service_record.Models.View_Models;
 using System.Diagnostics;
+using Microsoft.AspNet.Identity;
 
 namespace allpax_service_record.Controllers
 {
@@ -50,6 +51,7 @@ namespace allpax_service_record.Controllers
             foreach (DataRow dr1 in dt1.Rows)
             {
                 vm_dailyReportViewAll dailyRptViewAll = new vm_dailyReportViewAll();
+                bool userInReport;
 
                 dailyRptViewAll.dailyReportID = (int)dr1[0];
                 dailyRptViewAll.active = (Boolean)dr1[1];
@@ -68,7 +70,18 @@ namespace allpax_service_record.Controllers
                 dailyRptViewAll.dailyReportAuthor = dr1[10].ToString();
                 dailyRptViewAll.equipment = dr1[11].ToString();
 
-                dailyRptViewAlls.Add(dailyRptViewAll);
+                userInReport = dailyRptViewAll.teamUserNames.Contains(User.Identity.GetUserName());
+
+                if (User.IsInRole("Admin"))
+                {
+                    //System.Diagnostics.Debug.WriteLine("user is an admin.");
+                    dailyRptViewAlls.Add(dailyRptViewAll);
+                }
+
+                if (!User.IsInRole("Admin") && (userInReport) && (dailyRptViewAll.active)) {
+                    //System.Diagnostics.Debug.WriteLine("user not an admin and part of an active report.");
+                    dailyRptViewAlls.Add(dailyRptViewAll);
+                }
             }
             sqlconn.Close();
             return View(dailyRptViewAlls);

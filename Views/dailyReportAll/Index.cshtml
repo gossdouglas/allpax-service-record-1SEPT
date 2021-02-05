@@ -139,7 +139,7 @@
     <script src="~/Content/tableFilter/dist/tablefilter/tablefilter.js"></script>
     @*END TABLE FILTER*@
 
-    <script>
+<script>
         $(document).ready(function () {//begin document read jquery statements
 
             fn_navBarUpdate();
@@ -270,26 +270,15 @@
                 $.LoadingOverlay("hide");
             }
 
-            //window.onbeforeunload = function (e) {
-            //    return 'Dialog text here.';
-            //};
-
             function fn_navBarUpdate() {
                 $(".nav-item").css('border', 'none');
                 $(".nav-item.dailyReportAll").css('border', '1px solid grey');
             }
 
         });//end document read jquery statements
-    </script>
+</script>
 </head>
 <hr class="sectionSeparator">
-@*<div class="col-md-12">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/dailyReportAll">Home</a></li>
-        </ol>
-    </nav>
-</div>*@
 <div class="container-fluid">
     <h3 style="text-align: center">CUSTOMER SERVICE DAILY LOGS</h3>
     <div class="row">
@@ -363,74 +352,74 @@
                         Boolean userAuthorized = false;
                         string temp_author = item.dailyReportAuthor;
                         //END TEMPORARY LOOP VARIABLES
-
-                        <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
-                            <td id="record_item0" style="width:auto" @Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
-                            <td id="record_item1" style="text-align:center;">
-                                @if (item.active == true)
-                                {
-                                    <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
-                                    <span hidden>@temp_active</span>
-                                }
-                                else
-                                {
-                                    <i class="fas fa-stop-circle fa-2x" style="color:red;"></i>
-                                    <span hidden>@temp_active</span>
-                                }
-                            </td>
-                            <td id="record_item2" value=@temp_date>@temp_date</td>
-                            <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
-                            <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
-                            <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
-                            <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
-                            <td id="record_item7" value=>
-                                <span>
-                                    @for (var i = 0; i < (temp_team.Count); i++)
-                                    {
-                                        @(temp_team[@i] + "|")
-                                    }
-                                </span>
-                            </td>
-                            <td id="record_item8">
-                                <span>
-                                    @for (var i = 0; i < (temp_workDescription.Count); i++)
-                                    {
-                                        @(temp_workDescription[@i] + "|")
-                                    }
-                                </span>
-                            </td>
-                            <td>
-                                @if (User.IsInRole("Admin") | userLoggedIn == temp_author)
+                      
+                <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
+                    <td id="record_item0" style="width:auto" @Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
+                    <td id="record_item1" style="text-align:center;">
+                        @if (item.active == true)
+                        {
+                            <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
+                            <span hidden>@temp_active</span>
+                        }
+                        else
+                        {
+                            <i class="fas fa-stop-circle fa-2x" style="color:red;"></i>
+                            <span hidden>@temp_active</span>
+                        }
+                    </td>
+                    <td id="record_item2" value=@temp_date>@temp_date</td>
+                    <td id="record_item3" value=@Html.DisplayFor(modelItem => item.jobID)>@Html.DisplayFor(modelItem => item.jobID)</td>
+                    <td id="record_item4" value=@Html.DisplayFor(modelItem => item.subJobID)>@Html.DisplayFor(modelItem => item.description)</td>
+                    <td id="record_item5" value=@Html.DisplayFor(modelItem => item.customerName)>@Html.DisplayFor(modelItem => item.customerName)</td>
+                    <td id="record_item6" value=@Html.DisplayFor(modelItem => item.address)>@Html.DisplayFor(modelItem => item.address)</td>
+                    <td id="record_item7" value=>
+                        <span>
+                            @for (var i = 0; i < (temp_team.Count); i++)
+                            {
+                                @(temp_team[@i] + "|")
+                            }
+                        </span>
+                    </td>
+                    <td id="record_item8">
+                        <span>
+                            @for (var i = 0; i < (temp_workDescription.Count); i++)
+                            {
+                                @(temp_workDescription[@i] + "|")
+                            }
+                        </span>
+                    </td>
+                    <td>
+                        @if (User.IsInRole("Admin") | userLoggedIn == temp_author)
+                        {
+                            userAuthorized = true;
+                        }
+                        else
+                        {
+                            for (var i = 0; i < (temp_teamUserNames.Count); i++)
+                            {
+                                if (temp_teamUserNames[@i] == userLoggedIn | User.IsInRole("Admin"))
                                 {
                                     userAuthorized = true;
                                 }
-                                else
-                                {
-                                    for (var i = 0; i < (temp_teamUserNames.Count); i++)
-                                    {
-                                        if (temp_teamUserNames[@i] == userLoggedIn | User.IsInRole("Admin"))
-                                        {
-                                            userAuthorized = true;
-                                        }
-                                    }
-                                }
-                                @if (userAuthorized == true)
-                                {
-                                    <button class="btn btn-light btn-sm editButton">Edit</button>
-                                    <button class="btn btn-light btn-sm deleteButton">Delete</button>
-                                }
-                                else
-                                {
-                                    <button class="btn btn-light btn-sm editButton" disabled>Edit</button>
-                                    <button class="btn btn-light btn-sm deleteButton" disabled>Delete</button>
-                                }
-                                <button class="btn btn-light btn-sm copyButton">Copy</button>
-                                <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
-                                <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
-                                <span id="record_item11" hidden>@Html.DisplayFor(modelItem => item.equipment)</span>
-                            </td>
-                        </tr>
-                    }
+                            }
+                        }
+                        @if (userAuthorized == true)
+                        {
+                            <button class="btn btn-light btn-sm editButton">Edit</button>
+                            <button class="btn btn-light btn-sm deleteButton">Delete</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-light btn-sm editButton" disabled>Edit</button>
+                            <button class="btn btn-light btn-sm deleteButton" disabled>Delete</button>
+                        }
+                        <button class="btn btn-light btn-sm copyButton">Copy</button>
+                        <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
+                        <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
+                        <span id="record_item11" hidden>@Html.DisplayFor(modelItem => item.equipment)</span>
+                    </td>
+                </tr>
+            }
                 </tbody>
             </table>
         </div>
