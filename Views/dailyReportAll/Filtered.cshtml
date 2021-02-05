@@ -388,31 +388,21 @@
                             </span>
                         </td>
                         <td>
-                            @if (User.IsInRole("Admin") | userLoggedIn == temp_author)
+                            @*if the user is not an admin and the report has been submitted...*@
+                            @if (!(User.IsInRole("Admin")) && item.submissionStatus == 1)
                             {
-                                userAuthorized = true;
+                                <button class="btn btn-light btn-sm editButton">Edit</button>
+                                <button class="btn btn-light btn-sm deleteButton" disabled>Delete</button>
+                                <button class="btn btn-light btn-sm copyButton">Copy</button>
                             }
+
                             else
-                            {
-                                for (var i = 0; i < (temp_teamUserNames.Count); i++)
-                                {
-                                    if (temp_teamUserNames[@i] == userLoggedIn | User.IsInRole("Admin"))
-                                    {
-                                        userAuthorized = true;
-                                    }
-                                }
-                            }
-                            @if (userAuthorized == true)
                             {
                                 <button class="btn btn-light btn-sm editButton">Edit</button>
                                 <button class="btn btn-light btn-sm deleteButton">Delete</button>
+                                <button class="btn btn-light btn-sm copyButton">Copy</button>
                             }
-                            else
-                            {
-                                <button class="btn btn-light btn-sm editButton" disabled>Edit</button>
-                                <button class="btn btn-light btn-sm deleteButton" disabled>Delete</button>
-                            }
-                            <button class="btn btn-light btn-sm copyButton">Copy</button>
+
                             <span id="record_item9" hidden>@Html.DisplayFor(modelItem => item.customercode)</span>
                             <span id="record_item10" hidden>@Html.DisplayFor(modelItem => item.customerContact)</span>
                             <span id="record_item11" hidden>@Html.DisplayFor(modelItem => item.equipment)</span>
