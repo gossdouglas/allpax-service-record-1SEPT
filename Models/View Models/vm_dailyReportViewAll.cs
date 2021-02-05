@@ -26,6 +26,7 @@ namespace allpax_service_record.Models.View_Models
         public string customercode { get; set; }
         public string customerContact { get; set; }
         public string equipment { get; set; }
+        public int submissionStatus { get; set; }
 
     }
 }

@@ -307,8 +307,8 @@
                     <th class="th_reportID">
                         ID
                     </th>
-                    <th class="th_active">
-                        Active
+                    <th class="th_submissionSts">
+                        Submitted
                     </th>
                     <th class="th_date">
                         Date
@@ -345,7 +345,8 @@
                     List<string> temp_teamUserNames = item.teamUserNames;
                     List<string> temp_team = item.teamShortNames;
                     List<string> temp_workDescription = item.workDescription;
-                    Boolean temp_active = item.active;
+                    //Boolean temp_active = item.active;
+                    int temp_submissionSts = item.submissionStatus;
                     string userLoggedIn = @User.Identity.GetUserName();
                     Boolean userAuthorized = false;
                     string temp_author = item.dailyReportAuthor;
@@ -354,15 +355,15 @@
                     <tr class="record" id=@Html.DisplayFor(modelItem => item.dailyReportID)>
                         <td id="record_item0" value=@Html.DisplayFor(modelItem => item.dailyReportID)>@Html.DisplayFor(modelItem => item.dailyReportID)</td>
                         <td id="record_item1" style="text-align:center">
-                            @if (item.active == true)
+                            @if (item.submissionStatus == 1)
                             {
                                 <i class="fas fa-check-circle fa-2x" style="color:lawngreen;"></i>
-                                <span hidden>@temp_active</span>
+                                <span hidden>@temp_submissionSts</span>
                             }
                             else
                             {
-                                <i class="fas fa-stop-circle fa-2x" style="color:red" ;></i>
-                                <span hidden>@temp_active</span>
+                                <i class="fas fa-stop-circle fa-2x" style="color:red;"></i>
+                                <span hidden>@temp_submissionSts</span>
                             }
                         </td>
                         <td id="record_item2" value=@temp_date>@temp_date</td>
@@ -461,7 +462,7 @@
         //    "auto"],//action
 
             "5%",//reportID
-            "5%",//Active
+            "7%",//Active
             "10%",//date
             "5%",//job
             "10%",//subJob
