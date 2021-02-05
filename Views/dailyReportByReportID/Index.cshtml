@@ -581,8 +581,7 @@
                             dailyRptTeamArr.push([temp_userName, temp_name, temp_shortName]);
                             dailyRptTeamUserIDArr.push(temp_userName);
                         });
-                        console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
-                        console.log("yo " + dailyRptTeamUserIDArr.length)
+                        //console.log("the contents of dailyRptTeamUserIDArr: " + dailyRptTeamUserIDArr);
 
                         //cloned to new daily report
                         //begin fill the team names dropdown
@@ -1757,7 +1756,24 @@
 
             $("#input_startTime, #input_endTime").change(calcStartStopTimeDiff);
 
-            //END VALIDATION BEFORE SAVING SECTION             
+            //END VALIDATION BEFORE SAVING SECTION   
+
+            //$("button").prop("disabled", true);
+            //$("select").prop("disabled", true);
+
+            //if (($("#isAdmin").val() == 'false') && ($("txt_rtndSubmissionStatus").val() == 1)) {
+            //if (($("#isAdmin").val() == 'False')) {
+            //if ($("txt_rtndSubmissionStatus").val() == 1) {
+            if (($("#isAdmin").text() == 'False') && $("#txt_rtndSubmissionStatus").attr("value") == 1) {
+                $(":input").prop("disabled", true);
+                console.log("not admin.")
+            }
+
+            //console.log($("#txt_rtndSubmissionStatus").val());
+            //console.log($("#txt_rtndSubmissionStatus").attr("value"));
+            //console.log($("#txt_rtndSubmissionStatus").html());
+            //console.log($("#isAdmin").text());
+            
 
         });//end document read jquery statements
     </script>
@@ -1786,6 +1802,7 @@
                 <span><strong>Author</strong></span>
                 @*<span class="" id="dailyRptAuthor">@User.Identity.GetUserName()</span>*@
                 <span class="" id="dailyRptAuthor">@Model.First().dailyReportAuthor</span>
+                <span class="" id="isAdmin" hidden>@User.IsInRole("Admin")</span>
             </div>
         </div>
     </div>
@@ -2338,15 +2355,15 @@
 <hr class="sectionSeparator">
 <div class="container" id="_container">
     <div class="row">
-        <div class="col-md-4" style="padding:5px">
+        <div class="col-md-6" style="padding:5px">
             <button type="button" class="btn btn-primary btn-sm" id="saveAndExit_btn" style="width: 100%">Save & Exit</button>
         </div>
-        <div class="col-md-4" style="padding:5px">
+        <div class="col-md-6" style="padding:5px">
             <button type="button" class="btn btn-primary btn-sm" id="saveAndSubmit_btn" style="width: 100%">Save & Submit</button>
         </div>
-        <div class="col-md-4" style="padding:5px">
+        @*<div class="col-md-4" style="padding:5px">
             <button type="button" class="btn btn-primary btn-sm" id="printDailyReport" style="width: 100%" disabled>E-mail Daily Report Test</button>
-        </div>
+        </div>*@
     </div>
 </div>
 @*END FINAL PAGE ACTIONS*@

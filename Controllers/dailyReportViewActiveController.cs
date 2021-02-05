@@ -52,7 +52,7 @@ namespace allpax_service_record.Controllers
                 "tbl_Jobs.jobID = tbl_dailyReport.jobID " +
 
                 "WHERE " +
-                "tbl_Jobs.active = '1'"; 
+                "tbl_Jobs.active = '1' AND tbl_dailyReport.submissionStatus = '1'"; 
 
             SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
             SqlDataAdapter sda1 = new SqlDataAdapter(sqlcomm1);
@@ -139,7 +139,7 @@ namespace allpax_service_record.Controllers
                 "AND " +
                 "tbl_dailyReport.date <= @endDate " +
                 "AND " +
-                "tbl_Jobs.active = '1'";
+                "tbl_Jobs.active = '1' AND tbl_dailyReport.submissionStatus = '1'";
 
             SqlCommand sqlcomm1 = new SqlCommand(sqlquery1, sqlconn);
             sqlcomm1.Parameters.AddWithValue("@startDate", startDate);
