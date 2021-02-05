@@ -130,6 +130,9 @@ namespace allpax_service_record.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    //await _userManager.AddClaimAsync(user.UserName, new Claim("name", user.name));
+                    //await _userManager.AddClaimAsync(user.UserName, new Claim("name", user.name));
+
                     //comment out the line below to prevent the newly registered user from being logged in afterward
                     //the reason being that an admin will be creating new users, not the users themselves
                     //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
