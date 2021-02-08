@@ -359,7 +359,7 @@
                 var currentRowClass = currentRow.attr("class");
                 var currentRowClassSwap;
 
-                console.log(currentRowClass);
+                //console.log(currentRowClass);
 
                 if (currentRowClass.includes("addRecord")) {
                     currentRowClassSwap = currentRowClass.replace(/addRecord/, "addRecordInEdit");//
@@ -381,8 +381,8 @@
                     $($(currentRow)).find(".button_div .Btn_delete").attr("disabled", "true");
                 }
 
-                console.log(".Btn_edit:" + currentRow.attr("class"));
-                console.log(".Btn_edit" + currentRowClassSwap);
+                //console.log(".Btn_edit:" + currentRow.attr("class"));
+                //console.log(".Btn_edit" + currentRowClassSwap);
 
                 //HOURS INPUT UPDATE
 
@@ -398,6 +398,8 @@
                 $(currentRow).find(".dpdwn_parsed_div").hide();
                 $(currentRow).find(".dpdwn_div").show();
                 $(currentRow).css("color", "red");
+
+                enable_disableSave();
             });
 
             //cloned to new daily report
@@ -451,6 +453,8 @@
 
                     fn_produceParsedShortNames($(this));
                 }
+
+                enable_disableSave();
             });
 
             //cloned to new daily report
@@ -1639,6 +1643,12 @@
 
                 if ($("#input_endTime").val() < $("#input_startTime").val()) {
                     //console.log("The end time must not be earlier than the start time.")
+                    filled = false;
+                }
+
+                if ($(".addRecordInEdit").length != 0 || $(".returnedRecordsInEdit").length != 0) {
+                    //console.log("There is a record still in edit.")
+
                     filled = false;
                 }
 

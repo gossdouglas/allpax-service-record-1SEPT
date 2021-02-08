@@ -320,6 +320,8 @@
                 $(currentRow).find(".dpdwn_parsed_div").hide();
                 $(currentRow).find(".dpdwn_div").show();
                 $(currentRow).css("color", "red");
+
+                enable_disableSave();
             });
 
             //cloned to new daily report
@@ -363,6 +365,8 @@
 
                     fn_produceParsedShortNames($(this));
                 }
+
+                enable_disableSave();
             });
 
             //differs between new daily report and an existing one
@@ -858,7 +862,13 @@
                 }
 
                 if ($("#input_endTime").val() < $("#input_startTime").val()) {
-                    console.log("The end time must not be earlier than the start time.")
+                    //console.log("The end time must not be earlier than the start time.")
+
+                    filled = false;
+                }
+
+                if ($(".addRecordInEdit").length != 0) {
+                    //console.log("There is a record still in edit.")
 
                     filled = false;
                 }
