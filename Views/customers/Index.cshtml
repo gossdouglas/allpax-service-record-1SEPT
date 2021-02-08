@@ -47,7 +47,6 @@
             position: relative;
             width: 60%;
             margin: 0 auto;
-            overflow: auto;
         }
 
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
@@ -386,12 +385,12 @@
         <h2>
             <span>
                 <strong>Customer Management</strong>
-                <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#customerNewForm">
+                <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#customerNewForm" data-bs-toggle="tooltip" data-bs-placement="" title="Add a new customer.">
                     <i class="far fa-plus-square fa-2x" style="color:black;"></i>
                 </button>
             </span>
         </h2>
-        
+
     </div>
 </div>
 <div class="" id="customerData_container">
@@ -444,97 +443,97 @@
         </table>
     </div>
 </div>
-    @*BEGIN EDIT CUSTOMER MODAL TEMPLATE*@
-    <div class="modal fade" id="customerEditForm" tabindex="-1" role="dialog" aria-labelledby="customerEditForm" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="float-left">
-                        <h5 class="modal-title" id="customerEditForm">Edit Customer</h5>
-                    </div>
-                    <div class="float-none">
-                        <button type="button" class="btn btn-light btn-sm customerEditForm" data-toggle="modal" data-target="#customerNewForm" data-bs-toggle="tooltip" data-bs-placement="" title="Add a new customer."><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                        <button type="button" class="btn btn-light btn-sm customerEditForm btn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+@*BEGIN EDIT CUSTOMER MODAL TEMPLATE*@
+<div class="modal fade" id="customerEditForm" tabindex="-1" role="dialog" aria-labelledby="customerEditForm" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="float-left">
+                    <h5 class="modal-title" id="customerEditForm">Edit Customer</h5>
                 </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="validation-summary-valid text-danger" data-valmsg-summary="true">
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="customer-code" class="col-form-label">Customer Code:</label>
-                                    <input type="text" class="form-control customer-code" maxlength="3">
-                                </div>
-                                <div class="col-6">
-                                    <label for="customer-name" class="col-form-label">Customer Name:</label>
-                                    <input type="text" class="form-control customer-name" maxlength="50">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="address" class="col-form-label">Location:</label>
-                                    <input type="text" class="form-control address" maxlength="50">
-                                    <label for="id" class="col-form-label" hidden>Table ID:</label>
-                                    <input type="text" class="form-control id" hidden>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn customerEditForm btn_save" value="">Save</button>
-                    <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    @*END EDIT CUSTOMER MODAL TEMPLATE*@
-
-    @*BEGIN NEW CUSTOMER MODAL TEMPLATE*@
-    <div class="modal fade" id="customerNewForm" tabindex="-1" role="dialog" aria-labelledby="customerNewForm" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="customerNewForm">Add Customer</h5>
+                <div class="float-none">
+                    <button type="button" class="btn btn-light btn-sm customerEditForm" data-toggle="modal" data-target="#customerNewForm" data-bs-toggle="tooltip" data-bs-placement="" title="Add a new customer."><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                    <button type="button" class="btn btn-light btn-sm customerEditForm btn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="customer-code" class="col-form-label">Customer Code:</label>
-                                    <input type="text" class="form-control customer-code" maxlength="3">
-                                </div>
-                                <div class="col-6">
-                                    <label for="customer-name" class="col-form-label">Customer Name:</label>
-                                    <input type="text" class="form-control customer-name" maxlength="50">
-                                </div>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="validation-summary-valid text-danger" data-valmsg-summary="true">
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="customer-code" class="col-form-label">Customer Code:</label>
+                                <input type="text" class="form-control customer-code" maxlength="3">
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="address" class="col-form-label">Location:</label>
-                                    <input type="text" class="form-control address" maxlength="50">
-                                </div>
+                            <div class="col-6">
+                                <label for="customer-name" class="col-form-label">Customer Name:</label>
+                                <input type="text" class="form-control customer-name" maxlength="50">
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn customerNewForm btn_save" value="">Save</button>
-                    <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
-                </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="address" class="col-form-label">Location:</label>
+                                <input type="text" class="form-control address" maxlength="50">
+                                <label for="id" class="col-form-label" hidden>Table ID:</label>
+                                <input type="text" class="form-control id" hidden>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn customerEditForm btn_save" value="">Save</button>
+                <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
-    @*END NEW CUSTOMER MODAL TEMPLATE*@
+</div>
+@*END EDIT CUSTOMER MODAL TEMPLATE*@
+
+@*BEGIN NEW CUSTOMER MODAL TEMPLATE*@
+<div class="modal fade" id="customerNewForm" tabindex="-1" role="dialog" aria-labelledby="customerNewForm" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="customerNewForm">Add Customer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="customer-code" class="col-form-label">Customer Code:</label>
+                                <input type="text" class="form-control customer-code" maxlength="3">
+                            </div>
+                            <div class="col-6">
+                                <label for="customer-name" class="col-form-label">Customer Name:</label>
+                                <input type="text" class="form-control customer-name" maxlength="50">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="address" class="col-form-label">Location:</label>
+                                <input type="text" class="form-control address" maxlength="50">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn customerNewForm btn_save" value="">Save</button>
+                <button type="button" class="btn btn_cancel" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*END NEW CUSTOMER MODAL TEMPLATE*@
 @*END CUSTOMER SECTION*@
 
 @section Scripts {

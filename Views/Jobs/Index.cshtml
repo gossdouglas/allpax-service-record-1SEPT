@@ -52,7 +52,6 @@
             position: relative;
             width: 90%;
             margin: 0 auto;
-            overflow: auto;
         }
 
         .subJobTypes_div {
@@ -83,18 +82,6 @@
         .active_div {
             text-align: center
         }
-
-        /*.tbl_header {
-            border: 1px solid black;
-            padding: 0px;
-        }*/
-
-        /*.tbl_returned-cell {
-            border-left: 1px solid black;
-            border-bottom: 1px solid black;
-            border-right: 1px solid black;*/
-            /*padding: 5px;*/
-        /*}*/
 
         /*BEGIN CHANGE LAYOUT FOR MOBILE*/
         @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
@@ -1434,7 +1421,7 @@
         <h2>
             <span>
                 <strong>Job Management</strong>
-                <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#jobNewForm">
+                <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#jobNewForm" data-bs-toggle="tooltip" data-bs-placement="" title="Add a new job.">
                     <i class="far fa-plus-square fa-2x" style="color:black;"></i>
                 </button>
             </span>
@@ -1443,15 +1430,6 @@
 </div>
 @*BEGIN RETURNED RECORDS*@
 <div class="" id="jobData_container">
-    @*<h2>
-        <span>
-            <strong>Job Management</strong>
-            <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#jobNewForm"
-                     data-bs-toggle="tooltip" data-bs-placement="" title="Add a new job.">
-                <i class="far fa-plus-square fa-2x" style="color:black;"></i>
-            </button>
-        </span>
-    </h2>*@
     <div class="table-responsive">
         <table id="dt_jobData" class="table table-striped table-bordered" style="width:100%">
             <thead>
