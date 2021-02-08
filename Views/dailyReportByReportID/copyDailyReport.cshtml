@@ -426,10 +426,11 @@
                     url: '/DataService.asmx/GetAllJobNos',
                     method: 'post',
                     dataType: 'json',
+                    data: { active: '1' },
                     success: function (data) {
                         $(data).each(function (index, item) {
                             if (item.jobID !== jobs_dpdown.val()) {
-                                jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                                jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID + "|" + item.customerCode }));
                             }
                         });
                     }
@@ -1117,7 +1118,7 @@
         </div>
         <div class="md-col-2" style="padding:5px">
             <select name="jobs_dpdown" id="jobs_dpdown" style="width:100%" value="">
-                <option value="@Model.First().jobID">@Model.First().jobID</option>
+                <option value="@Model.First().jobID">@Model.First().jobID|@Model.First().customerCode</option>
             </select>
             <input type="text" id="input_jobs_dpdown" name="" style="width:100%" hidden>
         </div>

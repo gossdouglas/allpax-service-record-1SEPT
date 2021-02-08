@@ -25,7 +25,7 @@ namespace allpax_service_record
     {
 
         [WebMethod]
-        public void GetAllJobNos()
+        public void GetAllJobNos(string active)
         {
             string cs = ConfigurationManager.ConnectionStrings["allpaxServiceRecordEntities"].ConnectionString;
             List<dpdwn_jobID> jobIDs = new List<dpdwn_jobID>();
@@ -33,12 +33,14 @@ namespace allpax_service_record
             {
                 SqlCommand cmd = new SqlCommand("spGetAllJobNos", con);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@active", active);
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
                     dpdwn_jobID jobID = new dpdwn_jobID();
                     jobID.jobID = rdr["jobID"].ToString();
+                    jobID.customerCode = rdr["customerCode"].ToString();
                     jobIDs.Add(jobID);
                 }
             }

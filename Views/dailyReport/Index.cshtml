@@ -396,12 +396,13 @@
                     url: 'DataService.asmx/GetAllJobNos',
                     method: 'post',
                     dataType: 'json',
+                    data: { active: '1' },
                     success: function (data) {
 
                         jobs_dpdown.append($('<option/>', { value: -1, text: 'Select Job' }));
 
                         $(data).each(function (index, item) {
-                            jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID }));
+                            jobs_dpdown.append($('<option/>', { value: item.jobID, text: item.jobID + "|" + item.customerCode }));
                         });
                     }
                 });
