@@ -416,11 +416,11 @@
                         <td class="description_div">@temp_description</td>
                         <td class="button_div" style="padding:0px;">
                             <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#subJobTypeEditForm" data-sub-job-type-id="@temp_subJobTypeID"
-                                    data-description="@temp_description">
+                                    data-description="@temp_description" data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line.">
                                 <i class="far fa-edit fa-2x" style="color:black;">
                                 </i>
                             </button>
-                            <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                            <button class="btn btn-light btn-sm Btn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                         </td>
                     </tr>
                 }
@@ -438,8 +438,8 @@
                     <h5 class="modal-title" id="subJobTypeEditForm">Edit Sub-job Type</h5>
                 </div>
                 <div class="float-none">
-                    <button type="button" class="btn btn-light btn-sm subJobTypeEditForm" data-toggle="modal" data-target="#subJobTypeNewForm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                    <button type="button" class="btn btn-light btn-sm subJobTypeEditForm btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                    <button type="button" class="btn btn-light btn-sm subJobTypeEditForm" data-toggle="modal" data-target="#subJobTypeNewForm" data-bs-toggle="tooltip" data-bs-placement="" title="Add a new sub-job type."><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                    <button type="button" class="btn btn-light btn-sm subJobTypeEditForm btn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

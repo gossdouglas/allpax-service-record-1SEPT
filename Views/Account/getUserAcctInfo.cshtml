@@ -502,13 +502,15 @@
                             {
                                 <td class="button_div" style="padding:0px;">
                                     <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
+                                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled
+                                            data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line.">
                                         <i class="far fa-edit fa-2x" style="color:black;">
                                         </i>
                                     </button>
-                                    <button class="btn btn-light btn-sm Btn_delete" disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                                    <button class="btn btn-light btn-sm Btn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line." disabled><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                                     <button class="btn btn-light btn-sm Btn_resetPwd" data-toggle="modal" data-target="#resetPasswordForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" disabled>
+                                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" 
+                                            data-bs-toggle="tooltip" data-bs-placement="" title="Reset this user's password." disabled>
                                         <i class="fas fa-key fa-2x" style="color:black;">
                                         </i>
                                     </button>
@@ -519,13 +521,15 @@
                             {
                                 <td class="button_div" style="padding:0px;">
                                     <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#userEditForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
+                                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active"
+                                            data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line.">
                                         <i class="far fa-edit fa-2x" style="color:black;">
                                         </i>
                                     </button>
-                                    <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                                    <button class="btn btn-light btn-sm Btn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                                     <button class="btn btn-light btn-sm Btn_resetPwd" data-toggle="modal" data-target="#resetPasswordForm" data-asp-net-id="@temp_aspNetId" data-full-name="@temp_name"
-                                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active">
+                                            data-short-name="@temp_shortName" data-user-name="@temp_userName" data-email="@temp_email" data-admin="@temp_admin" data-active="@temp_active" 
+                                            data-bs-toggle="tooltip" data-bs-placement="" title="Reset this user's password.">
                                         <i class="fas fa-key fa-2x" style="color:black;">
                                         </i>
                                     </button>
@@ -551,8 +555,9 @@
                             <h5 class="modal-title" id="userEditForm">Edit user</h5>
                         </div>
                         <div class="float-none">
-                            <button type="button" class="btn btn-light btn-sm userEditForm" data-toggle="modal" data-target="#userNewForm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                            <button type="button" class="btn btn-light btn-sm userEditForm btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                            <button type="button" class="btn btn-light btn-sm userEditForm" data-toggle="modal" data-target="#userNewForm" 
+                                    data-bs-toggle="tooltip" data-bs-placement="" title="Add a new user."><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                            <button type="button" class="btn btn-light btn-sm userEditForm btn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

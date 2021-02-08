@@ -465,11 +465,11 @@
                         <td class="rate_div">@temp_rate</td>
                         <td class="button_div" style="padding:0px;">
                             <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#resourceEditForm" data-resource-type-id="@temp_resourceTypeID"
-                                    data-resource-type="@temp_resourceType" data-description="@temp_description" data-rate="@temp_rate">
+                                    data-resource-type="@temp_resourceType" data-description="@temp_description" data-rate="@temp_rate" data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line.">
                                 <i class="far fa-edit fa-2x" style="color:black;">
                                 </i>
                             </button>
-                            <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                            <button class="btn btn-light btn-sm Btn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                         </td>
                     </tr>
                 }
@@ -487,8 +487,8 @@
                     <h5 class="modal-title" id="resourceEditForm">Edit Resource</h5>
                 </div>
                 <div class="float-none">
-                    <button type="button" class="btn btn-light btn-sm resourceEditForm" data-toggle="modal" data-target="#resourceNewForm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                    <button type="button" class="btn btn-light btn-sm resourceEditForm btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                    <button type="button" class="btn btn-light btn-sm resourceEditForm" data-toggle="modal" data-target="#resourceNewForm" data-bs-toggle="tooltip" data-bs-placement="" title="Add a new job resource."><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                    <button type="button" class="btn btn-light btn-sm resourceEditForm btn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
