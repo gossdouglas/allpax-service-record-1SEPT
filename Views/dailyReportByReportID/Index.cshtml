@@ -1774,10 +1774,10 @@
                 //console.log("not admin.")
             }
 
-            //console.log($("#txt_rtndSubmissionStatus").val());
-            //console.log($("#txt_rtndSubmissionStatus").attr("value"));
-            //console.log($("#txt_rtndSubmissionStatus").html());
-            //console.log($("#isAdmin").text());
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
             
 
         });//end document read jquery statements
@@ -1966,7 +1966,7 @@
     <div class="col-md-6 narr_div workDescTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
     <div class="col-md-3 dpdwn_div workDescTeam_dpdwn_div" style="padding: 0px; display:none">
-        <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll" data-bs-toggle="tooltip" data-bs-placement="" title="Add all team members to this line."><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
         <select class="Team_dpdwn workDescTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
             @for (var j = 0; j < (@temp_userNames.Count); j++)
             {
@@ -1993,9 +1993,9 @@
     @*//HOURS INPUT UPDATE*@
 
     <div class="col-md-2 button_div workDescTeam_button_div" style="padding:0px;">
-        <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+        <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line."><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_save lineWorkDescBtn_save" data-bs-toggle="tooltip" data-bs-placement="" title="Save edits to this line." hidden><i class="far fa-save fa-2x" style="color: black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
     </div>
 
     <div class="col-md-1 state_div workDescTeam_state_div" style="padding:0px;">
@@ -2014,7 +2014,7 @@
         <div class="row entryRow workDescriptionLine_template_row_active" id="" style="">
             <div class="col-md-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-md-3 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
-                <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+                <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll" data-bs-toggle="tooltip" data-bs-placement="" title="Add all team members to this line."><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
@@ -2028,11 +2028,11 @@
             </div>
 
             <div class="col-md-2 button_div workDescTeam_button_div" style="padding:0px;">
-                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
+                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add" data-bs-toggle="tooltip" data-bs-placement="" title="Add this line to the report."><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
 
-                <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line." hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' data-bs-toggle="tooltip" data-bs-placement="" title="Save edits to this line." hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line." hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
             </div>
 
             <div class="col-md-1 state_div workDescTeam_state_div" style="padding:0px;">
@@ -2044,7 +2044,7 @@
         <div class="row entryRow workDescriptionLine_template_row_hidden" id="" style="" hidden>
             <div class="col-md-6 narr_div workDescTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-md-3 dpdwn_div workDescTeam_dpdwn_div" style="padding:0px;">
-                <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+                <button class="btn btn-light btn-sm Btn_selectAll lineWorkDescBtn_selectAll" data-bs-toggle="tooltip" data-bs-placement="" title="Add all team members to this line."><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new workDescTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
@@ -2058,11 +2058,11 @@
             </div>
 
             <div class="col-md-2 button_div workDescTeam_button_div" style="padding:0px;">
-                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add"><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
+                <button id="" class="btn btn-light btn-sm Btn_add newWorkDescBtn_add" data-bs-toggle="tooltip" data-bs-placement="" title="Add this line to the report."><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
 
-                <button class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <button class="btn btn-light btn-sm Btn_edit lineWorkDescBtn_edit"  data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line." hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save lineWorkDescBtn_save' data-bs-toggle="tooltip" data-bs-placement="" title="Save edits to this line." hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineWorkDescBtn_delete' data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line." hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
             </div>
 
             <div class="col-md-1 state_div workDescTeam_state_div" style="padding:0px;">
@@ -2113,7 +2113,7 @@
     <div class="col-md-5 narr_div delaysTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
     <div class="col-md-3 dpdwn_div delaysTeam_dpdwn_div" style="padding: 0px; display:none">
-        <button class="btn btn-light btn-sm Btn_selectAll lineDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_selectAll lineDelaysBtn_selectAll" data-bs-toggle="tooltip" data-bs-placement="" title="Add all team members to this line."><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
         <select class="Team_dpdwn delaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
             @for (var j = 0; j < (@temp_userNames.Count); j++)
             {
@@ -2139,9 +2139,9 @@
     @*//HOURS INPUT UPDATE*@
 
     <div class="col-md-2 button_div delaysTeam_button_div" style="padding:0px;">
-        <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save lineDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete lineDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+        <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line."><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_save lineDelaysBtn_save" data-bs-toggle="tooltip" data-bs-placement="" title="Save edits to this line." hidden><i class="far fa-save fa-2x" style="color: black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_delete lineDelaysBtn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
     </div>
 
     <div class="col-md-1 state_div delaysDescTeam_state_div" style="padding:0px;">
@@ -2159,7 +2159,7 @@
         <div class="row entryRow delaysLine_template_row_active" id="" style="">
             <div class="col-md-5 narr_div delaysTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-md-3 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
-                <button class="btn btn-light btn-sm Btn_selectAll lineDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+                <button class="btn btn-light btn-sm Btn_selectAll lineDelaysBtn_selectAll" data-bs-toggle="tooltip" data-bs-placement="" title="Add all team members to this line."><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new delaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
@@ -2172,11 +2172,11 @@
             </div>
 
             <div class="col-md-2 button_div delaysTeam_button_div" style="padding:0px;">
-                <button id="" class="btn btn-light btn-sm Btn_add newDelaysBtn_add"><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
+                <button id="" class="btn btn-light btn-sm Btn_add newDelaysBtn_add" data-bs-toggle="tooltip" data-bs-placement="" title="Add this line to the report."><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
 
-                <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                <button class='btn btn-light btn-sm Btn_save lineDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm Btn_delete lineDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line." hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save lineDelaysBtn_save' data-bs-toggle="tooltip" data-bs-placement="" title="Save edits to this line." hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineDelaysBtn_delete' data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line." hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
             </div>
 
             <div class="col-md-1 state_div delaysDescTeam_state_div" style="padding:0px;">
@@ -2188,7 +2188,7 @@
         <div class="row entryRow delaysLine_template_row_hidden" id="" style="" hidden>
             <div class="col-md-5 narr_div delaysTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-md-3 dpdwn_div delaysTeam_dpdwn_div" style="padding:0px;">
-                <button class="btn btn-light btn-sm Btn_selectAll lineDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+                <button class="btn btn-light btn-sm Btn_selectAll lineDelaysBtn_selectAll" data-bs-toggle="tooltip" data-bs-placement="" title="Add all team members to this line."><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new delaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
@@ -2201,11 +2201,11 @@
             </div>
 
             <div class="col-md-2 button_div delaysTeam_button_div" style="padding:0px;">
-                <button id="" class="btn btn-light btn-sm Btn_add newDelaysBtn_add"><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
+                <button id="" class="btn btn-light btn-sm Btn_add newDelaysBtn_add" data-bs-toggle="tooltip" data-bs-placement="" title="Add this line to the report."><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
 
-                <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                <button class='btn btn-light btn-sm Btn_save lineDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm Btn_delete lineDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_edit lineDelaysBtn_edit" data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line." hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save lineDelaysBtn_save' data-bs-toggle="tooltip" data-bs-placement="" title="Save edits to this line." hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete lineDelaysBtn_delete' data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line." hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
             </div>
             <div class="col-md-1 state_div delaysDescTeam_state_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
@@ -2254,7 +2254,7 @@
     <div class="col-md-5 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="false" style="">@temp_workDescription</div>
 
     <div class="col-md-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding: 0px; display:none">
-        <button class="btn btn-light btn-sm Btn_selectAll lineWntyDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_selectAll lineWntyDelaysBtn_selectAll" data-bs-toggle="tooltip" data-bs-placement="" title="Add all team members to this line."><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
         <select class="Team_dpdwn wntyDelaysTeam_dpdwn RtndRecs" id="" multiple="" tabindex="0" aria-hidden="false">
             @for (var j = 0; j < (@temp_userNames.Count); j++)
             {
@@ -2280,9 +2280,9 @@
     @*//HOURS INPUT UPDATE*@
 
     <div class="col-md-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
-        <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" style=""><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_save lineWntyDelaysBtn_save" style="display:none"><i class="far fa-save fa-2x" style="color: black;"></i></button>
-        <button class="btn btn-light btn-sm Btn_delete lineWntyDelaysBtn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+        <button id="" class="btn btn-light btn-sm Btn_edit lineWntyDelaysBtn_edit" data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line."><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_save lineWntyDelaysBtn_save" data-bs-toggle="tooltip" data-bs-placement="" title="Save edits to this line." hidden><i class="far fa-save fa-2x" style="color: black;"></i></button>
+        <button class="btn btn-light btn-sm Btn_delete lineWntyDelaysBtn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
     </div>
 
     <div class="col-md-1 state_div wntyDelaysDescTeam_state_div" style="padding:0px;">
@@ -2300,7 +2300,7 @@
         <div class="row entryRow wntyDelaysLine_template_row_active" id="" style="">
             <div class="col-md-5 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-md-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
-                <button class="btn btn-light btn-sm Btn_selectAll lineWntyDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+                <button class="btn btn-light btn-sm Btn_selectAll lineWntyDelaysBtn_selectAll" data-bs-toggle="tooltip" data-bs-placement="" title="Add all team members to this line."><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new wntyDelaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
@@ -2313,11 +2313,11 @@
             </div>
 
             <div class="col-md-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
-                <button id="" class="btn btn-light btn-sm Btn_add newwntyDelaysBtn_add"><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
+                <button id="" class="btn btn-light btn-sm Btn_add newwntyDelaysBtn_add" data-bs-toggle="tooltip" data-bs-placement="" title="Add this line to the report."><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
 
-                <button id="" class="btn btn-light btn-sm Btn_edit linewntyDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                <button class='btn btn-light btn-sm Btn_save linewntyDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm Btn_delete linewntyDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_edit linewntyDelaysBtn_edit" data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line." hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save linewntyDelaysBtn_save' data-bs-toggle="tooltip" data-bs-placement="" title="Save edits to this line." hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete linewntyDelaysBtn_delete' data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line." hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
             </div>
             <div class="col-md-1 state_div wntyDelaysDescTeam_state_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
@@ -2327,7 +2327,7 @@
         <div class="row entryRow wntyDelaysLine_template_row_hidden" id="" style="" hidden>
             <div class="col-md-5 narr_div wntyDelaysTeam_narr_div" id="" contenteditable="true" style=""></div>
             <div class="col-md-3 dpdwn_div wntyDelaysTeam_dpdwn_div" style="padding:0px;">
-                <button class="btn btn-light btn-sm Btn_selectAll lineWntyDelaysBtn_selectAll"><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
+                <button class="btn btn-light btn-sm Btn_selectAll lineWntyDelaysBtn_selectAll" data-bs-toggle="tooltip" data-bs-placement="" title="Add all team members to this line."><i class="far fa-object-group fa-2x" style="color:black;"></i></button>
                 <select class="Team_dpdwn team_dpdwn_new wntyDelaysTeam_dpdwn" id="" multiple="multiple">
                 </select>
             </div>
@@ -2340,11 +2340,11 @@
             </div>
 
             <div class="col-md-2 button_div wntyDelaysTeam_button_div" style="padding:0px;">
-                <button id="" class="btn btn-light btn-sm Btn_add newwntyDelaysBtn_add"><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
+                <button id="" class="btn btn-light btn-sm Btn_add newwntyDelaysBtn_add" data-bs-toggle="tooltip" data-bs-placement="" title="Add this line to the report."><img class="icon" src="~/assets/images/save-custom.svg" alt="" width="30"></button>
 
-                <button id="" class="btn btn-light btn-sm Btn_edit linewntyDelaysBtn_edit" hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
-                <button class='btn btn-light btn-sm Btn_save linewntyDelaysBtn_save' hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
-                <button class='btn btn-light btn-sm Btn_delete linewntyDelaysBtn_delete' hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
+                <button id="" class="btn btn-light btn-sm Btn_edit linewntyDelaysBtn_edit" data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line." hidden><i class="far fa-edit fa-2x" style="color:black;"></i></button>
+                <button class='btn btn-light btn-sm Btn_save linewntyDelaysBtn_save' data-bs-toggle="tooltip" data-bs-placement="" title="Save edits to this line." hidden><i class='far fa-save fa-2x' style='color: black;'></i></button>
+                <button class='btn btn-light btn-sm Btn_delete linewntyDelaysBtn_delete' data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line." hidden><i class='far fa-minus-square fa-2x' style='color: black;'></i></button>
             </div>
             <div class="col-md-1 state_div wntyDelaysDescTeam_state_div" style="padding:0px;">
                 <button id="" class="btn btn-light btn-sm Btn_addedRecord" disabled hidden><i class="far fa-plus-square fa-2x icon_addedRecord"></i></button>
