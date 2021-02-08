@@ -369,6 +369,11 @@
                 $(".nav-item.adminTasks").css('border', '2px solid white');
             }
 
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+
             //////////////////END MISCELLANEOUS SECTION
            
         });//end document read jquery statements
@@ -418,18 +423,18 @@
                     int temp_id = item.id;
                     //END TEMPORARY LOOP VARIABLES
 
-                    <tr class="returnedRecords" id="" style="">
+                    <tr class="returnedRecords">
                         <td class="customerCode_div">@temp_customerCode</td>
                         <td class="customerName_div">@temp_customerName</td>
                         <td class="address_div">@temp_address</td>
                         <td class="id_div" hidden>@temp_id</td>
                         <td class="button_div" style="padding:0px;">
                             <button class="btn btn-light btn-sm Btn_edit" data-toggle="modal" data-target="#customerEditForm" data-customer-code="@temp_customerCode"
-                                    data-customer-name="@temp_customerName" data-address="@temp_address" data-id="@temp_id">
+                                    data-customer-name="@temp_customerName" data-address="@temp_address" data-id="@temp_id" data-bs-toggle="tooltip" data-bs-placement="" title="Edit this line.">
                                 <i class="far fa-edit fa-2x" style="color:black;">
                                 </i>
                             </button>
-                            <button class="btn btn-light btn-sm Btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                            <button class="btn btn-light btn-sm Btn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                         </td>
                     </tr>
                 }
@@ -447,8 +452,8 @@
                         <h5 class="modal-title" id="customerEditForm">Edit Customer</h5>
                     </div>
                     <div class="float-none">
-                        <button type="button" class="btn btn-light btn-sm customerEditForm" data-toggle="modal" data-target="#customerNewForm"><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
-                        <button type="button" class="btn btn-light btn-sm customerEditForm btn_delete"><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
+                        <button type="button" class="btn btn-light btn-sm customerEditForm" data-toggle="modal" data-target="#customerNewForm" data-bs-toggle="tooltip" data-bs-placement="" title="Add a new customer."><i class="far fa-plus-square fa-2x" style="color:black;"></i></button>
+                        <button type="button" class="btn btn-light btn-sm customerEditForm btn_delete" data-bs-toggle="tooltip" data-bs-placement="" title="Delete this line."><i class="far fa-minus-square fa-2x" style="color: black;"></i></button>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

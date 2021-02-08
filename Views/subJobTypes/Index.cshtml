@@ -365,6 +365,11 @@
                 $(".nav-item.adminTasks").css('border', '2px solid white');
             }
 
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+
             //////////////////END MISCELLANEOUS SECTION          
 
         });//end document read jquery statements
